@@ -1,0 +1,3526 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Wishlistgül</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
+    <style>
+        /* ═══════════ DESIGN TOKENS ═══════════ */
+        :root {
+            --bg: #FFF0F6;
+            --surface: rgba(255, 240, 250, 0.78);
+            --surfaceHover: rgba(255, 230, 245, 0.90);
+            --accent: #E8458B;
+            --accentSoft: rgba(232, 69, 139, 0.14);
+            --accentMid: rgba(232, 69, 139, 0.22);
+            --textPrimary: #1A1A2E;
+            --textSecondary: #8A8A9A;
+            --stroke: rgba(232, 69, 139, 0.10);
+            --glow: rgba(232, 69, 139, 0.25);
+            --lilac: #A87CFF;
+            --lilacSoft: rgba(168, 124, 255, 0.12);
+            --elev1: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --elev2: 0 16px 48px rgba(0, 0, 0, 0.10);
+            --r1: 16px;
+            --r2: 28px;
+            --font-display: 'DM Serif Display', serif;
+            --font-text: 'DM Sans', -apple-system, system-ui, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-text);
+            color: var(--textPrimary);
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(255, 80, 180, 0.38), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(140, 107, 255, 0.16), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(255, 80, 180, 0.22), transparent 50%),
+                linear-gradient(180deg, #ffe8f2, #f5e4ff);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══════════ HEADER ═══════════ */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            background: linear-gradient(180deg, rgba(255, 240, 250, 0.92), rgba(255, 235, 248, 0.72));
+            border-bottom: 1px solid var(--stroke);
+            padding: 12px 16px;
+        }
+
+        @supports(padding-top:env(safe-area-inset-top)) {
+            header {
+                padding-top: calc(12px + env(safe-area-inset-top));
+            }
+        }
+
+        .hRow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .appName {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 400;
+            font-style: italic;
+            background: linear-gradient(135deg, #ff38aa, #9572ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.3px;
+            padding-right: 4px;
+            overflow: visible;
+        }
+
+        .hBtns {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* ═══════════ BUTTONS ═══════════ */
+        .btn {
+            appearance: none;
+            border: 1px solid var(--stroke);
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: var(--textPrimary);
+            font-family: var(--font-text);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.18s ease-out, background 0.18s ease-out, box-shadow 0.18s ease-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn:hover {
+            background: var(--surfaceHover);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .btn.primary {
+            border-color: var(--accentMid);
+            background: linear-gradient(135deg, rgba(232, 69, 139, 0.28), rgba(168, 124, 255, 0.14));
+            color: #3a0b2b;
+        }
+
+        .btn.danger {
+            border-color: var(--accentMid);
+            background: var(--accentSoft);
+            color: #3a0b2b;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* ═══════════ CATEGORY PILLS ═══════════ */
+        .catBar {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 12px 16px 0;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .catBar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .catPill {
+            flex: 0 0 auto;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-family: var(--font-text);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--stroke);
+            background: var(--surface);
+            color: var(--textSecondary);
+            transition: all 0.18s ease-out;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .catPill.active {
+            background: linear-gradient(135deg, rgba(232, 69, 139, 0.26), rgba(168, 124, 255, 0.14));
+            color: #3a0b2b;
+            border-color: var(--accentMid);
+            box-shadow: 0 4px 16px var(--glow);
+        }
+
+        /* ═══════════ SORT BAR ═══════════ */
+        .sortBar {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 8px 16px 0;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+
+        }
+
+        .sortBar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sortPill {
+            flex: 0 0 auto;
+            padding: 5px 11px;
+            border-radius: 6px;
+            font-family: var(--font-text);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--textSecondary);
+            transition: all 0.18s ease-out;
+            white-space: nowrap;
+        }
+
+        .sortPill.active {
+            background: var(--accentSoft);
+            color: var(--accent);
+            border-color: var(--accentMid);
+        }
+
+        /* ═══════════ CONTENT ═══════════ */
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px 16px 100px;
+        }
+
+        /* ═══════════ GRID ═══════════ */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        /* ═══════════ SIGNATURE #1: FLOATING TILE ═══════════ */
+        .card {
+            position: relative;
+            border-radius: var(--r1);
+            overflow: hidden;
+            border: 1px solid var(--stroke);
+            background: linear-gradient(180deg, var(--surface), rgba(255, 235, 248, 0.55));
+            box-shadow: var(--elev1);
+            cursor: pointer;
+            transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+            opacity: 0;
+            animation: cardStaggerIn 0.4s ease-out forwards;
+        }
+
+        .card:nth-child(odd) {
+            transform: rotate(-0.4deg);
+        }
+
+        .card:nth-child(even) {
+            transform: rotate(0.4deg);
+        }
+
+        .card:hover {
+            box-shadow: var(--elev2);
+            z-index: 2;
+        }
+
+        .card:active {
+            transform: scale(0.97) rotate(0deg) !important;
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            display: block;
+            background: rgba(255, 245, 252, 0.50);
+        }
+
+        /* Card corner chips */
+        .card .chipTL {
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            padding: 4px 10px;
+            border-radius: 28px;
+            background: rgba(255, 240, 250, 0.88);
+            border: 1px solid rgba(232, 69, 139, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card .chipTR {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            padding: 6px 10px;
+            border-radius: 28px;
+            background: rgba(255, 240, 250, 0.88);
+            border: 1px solid rgba(232, 69, 139, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #3a0b2b;
+            transition: transform 0.1s ease;
+        }
+
+        .card .chipTR:active {
+            transform: scale(0.93);
+        }
+
+        /* ═══════════ SIGNATURE #2: DESIRE PULSE ═══════════ */
+        .desireMeter {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .desireMeter .dHeart {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s ease-out;
+        }
+
+        .desireMeter .dHeart.filled {
+            animation: desirePulse 1.8s ease-in-out infinite;
+        }
+
+        .desireMeter .dHeart:nth-child(2).filled {
+            animation-delay: 0.1s;
+        }
+
+        .desireMeter .dHeart:nth-child(3).filled {
+            animation-delay: 0.2s;
+        }
+
+        .desireMeter .dHeart:nth-child(4).filled {
+            animation-delay: 0.3s;
+        }
+
+        .desireMeter .dHeart:nth-child(5).filled {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes desirePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.25);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        /* Card stagger animation */
+        @keyframes cardStaggerIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Bought overlay */
+        .card.bought .chipTR {
+            display: none;
+        }
+
+        .card.bought::after {
+            content: attr(data-bought-text);
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 200, 225, 0.60), rgba(200, 180, 255, 0.45));
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            color: #5c1745;
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            white-space: pre-line;
+            text-align: center;
+            text-shadow: 0 1px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .card.bought img {
+            filter: grayscale(0.3) brightness(0.90);
+        }
+
+        /* ═══════════ EMPTY STATE ═══════════ */
+        .emptyState {
+            border: 1px dashed var(--accentMid);
+            border-radius: var(--r2);
+            padding: 48px 24px;
+            background: rgba(255, 245, 252, 0.50);
+            text-align: center;
+            display: none;
+        }
+
+        .emptyState .emptyIllustration {
+            font-size: 56px;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .emptyState .emptyTitle {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            margin-bottom: 8px;
+        }
+
+        .emptyState .emptyDesc {
+            font-size: 14px;
+            color: var(--textSecondary);
+            line-height: 1.5;
+        }
+
+        /* ═══════════ SKELETON LOADING ═══════════ */
+        .skeleton {
+            border-radius: var(--r1);
+            background: linear-gradient(90deg,
+                    rgba(255, 240, 250, 0.6) 25%, rgba(255, 230, 245, 0.9) 50%, rgba(255, 240, 250, 0.6) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            aspect-ratio: 1/1;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ═══════════ MODAL (bottom sheet) ═══════════ */
+        .modalBack {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            background: rgba(26, 26, 46, 0.32);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            transition: background 0.22s ease-out;
+        }
+
+        .modal {
+            width: 92%;
+            max-width: 600px;
+            max-height: 85vh;
+            border-radius: var(--r2) var(--r2) 0 0;
+            background: rgba(255, 245, 252, 0.96);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            box-shadow: 0 -4px 50px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.45, 1), opacity 0.22s ease-out;
+            margin-bottom: 0;
+        }
+
+        .modalBack.show .modal {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .handle {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0 4px;
+        }
+
+        .handle span {
+            width: 36px;
+            height: 4px;
+            border-radius: 99px;
+            background: rgba(0, 0, 0, 0.10);
+        }
+
+        .mHead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 16px 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .mHead strong {
+            font-family: var(--font-display);
+            font-size: 16px;
+        }
+
+        .mBody {
+            padding: 16px;
+        }
+
+        .preview {
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: var(--r1);
+            overflow: hidden;
+            aspect-ratio: 1/1;
+            max-height: 240px;
+            margin: 0 auto 16px;
+            background: rgba(255, 248, 253, 0.60);
+        }
+
+        .preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .fields {
+            display: grid;
+            gap: 16px;
+        }
+
+        .label {
+            font-family: var(--font-text);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .linkRow {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .linkRow input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .linkBtn {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: var(--r1);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .two {
+            display: grid;
+            gap: 8px;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .three {
+            display: grid;
+            gap: 8px;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        input[type="url"],
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 248, 253, 0.80);
+            color: var(--textPrimary);
+            font-family: var(--font-text);
+            font-size: 14px;
+            padding: 10px 12px;
+            border-radius: var(--r1);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: border-color 0.15s ease-out;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--accentMid);
+        }
+
+        select {
+            font-size: 13px;
+        }
+
+        textarea {
+            min-height: 68px;
+            resize: vertical;
+            font-size: 14px;
+        }
+
+        /* Desire Meter in modal */
+        .desireSelector {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .desireSelector .dBtn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--r1);
+            border: 1px solid var(--stroke);
+            background: var(--surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease-out;
+            font-size: 18px;
+        }
+
+        .desireSelector .dBtn.active {
+            background: var(--accentSoft);
+            border-color: var(--accentMid);
+            transform: scale(1.08);
+        }
+
+        .desireSelector .dBtn:active {
+            transform: scale(0.95);
+        }
+
+        /* Collapsible fields */
+        .toggleField {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .toggleField .tLabel {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--textPrimary);
+        }
+
+        .toggleField .tIcon {
+            font-size: 14px;
+            transition: transform 0.2s ease-out;
+        }
+
+        .toggleField.open .tIcon {
+            transform: rotate(90deg);
+        }
+
+        .toggleContent {
+            display: none;
+            padding: 0 0 4px;
+        }
+
+        .toggleContent.show {
+            display: block;
+        }
+
+        .foot {
+            display: none;
+            gap: 8px;
+            justify-content: space-between;
+            padding: 16px 0 0;
+            margin-top: 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .foot.show {
+            display: flex;
+        }
+
+        @supports(padding-bottom:env(safe-area-inset-bottom)) {
+            .foot {
+                padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* ═══════════ PURCHASE MODAL ═══════════ */
+        .purchaseBody {
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        .purchaseBody h3 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 16px;
+            color: var(--textPrimary);
+        }
+
+        .purchaseBody input {
+            max-width: 200px;
+            margin: 0 auto 16px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .purchaseBody .purchaseBtns {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        /* ═══════════ WRAPPED MODAL ═══════════ */
+        .wrappedBody {
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        .wrappedBody h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            background: linear-gradient(135deg, var(--accent), var(--lilac));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wrappedBody .sub {
+            font-size: 12px;
+            color: var(--textSecondary);
+            margin-bottom: 16px;
+        }
+
+        .wrNav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .wrNav button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--accent);
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.1s ease;
+        }
+
+        .wrNav button:active {
+            background: var(--accentSoft);
+        }
+
+        .wrNav .wrLabel {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            min-width: 140px;
+        }
+
+        .statGrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .statCard {
+            border-radius: var(--r1);
+            padding: 16px 8px;
+            background: linear-gradient(135deg, var(--accentSoft), var(--lilacSoft));
+            border: 1px solid var(--stroke);
+        }
+
+        .statCard .num {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .statCard .desc {
+            font-size: 10px;
+            color: var(--textSecondary);
+            margin-top: 4px;
+        }
+
+        .wrappedNote {
+            font-size: 12px;
+            color: var(--textSecondary);
+            font-style: italic;
+        }
+
+        /* ═══════════ HAMBURGER MENU ═══════════ */
+        .menuWrap {
+            position: relative;
+        }
+
+        .menuBtn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            line-height: 1;
+            border-radius: 50%;
+        }
+
+        .dropdown {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            min-width: 180px;
+            border-radius: var(--r1);
+            border: 1px solid var(--stroke);
+            background: rgba(255, 245, 252, 0.96);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
+            z-index: 30;
+            opacity: 0;
+            transform: translateY(-8px) scale(0.95);
+            pointer-events: none;
+            transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+            overflow: hidden;
+        }
+
+        .dropdown.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .dropItem {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            font-family: var(--font-text);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--textPrimary);
+            cursor: pointer;
+            transition: background 0.12s ease;
+            text-align: left;
+        }
+
+        .dropItem:hover {
+            background: var(--accentSoft);
+        }
+
+        .dropItem:active {
+            background: var(--accentMid);
+        }
+
+        .dropItem+.dropItem {
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .dropItem .dropIcon {
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+        }
+
+        .dropItem.dropDanger {
+            color: #c0284a;
+            border-top: 1px solid rgba(192, 40, 74, 0.10);
+            margin-top: 4px;
+            padding-top: 14px;
+        }
+
+        .dropItem.dropDanger:hover {
+            background: rgba(192, 40, 74, 0.08);
+        }
+
+        .dropItem.dropDanger:active {
+            background: rgba(192, 40, 74, 0.14);
+        }
+
+        /* ═══════════ SECRET TOGGLE ═══════════ */
+        .secretToggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+
+        .secretToggle .stLabel {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--textSecondary);
+        }
+
+        .switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ddd;
+            border-radius: 24px;
+            transition: 0.25s;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.25s;
+        }
+
+        .switch input:checked+.slider {
+            background: var(--accent);
+        }
+
+        .switch input:checked+.slider::before {
+            transform: translateX(20px);
+        }
+
+        /* Secret card badge */
+        .secretBadge {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 8px;
+            z-index: 5;
+            backdrop-filter: blur(6px);
+        }
+
+        /* Camera button */
+        .cameraBtn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            line-height: 1;
+            border-radius: 50%;
+        }
+
+        /* ═══════════ TOAST ═══════════ */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: 14px 24px;
+            border-radius: 28px;
+            background: rgba(255, 245, 252, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--accentMid);
+            box-shadow: 0 12px 40px rgba(232, 69, 139, 0.18);
+            font-family: var(--font-text);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--textPrimary);
+            z-index: 100;
+            opacity: 0;
+            animation: toastIn 0.35s ease-out forwards, toastOut 0.35s ease-in 2.8s forwards;
+            white-space: nowrap;
+            max-width: 90vw;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        @keyframes toastIn {
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+
+        /* ═══════════ WRAPPED GALLERY ═══════════ */
+        .wrGallery {
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--stroke);
+        }
+
+        .wrGallery.show {
+            display: flex;
+        }
+
+        .statCard.clickable {
+            cursor: pointer;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+
+        .statCard.clickable:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 20px var(--glow);
+        }
+
+        .statCard.clickable:active {
+            transform: scale(0.97);
+        }
+
+        /* 3D Flip Card */
+        .flipCard {
+            width: 100px;
+            height: 100px;
+            perspective: 600px;
+            cursor: pointer;
+        }
+
+        .flipInner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .flipInner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flipFront,
+        .flipBack {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .flipFront {
+            border: 1px solid var(--stroke);
+        }
+
+        .flipFront img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .flipBack {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(232, 69, 139, 0.22), rgba(168, 124, 255, 0.18));
+            border: 1px solid var(--accentMid);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px;
+        }
+
+        .flipBack .fbPrice {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .flipBack .fbDate {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--textSecondary);
+        }
+
+        /* ═══════════ WISHLIST AI ═══════════ */
+        .aiBack {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(255, 80, 180, 0.38), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(140, 107, 255, 0.16), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(255, 80, 180, 0.22), transparent 50%),
+                linear-gradient(180deg, #ffe8f2, #f5e4ff);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .aiBack.show {
+            display: flex;
+        }
+
+        .aiHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 232, 242, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 10;
+            border-bottom: 1px solid var(--stroke);
+        }
+
+        .aiHeader .aiTitle {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .aiTitle .wl {
+            font-weight: 700;
+            background: linear-gradient(135deg, #6C63FF, #FF6FD8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .aiTitle .ai {
+            font-weight: 400;
+            background: linear-gradient(135deg, #9B8FFF, #FF6FD8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .aiHeader .aiBackBtn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--textPrimary);
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .aiHeader .aiBackBtn:active {
+            background: var(--accentSoft);
+        }
+
+        .aiBody {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .aiScreen {
+            display: none;
+        }
+
+        .aiScreen.active {
+            display: block;
+        }
+
+        /* Mode Cards */
+        .aiModes {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 12px;
+        }
+
+        .aiModeCard {
+            background: var(--surface);
+            border: 1px solid var(--stroke);
+            border-radius: var(--r1);
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .aiModeCard:active {
+            transform: scale(0.97);
+        }
+
+        .aiModeCard:hover {
+            box-shadow: var(--elev1);
+        }
+
+        .aiModeCard .mcIcon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .aiModeCard .mcTitle {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            margin-bottom: 4px;
+        }
+
+        .aiModeCard .mcDesc {
+            font-size: 12px;
+            color: var(--textSecondary);
+            line-height: 1.5;
+        }
+
+        /* AI Form */
+        .aiFormGroup {
+            margin-bottom: 16px;
+        }
+
+        .aiFormGroup .afLabel {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .aiFormGroup input[type="number"],
+        .aiFormGroup select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--stroke);
+            border-radius: var(--r1);
+            font-size: 14px;
+            background: var(--surface);
+            color: var(--textPrimary);
+            font-family: var(--font-text);
+        }
+
+        /* Preference Slider */
+        .aiPrefSlider {
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        /* AI Info Tip */
+        .aiInfoTip {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            border-radius: var(--r1);
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.06), rgba(255, 111, 216, 0.06));
+            border: 1px solid rgba(108, 99, 255, 0.12);
+            font-size: 11px;
+            color: var(--textSecondary);
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .aiInfoTip .tipIcon {
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .aiPrefSlider .prefLabel {
+            font-size: 11px;
+            color: var(--textSecondary);
+            margin-bottom: 6px;
+        }
+
+        .aiPrefSlider input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #4CAF50, #9C27B0, #E8458B);
+        }
+
+        .aiPrefSlider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .aiPrefSlider .prefLabels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--textSecondary);
+            margin-top: 4px;
+        }
+
+        /* Product Selection Grid */
+        .aiProdGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .aiProdItem {
+            position: relative;
+            border-radius: var(--r1);
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s;
+            aspect-ratio: 1;
+        }
+
+        .aiProdItem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .aiProdItem.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accentSoft);
+            transform: scale(1.04);
+        }
+
+        .aiProdItem.disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .aiProdItem .prodCheck {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .aiProdItem.selected .prodCheck {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .aiProdItem .prodName {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 16px 6px 6px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Need Score Stars */
+        .aiNeedStars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .aiNeedStars .nStar {
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.15s;
+            filter: grayscale(1);
+            opacity: 0.4;
+        }
+
+        .aiNeedStars .nStar.active {
+            filter: none;
+            opacity: 1;
+        }
+
+        .aiNeedStars .nStar:active {
+            transform: scale(1.3);
+        }
+
+        /* AI Submit Button */
+        .aiSubmitBtn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--r1);
+            background: linear-gradient(135deg, var(--accent), var(--lilac));
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .aiSubmitBtn:active {
+            transform: scale(0.96);
+        }
+
+        .aiSubmitBtn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Loading Screen */
+        .aiLoadWrap {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .aiExperts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .aiExpAvatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            opacity: 0.3;
+            transition: all 0.5s;
+            border: 3px solid transparent;
+        }
+
+        .aiExpAvatar.thinking {
+            opacity: 1;
+            animation: aiPulse 1.2s infinite;
+        }
+
+        .aiExpAvatar.done {
+            opacity: 1;
+        }
+
+        @keyframes aiPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .aiLoadStatus {
+            font-size: 14px;
+            color: var(--textSecondary);
+            margin-top: 16px;
+            font-weight: 600;
+        }
+
+        .aiProgress {
+            width: 80%;
+            height: 6px;
+            border-radius: 3px;
+            background: #eee;
+            margin: 16px auto 0;
+            overflow: hidden;
+        }
+
+        .aiProgressBar {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--lilac));
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* Results Screen */
+        .aiResultTabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 16px;
+            background: var(--surface);
+            border-radius: var(--r1);
+            overflow: hidden;
+            border: 1px solid var(--stroke);
+        }
+
+        .aiResultTab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--textSecondary);
+            transition: 0.2s;
+        }
+
+        .aiResultTab.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .aiTabContent {
+            display: none;
+        }
+
+        .aiTabContent.active {
+            display: block;
+        }
+
+        /* Recommendation Card */
+        .aiRecCard {
+            background: var(--surface);
+            border: 1px solid var(--stroke);
+            border-radius: var(--r1);
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .aiRecCard .recRank {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--lilac));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .aiRecCard .recImg {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .aiRecCard .recInfo {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .aiRecCard .recName {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .aiRecCard .recScore {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .aiRecCard .recReason {
+            font-size: 11px;
+            color: var(--textSecondary);
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .aiSummaryBox {
+            background: linear-gradient(135deg, rgba(232, 69, 139, 0.08), rgba(168, 124, 255, 0.08));
+            border: 1px solid var(--stroke);
+            border-radius: var(--r1);
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .aiSummaryBox .sbTitle {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            margin-bottom: 6px;
+        }
+
+        .aiSummaryBox .sbText {
+            font-size: 12px;
+            color: var(--textSecondary);
+            line-height: 1.6;
+        }
+
+        /* Expert Panel */
+        .aiExpPanel {
+            background: var(--surface);
+            border: 1px solid var(--stroke);
+            border-radius: var(--r1);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .aiExpHead {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+        }
+
+        .aiExpHead .expIcon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .aiExpHead .expName {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            flex: 1;
+        }
+
+        .aiExpHead .expWeight {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .aiExpHead .expChevron {
+            font-size: 14px;
+            color: var(--textSecondary);
+            transition: transform 0.2s;
+        }
+
+        .aiExpPanel.open .expChevron {
+            transform: rotate(90deg);
+        }
+
+        .aiExpBody {
+            display: none;
+            padding: 0 14px 14px;
+            font-size: 12px;
+            color: var(--textSecondary);
+            line-height: 1.6;
+        }
+
+        .aiExpPanel.open .aiExpBody {
+            display: block;
+        }
+
+        .expWeightBar {
+            height: 6px;
+            border-radius: 3px;
+            background: #eee;
+            margin: 6px 0 8px;
+            overflow: hidden;
+        }
+
+        .expWeightFill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        .expKeyPoints {
+            margin-top: 8px;
+        }
+
+        .expKeyPoints li {
+            margin-bottom: 4px;
+            margin-left: 16px;
+        }
+
+        /* Debate Bubbles */
+        .aiDebateMsg {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .aiDebateMsg .dbIcon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .aiDebateMsg .dbBubble {
+            background: var(--surface);
+            border: 1px solid var(--stroke);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: var(--textPrimary);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .aiDebateMsg .dbName {
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 3px;
+        }
+
+        .aiDebateMsg .dbAgree {
+            color: #4CAF50;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .aiDebateMsg .dbDisagree {
+            color: #E8458B;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        /* History */
+        .aiHistItem {
+            background: var(--surface);
+            border: 1px solid var(--stroke);
+            border-radius: var(--r1);
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .aiHistItem:active {
+            transform: scale(0.98);
+        }
+
+        .aiHistItem .hiDate {
+            font-size: 10px;
+            color: var(--textSecondary);
+        }
+
+        .aiHistItem .hiType {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 3px 0;
+        }
+
+        .aiHistItem .hiSummary {
+            font-size: 12px;
+            color: var(--textPrimary);
+            line-height: 1.5;
+        }
+
+        .aiEmptyHist {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--textSecondary);
+            font-size: 13px;
+        }
+
+        /* AI Wrapped Card */
+        .aiWrappedCard {
+            background: linear-gradient(135deg, rgba(232, 69, 139, 0.12), rgba(168, 124, 255, 0.12));
+            border: 1px solid var(--accentMid);
+            border-radius: var(--r1);
+            padding: 14px;
+            margin-top: 14px;
+        }
+
+        .aiWrappedCard .awTitle {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            margin-bottom: 8px;
+        }
+
+        .aiWrappedCard .awStat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 4px 0;
+            color: var(--textSecondary);
+        }
+
+        .aiWrappedCard .awVal {
+            font-weight: 700;
+            color: var(--textPrimary);
+        }
+
+        .aiWrappedCard .awBadge {
+            display: inline-block;
+            background: var(--accentSoft);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="hRow">
+            <div class="appName">Wishlistgül</div>
+            <div class="hBtns">
+                <label class="btn primary" for="filePick">+ Ekle</label>
+                <input id="filePick" class="hidden" type="file" accept="image/*,.webp,.gif,.avif,.svg,.png" multiple />
+                <label class="btn cameraBtn" for="cameraPick" title="Kamera"><i class="ph ph-camera"></i></label>
+                <input id="cameraPick" class="hidden" type="file" accept="image/*" capture="environment" />
+                <div class="menuWrap">
+                    <button id="menuBtn" class="btn menuBtn" title="Menü"><i class="ph ph-list"></i></button>
+                    <div class="dropdown" id="dropdown">
+                        <button class="dropItem" id="dropAI"><span class="dropIcon"><i
+                                    class="ph ph-brain"></i></span>WishlistAI</button>
+                        <button class="dropItem" id="dropWrapped"><span class="dropIcon"><i
+                                    class="ph ph-chart-bar"></i></span>Wrapped</button>
+                        <button class="dropItem" id="dropSecret"><span class="dropIcon"><i
+                                    class="ph ph-lock"></i></span>Gizli Mod</button>
+                        <button class="dropItem dropDanger" id="dropReset"><span class="dropIcon"><i
+                                    class="ph ph-trash"></i></span>Sıfırla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="catBar" id="catBar">
+        <div class="catPill active" data-cat="all">Tümü</div>
+        <div class="catPill" data-cat="giyim"><i class="ph ph-t-shirt"></i> Giyim</div>
+        <div class="catPill" data-cat="makyaj"><i class="ph ph-paint-brush"></i> Makyaj &amp; Cilt</div>
+        <div class="catPill" data-cat="album"><i class="ph ph-vinyl-record"></i> Albüm</div>
+        <div class="catPill" data-cat="parfum"><i class="ph ph-flower-lotus"></i> Parfüm</div>
+        <div class="catPill" data-cat="sac"><i class="ph ph-sparkle"></i> Saç Bakım</div>
+        <div class="catPill" data-cat="diger"><i class="ph ph-package"></i> Diğer</div>
+        <div class="catPill" data-cat="secret"><i class="ph ph-lock"></i> Gizli</div>
+        <div class="catPill" data-cat="bought"><i class="ph ph-check-circle"></i> Alındı</div>
+    </div>
+
+    <!-- Sort bar -->
+    <div class="sortBar" id="sortBar">
+        <div class="sortPill active" data-sort="date-desc">Tarih ↓</div>
+        <div class="sortPill" data-sort="date-asc">Tarih ↑</div>
+        <div class="sortPill" data-sort="priority-desc">Öncelik ↓</div>
+        <div class="sortPill" data-sort="priority-asc">Öncelik ↑</div>
+    </div>
+
+    <main class="content">
+        <div id="grid" class="grid"></div>
+        <div id="empty" class="emptyState">
+            <div class="emptyIllustration"><i class="ph ph-sparkle" style="font-size:56px;color:var(--accent)"></i>
+            </div>
+            <div class="emptyTitle">Henüz bir istek yok</div>
+            <div class="emptyDesc">"+ Ekle" tuşu ile hayalindeki ürünleri listeye ekle,<br>ne zaman alacağını planla
+            </div>
+        </div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="modalBack" class="modalBack" role="dialog" aria-modal="true">
+        <div class="modal" id="modal">
+            <div class="handle"><span></span></div>
+            <div class="mHead">
+                <strong>İstek Detayı</strong>
+                <button id="closeModal" class="btn">Kapat</button>
+            </div>
+            <div class="mBody">
+                <div class="preview"><img id="mImg" alt="preview" /></div>
+                <div class="fields">
+                    <!-- Link -->
+                    <div>
+                        <div class="label">Link</div>
+                        <div class="linkRow">
+                            <input id="mLink" type="url" placeholder="https://..." />
+                            <button id="goLink" class="btn linkBtn" title="Linke git"><i
+                                    class="ph ph-link"></i></button>
+                        </div>
+                    </div>
+                    <!-- Category + Month + Year -->
+                    <div class="three">
+                        <div>
+                            <div class="label">Kategori</div>
+                            <select id="mCategory">
+                                <option value="giyim">Giyim</option>
+                                <option value="makyaj">Makyaj</option>
+                                <option value="album">Albüm</option>
+                                <option value="parfum">Parfüm</option>
+                                <option value="sac">Saç</option>
+                                <option value="diger">Diğer</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Ay</div>
+                            <select id="mTimeline">
+                                <option value="ocak">Ocak</option>
+                                <option value="subat">Şubat</option>
+                                <option value="mart">Mart</option>
+                                <option value="nisan">Nisan</option>
+                                <option value="mayis">Mayıs</option>
+                                <option value="haziran">Haziran</option>
+                                <option value="temmuz">Temmuz</option>
+                                <option value="agustos">Ağustos</option>
+                                <option value="eylul">Eylül</option>
+                                <option value="ekim">Ekim</option>
+                                <option value="kasim">Kasım</option>
+                                <option value="aralik">Aralık</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="label">Yıl</div>
+                            <select id="mYear"></select>
+                        </div>
+                    </div>
+                    <!-- Desire Meter (Signature #2) -->
+                    <div>
+                        <div class="label">Öncelik</div>
+                        <div class="desireSelector" id="desireSelector"></div>
+                        <input type="hidden" id="mPriority" value="3" />
+                    </div>
+                    <!-- Target Price (collapsible) -->
+                    <div>
+                        <div class="toggleField" id="togglePrice">
+                            <span class="tIcon">›</span>
+                            <span class="tLabel">Hedef Fiyat</span>
+                        </div>
+                        <div class="toggleContent" id="priceContent">
+                            <input id="mPrice" type="text" inputmode="numeric" placeholder="₺ 0" />
+                        </div>
+                    </div>
+                    <!-- Note (collapsible) -->
+                    <div>
+                        <div class="toggleField" id="toggleNote">
+                            <span class="tIcon">›</span>
+                            <span class="tLabel">Not</span>
+                        </div>
+                        <div class="toggleContent" id="noteContent">
+                            <textarea id="mNote" placeholder="Beden / renk / niye istiyorum..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- Secret Toggle -->
+                <div class="secretToggle">
+                    <span class="stLabel"><i class="ph ph-lock"></i> Gizli olarak sakla</span>
+                    <label class="switch">
+                        <input type="checkbox" id="mSecret" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="foot" id="modalFoot">
+                    <button id="deleteItem" class="btn danger">Sil</button>
+                    <button id="saveItem" class="btn primary">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseBack" class="modalBack" role="dialog" aria-modal="true">
+        <div class="modal" id="purchaseModal">
+            <div class="handle"><span></span></div>
+            <div class="mHead">
+                <strong>Ürün Alış Paneli</strong>
+                <button id="closePurchase" class="btn">İptal</button>
+            </div>
+            <div class="purchaseBody">
+                <h3>Ne kadara aldın?</h3>
+                <input id="purchasePrice" type="text" inputmode="numeric" placeholder="₺ 0" />
+                <div class="purchaseBtns">
+                    <button id="confirmPurchase" class="btn primary">Onayla</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wrapped Modal -->
+    <div id="wrappedBack" class="modalBack" role="dialog" aria-modal="true">
+        <div class="modal" id="wrappedModal">
+            <div class="handle"><span></span></div>
+            <div class="mHead">
+                <strong>Wrapped</strong>
+                <button id="closeWrapped" class="btn">Kapat</button>
+            </div>
+            <div class="wrappedBody">
+                <div class="wrNav">
+                    <button id="wrPrev">‹</button>
+                    <div class="wrLabel" id="wrLabel">Şubat 2026</div>
+                    <button id="wrNext">›</button>
+                </div>
+                <h2 id="wrTitle">Şubat 2026 Wrapped'i</h2>
+                <div class="sub" id="wrRange">1 Şubat – 28 Şubat 2026</div>
+                <div class="statGrid">
+                    <div class="statCard">
+                        <div class="num" id="wrAdded">0</div>
+                        <div class="desc">Eklenen</div>
+                    </div>
+                    <div class="statCard">
+                        <div class="num" id="wrBought">0</div>
+                        <div class="desc">Alınan</div>
+                    </div>
+                    <div class="statCard">
+                        <div class="num" id="wrSpent">₺0</div>
+                        <div class="desc">Harcanan</div>
+                    </div>
+                </div>
+                <div class="wrGallery" id="wrGallery"></div>
+                <div class="wrappedNote">Her ayın son günü otomatik güncellenir ✨</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ WISHLIST AI MODAL ═══ -->
+    <div class="aiBack" id="aiBack">
+        <div class="aiHeader">
+            <button class="aiBackBtn" id="aiCloseBtn"><i class="ph ph-arrow-left"></i></button>
+            <div class="aiTitle"><span class="wl">Wishlist</span><span class="ai">Ai</span></div>
+            <div style="width:36px"></div>
+        </div>
+        <div class="aiBody">
+            <!-- Screen 1: Mode Select -->
+            <div class="aiScreen active" id="aiScreenMode">
+                <div style="text-align:center;margin-bottom:12px;">
+                    <div style="font-size:36px;"><i class="ph ph-brain" style="font-size:36px;color:var(--accent)"></i>
+                    </div>
+                    <div style="font-family:var(--font-display);font-size:16px;font-weight:700;margin-top:8px;">Uzman AI
+                        Konseyi</div>
+                    <div style="font-size:12px;color:var(--textSecondary);margin-top:4px;">6 uzman, 1 hakem — senin için
+                        analiz eder</div>
+                </div>
+                <div class="aiModes">
+                    <div class="aiModeCard" data-mode="budget">
+                        <div class="mcIcon"><i class="ph ph-wallet"></i></div>
+                        <div class="mcTitle">Bütçe Optimizasyonu</div>
+                        <div class="mcDesc">X TL bütçe ile hangilerini almalıyım? En iyi alışveriş planını oluşturur.
+                        </div>
+                    </div>
+                    <div class="aiModeCard" data-mode="compare">
+                        <div class="mcIcon"><i class="ph ph-scales"></i></div>
+                        <div class="mcTitle">Karşılaştırma</div>
+                        <div class="mcDesc">Bu ürünler arasından hangisini almalıyım? Detaylı kıyaslama yapar.</div>
+                    </div>
+                    <div class="aiModeCard" data-mode="priority">
+                        <div class="mcIcon"><i class="ph ph-list-numbers"></i></div>
+                        <div class="mcTitle">Önceliklendirme</div>
+                        <div class="mcDesc">Hangi sırayla almalıyım? Akıllı alım planı oluşturur.</div>
+                    </div>
+                    <div class="aiModeCard" id="aiHistCard">
+                        <div class="mcIcon"><i class="ph ph-clock-counter-clockwise"></i></div>
+                        <div class="mcTitle">Geçmiş</div>
+                        <div class="mcDesc">Önceki AI analizlerini görüntüle ve karşılaştır.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: Form -->
+            <div class="aiScreen" id="aiScreenForm">
+                <div class="aiInfoTip">
+                    <span class="tipIcon"><i class="ph ph-lightbulb"></i></span>
+                    <span>Daha doğru sonuçlar için ürünlerin <b>öncelik</b>, <b>hedef fiyat</b> ve <b>alma zamanı</b>
+                        bilgilerini İstek Detayı'ndan doldurun.</span>
+                </div>
+                <div id="aiBudgetFields" style="display:none;">
+                    <div class="aiFormGroup">
+                        <label class="afLabel">Bütçe (TL)</label>
+                        <input type="number" id="aiBudget" placeholder="5000" min="0" />
+                    </div>
+                    <div class="aiFormGroup">
+                        <label class="afLabel">Zaman Dilimi</label>
+                        <select id="aiTimeFrame">
+                            <option value="1m">Bu ay</option>
+                            <option value="3m">3 ay</option>
+                            <option value="6m">6 ay</option>
+                            <option value="1y">1 yıl</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="aiFormGroup">
+                    <label class="afLabel">Ürün Seçimi <span id="aiSelCount">(0 seçili)</span></label>
+                    <div class="aiProdGrid" id="aiProdGrid"></div>
+                </div>
+                <div class="aiPrefSlider">
+                    <div class="prefLabel">Tercih Ayarı — AI uzmanların ağırlığını etkiler</div>
+                    <input type="range" id="aiPref" min="-2" max="2" step="1" value="0" />
+                    <div class="prefLabels">
+                        <span><i class="ph ph-piggy-bank"></i> Tasarruf</span>
+                        <span><i class="ph ph-scales"></i> Dengeli</span>
+                        <span><i class="ph ph-confetti"></i> Deneyim</span>
+                    </div>
+                </div>
+                <button class="aiSubmitBtn" id="aiRunBtn" disabled><i class="ph ph-magnifying-glass"></i> Analiz
+                    Et</button>
+            </div>
+
+            <!-- Screen 3: Loading -->
+            <div class="aiScreen" id="aiScreenLoad">
+                <div class="aiLoadWrap">
+                    <div style="font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:4px;">Uzman
+                        Konseyi Toplanıyor</div>
+                    <div class="aiExperts" id="aiExpAvatars">
+                        <div class="aiExpAvatar" style="background:#E8F5E9;border-color:#4CAF50;">💰</div>
+                        <div class="aiExpAvatar" style="background:#E3F2FD;border-color:#2196F3;">🎯</div>
+                        <div class="aiExpAvatar" style="background:#FFF8E1;border-color:#FFC107;">⭐</div>
+                        <div class="aiExpAvatar" style="background:#F3E5F5;border-color:#9C27B0;">🌟</div>
+                        <div class="aiExpAvatar" style="background:#FFF3E0;border-color:#FF9800;">🐷</div>
+                        <div class="aiExpAvatar" style="background:#FCE4EC;border-color:#E91E63;">🎉</div>
+                        <div class="aiExpAvatar" style="background:#ECEFF1;border-color:#607D8B;">⚖️</div>
+                    </div>
+                    <div class="aiLoadStatus" id="aiLoadStatus">Uzmanlar hazırlanıyor...</div>
+                    <div class="aiProgress">
+                        <div class="aiProgressBar" id="aiProgressBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 4: Results -->
+            <div class="aiScreen" id="aiScreenResult">
+                <div class="aiResultTabs">
+                    <button class="aiResultTab active" data-tab="rec"><i class="ph ph-chart-bar"></i> Öneri</button>
+                    <button class="aiResultTab" data-tab="exp"><i class="ph ph-users-three"></i> Uzmanlar</button>
+                    <button class="aiResultTab" data-tab="debate"><i class="ph ph-chat-teardrop-dots"></i>
+                        Tartışma</button>
+                </div>
+                <div class="aiTabContent active" id="aiTabRec"></div>
+                <div class="aiTabContent" id="aiTabExp"></div>
+                <div class="aiTabContent" id="aiTabDebate"></div>
+                <div style="display:flex;gap:10px;margin-top:16px;">
+                    <button class="aiSubmitBtn" id="aiSaveHist"
+                        style="flex:1;background:var(--surface);color:var(--textPrimary);border:1px solid var(--stroke);"><i
+                            class="ph ph-floppy-disk"></i>
+                        Geçmişe Kaydet</button>
+                    <button class="aiSubmitBtn" id="aiNewQuery" style="flex:1;"><i class="ph ph-arrows-clockwise"></i>
+                        Yeni Analiz</button>
+                </div>
+            </div>
+
+            <!-- Screen 5: History -->
+            <div class="aiScreen" id="aiScreenHist">
+                <div id="aiHistList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const LS_KEY = "wishlist_v3";
+        let items = [];
+        let activeId = null;
+        let activeCat = "all";
+        let activeSort = "date-desc";
+        let purchaseTargetId = null;
+
+        /* ── DOM refs ── */
+        const gridEl = document.getElementById("grid");
+        const emptyEl = document.getElementById("empty");
+        const filePick = document.getElementById("filePick");
+        const modalBack = document.getElementById("modalBack");
+        const closeModalBtn = document.getElementById("closeModal");
+        const mImg = document.getElementById("mImg");
+        const mLink = document.getElementById("mLink");
+        const goLinkBtn = document.getElementById("goLink");
+        const mCategory = document.getElementById("mCategory");
+        const mTimeline = document.getElementById("mTimeline");
+        const mYear = document.getElementById("mYear");
+        const mPriority = document.getElementById("mPriority");
+        const mPrice = document.getElementById("mPrice");
+        const mNote = document.getElementById("mNote");
+        const saveItemBtn = document.getElementById("saveItem");
+        const deleteItemBtn = document.getElementById("deleteItem");
+        const purchaseBack = document.getElementById("purchaseBack");
+        const closePurchaseBtn = document.getElementById("closePurchase");
+        const purchasePriceInput = document.getElementById("purchasePrice");
+        const wrappedBack = document.getElementById("wrappedBack");
+        const closeWrappedBtn = document.getElementById("closeWrapped");
+        const desireSelectorEl = document.getElementById("desireSelector");
+        const menuBtnEl = document.getElementById("menuBtn");
+        const dropdownEl = document.getElementById("dropdown");
+        const wrGalleryEl = document.getElementById("wrGallery");
+
+        /* ── Year select population ── */
+        (function initYearSelect() {
+            const now = new Date().getFullYear();
+            for (let y = 2026; y <= 2036; y++) {
+                const o = document.createElement("option");
+                o.value = y; o.textContent = y;
+                if (y === new Date().getFullYear()) o.selected = true;
+                mYear.appendChild(o);
+            }
+        })();
+
+        /* ═══ SIGNATURE #2: DESIRE METER BUILDER ═══ */
+        function buildDesireSelector(level) {
+            desireSelectorEl.innerHTML = "";
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.createElement("div");
+                btn.className = "dBtn" + (i <= level ? " active" : "");
+                btn.innerHTML = i <= level
+                    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="#E8458B"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+                    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+                btn.addEventListener("click", () => {
+                    mPriority.value = i;
+                    buildDesireSelector(i);
+                });
+                desireSelectorEl.appendChild(btn);
+            }
+        }
+
+        /* Build desire meter for cards */
+        function buildCardDesireMeter(level) {
+            let html = '<span class="desireMeter">';
+            for (let i = 1; i <= 5; i++) {
+                const filled = i <= level;
+                html += '<svg class="dHeart' + (filled ? ' filled' : '') + '" width="12" height="12" viewBox="0 0 24 24" '
+                    + (filled ? 'fill="#E8458B"' : 'fill="none" stroke="#dbb" stroke-width="1.5"')
+                    + '><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+            }
+            html += '</span>';
+            return html;
+        }
+
+        /* ═══ NUMBER-ONLY INPUT (BUG FIX) ═══ */
+        function enforceNumericInput(el) {
+            el.addEventListener("keydown", e => {
+                if (["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) return;
+                if (e.ctrlKey || e.metaKey) return;
+                if (!/^\d$/.test(e.key)) e.preventDefault();
+            });
+            el.addEventListener("input", () => {
+                el.value = el.value.replace(/\D/g, "");
+            });
+            el.addEventListener("paste", e => {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData("text");
+                el.value = text.replace(/\D/g, "");
+            });
+        }
+        enforceNumericInput(purchasePriceInput);
+        enforceNumericInput(mPrice);
+
+        /* ── Toggles ── */
+        document.getElementById("togglePrice").addEventListener("click", function () {
+            this.classList.toggle("open");
+            document.getElementById("priceContent").classList.toggle("show");
+        });
+        document.getElementById("toggleNote").addEventListener("click", function () {
+            this.classList.toggle("open");
+            document.getElementById("noteContent").classList.toggle("show");
+        });
+
+        /* ── Storage ── */
+        function load() {
+            try {
+                let raw = localStorage.getItem(LS_KEY);
+                if (!raw) raw = localStorage.getItem("wishlist_photo_v2_light");
+                items = raw ? JSON.parse(raw) : [];
+            } catch (e) { items = []; }
+        }
+        function persist() { localStorage.setItem(LS_KEY, JSON.stringify(items)); }
+        function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
+
+        /* ── Category filter ── */
+        document.getElementById("catBar").addEventListener("click", e => {
+            const pill = e.target.closest(".catPill");
+            if (!pill) return;
+            document.querySelectorAll(".catPill").forEach(p => p.classList.remove("active"));
+            pill.classList.add("active");
+            activeCat = pill.dataset.cat;
+            render();
+        });
+
+        /* ── Sort filter ── */
+        document.getElementById("sortBar").addEventListener("click", e => {
+            const pill = e.target.closest(".sortPill");
+            if (!pill) return;
+            document.querySelectorAll(".sortPill").forEach(p => p.classList.remove("active"));
+            pill.classList.add("active");
+            activeSort = pill.dataset.sort;
+            render();
+        });
+
+        /* ── Sort logic ── */
+        function sortItems(arr) {
+            const copy = [...arr];
+            switch (activeSort) {
+                case "date-desc": return copy.sort((a, b) => b.createdAt - a.createdAt);
+                case "date-asc": return copy.sort((a, b) => a.createdAt - b.createdAt);
+                case "priority-desc": return copy.sort((a, b) => (b.priority || 1) - (a.priority || 1));
+                case "priority-asc": return copy.sort((a, b) => (a.priority || 1) - (b.priority || 1));
+                default: return copy.sort((a, b) => b.createdAt - a.createdAt);
+            }
+        }
+
+        /* ═══ RENDER ═══ */
+        function render() {
+            gridEl.innerHTML = "";
+            let filtered;
+            if (activeCat === "all") {
+                filtered = items.filter(x => x.status !== "bought" && !x.secret);
+            } else if (activeCat === "bought") {
+                filtered = items.filter(x => x.status === "bought" && !x.secret);
+            } else if (activeCat === "secret") {
+                filtered = items.filter(x => x.secret);
+            } else {
+                filtered = items.filter(x => (x.category || "diger") === activeCat && x.status !== "bought" && !x.secret);
+            }
+
+            const sorted = sortItems(filtered);
+
+            if (!sorted.length) {
+                emptyEl.style.display = "block";
+                return;
+            }
+            emptyEl.style.display = "none";
+
+            sorted.forEach((it, idx) => {
+                const card = document.createElement("div");
+                const isBought = it.status === "bought";
+                card.className = "card" + (isBought ? " bought" : "");
+                card.style.animationDelay = (idx * 0.06) + "s";
+
+                if (isBought) {
+                    let boughtText = "✓ Alındı";
+                    if (it.boughtPrice) boughtText += "\n₺" + it.boughtPrice;
+                    card.setAttribute("data-bought-text", boughtText);
+                }
+
+                const img = document.createElement("img");
+                img.src = it.imgData; img.alt = "wishlist"; img.loading = "lazy";
+
+                /* Signature #1: Floating tile chips */
+                const chipTL = document.createElement("div");
+                chipTL.className = "chipTL";
+                chipTL.innerHTML = buildCardDesireMeter(it.priority || 1);
+
+                card.appendChild(img);
+                card.appendChild(chipTL);
+
+                /* Secret badge */
+                if (it.secret) {
+                    const badge = document.createElement("div");
+                    badge.className = "secretBadge";
+                    badge.textContent = "🔒 Gizli";
+                    card.appendChild(badge);
+                }
+
+                if (!isBought) {
+                    const chipTR = document.createElement("div");
+                    chipTR.className = "chipTR";
+                    chipTR.textContent = "Aldım";
+                    chipTR.addEventListener("click", ev => {
+                        ev.stopPropagation();
+                        openPurchaseModal(it.id);
+                    });
+                    card.appendChild(chipTR);
+                }
+
+                card.addEventListener("click", () => openModal(it.id));
+                gridEl.appendChild(card);
+            });
+        }
+
+        /* ═══ DETAIL MODAL ═══ */
+        function openModal(id) {
+            const it = items.find(x => x.id === id);
+            if (!it) return;
+            activeId = id;
+
+            mImg.src = it.imgData;
+            mLink.value = it.link || "";
+            mCategory.value = it.category || "diger";
+            mTimeline.value = it.timeline || "ocak";
+            mYear.value = it.timelineYear || new Date().getFullYear();
+            mPrice.value = it.price || "";
+            mNote.value = it.note || "";
+            document.getElementById("mSecret").checked = !!it.secret;
+            buildDesireSelector(it.priority || 3);
+            mPriority.value = it.priority || 3;
+
+            /* Reset toggles */
+            document.getElementById("togglePrice").classList.remove("open");
+            document.getElementById("priceContent").classList.remove("show");
+            document.getElementById("toggleNote").classList.remove("open");
+            document.getElementById("noteContent").classList.remove("show");
+
+            if (it.price) {
+                document.getElementById("togglePrice").classList.add("open");
+                document.getElementById("priceContent").classList.add("show");
+            }
+            if (it.note) {
+                document.getElementById("toggleNote").classList.add("open");
+                document.getElementById("noteContent").classList.add("show");
+            }
+
+            /* Show foot buttons */
+            document.getElementById("modalFoot").classList.add("show");
+
+            modalBack.style.display = "flex";
+            requestAnimationFrame(() => modalBack.classList.add("show"));
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeDetailModal() {
+            modalBack.classList.remove("show");
+            setTimeout(() => { modalBack.style.display = "none"; }, 280);
+            document.body.style.overflow = "";
+            activeId = null;
+        }
+
+        /* Go link */
+        goLinkBtn.addEventListener("click", () => {
+            const url = (mLink.value || "").trim();
+            if (!url) return;
+            const href = url.match(/^https?:\/\//) ? url : "https://" + url;
+            window.open(href, "_blank", "noopener");
+        });
+
+        /* ═══ PURCHASE MODAL ═══ */
+        function openPurchaseModal(id) {
+            purchaseTargetId = id;
+            purchasePriceInput.value = "";
+            purchaseBack.style.display = "flex";
+            requestAnimationFrame(() => purchaseBack.classList.add("show"));
+            document.body.style.overflow = "hidden";
+        }
+        function closePurchaseModal() {
+            purchaseBack.classList.remove("show");
+            setTimeout(() => { purchaseBack.style.display = "none"; }, 280);
+            document.body.style.overflow = "";
+            purchaseTargetId = null;
+        }
+        closePurchaseBtn.addEventListener("click", closePurchaseModal);
+        purchaseBack.addEventListener("click", e => { if (e.target === purchaseBack) closePurchaseModal(); });
+
+        document.getElementById("confirmPurchase").addEventListener("click", () => {
+            if (!purchaseTargetId) return;
+            const it = items.find(x => x.id === purchaseTargetId);
+            if (!it) return;
+            const price = parseInt(purchasePriceInput.value, 10) || 0;
+            it.status = "bought";
+            it.boughtPrice = price > 0 ? price : 0;
+            it.boughtAt = Date.now();
+            persist(); render(); closePurchaseModal();
+            showToast("Alınan ürünleri görmek için dokun → 'Alındı'", () => {
+                document.querySelectorAll(".catPill").forEach(p => p.classList.remove("active"));
+                const boughtPill = document.querySelector('.catPill[data-cat="bought"]');
+                if (boughtPill) { boughtPill.classList.add("active"); }
+                activeCat = "bought";
+                render();
+            });
+        });
+
+        /* ═══ FILE PICK ═══ */
+        function fileToDataURL(file) {
+            return new Promise((res, rej) => {
+                const r = new FileReader();
+                r.onload = () => res(String(r.result));
+                r.onerror = rej;
+                r.readAsDataURL(file);
+            });
+        }
+
+        filePick.addEventListener("change", async e => {
+            const files = e.target.files;
+            if (!files || !files.length) return;
+            for (const file of files) {
+                const imgData = await fileToDataURL(file);
+                items.push({
+                    id: Math.random().toString(16).slice(2) + Date.now().toString(16),
+                    imgData, link: "", category: "diger", timeline: "ocak",
+                    timelineYear: new Date().getFullYear(),
+                    priority: 3, note: "", price: "", status: "want",
+                    boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
+                });
+            }
+            persist(); render();
+            requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
+            if (items.length) openModal(items[items.length - 1].id);
+            filePick.value = "";
+        });
+
+        /* Camera capture */
+        document.getElementById("cameraPick").addEventListener("change", async e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const imgData = await fileToDataURL(file);
+            items.push({
+                id: Math.random().toString(16).slice(2) + Date.now().toString(16),
+                imgData, link: "", category: "diger", timeline: "ocak",
+                timelineYear: new Date().getFullYear(),
+                priority: 3, note: "", price: "", status: "want",
+                boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
+            });
+            persist(); render();
+            openModal(items[items.length - 1].id);
+            e.target.value = "";
+        });
+
+        /* Save */
+        saveItemBtn.addEventListener("click", () => {
+            if (!activeId) return;
+            const it = items.find(x => x.id === activeId);
+            if (!it) return;
+            it.link = (mLink.value || "").trim();
+            it.category = mCategory.value;
+            it.timeline = mTimeline.value;
+            it.timelineYear = parseInt(mYear.value, 10) || new Date().getFullYear();
+            it.priority = clamp(parseInt(mPriority.value, 10) || 1, 1, 5);
+            it.price = (mPrice.value || "").trim();
+            it.note = (mNote.value || "").trim();
+            it.secret = document.getElementById("mSecret").checked;
+            persist(); render(); closeDetailModal();
+        });
+
+        /* Delete */
+        deleteItemBtn.addEventListener("click", () => {
+            if (!activeId) return;
+            items = items.filter(x => x.id !== activeId);
+            persist(); render(); closeDetailModal();
+        });
+
+        closeModalBtn.addEventListener("click", closeDetailModal);
+        modalBack.addEventListener("click", e => { if (e.target === modalBack) closeDetailModal(); });
+
+        /* Clear all */
+        function clearAll() {
+            if (!confirm("⚠ DİKKAT: Tüm istek listesi silinecek!\n\nEklediğin tüm ürünler, fotoğraflar, notlar ve satın alma geçmişi kalıcı olarak silinecektir.\n\nBu işlem geri alınamaz. Devam etmek istiyor musun?")) return;
+            items = [];
+            persist();
+            /* Clear legacy keys so Wrapped doesn't show stale data */
+            localStorage.removeItem("wishlist_photo_v2_light");
+            localStorage.removeItem(AI_HIST_KEY);
+            render();
+        }
+
+        /* ═══ HAMBURGER MENU ═══ */
+        menuBtnEl.addEventListener("click", e => {
+            e.stopPropagation();
+            dropdownEl.classList.toggle("open");
+        });
+        document.addEventListener("click", e => {
+            if (!dropdownEl.contains(e.target) && e.target !== menuBtnEl) {
+                dropdownEl.classList.remove("open");
+            }
+        });
+        document.getElementById("dropReset").addEventListener("click", () => {
+            dropdownEl.classList.remove("open");
+            clearAll();
+        });
+        document.getElementById("dropWrapped").addEventListener("click", () => {
+            dropdownEl.classList.remove("open");
+            openWrapped();
+        });
+        document.getElementById("dropAI").addEventListener("click", () => {
+            dropdownEl.classList.remove("open");
+            openAI();
+        });
+        document.getElementById("dropSecret").addEventListener("click", () => {
+            dropdownEl.classList.remove("open");
+            document.querySelectorAll(".catPill").forEach(p => p.classList.remove("active"));
+            const secretPill = document.querySelector('.catPill[data-cat="secret"]');
+            if (secretPill) secretPill.classList.add("active");
+            activeCat = "secret";
+            render();
+        });
+
+        /* ═══ TOAST ═══ */
+        function showToast(msg, onClick) {
+            const existing = document.querySelector(".toast");
+            if (existing) existing.remove();
+            const t = document.createElement("div");
+            t.className = "toast";
+            t.textContent = msg;
+            if (onClick) {
+                t.addEventListener("click", () => {
+                    onClick();
+                    if (t.parentNode) t.remove();
+                });
+            }
+            document.body.appendChild(t);
+            setTimeout(() => { if (t.parentNode) t.remove(); }, 3300);
+        }
+
+        /* ═══ WRAPPED ═══ */
+        const MONTHS_TR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+        let wrMonth, wrYear;
+
+        function daysInMonth(m, y) { return new Date(y, m + 1, 0).getDate(); }
+
+        function formatDate(ts) {
+            const d = new Date(ts);
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return dd + '/' + mm + '/' + yyyy;
+        }
+
+        function updateWrappedUI() {
+            const mName = MONTHS_TR[wrMonth];
+            const lastDay = daysInMonth(wrMonth, wrYear);
+            const firstTs = new Date(wrYear, wrMonth, 1).getTime();
+            const lastTs = new Date(wrYear, wrMonth, lastDay, 23, 59, 59, 999).getTime();
+
+            document.getElementById("wrLabel").textContent = mName + " " + wrYear;
+            document.getElementById("wrTitle").textContent = mName + " " + wrYear + " Wrapped'i";
+            document.getElementById("wrRange").textContent = "1 " + mName + " – " + lastDay + " " + mName + " " + wrYear;
+
+            const addedThisMonth = items.filter(x => x.createdAt >= firstTs && x.createdAt <= lastTs).length;
+            const boughtThisMonth = items.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
+            const boughtCount = boughtThisMonth.length;
+            const totalSpent = boughtThisMonth.reduce((s, x) => s + (x.boughtPrice || 0), 0);
+
+            document.getElementById("wrAdded").textContent = addedThisMonth;
+            document.getElementById("wrBought").textContent = boughtCount;
+            document.getElementById("wrSpent").textContent = "₺" + totalSpent;
+
+            /* Make bought stat clickable */
+            const boughtCard = document.getElementById("wrBought").closest(".statCard");
+            boughtCard.classList.toggle("clickable", boughtCount > 0);
+
+            /* Hide gallery when navigating months */
+            wrGalleryEl.classList.remove("show");
+            wrGalleryEl.innerHTML = "";
+
+            /* Store bought items for gallery */
+            wrGalleryEl._boughtItems = boughtThisMonth;
+        }
+
+        /* Bought stat click → toggle gallery */
+        document.getElementById("wrBought").closest(".statCard").addEventListener("click", () => {
+            const boughtItems = wrGalleryEl._boughtItems || [];
+            if (!boughtItems.length) return;
+
+            if (wrGalleryEl.classList.contains("show")) {
+                wrGalleryEl.classList.remove("show");
+                wrGalleryEl.innerHTML = "";
+                return;
+            }
+
+            wrGalleryEl.innerHTML = "";
+            boughtItems.forEach(it => {
+                const flipCard = document.createElement("div");
+                flipCard.className = "flipCard";
+
+                const inner = document.createElement("div");
+                inner.className = "flipInner";
+
+                /* Front — photo */
+                const front = document.createElement("div");
+                front.className = "flipFront";
+                if (it.secret) {
+                    /* Secret item: show blurred lock placeholder instead of photo */
+                    front.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0e0f0,#e0d0f0);font-size:32px;">🔒</div>';
+                } else {
+                    const img = document.createElement("img");
+                    img.src = it.imgData;
+                    img.alt = "bought";
+                    front.appendChild(img);
+                }
+
+                /* Back — price & date */
+                const back = document.createElement("div");
+                back.className = "flipBack";
+                const priceEl = document.createElement("div");
+                priceEl.className = "fbPrice";
+                priceEl.textContent = "₺" + (it.boughtPrice || 0);
+                const dateEl = document.createElement("div");
+                dateEl.className = "fbDate";
+                dateEl.textContent = it.secret ? "Gizli" : (it.boughtAt ? formatDate(it.boughtAt) : "—");
+                back.appendChild(priceEl);
+                back.appendChild(dateEl);
+
+                inner.appendChild(front);
+                inner.appendChild(back);
+                flipCard.appendChild(inner);
+
+                flipCard.addEventListener("click", () => {
+                    inner.classList.toggle("flipped");
+                });
+
+                wrGalleryEl.appendChild(flipCard);
+            });
+
+            wrGalleryEl.classList.add("show");
+        });
+
+        function openWrapped() {
+            const now = new Date();
+            wrMonth = now.getMonth();
+            wrYear = now.getFullYear();
+            updateWrappedUI();
+            wrappedBack.style.display = "flex";
+            requestAnimationFrame(() => wrappedBack.classList.add("show"));
+            document.body.style.overflow = "hidden";
+        }
+        function closeWrapped() {
+            wrappedBack.classList.remove("show");
+            setTimeout(() => { wrappedBack.style.display = "none"; }, 280);
+            document.body.style.overflow = "";
+        }
+
+        document.getElementById("wrPrev").addEventListener("click", () => {
+            wrMonth--;
+            if (wrMonth < 0) { wrMonth = 11; wrYear--; }
+            updateWrappedUI();
+        });
+        document.getElementById("wrNext").addEventListener("click", () => {
+            wrMonth++;
+            if (wrMonth > 11) { wrMonth = 0; wrYear++; }
+            updateWrappedUI();
+        });
+
+        closeWrappedBtn.addEventListener("click", closeWrapped);
+        wrappedBack.addEventListener("click", e => { if (e.target === wrappedBack) closeWrapped(); });
+
+        /* ═══════════════════════════════════════════════════════════
+           ═══ WISHLIST AI — EXPERT COUNCIL ENGINE ═══
+           ═══════════════════════════════════════════════════════════ */
+        const AI_HIST_KEY = "wishlist_ai_history";
+        let aiMode = null;
+        let aiSelectedIds = [];
+        let aiCurrentResult = null;
+
+        const EXPERTS = [
+            { id: "budget", name: "Bütçe Uzmanı", icon: "💰", color: "#4CAF50", weights: { price: 0.40, need: 0.25, cat: 0.15, save: 0.15, exp: -0.05 } },
+            { id: "need", name: "İhtiyaç Analisti", icon: "🎯", color: "#2196F3", weights: { price: 0.10, need: 0.50, cat: 0.10, save: 0.00, exp: 0.00 } },
+            { id: "quality", name: "Kalite Uzmanı", icon: "⭐", color: "#FFC107", weights: { price: 0.20, need: 0.20, cat: 0.25, save: 0.00, exp: 0.10 } },
+            { id: "lifestyle", name: "Yaşam Tarzı Danışmanı", icon: "🌟", color: "#9C27B0", weights: { price: 0.15, need: 0.25, cat: 0.30, save: 0.00, exp: 0.10 } },
+            { id: "savings", name: "Tasarruf Savunucusu", icon: "🐷", color: "#FF9800", weights: { price: 0.45, need: 0.15, cat: 0.05, save: 0.30, exp: -0.15 } },
+            { id: "experience", name: "Deneyim Tutkunu", icon: "🎉", color: "#E91E63", weights: { price: 0.05, need: 0.35, cat: 0.20, save: -0.15, exp: 0.30 } }
+        ];
+        const REFEREE = { id: "referee", name: "Hakem", icon: "⚖️", color: "#607D8B" };
+
+        const CATEGORIES_TR = { giyim: "Giyim", kozmetik: "Kozmetik", teknoloji: "Teknoloji", parfum: "Parfüm", sac: "Saç Bakım", diger: "Diğer" };
+        const TIME_LABELS = { "1m": "bu ay", "3m": "3 ay içinde", "6m": "6 ay içinde", "1y": "1 yıl içinde" };
+
+        /* Expert weight multiplier based on user preference */
+        function expertMult(expertId, pref) {
+            if (expertId === "savings") return 1 + (-pref * 0.25); // pref -2→1.5, 0→1, +2→0.5
+            if (expertId === "experience") return 1 + (pref * 0.25); // pref -2→0.5, 0→1, +2→1.5
+            return 1;
+        }
+
+        /* Score a single product for one expert */
+        function scoreProduct(expert, prod, allProducts, budget, pref) {
+            const w = expert.weights;
+            const prices = allProducts.map(p => p.price || 0).filter(p => p > 0);
+            const maxPrice = Math.max(...prices, 1);
+            const minPrice = Math.min(...prices, 0);
+
+            // Price score (cheaper = higher, relative to range)
+            const priceVal = prod.price || 0;
+            const priceScore = priceVal > 0 ? (1 - (priceVal - minPrice) / (maxPrice - minPrice + 1)) * 100 : 50;
+
+            // Need score (1-5 normalized to 0-100)
+            const needScore = ((prod.needScore || 3) / 5) * 100;
+
+            // Category bonus (lifestyle/quality get bonuses for certain categories)
+            let catBonus = 50;
+            if (expert.id === "lifestyle" && ["parfum", "giyim"].includes(prod.category)) catBonus = 80;
+            if (expert.id === "quality" && ["teknoloji"].includes(prod.category)) catBonus = 85;
+            if (expert.id === "savings") catBonus = 30; // savings expert is always skeptical
+
+            // Savings bias (if budget constrained, favor cheaper items)
+            const saveBias = budget > 0 ? Math.max(0, (1 - priceVal / budget)) * 100 : 50;
+
+            // Experience bias (higher need = more joy)
+            const expBias = needScore * 1.1;
+
+            let baseScore = (priceScore * w.price) + (needScore * w.need) + (catBonus * w.cat)
+                + (saveBias * w.save) + (expBias * w.exp);
+            baseScore = Math.max(5, Math.min(95, baseScore));
+
+            const mult = expertMult(expert.id, pref);
+            const weightedScore = Math.round(baseScore * mult);
+
+            return { baseScore: Math.round(baseScore), weightedScore, mult };
+        }
+
+        /* Template-based reasoning generator */
+        const REASONING_TEMPLATES = {
+            budget: {
+                high: ["{name} fiyat/performans açısından oldukça avantajlı.", "₺{price} bütçe dostu bir seçenek, çok iyi değer."],
+                mid: ["{name} fiyat olarak orta seviyede, makul bir yatırım.", "Fiyatı kabul edilebilir ama daha ekonomik alternatifler olabilir."],
+                low: ["{name} bütçeyi fazla zorlayan bir ürün.", "₺{price} oldukça yüksek, bütçe açısından riskli."]
+            },
+            need: {
+                high: ["{name} gerçek bir ihtiyaca yanıt veriyor, ihtiyaç skoru yüksek.", "Bu ürün günlük hayatta ciddi fark yaratabilir."],
+                mid: ["{name} ihtiyaç olarak orta seviyede, 'olsa iyi olur' kategorisinde.", "İhtiyaç skoru orta — onsuz da idare edilebilir."],
+                low: ["{name} istekten çok lüks kategorisinde.", "İhtiyaç skoru düşük, öncelikli değil."]
+            },
+            quality: {
+                high: ["{name} uzun vadede kaliteli bir yatırım olacaktır.", "Kalite ve dayanıklılık açısından güvenilir bir seçim."],
+                mid: ["{name} kalite açısından standart seviyede.", "Orta segment bir ürün, beklentileri karşılar."],
+                low: ["{name} kalite konusunda soru işaretleri var.", "Uzun vadeli değeri düşük olabilir."]
+            },
+            lifestyle: {
+                high: ["{name} yaşam tarzınla mükemmel uyum sağlıyor.", "Bu ürün seni yansıtıyor, günlük stiline tam oturuyor."],
+                mid: ["{name} yaşam tarzına kısmen uyuyor.", "Stiline uygun ama vazgeçilmez değil."],
+                low: ["{name} yaşam tarzınla tam örtüşmüyor.", "Kullanım sıklığı düşük kalabilir."]
+            },
+            savings: {
+                high: ["Şu anda almaman gereken bir ürün yok, {name} mantıklı.", "Harcama doğru yöne gidiyor, {name} akıllı bir seçim."],
+                mid: ["{name} alınabilir ama acele etme, bir düşün.", "Gerçekten ₺{price} harcamaya değer mi? İyi düşün."],
+                low: ["₺{price} gereksiz harcama riski taşıyor!", "Bu parayı biriktirsen daha faydalı olur."]
+            },
+            experience: {
+                high: ["{name} hayatına renk katacak! Kesinlikle al! 🎉", "YOLO! {name} seni mutlu edecek, tereddüt etme!"],
+                mid: ["{name} iyi bir deneyim sunabilir, hayatın tadını çıkar.", "Biraz düşün ama kendinten de esirgeme."],
+                low: ["{name} çok heyecanlandırmıyor ama olabilir.", "Deneyim açısından çok öne çıkmıyor."]
+            }
+        };
+
+        function generateReasoning(expertId, prod, score) {
+            const templates = REASONING_TEMPLATES[expertId];
+            if (!templates) return prod.name + " için puan: " + score;
+            const tier = score >= 65 ? "high" : score >= 40 ? "mid" : "low";
+            const pool = templates[tier];
+            const tpl = pool[Math.floor(Math.random() * pool.length)];
+            return tpl.replace(/\{name\}/g, prod.name).replace(/\{price\}/g, String(prod.price || 0));
+        }
+
+        function generateKeyPoints(expertId, products, scores) {
+            const points = [];
+            const best = scores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
+            const worst = scores.reduce((a, b) => a.weightedScore < b.weightedScore ? a : b);
+            if (expertId === "budget") {
+                points.push("En iyi fiyat/değer: " + best.prodName);
+                if (worst.prodName !== best.prodName) points.push("En pahalı seçenek: " + worst.prodName);
+            } else if (expertId === "need") {
+                points.push("En yüksek ihtiyaç: " + best.prodName);
+                points.push("Toplam " + products.length + " ürün değerlendirildi");
+            } else if (expertId === "savings") {
+                const total = products.reduce((s, p) => s + (p.price || 0), 0);
+                points.push("Toplam liste değeri: ₺" + total);
+                points.push("Dikkatli harcama önerisi");
+            } else if (expertId === "experience") {
+                points.push("En keyifli seçim: " + best.prodName + " 🎉");
+                points.push("Hayatın tadını çıkar!");
+            } else {
+                points.push("Öne çıkan: " + best.prodName);
+                if (products.length > 2) points.push(products.length + " ürün analiz edildi");
+            }
+            return points;
+        }
+
+        /* Run analysis for all experts */
+        function runExpertAnalysis(products, budget, pref) {
+            return EXPERTS.map(expert => {
+                const scores = products.map(p => {
+                    const s = scoreProduct(expert, p, products, budget, pref);
+                    return { ...s, prodId: p.id, prodName: p.name, reasoning: generateReasoning(expert.id, p, s.baseScore) };
+                });
+                const recommendation = generateReasoning(expert.id,
+                    products[scores.indexOf(scores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b))],
+                    scores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b).weightedScore
+                );
+                return {
+                    ...expert,
+                    productScores: scores,
+                    recommendation,
+                    keyPoints: generateKeyPoints(expert.id, products, scores),
+                    weightApplied: expertMult(expert.id, pref)
+                };
+            });
+        }
+
+        /* Debate generator — with richer counter-arguments */
+        const COUNTER_TEMPLATES = {
+            budget: {
+                savings: "Tasarruf önemli ama sadece en ucuzu almak her zaman doğru değil — fiyat/performans dengesine bakmalıyız.",
+                experience: "Deneyim güzel ama cüzdan ağlamasın! Kontrollü harcama ile de mutlu olunur.",
+                lifestyle: "Stil önemli ama gösteriş için bütçeyi zorlamak mantıksız.",
+                need: "İhtiyaç skoru tek başına yeterli değil, fiyatıyla birlikte değerlendirmeli.",
+                quality: "Kalite bahanesiyle her zaman pahalı ürüne yönelmek doğru stratejik değil."
+            },
+            need: {
+                experience: "Eğlence güzel ama önce gerçek ihtiyaçları karşılamamız lazım.",
+                savings: "Her şeyden kısmak da sağlıklı değil — gerçek ihtiyaçlara yatırım şart.",
+                lifestyle: "Trend takip etmek yerine gerçekten neye ihtiyacın var onu düşün.",
+                budget: "Bütçe önemli ama ihtiyaç olan şeyden kısmak uzun vadede zararlı.",
+                quality: "Kalite güzel ama asıl soru bu ürüne gerçekten ihtiyacın var mı?"
+            },
+            quality: {
+                budget: "Ucuz alıp sık sık değiştirmek mi, kaliteli alıp uzun süre kullanmak mı? Kalite kazanır.",
+                savings: "Tasarruf adına kalitesiz ürün almak para israfıdır!",
+                experience: "Anlık heyecan yerine uzun vadeli memnuniyet sağlayan kaliteyi tercih etmeliyiz.",
+                need: "İhtiyaç olsa bile kalitesiz ürün almak çözüm değil.",
+                lifestyle: "Sadece güzel görünmesi yetmez, kaliteli de olmalı."
+            },
+            lifestyle: {
+                savings: "Hayatı sadece biriktirmek için yaşamıyoruz — kendini ifade etmek de önemli.",
+                budget: "Bütçe sınırı içinde bile stilden vazgeçmemek gerekir.",
+                quality: "En kaliteli ürün sana yakışmıyorsa ne anlamı var?",
+                need: "Bazen 'ihtiyaç' dışında olan şeyler de hayatı güzelleştirir.",
+                experience: "Deneyim güzel ama tarzına uyan seçimler daha kalıcı mutluluk verir."
+            },
+            savings: {
+                experience: "Eğlence için para saçmak kolay — ama yarın ne olacak? Biriktir!",
+                lifestyle: "Moda ve trend peşinde koşmak cüzdanı eritir. Gerçekten gerekli mi?",
+                budget: "Bütçe planı güzel ama en iyi plan hiç harcamamak! Gerçekten lazım mı?",
+                quality: "'Kaliteli' diye pahalı ürüne para vermek her zaman akıllıca değil.",
+                need: "İhtiyaç mı yoksa istekle mi karıştırıyorsun? Çoğu şey onsuz da olur."
+            },
+            experience: {
+                savings: "Hayatı biriktirmek için değil yaşamak için yaşıyoruz! Biraz harca, mutlu ol!",
+                budget: "Her şeyi hesaplamak bazen hayatı kaçırmak demek. YOLO!",
+                need: "Her şey 'ihtiyaç' olacak diye bir kural yok — keyif de önemli!",
+                quality: "En kaliteli ürün değil, en çok mutlu eden ürün doğru seçimdir.",
+                lifestyle: "Tarz güzel ama asıl olan o ürünle yaşayacağın deneyim!"
+            }
+        };
+
+        function generateDebate(expertAnalyses, products) {
+            const debate = [];
+            for (let i = 0; i < expertAnalyses.length; i++) {
+                const exp = expertAnalyses[i];
+                const agreements = [];
+                const disagreements = [];
+                const counterArgs = [];
+
+                const expTop = exp.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
+
+                for (let j = 0; j < expertAnalyses.length; j++) {
+                    if (i === j) continue;
+                    const other = expertAnalyses[j];
+                    const othTop = other.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
+                    if (expTop.prodId === othTop.prodId) {
+                        agreements.push(other.name + " ile " + expTop.prodName + " konusunda hemfikiriz");
+                    } else {
+                        const diff = Math.abs(expTop.weightedScore - othTop.weightedScore);
+                        if (diff > 10) {
+                            disagreements.push(other.name + " " + othTop.prodName + " diyor ama ben " + expTop.prodName + " diyorum");
+                            /* Fetch specific counter-argument */
+                            const ct = COUNTER_TEMPLATES[exp.id];
+                            if (ct && ct[other.id]) {
+                                counterArgs.push(ct[other.id]);
+                            }
+                        }
+                    }
+                }
+
+                /* Pick the most relevant counter-argument */
+                let mainCounter = "";
+                if (counterArgs.length > 0) {
+                    mainCounter = counterArgs[0];
+                } else if (disagreements.length > 0) {
+                    mainCounter = "Farklı bakış açılarını anlıyorum ama kendi analizime güveniyorum.";
+                }
+
+                debate.push({
+                    role: exp.name,
+                    icon: exp.icon,
+                    color: exp.color,
+                    message: exp.recommendation,
+                    agreements: agreements.slice(0, 2),
+                    disagreements: disagreements.slice(0, 3),
+                    counterArguments: mainCounter
+                });
+            }
+            return debate;
+        }
+
+        /* Referee decision */
+        function refereeDecision(expertAnalyses, products, budget, mode, pref, timeFrame) {
+            // Weighted average scores
+            const finalScores = products.map(p => {
+                let totalWeight = 0, totalScore = 0;
+                expertAnalyses.forEach(exp => {
+                    const ps = exp.productScores.find(s => s.prodId === p.id);
+                    if (ps) {
+                        totalScore += ps.weightedScore * exp.weightApplied;
+                        totalWeight += exp.weightApplied;
+                    }
+                });
+                return { ...p, finalScore: Math.round(totalScore / (totalWeight || 1)) };
+            }).sort((a, b) => b.finalScore - a.finalScore);
+
+            let recommended = [];
+            let budgetAlloc = "";
+            let timeline = "";
+            let summary = "";
+            const warnings = [];
+
+            if (mode === "budget" && budget > 0) {
+                // Greedy knapsack
+                let remaining = budget;
+                finalScores.forEach(p => {
+                    if ((p.price || 0) <= remaining) {
+                        recommended.push(p);
+                        remaining -= (p.price || 0);
+                    }
+                });
+                const spent = budget - remaining;
+                budgetAlloc = "₺" + spent + " / ₺" + budget + " kullanıldı (₺" + remaining + " kaldı)";
+                timeline = "Önerilen ürünleri " + (TIME_LABELS[timeFrame] || "bu ay") + " almanız uygun";
+                summary = recommended.length + " ürün bütçe dahilinde önerildi. " + budgetAlloc;
+                if (remaining < budget * 0.1) warnings.push("Bütçenin neredeyse tamamı kullanılıyor!");
+            } else if (mode === "compare") {
+                recommended = finalScores;
+                summary = "En yüksek puanı " + finalScores[0].name + " aldı (" + finalScores[0].finalScore + " puan).";
+                if (finalScores.length > 1 && finalScores[0].finalScore - finalScores[1].finalScore < 5) {
+                    warnings.push("İlk iki ürün çok yakın puanda — ikisi de iyi seçenekler.");
+                }
+            } else {
+                // Prioritization: score/price ratio + need
+                recommended = finalScores.map((p, i) => ({ ...p, priority: i + 1 }));
+                const totalCost = recommended.reduce((s, p) => s + (p.price || 0), 0);
+                timeline = "Toplam maliyet ₺" + totalCost + ". Öncelik sırasıyla alım önerilir.";
+                summary = "Öncelik sırası belirlendi. İlk alınması gereken: " + finalScores[0].name;
+            }
+
+            if (!recommended.length) recommended = finalScores.slice(0, 3);
+
+            // Consensus
+            recommended = recommended.map((p, i) => {
+                const agreements = expertAnalyses.filter(exp => {
+                    const top = exp.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
+                    return top.prodId === p.id;
+                }).length;
+                return {
+                    ...p,
+                    priority: i + 1,
+                    expertConsensus: agreements + "/" + EXPERTS.length + " uzman destekliyor",
+                    reasoning: generateReasoning("quality", p, p.finalScore)
+                };
+            });
+
+            const prefAck = pref > 0
+                ? "Deneyim odaklı tercihin dikkate alındı. Deneyim Tutkunu görüşü ağırlıklı."
+                : pref < 0
+                    ? "Tasarruf odaklı tercihin dikkate alındı. Tasarruf Savunucusu görüşü ağırlıklı."
+                    : "Dengeli bir değerlendirme yapıldı.";
+
+            return {
+                recommendedProducts: recommended,
+                budgetAllocation: budgetAlloc,
+                timeline,
+                summary,
+                warnings,
+                preferenceAcknowledgment: prefAck
+            };
+        }
+
+        /* ═══ AI UI LOGIC ═══ */
+        function aiShowScreen(screenId) {
+            document.querySelectorAll("#aiBack .aiScreen").forEach(s => s.classList.remove("active"));
+            document.getElementById(screenId).classList.add("active");
+        }
+
+        function openAI() {
+            aiMode = null;
+            aiSelectedIds = [];
+            aiCurrentResult = null;
+            document.getElementById("aiBack").classList.add("show");
+            document.body.style.overflow = "hidden";
+            aiShowScreen("aiScreenMode");
+        }
+
+        function closeAI() {
+            document.getElementById("aiBack").classList.remove("show");
+            document.body.style.overflow = "";
+        }
+
+        document.getElementById("aiCloseBtn").addEventListener("click", () => {
+            const currentScreen = document.querySelector("#aiBack .aiScreen.active");
+            if (currentScreen.id === "aiScreenMode") {
+                closeAI();
+            } else if (currentScreen.id === "aiScreenHist") {
+                aiShowScreen("aiScreenMode");
+            } else {
+                aiShowScreen("aiScreenMode");
+            }
+        });
+
+        /* History card click */
+        document.getElementById("aiHistCard").addEventListener("click", () => {
+            aiShowScreen("aiScreenHist");
+            renderAIHistory();
+        });
+
+        /* Mode select */
+        document.querySelectorAll(".aiModeCard").forEach(card => {
+            card.addEventListener("click", () => {
+                if (!card.dataset.mode) return; // skip history card
+                aiMode = card.dataset.mode;
+                aiSelectedIds = [];
+                aiShowScreen("aiScreenForm");
+                document.getElementById("aiBudgetFields").style.display = aiMode === "budget" ? "block" : "none";
+                buildProductGrid();
+                updateAIRunBtn();
+            });
+        });
+
+        /* Build product grid */
+        function buildProductGrid() {
+            const grid = document.getElementById("aiProdGrid");
+            grid.innerHTML = "";
+            const available = items.filter(x => x.status !== "bought" && !x.secret);
+            if (!available.length) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--textSecondary);font-size:12px;padding:20px;">Henüz ürün yok. Önce ürün ekleyin.</div>';
+                return;
+            }
+            available.forEach(it => {
+                const div = document.createElement("div");
+                div.className = "aiProdItem";
+                div.dataset.id = it.id;
+                div.innerHTML = `
+                    <img src="${it.imgData}" alt="product" />
+                    <div class="prodCheck"></div>
+                    <div class="prodName">${it.category ? (CATEGORIES_TR[it.category] || it.category) : "Ürün"}</div>
+                `;
+                div.addEventListener("click", () => toggleProductSelect(it.id));
+                grid.appendChild(div);
+            });
+        }
+
+        function toggleProductSelect(id) {
+            const maxSel = aiMode === "compare" ? 5 : 999;
+            const idx = aiSelectedIds.indexOf(id);
+            if (idx >= 0) {
+                aiSelectedIds.splice(idx, 1);
+            } else if (aiSelectedIds.length < maxSel) {
+                aiSelectedIds.push(id);
+            }
+            // Update UI
+            document.querySelectorAll(".aiProdItem").forEach(el => {
+                const isSelected = aiSelectedIds.includes(el.dataset.id);
+                el.classList.toggle("selected", isSelected);
+                el.querySelector(".prodCheck").textContent = isSelected ? "✓" : "";
+                el.classList.toggle("disabled", !isSelected && aiSelectedIds.length >= maxSel);
+            });
+            document.getElementById("aiSelCount").textContent = "(" + aiSelectedIds.length + " seçili)";
+            updateAIRunBtn();
+        }
+
+        function updateAIRunBtn() {
+            const btn = document.getElementById("aiRunBtn");
+            const minSel = aiMode === "compare" ? 2 : 1;
+            const hasBudget = aiMode !== "budget" || (parseInt(document.getElementById("aiBudget").value) > 0);
+            btn.disabled = aiSelectedIds.length < minSel || !hasBudget;
+        }
+
+        document.getElementById("aiBudget").addEventListener("input", updateAIRunBtn);
+
+        /* Preference slider — emoji removed, no-op listener */
+        document.getElementById("aiPref").addEventListener("input", function () {
+            /* slider value is used at analysis time */
+        });
+
+        /* Run analysis */
+        document.getElementById("aiRunBtn").addEventListener("click", () => {
+            const pref = parseInt(document.getElementById("aiPref").value) || 0;
+            const budget = aiMode === "budget" ? (parseInt(document.getElementById("aiBudget").value) || 0) : 0;
+            const timeFrame = document.getElementById("aiTimeFrame").value;
+            const selectedProducts = aiSelectedIds.map(id => {
+                const it = items.find(x => x.id === id);
+                if (!it) return null;
+                return {
+                    id: it.id,
+                    name: CATEGORIES_TR[it.category] || it.category || "Ürün",
+                    price: parseInt(it.price) || 0,
+                    needScore: it.priority || 3,
+                    category: it.category || "diger",
+                    imgData: it.imgData
+                };
+            }).filter(Boolean);
+
+            if (!selectedProducts.length) return;
+
+            // Loading animation
+            aiShowScreen("aiScreenLoad");
+            runLoadingAnimation(selectedProducts, budget, pref, timeFrame);
+        });
+
+        /* Loading animation sequence */
+        function runLoadingAnimation(products, budget, pref, timeFrame) {
+            const avatars = document.querySelectorAll("#aiExpAvatars .aiExpAvatar");
+            const statusEl = document.getElementById("aiLoadStatus");
+            const progressEl = document.getElementById("aiProgressBar");
+            avatars.forEach(a => { a.classList.remove("thinking", "done"); });
+            progressEl.style.width = "0%";
+
+            const steps = [
+                { delay: 400, idx: 0, status: "💰 Bütçe Uzmanı değerlendiriyor...", progress: "10%" },
+                { delay: 900, idx: 1, status: "🎯 İhtiyaç Analisti inceliyor...", progress: "25%" },
+                { delay: 1400, idx: 2, status: "⭐ Kalite Uzmanı analiz ediyor...", progress: "38%" },
+                { delay: 1900, idx: 3, status: "🌟 Yaşam Tarzı Danışmanı düşünüyor...", progress: "50%" },
+                { delay: 2400, idx: 4, status: "🐷 Tasarruf Savunucusu hesaplıyor...", progress: "62%" },
+                { delay: 2900, idx: 5, status: "🎉 Deneyim Tutkunu değerlendiriyor...", progress: "75%" },
+                { delay: 3400, status: "💬 Uzmanlar tartışıyor...", progress: "85%" },
+                { delay: 4200, idx: 6, status: "⚖️ Hakem nihai kararı veriyor...", progress: "95%" },
+            ];
+
+            steps.forEach(step => {
+                setTimeout(() => {
+                    statusEl.textContent = step.status;
+                    progressEl.style.width = step.progress;
+                    if (step.idx !== undefined && avatars[step.idx]) {
+                        avatars[step.idx].classList.add("thinking");
+                        if (step.idx > 0 && avatars[step.idx - 1]) {
+                            avatars[step.idx - 1].classList.remove("thinking");
+                            avatars[step.idx - 1].classList.add("done");
+                        }
+                    }
+                }, step.delay);
+            });
+
+            // Run actual analysis
+            setTimeout(() => {
+                const expertAnalyses = runExpertAnalysis(products, budget, pref);
+                const debate = generateDebate(expertAnalyses, products);
+                const finalDecision = refereeDecision(expertAnalyses, products, budget, aiMode, pref,
+                    document.getElementById("aiTimeFrame").value);
+
+                aiCurrentResult = {
+                    id: Date.now().toString(36),
+                    queryType: aiMode,
+                    createdAt: Date.now(),
+                    products,
+                    budget,
+                    pref,
+                    expertAnalyses,
+                    debate,
+                    finalDecision
+                };
+
+                avatars.forEach(a => { a.classList.remove("thinking"); a.classList.add("done"); });
+                progressEl.style.width = "100%";
+                statusEl.textContent = "✅ Analiz tamamlandı!";
+
+                setTimeout(() => {
+                    aiShowScreen("aiScreenResult");
+                    renderAIResults(aiCurrentResult);
+                }, 600);
+            }, 5000);
+        }
+
+        /* Render results */
+        function renderAIResults(result) {
+            const fd = result.finalDecision;
+            const exps = result.expertAnalyses;
+
+            // Tab switching
+            document.querySelectorAll(".aiResultTab").forEach(tab => {
+                tab.classList.remove("active");
+                tab.addEventListener("click", function () {
+                    document.querySelectorAll(".aiResultTab").forEach(t => t.classList.remove("active"));
+                    document.querySelectorAll(".aiTabContent").forEach(c => c.classList.remove("active"));
+                    this.classList.add("active");
+                    document.getElementById("aiTab" + this.dataset.tab.charAt(0).toUpperCase() + this.dataset.tab.slice(1)).classList.add("active");
+                });
+            });
+            document.querySelector('.aiResultTab[data-tab="rec"]').classList.add("active");
+            document.querySelectorAll(".aiTabContent").forEach(c => c.classList.remove("active"));
+            document.getElementById("aiTabRec").classList.add("active");
+
+            // Tab 1: Recommendation
+            let recHtml = "";
+            recHtml += '<div class="aiSummaryBox"><div class="sbTitle">⚖️ Hakem Kararı</div><div class="sbText">' + fd.summary + '</div></div>';
+
+            if (fd.budgetAllocation) {
+                recHtml += '<div class="aiSummaryBox"><div class="sbTitle">💰 Bütçe</div><div class="sbText">' + fd.budgetAllocation + '</div></div>';
+            }
+            if (fd.timeline) {
+                recHtml += '<div class="aiSummaryBox"><div class="sbTitle">📅 Zaman Planı</div><div class="sbText">' + fd.timeline + '</div></div>';
+            }
+            if (fd.preferenceAcknowledgment) {
+                recHtml += '<div class="aiSummaryBox"><div class="sbTitle">🎚️ Tercih</div><div class="sbText">' + fd.preferenceAcknowledgment + '</div></div>';
+            }
+
+            fd.recommendedProducts.forEach((p, i) => {
+                recHtml += `<div class="aiRecCard">
+                    <div class="recRank">${i + 1}</div>
+                    <img class="recImg" src="${p.imgData}" alt="" />
+                    <div class="recInfo">
+                        <div class="recName">${p.name}</div>
+                        <div class="recScore">${p.finalScore} puan · ${p.expertConsensus}</div>
+                        <div class="recReason">${p.reasoning || ""}</div>
+                    </div>
+                </div>`;
+            });
+
+            if (fd.warnings.length) {
+                recHtml += '<div class="aiSummaryBox" style="border-color:#FFC107;"><div class="sbTitle">⚠️ Uyarılar</div><div class="sbText">' + fd.warnings.join("<br>") + '</div></div>';
+            }
+            document.getElementById("aiTabRec").innerHTML = recHtml;
+
+            // Tab 2: Expert panels
+            let expHtml = "";
+            exps.forEach(exp => {
+                const topProd = exp.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
+                const weightPct = Math.round(exp.weightApplied * 100);
+                expHtml += `<div class="aiExpPanel">
+                    <div class="aiExpHead" onclick="this.parentElement.classList.toggle('open')">
+                        <span class="expIcon">${exp.icon}</span>
+                        <span class="expName">${exp.name}</span>
+                        <span class="expWeight">×${exp.weightApplied.toFixed(2)}</span>
+                        <span class="expChevron">›</span>
+                    </div>
+                    <div class="aiExpBody">
+                        <div class="expWeightBar"><div class="expWeightFill" style="width:${weightPct}%;background:${exp.color};"></div></div>
+                        <div><strong>Öneri:</strong> ${exp.recommendation}</div>
+                        <div style="margin-top:6px;"><strong>En yüksek puan:</strong> ${topProd.prodName} (${topProd.weightedScore})</div>
+                        ${exp.productScores.map(s => `<div style="margin-top:4px;font-size:11px;">• ${s.prodName}: ${s.weightedScore} puan — ${s.reasoning}</div>`).join("")}
+                        <ul class="expKeyPoints">${exp.keyPoints.map(k => `<li>${k}</li>`).join("")}</ul>
+                    </div>
+                </div>`;
+            });
+            document.getElementById("aiTabExp").innerHTML = expHtml;
+
+            // Tab 3: Debate
+            let debateHtml = "";
+            result.debate.forEach(d => {
+                debateHtml += `<div class="aiDebateMsg">
+                    <span class="dbIcon">${d.icon}</span>
+                    <div class="dbBubble">
+                        <div class="dbName" style="color:${d.color}">${d.role}</div>
+                        <div>${d.message}</div>
+                        ${d.agreements.length ? '<div class="dbAgree">✅ ' + d.agreements.join("; ") + '</div>' : ''}
+                        ${d.disagreements.length ? '<div class="dbDisagree">❌ ' + d.disagreements.join("; ") + '</div>' : ''}
+                        ${d.counterArguments ? '<div style="margin-top:4px;font-style:italic;font-size:11px;">"' + d.counterArguments + '"</div>' : ''}
+                    </div>
+                </div>`;
+            });
+            // Referee final word
+            debateHtml += `<div class="aiDebateMsg">
+                <span class="dbIcon">⚖️</span>
+                <div class="dbBubble" style="border-color:var(--accent);background:linear-gradient(135deg,rgba(232,69,139,0.05),rgba(168,124,255,0.05));">
+                    <div class="dbName" style="color:#607D8B">Hakem — Nihai Karar</div>
+                    <div>${fd.summary}</div>
+                    <div style="margin-top:4px;font-size:11px;color:var(--accent);">${fd.preferenceAcknowledgment}</div>
+                </div>
+            </div>`;
+            document.getElementById("aiTabDebate").innerHTML = debateHtml;
+        }
+
+        /* Save to history */
+        document.getElementById("aiSaveHist").addEventListener("click", () => {
+            if (!aiCurrentResult) return;
+            let history = [];
+            try { history = JSON.parse(localStorage.getItem(AI_HIST_KEY)) || []; } catch (e) { }
+            // Don't save imgData to avoid localStorage bloat
+            const slim = {
+                id: aiCurrentResult.id,
+                queryType: aiCurrentResult.queryType,
+                createdAt: aiCurrentResult.createdAt,
+                productCount: aiCurrentResult.products.length,
+                summary: aiCurrentResult.finalDecision.summary,
+                pref: aiCurrentResult.pref,
+                budget: aiCurrentResult.budget
+            };
+            history.unshift(slim);
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem(AI_HIST_KEY, JSON.stringify(history));
+            showToast("💾 Analiz geçmişe kaydedildi!");
+        });
+
+        /* New query */
+        document.getElementById("aiNewQuery").addEventListener("click", () => {
+            aiShowScreen("aiScreenMode");
+            aiMode = null;
+            aiSelectedIds = [];
+            aiCurrentResult = null;
+        });
+
+        /* Render history */
+        function renderAIHistory() {
+            const list = document.getElementById("aiHistList");
+            let history = [];
+            try { history = JSON.parse(localStorage.getItem(AI_HIST_KEY)) || []; } catch (e) { }
+            if (!history.length) {
+                list.innerHTML = '<div class="aiEmptyHist">🤖 Henüz AI analizi yapılmamış<br><span style="font-size:11px;">Bir analiz yapıp "Geçmişe Kaydet" butonuna basın</span></div>';
+                return;
+            }
+            const typeLabels = { budget: "💰 Bütçe Optimizasyonu", compare: "⚔️ Karşılaştırma", priority: "📋 Önceliklendirme" };
+            list.innerHTML = history.map(h => {
+                const d = new Date(h.createdAt);
+                const dateStr = d.toLocaleDateString("tr-TR") + " " + d.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+                return `<div class="aiHistItem">
+                    <div class="hiDate">${dateStr}</div>
+                    <div class="hiType">${typeLabels[h.queryType] || h.queryType}</div>
+                    <div class="hiSummary">${h.productCount} ürün | ${h.summary || "—"}</div>
+                </div>`;
+            }).join("");
+        }
+
+        /* dropAI button is wired in the hamburger menu section */
+
+        /* ═══ AI WRAPPED INTEGRATION ═══ */
+        function getAIStats() {
+            let history = [];
+            try { history = JSON.parse(localStorage.getItem(AI_HIST_KEY)) || []; } catch (e) { }
+            const total = history.length;
+            if (!total) return null;
+            const byType = { budget: 0, compare: 0, priority: 0 };
+            let prefSum = 0;
+            history.forEach(h => {
+                byType[h.queryType] = (byType[h.queryType] || 0) + 1;
+                prefSum += (h.pref || 0);
+            });
+            const avgPref = prefSum / total;
+            let personality = "⚖️ Dengeli Alışverişçi";
+            if (avgPref >= 1) personality = "🎉 Yaşamdan Zevk Alan";
+            else if (avgPref >= 0.3) personality = "😊 Mutlu Alışverişçi";
+            else if (avgPref <= -1) personality = "🐷 Süper Tasarrufçu";
+            else if (avgPref <= -0.3) personality = "💡 Akıllı Tüketici";
+            return { total, byType, avgPref: avgPref.toFixed(1), personality };
+        }
+
+        /* Inject AI stats into Wrapped */
+        const origUpdateWrappedUI = updateWrappedUI;
+        updateWrappedUI = function () {
+            origUpdateWrappedUI();
+            // Add AI card
+            let aiCard = document.getElementById("wrAICard");
+            if (aiCard) aiCard.remove();
+            const stats = getAIStats();
+            if (!stats) return;
+            const container = document.querySelector(".wrappedBody");
+            if (!container) return;
+            const card = document.createElement("div");
+            card.id = "wrAICard";
+            card.className = "aiWrappedCard";
+            card.innerHTML = `
+                <div class="awTitle">🤖 AI Desteği</div>
+                <div class="awStat"><span>Toplam AI Sorgusu</span><span class="awVal">${stats.total}</span></div>
+                <div class="awStat"><span>Bütçe Analizi</span><span class="awVal">${stats.byType.budget || 0}</span></div>
+                <div class="awStat"><span>Karşılaştırma</span><span class="awVal">${stats.byType.compare || 0}</span></div>
+                <div class="awStat"><span>Önceliklendirme</span><span class="awVal">${stats.byType.priority || 0}</span></div>
+                <div class="awStat"><span>Ortalama Tercih</span><span class="awVal">${stats.avgPref}</span></div>
+                <div class="awBadge">${stats.personality}</div>
+            `;
+            container.insertBefore(card, document.querySelector(".wrappedNote"));
+        };
+
+        /* ═══ INIT ═══ */
+        load();
+        render();
+    </script>
+</body>
+
+</html>
