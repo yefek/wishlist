@@ -3289,34 +3289,122 @@
                 }, step.delay);
             });
 
-            // Run actual analysis
-            setTimeout(() => {
-                const expertAnalyses = runExpertAnalysis(products, budget, pref);
-                const debate = generateDebate(expertAnalyses, products);
-                const finalDecision = refereeDecision(expertAnalyses, products, budget, aiMode, pref,
-                    document.getElementById("aiTimeFrame").value);
+   // Run actual analysis via Groq API
+const productList = products.map((p, i) =>
+    `${i + 1}. ${p.name} — Fiyat: ₺${p.price || "?"}, Kategori: ${p.category || "?"}, Öncelik: ${p.priority || 3}/5`
+).join("\n");
 
-                aiCurrentResult = {
-                    id: Date.now().toString(36),
-                    queryType: aiMode,
-                    createdAt: Date.now(),
-                    products,
-                    budget,
-                    pref,
-                    expertAnalyses,
-                    debate,
-                    finalDecision
-                };
+const systemPrompt = `Sen bir alışveriş danışmanı panelisin. Aşağıdaki 6 uzman karakteri oynayacaksın:
 
-                avatars.forEach(a => { a.classList.remove("thinking"); a.classList.add("done"); });
-                progressEl.style.width = "100%";
-                statusEl.textContent = "✅ Analiz tamamlandı!";
+1. 💰 Bütçe Analisti (budget) — fiyat/değer odaklı, tutumlu
+2. 🎯 İhtiyaç Uzmanı (need) — gerçek ihtiyaç vs istek ayrımı yapar
+3. ⭐ Kalite Uzmanı (quality) — uzun vadeli kalite ve dayanıklılık
+4. 🌟 Yaşam Tarzı Danışmanı (lifestyle) — kişisel stil ve kimlik
+5. 🐷 Tasarruf Savunucusu (savings) — para biriktirmeyi savunur
+6. 🎉 Deneyim Tutkunu (experience) — anı ve keyfi önemser
+7. ⚖️ Hakem — tarafsız, diğerlerini dinler, nihai kararı verir
 
-                setTimeout(() => {
-                    aiShowScreen("aiScreenResult");
-                    renderAIResults(aiCurrentResult);
-                }, 600);
-            }, 5000);
+Kurallar:
+- Her uzman kendi bakış açısından yorum yapsın
+- Uzmanlar birbirini gerçekten eleştirsin, aynı fikirde olmasın
+- Hakem taraflı olmasın, güçlü argümanı kazansın
+- Türkçe yaz, samimi ve doğal konuş
+- Mod: ${aiMode === "budget" ? "Bütçe Optimizasyonu" : aiMode === "compare" ? "Karşılaştırma" : "Önceliklendirme"}
+- Bütçe: ₺${budget || "belirtilmedi"}
+
+Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
+{
+  "experts": [
+    {
+      "id": "budget",
+      "name": "Bütçe Analisti",
+      "icon": "💰",
+      "recommendation": "...",
+      "keyPoints": ["...", "..."],
+      "productScores": [{"prodName": "...", "weightedScore": 75, "reasoning": "..."}]
+    }
+  ],
+  "debate": [
+    {
+      "role": "Bütçe Analisti",
+      "icon": "💰",
+      "message": "...",
+      "agreements": ["..."],
+      "disagreements": ["..."],
+      "counterArguments": "..."
+    }
+  ],
+  "finalDecision": {
+    "winner": "ürün adı",
+    "summary": "...",
+    "budgetAllocation": "...",
+    "timeline": "...",
+    "preferenceAcknowledgment": "...",
+    "warnings": ["..."]
+  }
+}`;
+
+const userMessage = `Şu ürünleri analiz et:\n${productList}`;
+
+fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        systemPrompt,
+        messages: [{ role: 'user', content: userMessage }]
+    })
+})
+.then(r => r.json())
+.then(data => {
+    const text = data.choices[0].message.content;
+    const clean = text.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    aiCurrentResult = {
+        id: Date.now().toString(36),
+        queryType: aiMode,
+        createdAt: Date.now(),
+        products,
+        budget,
+        pref,
+        expertAnalyses: result.experts.map(e => ({
+            ...e,
+            color: EXPERTS.find(x => x.id === e.id)?.color || "#888",
+            weightApplied: 1
+        })),
+        debate: result.debate.map(d => ({
+            ...d,
+            color: EXPERTS.find(x => x.icon === d.icon)?.color || "#888"
+        })),
+        finalDecision: {
+            ...result.finalDecision,
+            recommendedProducts: result.experts.flatMap(e => e.productScores)
+                .sort((a, b) => b.weightedScore - a.weightedScore)
+                .filter((v, i, arr) => arr.findIndex(x => x.prodName === v.prodName) === i)
+                .slice(0, 3)
+                .map(s => ({
+                    name: s.prodName,
+                    finalScore: s.weightedScore,
+                    expertConsensus: s.reasoning,
+                    reasoning: s.reasoning,
+                    imgData: products.find(p => p.name === s.prodName)?.imgData || ""
+                }))
+        }
+    };
+
+    avatars.forEach(a => { a.classList.remove("thinking"); a.classList.add("done"); });
+    progressEl.style.width = "100%";
+    statusEl.textContent = "✅ Analiz tamamlandı!";
+
+    setTimeout(() => {
+        aiShowScreen("aiScreenResult");
+        renderAIResults(aiCurrentResult);
+    }, 600);
+})
+.catch(err => {
+    statusEl.textContent = "❌ Bir hata oluştu, tekrar dene.";
+    console.error(err);
+});
         }
 
         /* Render results */
@@ -3524,3 +3612,4 @@
 </body>
 
 </html>
+
