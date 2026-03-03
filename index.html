@@ -13,6 +13,7 @@
         href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=DM+Sans:wght@400;500;600&display=swap"
         rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
     <style>
         /* ═══════════ DESIGN TOKENS ═══════════ */
         :root {
@@ -58,6 +59,76 @@
                 linear-gradient(180deg, #ffe8f2, #f5e4ff);
             background-attachment: fixed;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══════════ THEMES ═══════════ */
+        body[data-theme="blue"] {
+            --accent: #3D7FE8; --accentSoft: rgba(61,127,232,0.14); --accentMid: rgba(61,127,232,0.22);
+            --stroke: rgba(61,127,232,0.10); --glow: rgba(61,127,232,0.25);
+            --lilac: #7CB4FF; --lilacSoft: rgba(124,180,255,0.12);
+            --surface: rgba(240,247,255,0.78); --surfaceHover: rgba(225,240,255,0.90);
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(61,127,232,0.32), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(100,160,255,0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(61,127,232,0.20), transparent 50%),
+                linear-gradient(180deg, #e8f0ff, #e4eeff);
+            background-attachment: fixed;
+        }
+        body[data-theme="green"] {
+            --accent: #2EB87A; --accentSoft: rgba(46,184,122,0.14); --accentMid: rgba(46,184,122,0.22);
+            --stroke: rgba(46,184,122,0.10); --glow: rgba(46,184,122,0.25);
+            --lilac: #7CDFB4; --lilacSoft: rgba(124,223,180,0.12);
+            --surface: rgba(240,255,248,0.78); --surfaceHover: rgba(225,255,242,0.90);
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(46,184,122,0.30), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(100,220,170,0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(46,184,122,0.20), transparent 50%),
+                linear-gradient(180deg, #e8fff4, #e4fff2);
+            background-attachment: fixed;
+        }
+        body[data-theme="charcoal"] {
+            --accent: #7B8FA8; --accentSoft: rgba(123,143,168,0.16); --accentMid: rgba(123,143,168,0.26);
+            --stroke: rgba(123,143,168,0.14); --glow: rgba(123,143,168,0.28);
+            --lilac: #A8B8CC; --lilacSoft: rgba(168,184,204,0.14);
+            --surface: rgba(242,245,248,0.82); --surfaceHover: rgba(232,237,244,0.92);
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(123,143,168,0.28), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(160,180,200,0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(123,143,168,0.18), transparent 50%),
+                linear-gradient(180deg, #edf0f4, #e8edf4);
+            background-attachment: fixed;
+        }
+        body[data-theme="peach"] {
+            --accent: #E8763D; --accentSoft: rgba(232,118,61,0.14); --accentMid: rgba(232,118,61,0.22);
+            --stroke: rgba(232,118,61,0.10); --glow: rgba(232,118,61,0.25);
+            --lilac: #FFAA7C; --lilacSoft: rgba(255,170,124,0.12);
+            --surface: rgba(255,245,240,0.78); --surfaceHover: rgba(255,238,228,0.90);
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(232,118,61,0.30), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(255,160,100,0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(232,118,61,0.20), transparent 50%),
+                linear-gradient(180deg, #fff0e8, #fff4e4);
+            background-attachment: fixed;
+        }
+
+        /* Theme picker */
+        .themeGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .themeCard {
+            border-radius:14px; overflow:hidden; border:2.5px solid transparent;
+            cursor:pointer; transition:all 0.2s ease; box-shadow:0 3px 12px rgba(0,0,0,0.08);
+        }
+        .themeCard:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.12); }
+        .themeCard:active { transform:scale(0.96); }
+        .themeCard.selected { border-color:var(--accent); box-shadow:0 0 0 3px var(--accentSoft), 0 4px 16px rgba(0,0,0,0.10); }
+        .themePreview {
+            width:100%; height:72px; position:relative;
+            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:8px;
+        }
+        .themePreviewBar { width:80%; height:7px; border-radius:99px; opacity:0.9; }
+        .themePreviewCard { width:80%; height:16px; border-radius:7px; opacity:0.5; }
+        .themeLabel {
+            font-size:11px; font-weight:600; color:var(--textSecondary);
+            text-align:center; padding:5px 4px; background:rgba(255,255,255,0.65);
         }
 
         /* ═══════════ HEADER ═══════════ */
@@ -1842,297 +1913,6 @@
             font-size: 13px;
         }
 
-        /* ═══════════ AUTH SCREEN ═══════════ */
-        #authScreen {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(255, 80, 180, 0.38), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(140, 107, 255, 0.16), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(255, 80, 180, 0.22), transparent 50%),
-                linear-gradient(180deg, #ffe8f2, #f5e4ff);
-            padding: 20px;
-        }
-
-        .authCard {
-            width: 100%;
-            max-width: 380px;
-            background: rgba(255, 245, 252, 0.94);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(232, 69, 139, 0.18);
-            border-radius: 28px;
-            box-shadow: 0 24px 64px rgba(232, 69, 139, 0.15), 0 8px 32px rgba(0,0,0,0.08);
-            padding: 36px 28px 32px;
-            animation: authSlideIn 0.45s cubic-bezier(0.32, 0.72, 0.45, 1) forwards;
-        }
-
-        @keyframes authSlideIn {
-            from { opacity: 0; transform: translateY(32px) scale(0.96); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .authLogo {
-            font-family: var(--font-display);
-            font-size: 32px;
-            font-weight: 400;
-            font-style: italic;
-            background: linear-gradient(135deg, #ff38aa, #9572ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            margin-bottom: 6px;
-        }
-
-        .authSub {
-            text-align: center;
-            font-size: 13px;
-            color: var(--textSecondary);
-            margin-bottom: 28px;
-        }
-
-        .authTabs {
-            display: flex;
-            gap: 0;
-            background: rgba(232, 69, 139, 0.07);
-            border-radius: 10px;
-            padding: 3px;
-            margin-bottom: 24px;
-        }
-
-        .authTab {
-            flex: 1;
-            padding: 8px 0;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            font-family: var(--font-text);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--textSecondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .authTab.active {
-            background: white;
-            color: var(--accent);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .authField {
-            margin-bottom: 12px;
-        }
-
-        /* ── Pill input wrapper ── */
-        .authInputWrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 240, 250, 0.72);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1.5px solid rgba(232, 69, 139, 0.14);
-            border-radius: 99px;
-            padding: 0 18px;
-            transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-        }
-
-        .authInputWrap:focus-within {
-            border-color: rgba(232, 69, 139, 0.55);
-            background: rgba(255, 244, 252, 0.92);
-            box-shadow: 0 0 0 4px rgba(232,69,139,0.08), 0 4px 20px rgba(232,69,139,0.14);
-        }
-
-        .authInputWrap .authInputIcon {
-            color: var(--accent);
-            opacity: 0.45;
-            flex-shrink: 0;
-            font-size: 17px;
-            transition: opacity 0.22s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .authInputWrap:focus-within .authInputIcon {
-            opacity: 1;
-        }
-
-        .authInputWrap input {
-            flex: 1;
-            min-width: 0;
-            border: none !important;
-            background: transparent !important;
-            padding: 13px 0;
-            font-size: 14px;
-            color: var(--textPrimary);
-            outline: none !important;
-            font-family: var(--font-text);
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            -webkit-appearance: none;
-        }
-
-        .authInputWrap input::placeholder {
-            color: var(--textSecondary);
-            opacity: 0.65;
-        }
-
-        /* pill divider between icon and input */
-        .authInputDivider {
-            width: 1px;
-            height: 16px;
-            background: rgba(232,69,139,0.18);
-            flex-shrink: 0;
-        }
-
-        /* Firebase status banner */
-        .fbStatusBadge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 99px;
-            margin: 0 auto 18px;
-            width: fit-content;
-        }
-
-        .fbStatusBadge.offline {
-            background: rgba(232,69,139,0.08);
-            color: var(--textSecondary);
-            border: 1px solid rgba(232,69,139,0.14);
-        }
-
-        .fbStatusBadge.online {
-            background: rgba(72,199,142,0.12);
-            color: #1a7a4c;
-            border: 1px solid rgba(72,199,142,0.30);
-        }
-
-        .authSubmit {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 99px;
-            background: linear-gradient(135deg, #E8458B, #9572ff);
-            color: white;
-            font-family: var(--font-text);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
-            box-shadow: 0 6px 22px rgba(232, 69, 139, 0.38);
-            margin-top: 10px;
-            letter-spacing: 0.2px;
-        }
-
-        .authSubmit:active { transform: scale(0.97); }
-        .authSubmit:hover  { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(232, 69, 139, 0.48); }
-
-        .authError {
-            background: rgba(232, 69, 139, 0.09);
-            border: 1px solid rgba(232, 69, 139, 0.22);
-            border-radius: 99px;
-            padding: 9px 16px;
-            font-size: 12px;
-            color: #c0125e;
-            margin-bottom: 12px;
-            display: none;
-            text-align: center;
-        }
-
-        .authSuccess {
-            background: rgba(72, 199, 142, 0.11);
-            border: 1px solid rgba(72, 199, 142, 0.28);
-            border-radius: 99px;
-            padding: 9px 16px;
-            font-size: 12px;
-            color: #1a7a4c;
-            margin-bottom: 12px;
-            display: none;
-            text-align: center;
-        }
-
-        /* ═══════════ SETTINGS MODAL ═══════════ */
-        .settingsSection {
-            margin-bottom: 20px;
-        }
-
-        .settingsSectionTitle {
-            font-family: var(--font-display);
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--textSecondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--stroke);
-        }
-
-        .settingsUserRow {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--accentSoft);
-            border: 1px solid var(--accentMid);
-            border-radius: var(--r1);
-            padding: 12px 14px;
-            margin-bottom: 16px;
-        }
-
-        .settingsAvatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #E8458B, #9572ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .settingsUsername {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--textPrimary);
-        }
-
-        .settingsEmail {
-            font-size: 11px;
-            color: var(--textSecondary);
-        }
-
-        .settingsLogout {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid rgba(232, 69, 139, 0.25);
-            border-radius: 10px;
-            background: rgba(232, 69, 139, 0.07);
-            color: var(--accent);
-            font-family: var(--font-text);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.18s ease;
-            margin-top: 8px;
-        }
-
-        .settingsLogout:hover {
-            background: rgba(232, 69, 139, 0.15);
-        }
-
         /* AI Wrapped Card */
         .aiWrappedCard {
             background: linear-gradient(135deg, rgba(232, 69, 139, 0.12), rgba(168, 124, 255, 0.12));
@@ -2174,6 +1954,154 @@
             border-radius: 20px;
             margin-top: 8px;
         }
+
+        /* ═══════════ AUTH SCREEN ═══════════ */
+        #authScreen {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(255,80,180,0.38), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(140,107,255,0.16), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(255,80,180,0.22), transparent 50%),
+                linear-gradient(180deg, #ffe8f2, #f5e4ff);
+            padding: 20px;
+        }
+        .authCard {
+            width: 100%; max-width: 380px;
+            background: rgba(255,245,252,0.94);
+            backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(232,69,139,0.18);
+            border-radius: 28px;
+            box-shadow: 0 24px 64px rgba(232,69,139,0.15), 0 8px 32px rgba(0,0,0,0.08);
+            padding: 36px 28px 32px;
+            animation: authSlideIn 0.45s cubic-bezier(0.32,0.72,0.45,1) forwards;
+        }
+        @keyframes authSlideIn {
+            from { opacity:0; transform:translateY(32px) scale(0.96); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .authLogo {
+            font-family: var(--font-display); font-size: 32px; font-weight: 400; font-style: italic;
+            background: linear-gradient(135deg,#ff38aa,#9572ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            text-align: center; margin-bottom: 6px;
+        }
+        .authSub { text-align:center; font-size:13px; color:var(--textSecondary); margin-bottom:28px; }
+        .authTabs {
+            display:flex; gap:0;
+            background: rgba(232,69,139,0.07);
+            border-radius:10px; padding:3px; margin-bottom:24px;
+        }
+        .authTab {
+            flex:1; padding:8px 0; border:none; background:transparent; border-radius:8px;
+            font-family:var(--font-text); font-size:13px; font-weight:600;
+            color:var(--textSecondary); cursor:pointer; transition:all 0.2s ease;
+        }
+        .authTab.active { background:white; color:var(--accent); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+        .authField { margin-bottom:12px; }
+        .authInputWrap {
+            display:flex; align-items:center; gap:10px;
+            background: rgba(255,240,250,0.72);
+            backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+            border: 1.5px solid rgba(232,69,139,0.14);
+            border-radius:99px; padding:0 18px;
+            transition: border-color 0.22s, box-shadow 0.22s, background 0.22s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .authInputWrap:focus-within {
+            border-color: rgba(232,69,139,0.55);
+            background: rgba(255,244,252,0.92);
+            box-shadow: 0 0 0 4px rgba(232,69,139,0.08), 0 4px 20px rgba(232,69,139,0.14);
+        }
+        .authInputIcon {
+            color:var(--accent); opacity:0.5; flex-shrink:0; font-size:17px;
+            transition:opacity 0.22s; display:flex; align-items:center;
+        }
+        .authInputWrap:focus-within .authInputIcon { opacity:1; }
+        .authInputDivider { width:1px; height:16px; background:rgba(232,69,139,0.18); flex-shrink:0; }
+        .authInputWrap input {
+            flex:1; min-width:0; border:none !important; background:transparent !important;
+            padding:13px 0; font-size:14px; color:var(--textPrimary); outline:none !important;
+            font-family:var(--font-text); box-shadow:none !important; border-radius:0 !important;
+            -webkit-appearance:none;
+        }
+        .authInputWrap input::placeholder { color:var(--textSecondary); opacity:0.65; }
+        .authSubmit {
+            width:100%; padding:14px; border:none; border-radius:99px;
+            background:linear-gradient(135deg,#E8458B,#9572ff); color:white;
+            font-family:var(--font-text); font-size:14px; font-weight:600; cursor:pointer;
+            transition: transform 0.18s, box-shadow 0.18s;
+            box-shadow: 0 6px 22px rgba(232,69,139,0.38); margin-top:10px;
+        }
+        .authSubmit:active { transform:scale(0.97); }
+        .authSubmit:hover  { transform:translateY(-1px); box-shadow:0 10px 30px rgba(232,69,139,0.48); }
+        .authError {
+            background:rgba(232,69,139,0.09); border:1px solid rgba(232,69,139,0.22);
+            border-radius:99px; padding:9px 16px; font-size:12px; color:#c0125e;
+            margin-bottom:12px; display:none; text-align:center;
+        }
+        .authSuccess {
+            background:rgba(72,199,142,0.11); border:1px solid rgba(72,199,142,0.28);
+            border-radius:99px; padding:9px 16px; font-size:12px; color:#1a7a4c;
+            margin-bottom:12px; display:none; text-align:center;
+        }
+
+        /* ═══════════ SETTINGS MODAL ═══════════ */
+        .settingsUserRow {
+            display:flex; align-items:center; gap:14px;
+            background:linear-gradient(135deg,rgba(232,69,139,0.10),rgba(168,124,255,0.10));
+            border:1.5px solid var(--accentMid); border-radius:20px;
+            padding:14px 16px; margin-bottom:20px;
+        }
+        .settingsAvatar {
+            width:46px; height:46px; border-radius:50%;
+            background:linear-gradient(135deg,#E8458B,#9572ff);
+            display:flex; align-items:center; justify-content:center;
+            color:white; font-weight:700; font-size:18px; flex-shrink:0;
+            box-shadow:0 4px 14px rgba(232,69,139,0.30);
+        }
+        .settingsUsername {
+            font-family:var(--font-display); font-size:18px; font-style:italic;
+            background:linear-gradient(135deg,#ff38aa,#9572ff);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        }
+        .settingsEmail { font-size:11px; color:var(--textSecondary); margin-top:2px; }
+        .settingsMenu { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+        .settingsTile {
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            gap:8px; padding:16px 10px; border-radius:16px;
+            border:1.5px solid var(--stroke); background:var(--surface);
+            backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+            cursor:pointer; transition:all 0.18s ease-out;
+            font-family:var(--font-text); font-size:12px; font-weight:600;
+            color:var(--textPrimary); text-align:center; line-height:1.3;
+        }
+        .settingsTile:hover {
+            background:var(--surfaceHover); border-color:var(--accentMid);
+            transform:translateY(-2px); box-shadow:0 6px 20px var(--glow);
+        }
+        .settingsTile:active { transform:scale(0.96); }
+        .settingsTile.active {
+            background:linear-gradient(135deg,rgba(232,69,139,0.18),rgba(168,124,255,0.12));
+            border-color:var(--accentMid); color:#3a0b2b;
+        }
+        .settingsTile.danger {
+            border-color:rgba(232,69,139,0.20); background:rgba(232,69,139,0.06); color:var(--accent);
+        }
+        .settingsTile.danger:hover { background:rgba(232,69,139,0.14); border-color:rgba(232,69,139,0.40); }
+        .settingsTileIcon { font-size:22px; line-height:1; }
+        .settingsPanelWrap { overflow:hidden; max-height:0; transition:max-height 0.35s ease; }
+        .settingsPanelWrap.open { max-height:400px; }
+        .settingsPanel {
+            background:rgba(255,245,252,0.60); border:1.5px solid var(--stroke);
+            border-radius:16px; padding:16px; margin-bottom:10px;
+        }
+        .settingsPanelTitle {
+            font-family:var(--font-display); font-size:14px; font-style:italic;
+            background:linear-gradient(135deg,#ff38aa,#9572ff);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            margin-bottom:12px;
+        }
     </style>
 </head>
 
@@ -2193,12 +2121,10 @@
                                     class="ph ph-brain"></i></span>WishlistAI</button>
                         <button class="dropItem" id="dropWrapped"><span class="dropIcon"><i
                                     class="ph ph-chart-bar"></i></span>Wrapped</button>
-                        <button class="dropItem" id="dropSecret"><span class="dropIcon"><i
-                                    class="ph ph-lock"></i></span>Gizli Mod</button>
                         <button class="dropItem" id="dropSettings" onclick="openSettings()"><span class="dropIcon"><i
                                     class="ph ph-gear"></i></span>Ayarlar</button>
-                        <button class="dropItem dropDanger" id="dropReset"><span class="dropIcon"><i
-                                    class="ph ph-trash"></i></span>Sıfırla</button>
+                        <button class="dropItem dropDanger" id="dropLogout" onclick="doLogout()"><span class="dropIcon"><i
+                                    class="ph ph-sign-out"></i></span>Çıkış Yap</button>
                     </div>
                 </div>
             </div>
@@ -2519,6 +2445,7 @@
         </div>
     </div>
 
+
     <!-- ═══ AUTH SCREEN ═══ -->
     <div id="authScreen">
         <div class="authCard">
@@ -2530,7 +2457,6 @@
             </div>
             <div id="authError" class="authError"></div>
             <div id="authSuccessMsg" class="authSuccess"></div>
-            <!-- Login Form -->
             <div id="loginForm">
                 <div class="authField">
                     <div class="authInputWrap">
@@ -2548,7 +2474,6 @@
                 </div>
                 <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
             </div>
-            <!-- Register Form -->
             <div id="registerForm" style="display:none;">
                 <div class="authField">
                     <div class="authInputWrap">
@@ -2585,273 +2510,312 @@
                 <button class="btn" onclick="closeSettings()">Kapat</button>
             </div>
             <div class="mBody">
-                <!-- User info -->
-                <div class="settingsSection">
-                    <div class="settingsSectionTitle">Hesabım</div>
-                    <div class="settingsUserRow">
-                        <div class="settingsAvatar" id="settingsAvatar">?</div>
-                        <div>
-                            <div class="settingsUsername" id="settingsUsernameDisplay">—</div>
-                            <div class="settingsEmail">Wishlistgül hesabı</div>
-                        </div>
+                <div class="settingsUserRow">
+                    <div class="settingsAvatar" id="settingsAvatar">?</div>
+                    <div>
+                        <div class="settingsUsername" id="settingsUsernameDisplay">—</div>
+                        <div class="settingsEmail">Wishlistgül hesabı</div>
                     </div>
                 </div>
-
-                <!-- Change password -->
-                <div class="settingsSection">
-                    <div class="settingsSectionTitle">Şifre Değiştir</div>
-                    <div id="pwError" class="authError"></div>
-                    <div id="pwSuccess" class="authSuccess"></div>
-                    <div class="authField">
-                        <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-lock-open"></i></span>
-                            <div class="authInputDivider"></div>
-                            <input id="pwOld" type="password" placeholder="Mevcut şifre" />
-                        </div>
+                <div class="settingsMenu">
+                    <div class="settingsTile" onclick="toggleSettingsPanel('pwPanel')">
+                        <div class="settingsTileIcon">🔑</div>
+                        <div>Şifre Değiştir</div>
                     </div>
-                    <div class="authField">
-                        <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-lock"></i></span>
-                            <div class="authInputDivider"></div>
-                            <input id="pwNew" type="password" placeholder="Yeni şifre" />
-                        </div>
+                    <div class="settingsTile" onclick="toggleSettingsPanel('themePanel')">
+                        <div class="settingsTileIcon">🎨</div>
+                        <div>Tema Rengi</div>
                     </div>
-                    <div class="authField">
-                        <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-lock-key"></i></span>
-                            <div class="authInputDivider"></div>
-                            <input id="pwNew2" type="password" placeholder="Yeni şifre tekrar" />
-                        </div>
+                    <div class="settingsTile" onclick="toggleSettingsPanel('langPanel')">
+                        <div class="settingsTileIcon">🌍</div>
+                        <div>Dil Tercihi</div>
                     </div>
-                    <button class="authSubmit" style="margin-top:0" onclick="doChangePassword()">Şifreyi Güncelle</button>
+                    <div class="settingsTile danger" onclick="toggleSettingsPanel('resetPanel')">
+                        <div class="settingsTileIcon">🗑️</div>
+                        <div>Listeyi Sıfırla</div>
+                    </div>
                 </div>
-
-                <!-- Logout -->
-                <div class="settingsSection">
-                    <div class="settingsSectionTitle">Oturum</div>
-                    <button class="settingsLogout" onclick="doLogout()"><i class="ph ph-sign-out"></i> Çıkış Yap</button>
+                <div class="settingsPanelWrap" id="pwPanel">
+                    <div class="settingsPanel">
+                        <div class="settingsPanelTitle">🔑 Şifre Değiştir</div>
+                        <div id="pwError" class="authError"></div>
+                        <div id="pwSuccess" class="authSuccess"></div>
+                        <div class="authField">
+                            <div class="authInputWrap">
+                                <span class="authInputIcon">🔓</span>
+                                <div class="authInputDivider"></div>
+                                <input id="pwOld" type="password" placeholder="Mevcut şifre" />
+                            </div>
+                        </div>
+                        <div class="authField">
+                            <div class="authInputWrap">
+                                <span class="authInputIcon">🔒</span>
+                                <div class="authInputDivider"></div>
+                                <input id="pwNew" type="password" placeholder="Yeni şifre" />
+                            </div>
+                        </div>
+                        <div class="authField">
+                            <div class="authInputWrap">
+                                <span class="authInputIcon">🔒</span>
+                                <div class="authInputDivider"></div>
+                                <input id="pwNew2" type="password" placeholder="Yeni şifre tekrar" />
+                            </div>
+                        </div>
+                        <button class="authSubmit" style="margin-top:4px" onclick="doChangePassword()">Güncelle →</button>
+                    </div>
+                </div>
+                <div class="settingsPanelWrap" id="themePanel">
+                    <div class="settingsPanel">
+                        <div class="settingsPanelTitle">🎨 Tema Rengi</div>
+                        <div class="themeGrid" id="themeGrid"></div>
+                    </div>
+                </div>
+                <div class="settingsPanelWrap" id="langPanel">
+                    <div class="settingsPanel">
+                        <div class="settingsPanelTitle">🌍 Dil Tercihi</div>
+                        <div style="font-size:13px;color:var(--textSecondary);text-align:center;padding:12px 0;">Yakında eklenecek ✨</div>
+                    </div>
+                </div>
+                <div class="settingsPanelWrap" id="resetPanel">
+                    <div class="settingsPanel">
+                        <div class="settingsPanelTitle">🗑️ Listeyi Sıfırla</div>
+                        <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
+                        <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="confirmReset()">Evet, Sıfırla</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        /* ═══════════════════════════════════════
-           🔥 FIREBASE CONFIG
-           ─────────────────────────────────────
-           1. console.firebase.google.com → Proje oluştur
-           2. Realtime Database → Oluştur → Test modunda başlat
-           3. Proje Ayarları → Web uygulaması → databaseURL kopyala
-           4. Aşağıya yapıştır (örn: https://PROJE-default-rtdb.firebaseio.com)
-        ═══════════════════════════════════════ */
+
+        /* ═══ FIREBASE CONFIG ═══ */
         const FB_DATABASE_URL = "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app";
-        const FB_ENABLED = FB_DATABASE_URL !== "YOUR_FIREBASE_DATABASE_URL" && FB_DATABASE_URL.startsWith("https://");
+        const FB_ENABLED = FB_DATABASE_URL.startsWith("https://");
 
         async function fbGet(path) {
             if (!FB_ENABLED) return null;
-            try {
-                const r = await fetch(`${FB_DATABASE_URL}/${path}.json`);
-                return r.ok ? await r.json() : null;
-            } catch { return null; }
+            try { const r = await fetch(FB_DATABASE_URL+'/'+path+'.json'); return r.ok ? await r.json() : null; }
+            catch { return null; }
         }
         async function fbSet(path, data) {
             if (!FB_ENABLED) return false;
             try {
-                const r = await fetch(`${FB_DATABASE_URL}/${path}.json`, {
-                    method: "PUT", headers: {"Content-Type":"application/json"}, body: JSON.stringify(data)
+                const r = await fetch(FB_DATABASE_URL+'/'+path+'.json', {
+                    method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
                 });
                 return r.ok;
             } catch { return false; }
         }
 
-        function updateFbBadge() {
-            const badge = document.getElementById("fbBadge");
-            if (!badge) return;
-            if (FB_ENABLED) {
-                badge.className = "fbStatusBadge online";
-                badge.innerHTML = "<span>🟢</span> Çok cihaz sync aktif";
-            } else {
-                badge.className = "fbStatusBadge offline";
-                badge.innerHTML = "<span>⚪</span> Yerel mod (tek cihaz)";
-            }
-        }
-        /* ═══════════════════════════════════════
-           AUTH SYSTEM
-        ═══════════════════════════════════════ */
-        const USERS_KEY   = "wl_users_v1";
-        const SESSION_KEY = "wl_session_v1";
+        /* ═══ AUTH SYSTEM ═══ */
+        const USERS_KEY = 'wl_users_v1';
+        const SESSION_KEY = 'wl_session_v1';
         let currentUser = null;
 
         async function hashPw(pw) {
-            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+            return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
         }
-
-        function getLocalUsers() {
-            try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; }
-        }
+        function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY))||{}; } catch { return {}; } }
         function saveLocalUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-
-        async function getUser(username) {
-            if (FB_ENABLED) {
-                const hash = await fbGet(`users/${username}/hash`);
-                if (hash) return hash;
-            }
-            return getLocalUsers()[username] || null;
+        async function getUser(u) {
+            if (FB_ENABLED) { const h = await fbGet('users/'+u+'/hash'); if (h) return h; }
+            return getLocalUsers()[u]||null;
         }
-
-        async function saveUserHash(username, hash) {
-            if (FB_ENABLED) await fbSet(`users/${username}/hash`, hash);
-            const u = getLocalUsers();
-            u[username] = hash;
-            saveLocalUsers(u);
+        async function saveUserHash(u,h) {
+            if (FB_ENABLED) await fbSet('users/'+u+'/hash', h);
+            const us=getLocalUsers(); us[u]=h; saveLocalUsers(us);
         }
-
         function switchAuthTab(tab) {
-            document.getElementById("loginForm").style.display    = tab === "login"    ? "" : "none";
-            document.getElementById("registerForm").style.display = tab === "register" ? "" : "none";
-            document.getElementById("authTabLogin").classList.toggle("active",    tab === "login");
-            document.getElementById("authTabRegister").classList.toggle("active", tab === "register");
-            document.getElementById("authError").style.display = "none";
-            document.getElementById("authSuccessMsg").style.display = "none";
+            document.getElementById('loginForm').style.display    = tab==='login'    ? '' : 'none';
+            document.getElementById('registerForm').style.display = tab==='register' ? '' : 'none';
+            document.getElementById('authTabLogin').classList.toggle('active',    tab==='login');
+            document.getElementById('authTabRegister').classList.toggle('active', tab==='register');
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccessMsg').style.display = 'none';
         }
-
         function showAuthError(msg) {
-            const el = document.getElementById("authError");
-            el.textContent = msg; el.style.display = "block";
-            document.getElementById("authSuccessMsg").style.display = "none";
+            const el=document.getElementById('authError');
+            el.textContent=msg; el.style.display='block';
+            document.getElementById('authSuccessMsg').style.display='none';
         }
-
         async function doLogin() {
-            const btn = document.querySelector("#loginForm .authSubmit");
-            const username = document.getElementById("loginUser").value.trim().toLowerCase();
-            const password = document.getElementById("loginPass").value;
-            if (!username || !password) return showAuthError("Kullanıcı adı ve şifre gerekli.");
-            btn.textContent = "Kontrol ediliyor..."; btn.disabled = true;
-            const storedHash = await getUser(username);
-            btn.textContent = "Giriş Yap →"; btn.disabled = false;
-            if (!storedHash) return showAuthError("Kullanıcı bulunamadı.");
-            const hash = await hashPw(password);
-            if (storedHash !== hash) return showAuthError("Şifre hatalı.");
+            const btn=document.querySelector('#loginForm .authSubmit');
+            const username=document.getElementById('loginUser').value.trim().toLowerCase();
+            const password=document.getElementById('loginPass').value;
+            if (!username||!password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
+            btn.textContent='Kontrol ediliyor...'; btn.disabled=true;
+            const stored=await getUser(username);
+            btn.textContent='Giriş Yap →'; btn.disabled=false;
+            if (!stored) return showAuthError('Kullanıcı bulunamadı.');
+            if (stored !== await hashPw(password)) return showAuthError('Şifre hatalı.');
             localStorage.setItem(SESSION_KEY, username);
             startApp(username);
         }
-
         async function doRegister() {
-            const btn = document.querySelector("#registerForm .authSubmit");
-            const username = document.getElementById("regUser").value.trim().toLowerCase();
-            const pw  = document.getElementById("regPass").value;
-            const pw2 = document.getElementById("regPass2").value;
-            if (!username || !pw) return showAuthError("Tüm alanları doldurun.");
-            if (username.length < 3) return showAuthError("Kullanıcı adı en az 3 karakter olmalı.");
-            if (pw.length < 4) return showAuthError("Şifre en az 4 karakter olmalı.");
-            if (pw !== pw2) return showAuthError("Şifreler eşleşmiyor.");
-            btn.textContent = "Oluşturuluyor..."; btn.disabled = true;
-            const existing = await getUser(username);
-            if (existing) {
-                btn.textContent = "Hesap Oluştur →"; btn.disabled = false;
-                return showAuthError("Bu kullanıcı adı zaten alınmış.");
-            }
-            const hash = await hashPw(pw);
-            await saveUserHash(username, hash);
-            btn.textContent = "Hesap Oluştur →"; btn.disabled = false;
+            const btn=document.querySelector('#registerForm .authSubmit');
+            const username=document.getElementById('regUser').value.trim().toLowerCase();
+            const pw=document.getElementById('regPass').value;
+            const pw2=document.getElementById('regPass2').value;
+            if (!username||!pw) return showAuthError('Tüm alanları doldurun.');
+            if (username.length<3) return showAuthError('Kullanıcı adı en az 3 karakter olmalı.');
+            if (pw.length<4) return showAuthError('Şifre en az 4 karakter olmalı.');
+            if (pw!==pw2) return showAuthError('Şifreler eşleşmiyor.');
+            btn.textContent='Oluşturuluyor...'; btn.disabled=true;
+            const existing=await getUser(username);
+            if (existing) { btn.textContent='Hesap Oluştur →'; btn.disabled=false; return showAuthError('Bu kullanıcı adı alınmış.'); }
+            await saveUserHash(username, await hashPw(pw));
+            btn.textContent='Hesap Oluştur →'; btn.disabled=false;
             localStorage.setItem(SESSION_KEY, username);
-            const el = document.getElementById("authSuccessMsg");
-            el.textContent = "Hesap oluşturuldu! Giriş yapılıyor..."; el.style.display = "block";
-            document.getElementById("authError").style.display = "none";
-            setTimeout(() => startApp(username), 700);
+            const el=document.getElementById('authSuccessMsg');
+            el.textContent='Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display='block';
+            document.getElementById('authError').style.display='none';
+            setTimeout(()=>startApp(username), 700);
         }
-
         function startApp(username) {
-            currentUser = username;
-            document.getElementById("authScreen").style.display = "none";
-            load().then(() => render());
+            currentUser=username;
+            document.getElementById('authScreen').style.display='none';
+            load().then(()=>render());
         }
-
         function doLogout() {
             localStorage.removeItem(SESSION_KEY);
-            currentUser = null;
-            items = [];
-            document.getElementById("authScreen").style.display = "flex";
-            document.getElementById("loginUser").value = "";
-            document.getElementById("loginPass").value = "";
-            document.getElementById("authError").style.display = "none";
-            document.getElementById("authSuccessMsg").style.display = "none";
-            switchAuthTab("login");
+            currentUser=null; items=[];
+            document.getElementById('authScreen').style.display='flex';
+            document.getElementById('loginUser').value='';
+            document.getElementById('loginPass').value='';
+            document.getElementById('authError').style.display='none';
+            document.getElementById('authSuccessMsg').style.display='none';
+            switchAuthTab('login');
             closeSettings();
         }
-
         function openSettings() {
-            document.getElementById("settingsUsernameDisplay").textContent = currentUser || "—";
-            document.getElementById("settingsAvatar").textContent = (currentUser || "?")[0].toUpperCase();
-            document.getElementById("pwError").style.display   = "none";
-            document.getElementById("pwSuccess").style.display = "none";
-            document.getElementById("pwOld").value  = "";
-            document.getElementById("pwNew").value  = "";
-            document.getElementById("pwNew2").value = "";
-            const sb = document.getElementById("settingsBack");
-            sb.style.display = "flex";
-            requestAnimationFrame(() => sb.classList.add("show"));
-            document.body.style.overflow = "hidden";
+            document.getElementById('settingsUsernameDisplay').textContent=currentUser||'—';
+            document.getElementById('settingsAvatar').textContent=(currentUser||'?')[0].toUpperCase();
+            document.getElementById('pwError').style.display='none';
+            document.getElementById('pwSuccess').style.display='none';
+            document.getElementById('pwOld').value='';
+            document.getElementById('pwNew').value='';
+            document.getElementById('pwNew2').value='';
+            // close all panels
+            document.querySelectorAll('.settingsPanelWrap').forEach(p=>p.classList.remove('open'));
+            document.querySelectorAll('.settingsTile').forEach(t=>t.classList.remove('active'));
+            renderThemeGrid();
+            const sb=document.getElementById('settingsBack');
+            sb.style.display='flex';
+            requestAnimationFrame(()=>sb.classList.add('show'));
+            document.body.style.overflow='hidden';
         }
-
+        function toggleSettingsPanel(id) {
+            const panel=document.getElementById(id);
+            const isOpen=panel.classList.contains('open');
+            document.querySelectorAll('.settingsPanelWrap').forEach(p=>p.classList.remove('open'));
+            document.querySelectorAll('.settingsTile').forEach(t=>t.classList.remove('active'));
+            if (!isOpen) {
+                panel.classList.add('open');
+                // mark corresponding tile active
+                const tiles=document.querySelectorAll('.settingsTile');
+                const map={'pwPanel':0,'themePanel':1,'langPanel':2,'resetPanel':3};
+                if (map[id]!==undefined) tiles[map[id]].classList.add('active');
+            }
+        }
         function closeSettings() {
-            const sb = document.getElementById("settingsBack");
+            const sb=document.getElementById('settingsBack');
             if (!sb) return;
-            sb.classList.remove("show");
-            setTimeout(() => { sb.style.display = "none"; }, 280);
-            document.body.style.overflow = "";
+            sb.classList.remove('show');
+            setTimeout(()=>{ sb.style.display='none'; }, 280);
+            document.body.style.overflow='';
         }
-
         async function doChangePassword() {
-            const oldPw = document.getElementById("pwOld").value;
-            const newPw = document.getElementById("pwNew").value;
-            const newPw2 = document.getElementById("pwNew2").value;
-            const pwErr = document.getElementById("pwError");
-            const pwOk  = document.getElementById("pwSuccess");
-            pwErr.style.display = "none"; pwOk.style.display = "none";
-            if (!oldPw || !newPw || !newPw2) {
-                pwErr.textContent = "Tüm alanları doldurun."; pwErr.style.display = "block"; return;
-            }
-            if (newPw.length < 4) {
-                pwErr.textContent = "Yeni şifre en az 4 karakter olmalı."; pwErr.style.display = "block"; return;
-            }
-            if (newPw !== newPw2) {
-                pwErr.textContent = "Yeni şifreler eşleşmiyor."; pwErr.style.display = "block"; return;
-            }
-            const storedHash = await getUser(currentUser);
-            const oldHash = await hashPw(oldPw);
-            if (storedHash !== oldHash) {
-                pwErr.textContent = "Mevcut şifre hatalı."; pwErr.style.display = "block"; return;
-            }
+            const oldPw=document.getElementById('pwOld').value;
+            const newPw=document.getElementById('pwNew').value;
+            const newPw2=document.getElementById('pwNew2').value;
+            const pwErr=document.getElementById('pwError');
+            const pwOk=document.getElementById('pwSuccess');
+            pwErr.style.display='none'; pwOk.style.display='none';
+            if (!oldPw||!newPw||!newPw2) { pwErr.textContent='Tüm alanları doldurun.'; pwErr.style.display='block'; return; }
+            if (newPw.length<4) { pwErr.textContent='Yeni şifre en az 4 karakter olmalı.'; pwErr.style.display='block'; return; }
+            if (newPw!==newPw2) { pwErr.textContent='Yeni şifreler eşleşmiyor.'; pwErr.style.display='block'; return; }
+            const stored=await getUser(currentUser);
+            if (stored !== await hashPw(oldPw)) { pwErr.textContent='Mevcut şifre hatalı.'; pwErr.style.display='block'; return; }
             await saveUserHash(currentUser, await hashPw(newPw));
-            document.getElementById("pwOld").value  = "";
-            document.getElementById("pwNew").value  = "";
-            document.getElementById("pwNew2").value = "";
-            pwOk.textContent = "Şifre başarıyla güncellendi! ✓"; pwOk.style.display = "block";
+            document.getElementById('pwOld').value='';
+            document.getElementById('pwNew').value='';
+            document.getElementById('pwNew2').value='';
+            pwOk.textContent='Şifre başarıyla güncellendi! ✓'; pwOk.style.display='block';
+        }
+        function confirmReset() {
+            if (confirm('Tüm istek listeni silmek istediğine emin misin?')) {
+                items=[];
+                localStorage.removeItem('wishlist_v3_'+currentUser);
+                if (FB_ENABLED) fbSet('users/'+currentUser+'/items', null);
+                render();
+                closeSettings();
+                showToast('🗑️ Liste sıfırlandı');
+            }
         }
 
-        document.addEventListener("keydown", e => {
-            if (e.key !== "Enter") return;
-            const ls = document.getElementById("authScreen");
-            if (!ls || ls.style.display === "none") return;
-            const loginVisible = document.getElementById("loginForm").style.display !== "none";
+        /* ═══ THEME SYSTEM ═══ */
+        const THEMES = [
+            { id:'pink',     label:'🌸 Pembe',   bg:['#ffe8f2','#f5e4ff'], accent:'#E8458B', sec:'#A87CFF' },
+            { id:'blue',     label:'💙 Mavi',    bg:['#e8f0ff','#e4eeff'], accent:'#3D7FE8', sec:'#7CB4FF' },
+            { id:'green',    label:'🌿 Yeşil',   bg:['#e8fff4','#e4fff2'], accent:'#2EB87A', sec:'#7CDFB4' },
+            { id:'peach',    label:'🍑 Şeftali', bg:['#fff0e8','#fff4e4'], accent:'#E8763D', sec:'#FFAA7C' },
+            { id:'charcoal', label:'🩶 Antrasit',bg:['#edf0f4','#e8edf4'], accent:'#7B8FA8', sec:'#A8B8CC' },
+        ];
+        const THEME_KEY = 'wl_theme_v1';
+
+        function applyTheme(id) {
+            if (id === 'pink' || !id) {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', id);
+            }
+            localStorage.setItem(THEME_KEY, id || 'pink');
+            renderThemeGrid();
+        }
+
+        function renderThemeGrid() {
+            const grid = document.getElementById('themeGrid');
+            if (!grid) return;
+            const active = localStorage.getItem(THEME_KEY) || 'pink';
+            grid.innerHTML = THEMES.map(t => `
+                <div class="themeCard${t.id === active ? ' selected' : ''}" onclick="applyTheme('${t.id}')">
+                    <div class="themePreview" style="background:linear-gradient(135deg,${t.bg[0]},${t.bg[1]});">
+                        <div class="themePreviewBar" style="background:${t.accent};"></div>
+                        <div class="themePreviewBar" style="background:${t.sec};width:60%;"></div>
+                        <div class="themePreviewCard" style="background:${t.accent};"></div>
+                    </div>
+                    <div class="themeLabel">${t.label}</div>
+                </div>
+            `).join('');
+        }
+
+        /* Load saved theme on start */
+        (function() {
+            const saved = localStorage.getItem(THEME_KEY);
+            if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
+        })();
+        document.addEventListener('keydown', e=>{
+            if (e.key!=='Enter') return;
+            const ls=document.getElementById('authScreen');
+            if (!ls||ls.style.display==='none') return;
+            const loginVisible=document.getElementById('loginForm').style.display!=='none';
             if (loginVisible) doLogin(); else doRegister();
         });
-
         (function checkSession() {
-            const saved = localStorage.getItem(SESSION_KEY);
+            const saved=localStorage.getItem(SESSION_KEY);
             if (saved) {
-                const users = getLocalUsers();
+                const users=getLocalUsers();
                 if (users[saved]) {
-                    currentUser = saved;
-                    document.getElementById("authScreen").style.display = "none";
+                    currentUser=saved;
+                    document.getElementById('authScreen').style.display='none';
                     return;
                 }
             }
         })();
 
-        const LS_KEY = currentUser ? "wishlist_v3_" + currentUser : "wishlist_v3";
+        const LS_KEY = currentUser ? 'wishlist_v3_'+currentUser : 'wishlist_v3';
         let items = [];
         let activeId = null;
         let activeCat = "all";
@@ -2956,30 +2920,24 @@
         });
 
         /* ── Storage ── */
-        function getUserKey() { return currentUser ? "wishlist_v3_" + currentUser : "wishlist_v3"; }
+        function getUserKey() { return currentUser ? 'wishlist_v3_'+currentUser : 'wishlist_v3'; }
         async function load() {
-            // Try Firebase first for multi-device sync
             if (FB_ENABLED && currentUser) {
                 try {
-                    const fbItems = await fbGet(`users/${currentUser}/items`);
+                    const fbItems = await fbGet('users/'+currentUser+'/items');
                     if (fbItems && Array.isArray(fbItems)) {
                         items = fbItems;
-                        localStorage.setItem(getUserKey(), JSON.stringify(items)); // cache locally
+                        localStorage.setItem(getUserKey(), JSON.stringify(items));
                         return;
                     }
                 } catch {}
             }
-            // Fallback to localStorage
-            try {
-                const raw = localStorage.getItem(getUserKey());
-                items = raw ? JSON.parse(raw) : [];
-            } catch (e) { items = []; }
+            try { const raw=localStorage.getItem(getUserKey()); items=raw?JSON.parse(raw):[]; }
+            catch { items=[]; }
         }
-        async function persist() {
+        function persist() {
             localStorage.setItem(getUserKey(), JSON.stringify(items));
-            if (FB_ENABLED && currentUser) {
-                fbSet(`users/${currentUser}/items`, items);
-            }
+            if (FB_ENABLED && currentUser) fbSet('users/'+currentUser+'/items', items);
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
 
@@ -3267,10 +3225,6 @@
                 dropdownEl.classList.remove("open");
             }
         });
-        document.getElementById("dropReset").addEventListener("click", () => {
-            dropdownEl.classList.remove("open");
-            clearAll();
-        });
         document.getElementById("dropWrapped").addEventListener("click", () => {
             dropdownEl.classList.remove("open");
             openWrapped();
@@ -3278,14 +3232,6 @@
         document.getElementById("dropAI").addEventListener("click", () => {
             dropdownEl.classList.remove("open");
             openAI();
-        });
-        document.getElementById("dropSecret").addEventListener("click", () => {
-            dropdownEl.classList.remove("open");
-            document.querySelectorAll(".catPill").forEach(p => p.classList.remove("active"));
-            const secretPill = document.querySelector('.catPill[data-cat="secret"]');
-            if (secretPill) secretPill.classList.add("active");
-            activeCat = "secret";
-            render();
         });
 
         /* ═══ TOAST ═══ */
@@ -3440,7 +3386,7 @@
         /* ═══════════════════════════════════════════════════════════
            ═══ WISHLIST AI — EXPERT COUNCIL ENGINE ═══
            ═══════════════════════════════════════════════════════════ */
-        const AI_HIST_KEY = currentUser ? "wishlist_ai_history_" + currentUser : "wishlist_ai_history";
+        const AI_HIST_KEY = currentUser ? "wishlist_ai_history_"+currentUser : "wishlist_ai_history";
         let aiMode = null;
         let aiSelectedIds = [];
         let aiCurrentResult = null;
@@ -4247,7 +4193,7 @@ fetch('/api/chat', {
         };
 
         /* ═══ INIT ═══ */
-        if (currentUser) { load().then(() => render()); }
+        if (currentUser) { load().then(()=>render()); }
     </script>
 </body>
 
