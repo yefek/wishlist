@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Wishlistgül" />
+    <meta name="application-name" content="Wishlistgül" />
+    <link rel="manifest" href="manifest.json" />
     <title>Wishlistgül</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,6 +38,43 @@
             --r2: 28px;
             --font-display: 'DM Serif Display', serif;
             --font-text: 'DM Sans', -apple-system, system-ui, sans-serif;
+            /* ── derived tokens ── */
+            --gradientHL: linear-gradient(135deg, #ff38aa, #9572ff);
+            --gradientBtn: linear-gradient(135deg, rgba(232, 69, 139, 0.28), rgba(168, 124, 255, 0.14));
+            --gradientPill: linear-gradient(135deg, rgba(232, 69, 139, 0.26), rgba(168, 124, 255, 0.14));
+            --headerBg: linear-gradient(180deg, rgba(255, 240, 250, 0.92), rgba(255, 235, 248, 0.72));
+            --surfaceBg: rgba(255, 245, 252, 0.96);
+            --surfaceBgLight: rgba(255, 245, 252, 0.50);
+            --chipBg: rgba(255, 240, 250, 0.88);
+            --chipBorder: rgba(232, 69, 139, 0.08);
+            --boughtOverlay: linear-gradient(135deg, rgba(255, 200, 225, 0.60), rgba(200, 180, 255, 0.45));
+            --boughtText: #5c1745;
+            --shimmer1: rgba(255, 240, 250, 0.6);
+            --shimmer2: rgba(255, 230, 245, 0.9);
+            --inputBg: rgba(255, 248, 253, 0.80);
+            --btnText: #3a0b2b;
+            --cardTint: rgba(255, 235, 248, 0.55);
+            --authBg: linear-gradient(180deg, #ffe8f2, #f5e4ff);
+            --authCardBg: rgba(255, 245, 252, 0.94);
+            --authInputBg: rgba(255, 240, 250, 0.72);
+            --authBtnGrad: linear-gradient(135deg, #E8458B, #9572ff);
+            --authShadow: rgba(232, 69, 139, 0.15);
+            --settingsBg: rgba(255, 245, 252, 0.60);
+            --accentVeryLight: rgba(232, 69, 139, 0.07);
+            --accentBorder: rgba(232, 69, 139, 0.14);
+            --accentBorderFocus: rgba(232, 69, 139, 0.55);
+            --accentFocusRing: rgba(232, 69, 139, 0.08);
+            --accentFocusGlow: rgba(232, 69, 139, 0.14);
+            --dangerBg: rgba(232, 69, 139, 0.06);
+            --dangerBorder: rgba(232, 69, 139, 0.20);
+            --dangerHoverBg: rgba(232, 69, 139, 0.14);
+            --dangerHoverBorder: rgba(232, 69, 139, 0.40);
+            --accentGradLight: linear-gradient(135deg, rgba(232, 69, 139, 0.10), rgba(168, 124, 255, 0.10));
+            --accentGradMid: linear-gradient(135deg, rgba(232, 69, 139, 0.18), rgba(168, 124, 255, 0.12));
+            --accentGradSubtle: linear-gradient(135deg, rgba(232, 69, 139, 0.08), rgba(168, 124, 255, 0.08));
+            --accentGradAuth: linear-gradient(135deg, rgba(232, 69, 139, 0.22), rgba(168, 124, 255, 0.18));
+            --accentGradWrap: linear-gradient(135deg, rgba(232, 69, 139, 0.12), rgba(168, 124, 255, 0.12));
+            --aiHeaderBg: rgba(255, 232, 242, 0.85);
         }
 
         * {
@@ -63,72 +103,407 @@
 
         /* ═══════════ THEMES ═══════════ */
         body[data-theme="blue"] {
-            --accent: #3D7FE8; --accentSoft: rgba(61,127,232,0.14); --accentMid: rgba(61,127,232,0.22);
-            --stroke: rgba(61,127,232,0.10); --glow: rgba(61,127,232,0.25);
-            --lilac: #7CB4FF; --lilacSoft: rgba(124,180,255,0.12);
-            --surface: rgba(240,247,255,0.78); --surfaceHover: rgba(225,240,255,0.90);
+            --accent: #3D7FE8;
+            --accentSoft: rgba(61, 127, 232, 0.14);
+            --accentMid: rgba(61, 127, 232, 0.22);
+            --stroke: rgba(61, 127, 232, 0.10);
+            --glow: rgba(61, 127, 232, 0.25);
+            --lilac: #7CB4FF;
+            --lilacSoft: rgba(124, 180, 255, 0.12);
+            --surface: rgba(240, 247, 255, 0.78);
+            --surfaceHover: rgba(225, 240, 255, 0.90);
+            --gradientHL: linear-gradient(135deg, #3D7FE8, #7CB4FF);
+            --gradientBtn: linear-gradient(135deg, rgba(61, 127, 232, 0.28), rgba(124, 180, 255, 0.14));
+            --gradientPill: linear-gradient(135deg, rgba(61, 127, 232, 0.26), rgba(124, 180, 255, 0.14));
+            --headerBg: linear-gradient(180deg, rgba(240, 247, 255, 0.92), rgba(225, 240, 255, 0.72));
+            --surfaceBg: rgba(240, 247, 255, 0.96);
+            --surfaceBgLight: rgba(240, 247, 255, 0.50);
+            --chipBg: rgba(240, 247, 255, 0.88);
+            --chipBorder: rgba(61, 127, 232, 0.08);
+            --boughtOverlay: linear-gradient(135deg, rgba(200, 220, 255, 0.60), rgba(180, 200, 255, 0.45));
+            --boughtText: #1a3a6b;
+            --shimmer1: rgba(240, 247, 255, 0.6);
+            --shimmer2: rgba(225, 240, 255, 0.9);
+            --inputBg: rgba(240, 248, 255, 0.80);
+            --btnText: #1a2a4b;
+            --cardTint: rgba(225, 240, 255, 0.55);
+            --authBg: linear-gradient(180deg, #e8f0ff, #e4eeff);
+            --authCardBg: rgba(240, 247, 255, 0.94);
+            --authInputBg: rgba(230, 242, 255, 0.72);
+            --authBtnGrad: linear-gradient(135deg, #3D7FE8, #7CB4FF);
+            --authShadow: rgba(61, 127, 232, 0.15);
+            --settingsBg: rgba(240, 247, 255, 0.60);
+            --accentVeryLight: rgba(61, 127, 232, 0.07);
+            --accentBorder: rgba(61, 127, 232, 0.14);
+            --accentBorderFocus: rgba(61, 127, 232, 0.55);
+            --accentFocusRing: rgba(61, 127, 232, 0.08);
+            --accentFocusGlow: rgba(61, 127, 232, 0.14);
+            --dangerBg: rgba(61, 127, 232, 0.06);
+            --dangerBorder: rgba(61, 127, 232, 0.20);
+            --dangerHoverBg: rgba(61, 127, 232, 0.14);
+            --dangerHoverBorder: rgba(61, 127, 232, 0.40);
+            --accentGradLight: linear-gradient(135deg, rgba(61, 127, 232, 0.10), rgba(124, 180, 255, 0.10));
+            --accentGradMid: linear-gradient(135deg, rgba(61, 127, 232, 0.18), rgba(124, 180, 255, 0.12));
+            --accentGradSubtle: linear-gradient(135deg, rgba(61, 127, 232, 0.08), rgba(124, 180, 255, 0.08));
+            --accentGradAuth: linear-gradient(135deg, rgba(61, 127, 232, 0.22), rgba(124, 180, 255, 0.18));
+            --accentGradWrap: linear-gradient(135deg, rgba(61, 127, 232, 0.12), rgba(124, 180, 255, 0.12));
+            --aiHeaderBg: rgba(232, 240, 255, 0.85);
             background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(61,127,232,0.32), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(100,160,255,0.14), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(61,127,232,0.20), transparent 50%),
+                radial-gradient(1100px 650px at 10% 0%, rgba(61, 127, 232, 0.32), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(100, 160, 255, 0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(61, 127, 232, 0.20), transparent 50%),
                 linear-gradient(180deg, #e8f0ff, #e4eeff);
             background-attachment: fixed;
         }
+
         body[data-theme="green"] {
-            --accent: #2EB87A; --accentSoft: rgba(46,184,122,0.14); --accentMid: rgba(46,184,122,0.22);
-            --stroke: rgba(46,184,122,0.10); --glow: rgba(46,184,122,0.25);
-            --lilac: #7CDFB4; --lilacSoft: rgba(124,223,180,0.12);
-            --surface: rgba(240,255,248,0.78); --surfaceHover: rgba(225,255,242,0.90);
+            --accent: #2EB87A;
+            --accentSoft: rgba(46, 184, 122, 0.14);
+            --accentMid: rgba(46, 184, 122, 0.22);
+            --stroke: rgba(46, 184, 122, 0.10);
+            --glow: rgba(46, 184, 122, 0.25);
+            --lilac: #7CDFB4;
+            --lilacSoft: rgba(124, 223, 180, 0.12);
+            --surface: rgba(240, 255, 248, 0.78);
+            --surfaceHover: rgba(225, 255, 242, 0.90);
+            --gradientHL: linear-gradient(135deg, #2EB87A, #7CDFB4);
+            --gradientBtn: linear-gradient(135deg, rgba(46, 184, 122, 0.28), rgba(124, 223, 180, 0.14));
+            --gradientPill: linear-gradient(135deg, rgba(46, 184, 122, 0.26), rgba(124, 223, 180, 0.14));
+            --headerBg: linear-gradient(180deg, rgba(240, 255, 248, 0.92), rgba(225, 255, 242, 0.72));
+            --surfaceBg: rgba(240, 255, 248, 0.96);
+            --surfaceBgLight: rgba(240, 255, 248, 0.50);
+            --chipBg: rgba(240, 255, 248, 0.88);
+            --chipBorder: rgba(46, 184, 122, 0.08);
+            --boughtOverlay: linear-gradient(135deg, rgba(200, 255, 225, 0.60), rgba(180, 255, 200, 0.45));
+            --boughtText: #0d5c3a;
+            --shimmer1: rgba(240, 255, 248, 0.6);
+            --shimmer2: rgba(225, 255, 242, 0.9);
+            --inputBg: rgba(240, 255, 250, 0.80);
+            --btnText: #0d3a25;
+            --cardTint: rgba(225, 255, 242, 0.55);
+            --authBg: linear-gradient(180deg, #e8fff4, #e4fff2);
+            --authCardBg: rgba(240, 255, 248, 0.94);
+            --authInputBg: rgba(230, 255, 245, 0.72);
+            --authBtnGrad: linear-gradient(135deg, #2EB87A, #7CDFB4);
+            --authShadow: rgba(46, 184, 122, 0.15);
+            --settingsBg: rgba(240, 255, 248, 0.60);
+            --accentVeryLight: rgba(46, 184, 122, 0.07);
+            --accentBorder: rgba(46, 184, 122, 0.14);
+            --accentBorderFocus: rgba(46, 184, 122, 0.55);
+            --accentFocusRing: rgba(46, 184, 122, 0.08);
+            --accentFocusGlow: rgba(46, 184, 122, 0.14);
+            --dangerBg: rgba(46, 184, 122, 0.06);
+            --dangerBorder: rgba(46, 184, 122, 0.20);
+            --dangerHoverBg: rgba(46, 184, 122, 0.14);
+            --dangerHoverBorder: rgba(46, 184, 122, 0.40);
+            --accentGradLight: linear-gradient(135deg, rgba(46, 184, 122, 0.10), rgba(124, 223, 180, 0.10));
+            --accentGradMid: linear-gradient(135deg, rgba(46, 184, 122, 0.18), rgba(124, 223, 180, 0.12));
+            --accentGradSubtle: linear-gradient(135deg, rgba(46, 184, 122, 0.08), rgba(124, 223, 180, 0.08));
+            --accentGradAuth: linear-gradient(135deg, rgba(46, 184, 122, 0.22), rgba(124, 223, 180, 0.18));
+            --accentGradWrap: linear-gradient(135deg, rgba(46, 184, 122, 0.12), rgba(124, 223, 180, 0.12));
+            --aiHeaderBg: rgba(232, 255, 244, 0.85);
             background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(46,184,122,0.30), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(100,220,170,0.14), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(46,184,122,0.20), transparent 50%),
+                radial-gradient(1100px 650px at 10% 0%, rgba(46, 184, 122, 0.30), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(100, 220, 170, 0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(46, 184, 122, 0.20), transparent 50%),
                 linear-gradient(180deg, #e8fff4, #e4fff2);
             background-attachment: fixed;
         }
+
         body[data-theme="charcoal"] {
-            --accent: #7B8FA8; --accentSoft: rgba(123,143,168,0.16); --accentMid: rgba(123,143,168,0.26);
-            --stroke: rgba(123,143,168,0.14); --glow: rgba(123,143,168,0.28);
-            --lilac: #A8B8CC; --lilacSoft: rgba(168,184,204,0.14);
-            --surface: rgba(242,245,248,0.82); --surfaceHover: rgba(232,237,244,0.92);
+            --accent: #7B8FA8;
+            --accentSoft: rgba(123, 143, 168, 0.16);
+            --accentMid: rgba(123, 143, 168, 0.26);
+            --stroke: rgba(123, 143, 168, 0.14);
+            --glow: rgba(123, 143, 168, 0.28);
+            --lilac: #A8B8CC;
+            --lilacSoft: rgba(168, 184, 204, 0.14);
+            --surface: rgba(242, 245, 248, 0.82);
+            --surfaceHover: rgba(232, 237, 244, 0.92);
+            --gradientHL: linear-gradient(135deg, #7B8FA8, #A8B8CC);
+            --gradientBtn: linear-gradient(135deg, rgba(123, 143, 168, 0.28), rgba(168, 184, 204, 0.14));
+            --gradientPill: linear-gradient(135deg, rgba(123, 143, 168, 0.26), rgba(168, 184, 204, 0.14));
+            --headerBg: linear-gradient(180deg, rgba(242, 245, 248, 0.92), rgba(232, 237, 244, 0.72));
+            --surfaceBg: rgba(242, 245, 248, 0.96);
+            --surfaceBgLight: rgba(242, 245, 248, 0.50);
+            --chipBg: rgba(242, 245, 248, 0.88);
+            --chipBorder: rgba(123, 143, 168, 0.08);
+            --boughtOverlay: linear-gradient(135deg, rgba(200, 210, 225, 0.60), rgba(190, 200, 220, 0.45));
+            --boughtText: #2d3a4b;
+            --shimmer1: rgba(242, 245, 248, 0.6);
+            --shimmer2: rgba(232, 237, 244, 0.9);
+            --inputBg: rgba(242, 246, 250, 0.80);
+            --btnText: #2d3a4b;
+            --cardTint: rgba(232, 237, 244, 0.55);
+            --authBg: linear-gradient(180deg, #edf0f4, #e8edf4);
+            --authCardBg: rgba(242, 245, 248, 0.94);
+            --authInputBg: rgba(235, 240, 248, 0.72);
+            --authBtnGrad: linear-gradient(135deg, #7B8FA8, #A8B8CC);
+            --authShadow: rgba(123, 143, 168, 0.15);
+            --settingsBg: rgba(242, 245, 248, 0.60);
+            --accentVeryLight: rgba(123, 143, 168, 0.07);
+            --accentBorder: rgba(123, 143, 168, 0.14);
+            --accentBorderFocus: rgba(123, 143, 168, 0.55);
+            --accentFocusRing: rgba(123, 143, 168, 0.08);
+            --accentFocusGlow: rgba(123, 143, 168, 0.14);
+            --dangerBg: rgba(123, 143, 168, 0.06);
+            --dangerBorder: rgba(123, 143, 168, 0.20);
+            --dangerHoverBg: rgba(123, 143, 168, 0.14);
+            --dangerHoverBorder: rgba(123, 143, 168, 0.40);
+            --accentGradLight: linear-gradient(135deg, rgba(123, 143, 168, 0.10), rgba(168, 184, 204, 0.10));
+            --accentGradMid: linear-gradient(135deg, rgba(123, 143, 168, 0.18), rgba(168, 184, 204, 0.12));
+            --accentGradSubtle: linear-gradient(135deg, rgba(123, 143, 168, 0.08), rgba(168, 184, 204, 0.08));
+            --accentGradAuth: linear-gradient(135deg, rgba(123, 143, 168, 0.22), rgba(168, 184, 204, 0.18));
+            --accentGradWrap: linear-gradient(135deg, rgba(123, 143, 168, 0.12), rgba(168, 184, 204, 0.12));
+            --aiHeaderBg: rgba(237, 240, 244, 0.85);
             background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(123,143,168,0.28), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(160,180,200,0.14), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(123,143,168,0.18), transparent 50%),
+                radial-gradient(1100px 650px at 10% 0%, rgba(123, 143, 168, 0.28), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(160, 180, 200, 0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(123, 143, 168, 0.18), transparent 50%),
                 linear-gradient(180deg, #edf0f4, #e8edf4);
             background-attachment: fixed;
         }
+
         body[data-theme="peach"] {
-            --accent: #E8763D; --accentSoft: rgba(232,118,61,0.14); --accentMid: rgba(232,118,61,0.22);
-            --stroke: rgba(232,118,61,0.10); --glow: rgba(232,118,61,0.25);
-            --lilac: #FFAA7C; --lilacSoft: rgba(255,170,124,0.12);
-            --surface: rgba(255,245,240,0.78); --surfaceHover: rgba(255,238,228,0.90);
+            --accent: #E8763D;
+            --accentSoft: rgba(232, 118, 61, 0.14);
+            --accentMid: rgba(232, 118, 61, 0.22);
+            --stroke: rgba(232, 118, 61, 0.10);
+            --glow: rgba(232, 118, 61, 0.25);
+            --lilac: #FFAA7C;
+            --lilacSoft: rgba(255, 170, 124, 0.12);
+            --surface: rgba(255, 245, 240, 0.78);
+            --surfaceHover: rgba(255, 238, 228, 0.90);
+            --gradientHL: linear-gradient(135deg, #E8763D, #FFAA7C);
+            --gradientBtn: linear-gradient(135deg, rgba(232, 118, 61, 0.28), rgba(255, 170, 124, 0.14));
+            --gradientPill: linear-gradient(135deg, rgba(232, 118, 61, 0.26), rgba(255, 170, 124, 0.14));
+            --headerBg: linear-gradient(180deg, rgba(255, 245, 240, 0.92), rgba(255, 238, 228, 0.72));
+            --surfaceBg: rgba(255, 245, 240, 0.96);
+            --surfaceBgLight: rgba(255, 245, 240, 0.50);
+            --chipBg: rgba(255, 245, 240, 0.88);
+            --chipBorder: rgba(232, 118, 61, 0.08);
+            --boughtOverlay: linear-gradient(135deg, rgba(255, 225, 200, 0.60), rgba(255, 200, 180, 0.45));
+            --boughtText: #6b3a1a;
+            --shimmer1: rgba(255, 245, 240, 0.6);
+            --shimmer2: rgba(255, 238, 228, 0.9);
+            --inputBg: rgba(255, 250, 245, 0.80);
+            --btnText: #4b2a0d;
+            --cardTint: rgba(255, 238, 228, 0.55);
+            --authBg: linear-gradient(180deg, #fff0e8, #fff4e4);
+            --authCardBg: rgba(255, 245, 240, 0.94);
+            --authInputBg: rgba(255, 240, 230, 0.72);
+            --authBtnGrad: linear-gradient(135deg, #E8763D, #FFAA7C);
+            --authShadow: rgba(232, 118, 61, 0.15);
+            --settingsBg: rgba(255, 245, 240, 0.60);
+            --accentVeryLight: rgba(232, 118, 61, 0.07);
+            --accentBorder: rgba(232, 118, 61, 0.14);
+            --accentBorderFocus: rgba(232, 118, 61, 0.55);
+            --accentFocusRing: rgba(232, 118, 61, 0.08);
+            --accentFocusGlow: rgba(232, 118, 61, 0.14);
+            --dangerBg: rgba(232, 118, 61, 0.06);
+            --dangerBorder: rgba(232, 118, 61, 0.20);
+            --dangerHoverBg: rgba(232, 118, 61, 0.14);
+            --dangerHoverBorder: rgba(232, 118, 61, 0.40);
+            --accentGradLight: linear-gradient(135deg, rgba(232, 118, 61, 0.10), rgba(255, 170, 124, 0.10));
+            --accentGradMid: linear-gradient(135deg, rgba(232, 118, 61, 0.18), rgba(255, 170, 124, 0.12));
+            --accentGradSubtle: linear-gradient(135deg, rgba(232, 118, 61, 0.08), rgba(255, 170, 124, 0.08));
+            --accentGradAuth: linear-gradient(135deg, rgba(232, 118, 61, 0.22), rgba(255, 170, 124, 0.18));
+            --accentGradWrap: linear-gradient(135deg, rgba(232, 118, 61, 0.12), rgba(255, 170, 124, 0.12));
+            --aiHeaderBg: rgba(255, 240, 232, 0.85);
             background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(232,118,61,0.30), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(255,160,100,0.14), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(232,118,61,0.20), transparent 50%),
+                radial-gradient(1100px 650px at 10% 0%, rgba(232, 118, 61, 0.30), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(255, 160, 100, 0.14), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(232, 118, 61, 0.20), transparent 50%),
                 linear-gradient(180deg, #fff0e8, #fff4e4);
             background-attachment: fixed;
         }
 
+        body[data-theme="dark"] {
+            --bg: #0f1923;
+            --accent: #6C5CE7;
+            --accentSoft: rgba(108, 92, 231, 0.18);
+            --accentMid: rgba(108, 92, 231, 0.28);
+            --stroke: rgba(255, 255, 255, 0.08);
+            --glow: rgba(108, 92, 231, 0.35);
+            --lilac: #a29bfe;
+            --lilacSoft: rgba(162, 155, 254, 0.14);
+            --surface: rgba(20, 30, 44, 0.85);
+            --surfaceHover: rgba(28, 40, 58, 0.92);
+            --textPrimary: #e8ecf2;
+            --textSecondary: #8a95a8;
+            --gradientHL: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            --gradientBtn: linear-gradient(135deg, rgba(108, 92, 231, 0.35), rgba(162, 155, 254, 0.18));
+            --gradientPill: linear-gradient(135deg, rgba(108, 92, 231, 0.30), rgba(162, 155, 254, 0.16));
+            --headerBg: linear-gradient(180deg, rgba(15, 25, 35, 0.95), rgba(18, 28, 42, 0.85));
+            --surfaceBg: rgba(18, 28, 42, 0.96);
+            --surfaceBgLight: rgba(18, 28, 42, 0.50);
+            --chipBg: rgba(22, 34, 50, 0.88);
+            --chipBorder: rgba(108, 92, 231, 0.12);
+            --boughtOverlay: linear-gradient(135deg, rgba(108, 92, 231, 0.25), rgba(162, 155, 254, 0.18));
+            --boughtText: #c8c0ff;
+            --shimmer1: rgba(22, 34, 50, 0.6);
+            --shimmer2: rgba(28, 42, 60, 0.9);
+            --inputBg: rgba(18, 28, 42, 0.80);
+            --btnText: #e8ecf2;
+            --cardTint: rgba(22, 34, 50, 0.70);
+            --authBg: linear-gradient(180deg, #0f1923, #141e2c);
+            --authCardBg: rgba(18, 28, 42, 0.92);
+            --authInputBg: rgba(22, 34, 50, 0.72);
+            --authBtnGrad: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            --authShadow: rgba(0, 0, 0, 0.35);
+            --settingsBg: rgba(18, 28, 42, 0.70);
+            --accentVeryLight: rgba(108, 92, 231, 0.10);
+            --accentBorder: rgba(108, 92, 231, 0.20);
+            --accentBorderFocus: rgba(108, 92, 231, 0.60);
+            --accentFocusRing: rgba(108, 92, 231, 0.15);
+            --accentFocusGlow: rgba(108, 92, 231, 0.22);
+            --dangerBg: rgba(220, 38, 38, 0.12);
+            --dangerBorder: rgba(220, 38, 38, 0.28);
+            --dangerHoverBg: rgba(220, 38, 38, 0.20);
+            --dangerHoverBorder: rgba(220, 38, 38, 0.45);
+            --accentGradLight: linear-gradient(135deg, rgba(108, 92, 231, 0.14), rgba(162, 155, 254, 0.10));
+            --accentGradMid: linear-gradient(135deg, rgba(108, 92, 231, 0.24), rgba(162, 155, 254, 0.16));
+            --accentGradSubtle: linear-gradient(135deg, rgba(108, 92, 231, 0.10), rgba(162, 155, 254, 0.08));
+            --accentGradAuth: linear-gradient(135deg, rgba(108, 92, 231, 0.28), rgba(162, 155, 254, 0.22));
+            --accentGradWrap: linear-gradient(135deg, rgba(108, 92, 231, 0.16), rgba(162, 155, 254, 0.12));
+            --aiHeaderBg: rgba(15, 25, 35, 0.90);
+            --elev1: 0 8px 32px rgba(0, 0, 0, 0.20);
+            --elev2: 0 16px 48px rgba(0, 0, 0, 0.30);
+            background:
+                radial-gradient(1100px 650px at 10% 0%, rgba(108, 92, 231, 0.18), transparent 55%),
+                radial-gradient(900px 500px at 90% 8%, rgba(162, 155, 254, 0.08), transparent 55%),
+                radial-gradient(800px 500px at 50% 100%, rgba(108, 92, 231, 0.12), transparent 50%),
+                linear-gradient(180deg, #0f1923, #141e2c);
+            background-attachment: fixed;
+        }
+
+        /* Dark mode specific overrides */
+        body[data-theme="dark"] #authScreen {
+            background: #0f1923;
+        }
+
+        body[data-theme="dark"] .authCard {
+            background: rgba(20, 30, 44, 0.88);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        body[data-theme="dark"] .authInputWrap {
+            background: rgba(15, 22, 34, 0.70);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body[data-theme="dark"] .authInputWrap:focus-within {
+            background: rgba(18, 28, 44, 0.85);
+        }
+
+        body[data-theme="dark"] .authTab.active {
+            background: rgba(108, 92, 231, 0.18);
+            color: #a29bfe;
+        }
+
+        body[data-theme="dark"] .authBlob {
+            opacity: 0.25;
+        }
+
+        body[data-theme="dark"] .dropdown {
+            background: rgba(18, 28, 42, 0.96);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        body[data-theme="dark"] .sheetContent {
+            background: rgba(15, 22, 34, 0.98);
+        }
+
+        body[data-theme="dark"] .settingsTile {
+            background: rgba(22, 34, 50, 0.70);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        body[data-theme="dark"] .settingsPanel {
+            background: rgba(20, 30, 44, 0.85);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        body[data-theme="dark"] .themeCard {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body[data-theme="dark"] .themeCard.active {
+            border-color: var(--accent);
+        }
+
+        body[data-theme="dark"] .langBtn {
+            background: rgba(22, 34, 50, 0.70);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body[data-theme="dark"] .modalBack {
+            background: rgba(0, 0, 0, 0.60);
+        }
+
         /* Theme picker */
-        .themeGrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .themeGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
         .themeCard {
-            border-radius:14px; overflow:hidden; border:2.5px solid transparent;
-            cursor:pointer; transition:all 0.2s ease; box-shadow:0 3px 12px rgba(0,0,0,0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2.5px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
         }
-        .themeCard:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.12); }
-        .themeCard:active { transform:scale(0.96); }
-        .themeCard.selected { border-color:var(--accent); box-shadow:0 0 0 3px var(--accentSoft), 0 4px 16px rgba(0,0,0,0.10); }
+
+        .themeCard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .themeCard:active {
+            transform: scale(0.96);
+        }
+
+        .themeCard.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accentSoft), 0 4px 16px rgba(0, 0, 0, 0.10);
+        }
+
         .themePreview {
-            width:100%; height:72px; position:relative;
-            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:8px;
+            width: 100%;
+            height: 72px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px;
         }
-        .themePreviewBar { width:80%; height:7px; border-radius:99px; opacity:0.9; }
-        .themePreviewCard { width:80%; height:16px; border-radius:7px; opacity:0.5; }
+
+        .themePreviewBar {
+            width: 80%;
+            height: 7px;
+            border-radius: 99px;
+            opacity: 0.9;
+        }
+
+        .themePreviewCard {
+            width: 80%;
+            height: 16px;
+            border-radius: 7px;
+            opacity: 0.5;
+        }
+
         .themeLabel {
-            font-size:11px; font-weight:600; color:var(--textSecondary);
-            text-align:center; padding:5px 4px; background:rgba(255,255,255,0.65);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            text-align: center;
+            padding: 5px 4px;
+            background: rgba(255, 255, 255, 0.65);
         }
 
         /* ═══════════ HEADER ═══════════ */
@@ -138,7 +513,7 @@
             z-index: 10;
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            background: linear-gradient(180deg, rgba(255, 240, 250, 0.92), rgba(255, 235, 248, 0.72));
+            background: var(--headerBg);
             border-bottom: 1px solid var(--stroke);
             padding: 12px 16px;
         }
@@ -162,7 +537,7 @@
             font-size: 24px;
             font-weight: 400;
             font-style: italic;
-            background: linear-gradient(135deg, #ff38aa, #9572ff);
+            background: var(--gradientHL);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -207,14 +582,14 @@
 
         .btn.primary {
             border-color: var(--accentMid);
-            background: linear-gradient(135deg, rgba(232, 69, 139, 0.28), rgba(168, 124, 255, 0.14));
-            color: #3a0b2b;
+            background: var(--gradientBtn);
+            color: var(--btnText);
         }
 
         .btn.danger {
             border-color: var(--accentMid);
             background: var(--accentSoft);
-            color: #3a0b2b;
+            color: var(--btnText);
         }
 
         .hidden {
@@ -256,8 +631,8 @@
         }
 
         .catPill.active {
-            background: linear-gradient(135deg, rgba(232, 69, 139, 0.26), rgba(168, 124, 255, 0.14));
-            color: #3a0b2b;
+            background: var(--gradientPill);
+            color: var(--btnText);
             border-color: var(--accentMid);
             box-shadow: 0 4px 16px var(--glow);
         }
@@ -320,7 +695,7 @@
             border-radius: var(--r1);
             overflow: hidden;
             border: 1px solid var(--stroke);
-            background: linear-gradient(180deg, var(--surface), rgba(255, 235, 248, 0.55));
+            background: linear-gradient(180deg, var(--surface), var(--cardTint));
             box-shadow: var(--elev1);
             cursor: pointer;
             transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
@@ -350,7 +725,7 @@
             aspect-ratio: 1/1;
             object-fit: cover;
             display: block;
-            background: rgba(255, 245, 252, 0.50);
+            background: var(--surfaceBgLight);
         }
 
         /* Card corner chips */
@@ -360,8 +735,8 @@
             top: 8px;
             padding: 4px 10px;
             border-radius: 28px;
-            background: rgba(255, 240, 250, 0.88);
-            border: 1px solid rgba(232, 69, 139, 0.08);
+            background: var(--chipBg);
+            border: 1px solid var(--chipBorder);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             font-size: 11px;
@@ -379,14 +754,14 @@
             top: 8px;
             padding: 6px 10px;
             border-radius: 28px;
-            background: rgba(255, 240, 250, 0.88);
-            border: 1px solid rgba(232, 69, 139, 0.08);
+            background: var(--chipBg);
+            border: 1px solid var(--chipBorder);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
-            color: #3a0b2b;
+            color: var(--btnText);
             transition: transform 0.1s ease;
         }
 
@@ -477,10 +852,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(255, 200, 225, 0.60), rgba(200, 180, 255, 0.45));
+            background: var(--boughtOverlay);
             backdrop-filter: blur(3px);
             -webkit-backdrop-filter: blur(3px);
-            color: #5c1745;
+            color: var(--boughtText);
             font-family: var(--font-display);
             font-size: 14px;
             font-weight: 700;
@@ -498,7 +873,7 @@
             border: 1px dashed var(--accentMid);
             border-radius: var(--r2);
             padding: 48px 24px;
-            background: rgba(255, 245, 252, 0.50);
+            background: var(--surfaceBgLight);
             text-align: center;
             display: none;
         }
@@ -527,7 +902,7 @@
         .skeleton {
             border-radius: var(--r1);
             background: linear-gradient(90deg,
-                    rgba(255, 240, 250, 0.6) 25%, rgba(255, 230, 245, 0.9) 50%, rgba(255, 240, 250, 0.6) 75%);
+                    var(--shimmer1) 25%, var(--shimmer2) 50%, var(--shimmer1) 75%);
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
             aspect-ratio: 1/1;
@@ -560,7 +935,7 @@
             max-width: 600px;
             max-height: 85vh;
             border-radius: var(--r2) var(--r2) 0 0;
-            background: rgba(255, 245, 252, 0.96);
+            background: var(--surfaceBg);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             box-shadow: 0 -4px 50px rgba(0, 0, 0, 0.15);
@@ -614,7 +989,7 @@
             aspect-ratio: 1/1;
             max-height: 240px;
             margin: 0 auto 16px;
-            background: rgba(255, 248, 253, 0.60);
+            background: var(--inputBg);
         }
 
         .preview img {
@@ -679,7 +1054,7 @@
         select {
             width: 100%;
             border: 1px solid rgba(0, 0, 0, 0.06);
-            background: rgba(255, 248, 253, 0.80);
+            background: var(--inputBg);
             color: var(--textPrimary);
             font-family: var(--font-text);
             font-size: 14px;
@@ -930,7 +1305,7 @@
             min-width: 180px;
             border-radius: var(--r1);
             border: 1px solid var(--stroke);
-            background: rgba(255, 245, 252, 0.96);
+            background: var(--surfaceBg);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
@@ -1093,11 +1468,11 @@
             transform: translateX(-50%) translateY(20px);
             padding: 14px 24px;
             border-radius: 28px;
-            background: rgba(255, 245, 252, 0.95);
+            background: var(--surfaceBg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--accentMid);
-            box-shadow: 0 12px 40px rgba(232, 69, 139, 0.18);
+            box-shadow: 0 12px 40px var(--authShadow);
             font-family: var(--font-text);
             font-size: 12px;
             font-weight: 600;
@@ -1197,7 +1572,7 @@
 
         .flipBack {
             transform: rotateY(180deg);
-            background: linear-gradient(135deg, rgba(232, 69, 139, 0.22), rgba(168, 124, 255, 0.18));
+            background: var(--accentGradAuth);
             border: 1px solid var(--accentMid);
             display: flex;
             flex-direction: column;
@@ -1224,11 +1599,7 @@
         .aiBack {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(255, 80, 180, 0.38), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(140, 107, 255, 0.16), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(255, 80, 180, 0.22), transparent 50%),
-                linear-gradient(180deg, #ffe8f2, #f5e4ff);
+            background: inherit;
             z-index: 2000;
             display: none;
             flex-direction: column;
@@ -1247,7 +1618,7 @@
             padding: 16px 20px;
             position: sticky;
             top: 0;
-            background: rgba(255, 232, 242, 0.85);
+            background: var(--aiHeaderBg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             z-index: 10;
@@ -1263,7 +1634,7 @@
 
         .aiTitle .wl {
             font-weight: 700;
-            background: linear-gradient(135deg, #6C63FF, #FF6FD8);
+            background: var(--gradientHL);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1271,7 +1642,7 @@
 
         .aiTitle .ai {
             font-weight: 400;
-            background: linear-gradient(135deg, #9B8FFF, #FF6FD8);
+            background: var(--gradientHL);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1416,7 +1787,7 @@
             -webkit-appearance: none;
             height: 6px;
             border-radius: 3px;
-            background: linear-gradient(to right, #4CAF50, #9C27B0, #E8458B);
+            background: linear-gradient(to right, var(--lilac), var(--accent));
         }
 
         .aiPrefSlider input[type="range"]::-webkit-slider-thumb {
@@ -1729,7 +2100,7 @@
         }
 
         .aiSummaryBox {
-            background: linear-gradient(135deg, rgba(232, 69, 139, 0.08), rgba(168, 124, 255, 0.08));
+            background: var(--accentGradSubtle);
             border: 1px solid var(--stroke);
             border-radius: var(--r1);
             padding: 14px;
@@ -1868,7 +2239,7 @@
         }
 
         .aiDebateMsg .dbDisagree {
-            color: #E8458B;
+            color: var(--accent);
             font-size: 11px;
             margin-top: 4px;
         }
@@ -1915,7 +2286,7 @@
 
         /* AI Wrapped Card */
         .aiWrappedCard {
-            background: linear-gradient(135deg, rgba(232, 69, 139, 0.12), rgba(168, 124, 255, 0.12));
+            background: var(--accentGradWrap);
             border: 1px solid var(--accentMid);
             border-radius: var(--r1);
             padding: 14px;
@@ -1957,150 +2328,557 @@
 
         /* ═══════════ AUTH SCREEN ═══════════ */
         #authScreen {
-            position: fixed; inset: 0; z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-            background:
-                radial-gradient(1100px 650px at 10% 0%, rgba(255,80,180,0.38), transparent 55%),
-                radial-gradient(900px 500px at 90% 8%, rgba(140,107,255,0.16), transparent 55%),
-                radial-gradient(800px 500px at 50% 100%, rgba(255,80,180,0.22), transparent 50%),
-                linear-gradient(180deg, #ffe8f2, #f5e4ff);
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fdf2f8;
             padding: 20px;
+            overflow: hidden;
         }
+
+        .authBlob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            will-change: transform;
+        }
+
+        .authBlob1 {
+            width: 340px;
+            height: 340px;
+            background: var(--accent);
+            top: -80px;
+            left: -60px;
+            animation: blobFloat1 8s ease-in-out infinite;
+        }
+
+        .authBlob2 {
+            width: 280px;
+            height: 280px;
+            background: var(--lilac);
+            bottom: -60px;
+            right: -40px;
+            animation: blobFloat2 10s ease-in-out infinite;
+        }
+
+        .authBlob3 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            top: 50%;
+            left: 60%;
+            opacity: 0.35;
+            animation: blobFloat3 12s ease-in-out infinite;
+        }
+
+        @keyframes blobFloat1 {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(40px, 30px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-20px, 50px) scale(0.95);
+            }
+        }
+
+        @keyframes blobFloat2 {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(-30px, -40px) scale(1.08);
+            }
+
+            66% {
+                transform: translate(20px, -20px) scale(0.96);
+            }
+        }
+
+        @keyframes blobFloat3 {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-40px, 30px) scale(1.1);
+            }
+        }
+
+        .authNoise {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
         .authCard {
-            width: 100%; max-width: 380px;
-            background: rgba(255,245,252,0.94);
-            backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(232,69,139,0.18);
+            width: min(420px, 92vw);
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 28px;
-            box-shadow: 0 24px 64px rgba(232,69,139,0.15), 0 8px 32px rgba(0,0,0,0.08);
-            padding: 36px 28px 32px;
-            animation: authSlideIn 0.45s cubic-bezier(0.32,0.72,0.45,1) forwards;
+            box-shadow: 0 24px 64px var(--authShadow), 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            padding: 40px 32px 36px;
+            opacity: 0;
+            animation: authCardIn 0.35s cubic-bezier(0.32, 0.72, 0.45, 1) 0.05s forwards;
         }
-        @keyframes authSlideIn {
-            from { opacity:0; transform:translateY(32px) scale(0.96); }
-            to   { opacity:1; transform:translateY(0) scale(1); }
+
+        @keyframes authCardIn {
+            from {
+                opacity: 0;
+                transform: translateY(28px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
+
         .authLogo {
-            font-family: var(--font-display); font-size: 32px; font-weight: 400; font-style: italic;
-            background: linear-gradient(135deg,#ff38aa,#9572ff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            text-align: center; margin-bottom: 6px;
+            font-family: var(--font-display);
+            font-size: 34px;
+            font-weight: 400;
+            font-style: italic;
+            background: var(--gradientHL);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 4px;
+            opacity: 0;
+            animation: authFadeUp 0.3s ease 0.1s forwards;
         }
-        .authSub { text-align:center; font-size:13px; color:var(--textSecondary); margin-bottom:28px; }
+
+        .authSub {
+            text-align: center;
+            font-size: 13px;
+            color: var(--textSecondary);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: authFadeUp 0.3s ease 0.12s forwards;
+        }
+
+        @keyframes authFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .authTabs {
-            display:flex; gap:0;
-            background: rgba(232,69,139,0.07);
-            border-radius:10px; padding:3px; margin-bottom:24px;
+            display: flex;
+            gap: 0;
+            background: var(--accentVeryLight);
+            border-radius: 12px;
+            padding: 3px;
+            margin-bottom: 22px;
+            opacity: 0;
+            animation: authFadeUp 0.3s ease 0.14s forwards;
         }
+
         .authTab {
-            flex:1; padding:8px 0; border:none; background:transparent; border-radius:8px;
-            font-family:var(--font-text); font-size:13px; font-weight:600;
-            color:var(--textSecondary); cursor:pointer; transition:all 0.2s ease;
+            flex: 1;
+            padding: 9px 0;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            font-family: var(--font-text);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            cursor: pointer;
+            transition: all 0.25s ease;
         }
-        .authTab.active { background:white; color:var(--accent); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-        .authField { margin-bottom:12px; }
+
+        .authTab.active {
+            background: white;
+            color: var(--accent);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .authField {
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: authFadeUp 0.3s ease 0.16s forwards;
+        }
+
+        .authField:nth-child(2) {
+            animation-delay: 0.18s;
+        }
+
+        .authField:nth-child(3) {
+            animation-delay: 0.20s;
+        }
+
+        .authField:nth-child(4) {
+            animation-delay: 0.22s;
+        }
+
         .authInputWrap {
-            display:flex; align-items:center; gap:10px;
-            background: rgba(255,240,250,0.72);
-            backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-            border: 1.5px solid rgba(232,69,139,0.14);
-            border-radius:99px; padding:0 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(0, 0, 0, 0.06);
+            border-radius: 99px;
+            padding: 0 18px;
             transition: border-color 0.22s, box-shadow 0.22s, background 0.22s;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
+
         .authInputWrap:focus-within {
-            border-color: rgba(232,69,139,0.55);
-            background: rgba(255,244,252,0.92);
-            box-shadow: 0 0 0 4px rgba(232,69,139,0.08), 0 4px 20px rgba(232,69,139,0.14);
+            border-color: var(--accentBorderFocus);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 0 0 4px var(--accentFocusRing), 0 4px 20px var(--accentFocusGlow);
         }
+
         .authInputIcon {
-            color:var(--accent); opacity:0.5; flex-shrink:0; font-size:17px;
-            transition:opacity 0.22s; display:flex; align-items:center;
+            color: var(--accent);
+            opacity: 0.45;
+            flex-shrink: 0;
+            font-size: 17px;
+            transition: opacity 0.22s;
+            display: flex;
+            align-items: center;
         }
-        .authInputWrap:focus-within .authInputIcon { opacity:1; }
-        .authInputDivider { width:1px; height:16px; background:rgba(232,69,139,0.18); flex-shrink:0; }
+
+        .authInputWrap:focus-within .authInputIcon {
+            opacity: 1;
+        }
+
+        .authInputDivider {
+            width: 1px;
+            height: 16px;
+            background: rgba(0, 0, 0, 0.08);
+            flex-shrink: 0;
+        }
+
         .authInputWrap input {
-            flex:1; min-width:0; border:none !important; background:transparent !important;
-            padding:13px 0; font-size:14px; color:var(--textPrimary); outline:none !important;
-            font-family:var(--font-text); box-shadow:none !important; border-radius:0 !important;
-            -webkit-appearance:none;
+            flex: 1;
+            min-width: 0;
+            border: none !important;
+            background: transparent !important;
+            padding: 14px 0;
+            font-size: 14px;
+            color: var(--textPrimary);
+            outline: none !important;
+            font-family: var(--font-text);
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            -webkit-appearance: none;
         }
-        .authInputWrap input::placeholder { color:var(--textSecondary); opacity:0.65; }
+
+        .authInputWrap input::placeholder {
+            color: var(--textSecondary);
+            opacity: 0.55;
+        }
+
+        .authEyeToggle {
+            background: none;
+            border: none;
+            color: var(--textSecondary);
+            font-size: 17px;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .authEyeToggle:hover {
+            opacity: 1;
+        }
+
         .authSubmit {
-            width:100%; padding:14px; border:none; border-radius:99px;
-            background:linear-gradient(135deg,#E8458B,#9572ff); color:white;
-            font-family:var(--font-text); font-size:14px; font-weight:600; cursor:pointer;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 99px;
+            background: var(--authBtnGrad);
+            color: white;
+            font-family: var(--font-text);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
             transition: transform 0.18s, box-shadow 0.18s;
-            box-shadow: 0 6px 22px rgba(232,69,139,0.38); margin-top:10px;
+            box-shadow: 0 6px 22px var(--glow);
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: authFadeUp 0.3s ease 0.22s forwards;
         }
-        .authSubmit:active { transform:scale(0.97); }
-        .authSubmit:hover  { transform:translateY(-1px); box-shadow:0 10px 30px rgba(232,69,139,0.48); }
+
+        .authSubmit::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent);
+            border-radius: 99px 99px 0 0;
+            pointer-events: none;
+        }
+
+        .authSubmit:active {
+            transform: scale(0.97);
+        }
+
+        .authSubmit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .authForgot {
+            text-align: center;
+            margin-top: 14px;
+            opacity: 0;
+            animation: authFadeUp 0.3s ease 0.24s forwards;
+        }
+
+        .authForgot a {
+            font-size: 12px;
+            color: var(--textSecondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .authForgot a:hover {
+            color: var(--accent);
+        }
+
         .authError {
-            background:rgba(232,69,139,0.09); border:1px solid rgba(232,69,139,0.22);
-            border-radius:99px; padding:9px 16px; font-size:12px; color:#c0125e;
-            margin-bottom:12px; display:none; text-align:center;
+            background: rgba(220, 38, 38, 0.06);
+            border: 1px solid rgba(220, 38, 38, 0.18);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: #c0125e;
+            margin-bottom: 12px;
+            display: none;
+            text-align: center;
         }
+
         .authSuccess {
-            background:rgba(72,199,142,0.11); border:1px solid rgba(72,199,142,0.28);
-            border-radius:99px; padding:9px 16px; font-size:12px; color:#1a7a4c;
-            margin-bottom:12px; display:none; text-align:center;
+            background: rgba(72, 199, 142, 0.11);
+            border: 1px solid rgba(72, 199, 142, 0.28);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: #1a7a4c;
+            margin-bottom: 12px;
+            display: none;
+            text-align: center;
         }
 
         /* ═══════════ SETTINGS MODAL ═══════════ */
         .settingsUserRow {
-            display:flex; align-items:center; gap:14px;
-            background:linear-gradient(135deg,rgba(232,69,139,0.10),rgba(168,124,255,0.10));
-            border:1.5px solid var(--accentMid); border-radius:20px;
-            padding:14px 16px; margin-bottom:20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--accentGradLight);
+            border: 1.5px solid var(--accentMid);
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
         }
+
         .settingsAvatar {
-            width:46px; height:46px; border-radius:50%;
-            background:linear-gradient(135deg,#E8458B,#9572ff);
-            display:flex; align-items:center; justify-content:center;
-            color:white; font-weight:700; font-size:18px; flex-shrink:0;
-            box-shadow:0 4px 14px rgba(232,69,139,0.30);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--authBtnGrad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px var(--glow);
         }
+
         .settingsUsername {
-            font-family:var(--font-display); font-size:18px; font-style:italic;
-            background:linear-gradient(135deg,#ff38aa,#9572ff);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-style: italic;
+            background: var(--gradientHL);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .settingsEmail { font-size:11px; color:var(--textSecondary); margin-top:2px; }
-        .settingsMenu { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+
+        .settingsEmail {
+            font-size: 11px;
+            color: var(--textSecondary);
+            margin-top: 2px;
+        }
+
+        .settingsMenu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
         .settingsTile {
-            display:flex; flex-direction:column; align-items:center; justify-content:center;
-            gap:8px; padding:16px 10px; border-radius:16px;
-            border:1.5px solid var(--stroke); background:var(--surface);
-            backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-            cursor:pointer; transition:all 0.18s ease-out;
-            font-family:var(--font-text); font-size:12px; font-weight:600;
-            color:var(--textPrimary); text-align:center; line-height:1.3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 10px;
+            border-radius: 16px;
+            border: 1.5px solid var(--stroke);
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            cursor: pointer;
+            transition: all 0.18s ease-out;
+            font-family: var(--font-text);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--textPrimary);
+            text-align: center;
+            line-height: 1.3;
         }
+
         .settingsTile:hover {
-            background:var(--surfaceHover); border-color:var(--accentMid);
-            transform:translateY(-2px); box-shadow:0 6px 20px var(--glow);
+            background: var(--surfaceHover);
+            border-color: var(--accentMid);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--glow);
         }
-        .settingsTile:active { transform:scale(0.96); }
+
+        .settingsTile:active {
+            transform: scale(0.96);
+        }
+
         .settingsTile.active {
-            background:linear-gradient(135deg,rgba(232,69,139,0.18),rgba(168,124,255,0.12));
-            border-color:var(--accentMid); color:#3a0b2b;
+            background: var(--accentGradMid);
+            border-color: var(--accentMid);
+            color: var(--btnText);
         }
+
         .settingsTile.danger {
-            border-color:rgba(232,69,139,0.20); background:rgba(232,69,139,0.06); color:var(--accent);
+            border-color: var(--dangerBorder);
+            background: var(--dangerBg);
+            color: var(--accent);
         }
-        .settingsTile.danger:hover { background:rgba(232,69,139,0.14); border-color:rgba(232,69,139,0.40); }
-        .settingsTileIcon { font-size:22px; line-height:1; }
-        .settingsPanelWrap { overflow:hidden; max-height:0; transition:max-height 0.35s ease; }
-        .settingsPanelWrap.open { max-height:400px; }
+
+        .settingsTile.danger:hover {
+            background: var(--dangerHoverBg);
+            border-color: var(--dangerHoverBorder);
+        }
+
+        .settingsTileIcon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .settingsPanelWrap {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .settingsPanelWrap.open {
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease 0.05s,
+                transform 0.3s ease 0.05s;
+        }
+
         .settingsPanel {
-            background:rgba(255,245,252,0.60); border:1.5px solid var(--stroke);
-            border-radius:16px; padding:16px; margin-bottom:10px;
+            background: var(--settingsBg);
+            border: 1.5px solid var(--stroke);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 10px;
         }
+
         .settingsPanelTitle {
-            font-family:var(--font-display); font-size:14px; font-style:italic;
-            background:linear-gradient(135deg,#ff38aa,#9572ff);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-            margin-bottom:12px;
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-style: italic;
+            background: var(--gradientHL);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        /* ═══════════ LANG PICKER ═══════════ */
+        .langGrid {
+            display: flex;
+            gap: 10px;
+        }
+
+        .langBtn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 8px;
+            border-radius: 12px;
+            border: 1.5px solid var(--stroke);
+            background: var(--surface);
+            font-family: var(--font-text);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--textPrimary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .langBtn:hover {
+            border-color: var(--accentMid);
+            background: var(--surfaceHover);
+        }
+
+        .langBtn.active {
+            background: var(--accentGradMid);
+            border-color: var(--accentMid);
+            color: var(--btnText);
+        }
+
+        .langFlag {
+            font-size: 20px;
         }
     </style>
 </head>
@@ -2118,13 +2896,14 @@
                     <button id="menuBtn" class="btn menuBtn" title="Menü"><i class="ph ph-list"></i></button>
                     <div class="dropdown" id="dropdown">
                         <button class="dropItem" id="dropAI"><span class="dropIcon"><i
-                                    class="ph ph-brain"></i></span>WishlistAI</button>
+                                    class="ph ph-brain"></i></span><span data-i18n="dropAI">WishlistAI</span></button>
                         <button class="dropItem" id="dropWrapped"><span class="dropIcon"><i
                                     class="ph ph-chart-bar"></i></span>Wrapped</button>
                         <button class="dropItem" id="dropSettings" onclick="openSettings()"><span class="dropIcon"><i
-                                    class="ph ph-gear"></i></span>Ayarlar</button>
-                        <button class="dropItem dropDanger" id="dropLogout" onclick="doLogout()"><span class="dropIcon"><i
-                                    class="ph ph-sign-out"></i></span>Çıkış Yap</button>
+                                    class="ph ph-gear"></i></span><span data-i18n="dropSettings">Ayarlar</span></button>
+                        <button class="dropItem dropDanger" id="dropLogout" onclick="doLogout()"><span
+                                class="dropIcon"><i class="ph ph-sign-out"></i></span><span data-i18n="dropLogout">Çıkış
+                                Yap</span></button>
                     </div>
                 </div>
             </div>
@@ -2132,7 +2911,7 @@
     </header>
 
     <div class="catBar" id="catBar">
-        <div class="catPill active" data-cat="all">Tümü</div>
+        <div class="catPill active" data-cat="all" data-i18n="catAll">Tümü</div>
         <div class="catPill" data-cat="giyim"><i class="ph ph-t-shirt"></i> Giyim</div>
         <div class="catPill" data-cat="makyaj"><i class="ph ph-paint-brush"></i> Makyaj &amp; Cilt</div>
         <div class="catPill" data-cat="album"><i class="ph ph-vinyl-record"></i> Albüm</div>
@@ -2361,8 +3140,8 @@
             <div class="aiScreen" id="aiScreenForm">
                 <div class="aiInfoTip">
                     <span class="tipIcon"><i class="ph ph-lightbulb"></i></span>
-                    <span>Daha doğru sonuçlar için ürünlerin <b>öncelik</b>, <b>hedef fiyat</b> ve <b>alma zamanı</b>
-                        bilgilerini İstek Detayı'ndan doldurun.</span>
+                    <span>Yapay zekâ analizinin doğruluğunu artırmak için ürünlere <b>öncelik</b>, <b>hedef fiyat</b> ve
+                        <b>planlanan alım zamanı</b> ekleyin.</span>
                 </div>
                 <div id="aiBudgetFields" style="display:none;">
                     <div class="aiFormGroup">
@@ -2448,6 +3227,15 @@
 
     <!-- ═══ AUTH SCREEN ═══ -->
     <div id="authScreen">
+        <div class="authBlob authBlob1"></div>
+        <div class="authBlob authBlob2"></div>
+        <div class="authBlob authBlob3"></div>
+        <svg class="authNoise" width="100%" height="100%">
+            <filter id="noise">
+                <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+            </filter>
+            <rect width="100%" height="100%" filter="url(#noise)" />
+        </svg>
         <div class="authCard">
             <div class="authLogo">Wishlistgül</div>
             <div class="authSub">Kendi istek listeni oluştur ✨</div>
@@ -2462,7 +3250,8 @@
                     <div class="authInputWrap">
                         <span class="authInputIcon"><i class="ph ph-user"></i></span>
                         <div class="authInputDivider"></div>
-                        <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
+                        <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username"
+                            autocapitalize="none" />
                     </div>
                 </div>
                 <div class="authField">
@@ -2470,16 +3259,28 @@
                         <span class="authInputIcon"><i class="ph ph-lock"></i></span>
                         <div class="authInputDivider"></div>
                         <input id="loginPass" type="password" placeholder="Şifre" autocomplete="current-password" />
+                        <button type="button" class="authEyeToggle"
+                            onclick="togglePasswordVisibility('loginPass', this)"><i
+                                class="ph ph-eye-slash"></i></button>
                     </div>
                 </div>
                 <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
+                <div class="authForgot"><a href="#">Şifremi unuttum</a></div>
             </div>
             <div id="registerForm" style="display:none;">
                 <div class="authField">
                     <div class="authInputWrap">
                         <span class="authInputIcon"><i class="ph ph-user-plus"></i></span>
                         <div class="authInputDivider"></div>
-                        <input id="regUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
+                        <input id="regUser" type="text" placeholder="Kullanıcı adı" autocomplete="username"
+                            autocapitalize="none" />
+                    </div>
+                </div>
+                <div class="authField">
+                    <div class="authInputWrap">
+                        <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
+                        <div class="authInputDivider"></div>
+                        <input id="regEmail" type="email" placeholder="E-posta (isteğe bağlı)" autocomplete="email" />
                     </div>
                 </div>
                 <div class="authField">
@@ -2487,6 +3288,8 @@
                         <span class="authInputIcon"><i class="ph ph-lock"></i></span>
                         <div class="authInputDivider"></div>
                         <input id="regPass" type="password" placeholder="Şifre" autocomplete="new-password" />
+                        <button type="button" class="authEyeToggle"
+                            onclick="togglePasswordVisibility('regPass', this)"><i class="ph ph-eye-slash"></i></button>
                     </div>
                 </div>
                 <div class="authField">
@@ -2494,6 +3297,9 @@
                         <span class="authInputIcon"><i class="ph ph-lock-key"></i></span>
                         <div class="authInputDivider"></div>
                         <input id="regPass2" type="password" placeholder="Şifre tekrar" autocomplete="new-password" />
+                        <button type="button" class="authEyeToggle"
+                            onclick="togglePasswordVisibility('regPass2', this)"><i
+                                class="ph ph-eye-slash"></i></button>
                     </div>
                 </div>
                 <button class="authSubmit" onclick="doRegister()">Hesap Oluştur →</button>
@@ -2520,19 +3326,19 @@
                 <div class="settingsMenu">
                     <div class="settingsTile" onclick="toggleSettingsPanel('pwPanel')">
                         <div class="settingsTileIcon">🔑</div>
-                        <div>Şifre Değiştir</div>
+                        <div data-i18n="tilePw">Şifre Değiştir</div>
                     </div>
                     <div class="settingsTile" onclick="toggleSettingsPanel('themePanel')">
                         <div class="settingsTileIcon">🎨</div>
-                        <div>Tema Rengi</div>
+                        <div data-i18n="tileTheme">Tema Rengi</div>
                     </div>
                     <div class="settingsTile" onclick="toggleSettingsPanel('langPanel')">
                         <div class="settingsTileIcon">🌍</div>
-                        <div>Dil Tercihi</div>
+                        <div data-i18n="tileLang">Dil Tercihi</div>
                     </div>
                     <div class="settingsTile danger" onclick="toggleSettingsPanel('resetPanel')">
                         <div class="settingsTileIcon">🗑️</div>
-                        <div>Listeyi Sıfırla</div>
+                        <div data-i18n="tileReset">Listeyi Sıfırla</div>
                     </div>
                 </div>
                 <div class="settingsPanelWrap" id="pwPanel">
@@ -2561,7 +3367,8 @@
                                 <input id="pwNew2" type="password" placeholder="Yeni şifre tekrar" />
                             </div>
                         </div>
-                        <button class="authSubmit" style="margin-top:4px" onclick="doChangePassword()">Güncelle →</button>
+                        <button class="authSubmit" style="margin-top:4px" onclick="doChangePassword()">Güncelle
+                            →</button>
                     </div>
                 </div>
                 <div class="settingsPanelWrap" id="themePanel">
@@ -2573,14 +3380,26 @@
                 <div class="settingsPanelWrap" id="langPanel">
                     <div class="settingsPanel">
                         <div class="settingsPanelTitle">🌍 Dil Tercihi</div>
-                        <div style="font-size:13px;color:var(--textSecondary);text-align:center;padding:12px 0;">Yakında eklenecek ✨</div>
+                        <div class="langGrid">
+                            <button class="langBtn active" id="langBtnTr" onclick="applyLanguage('tr')">
+                                <span class="langFlag">🇹🇷</span>
+                                <span>Türkçe</span>
+                            </button>
+                            <button class="langBtn" id="langBtnEn" onclick="applyLanguage('en')">
+                                <span class="langFlag">🇬🇧</span>
+                                <span>English</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="settingsPanelWrap" id="resetPanel">
                     <div class="settingsPanel">
                         <div class="settingsPanelTitle">🗑️ Listeyi Sıfırla</div>
-                        <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
-                        <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="confirmReset()">Evet, Sıfırla</button>
+                        <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi
+                            kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
+                        <button class="authSubmit"
+                            style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0"
+                            onclick="confirmReset()">Evet, Sıfırla</button>
                     </div>
                 </div>
             </div>
@@ -2595,14 +3414,14 @@
 
         async function fbGet(path) {
             if (!FB_ENABLED) return null;
-            try { const r = await fetch(FB_DATABASE_URL+'/'+path+'.json'); return r.ok ? await r.json() : null; }
+            try { const r = await fetch(FB_DATABASE_URL + '/' + path + '.json'); return r.ok ? await r.json() : null; }
             catch { return null; }
         }
         async function fbSet(path, data) {
             if (!FB_ENABLED) return false;
             try {
-                const r = await fetch(FB_DATABASE_URL+'/'+path+'.json', {
-                    method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
+                const r = await fetch(FB_DATABASE_URL + '/' + path + '.json', {
+                    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
                 });
                 return r.ok;
             } catch { return false; }
@@ -2615,140 +3434,151 @@
 
         async function hashPw(pw) {
             const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-            return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
-        function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY))||{}; } catch { return {}; } }
+        function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; } }
         function saveLocalUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
         async function getUser(u) {
-            if (FB_ENABLED) { const h = await fbGet('users/'+u+'/hash'); if (h) return h; }
-            return getLocalUsers()[u]||null;
+            if (FB_ENABLED) { const h = await fbGet('users/' + u + '/hash'); if (h) return h; }
+            return getLocalUsers()[u] || null;
         }
-        async function saveUserHash(u,h) {
-            if (FB_ENABLED) await fbSet('users/'+u+'/hash', h);
-            const us=getLocalUsers(); us[u]=h; saveLocalUsers(us);
+        async function saveUserHash(u, h) {
+            if (FB_ENABLED) await fbSet('users/' + u + '/hash', h);
+            const us = getLocalUsers(); us[u] = h; saveLocalUsers(us);
         }
         function switchAuthTab(tab) {
-            document.getElementById('loginForm').style.display    = tab==='login'    ? '' : 'none';
-            document.getElementById('registerForm').style.display = tab==='register' ? '' : 'none';
-            document.getElementById('authTabLogin').classList.toggle('active',    tab==='login');
-            document.getElementById('authTabRegister').classList.toggle('active', tab==='register');
+            document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
+            document.getElementById('authTabLogin').classList.toggle('active', tab === 'login');
+            document.getElementById('authTabRegister').classList.toggle('active', tab === 'register');
             document.getElementById('authError').style.display = 'none';
             document.getElementById('authSuccessMsg').style.display = 'none';
         }
         function showAuthError(msg) {
-            const el=document.getElementById('authError');
-            el.textContent=msg; el.style.display='block';
-            document.getElementById('authSuccessMsg').style.display='none';
+            const el = document.getElementById('authError');
+            el.textContent = msg; el.style.display = 'block';
+            document.getElementById('authSuccessMsg').style.display = 'none';
+        }
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'ph ph-eye';
+            } else {
+                input.type = 'password';
+                icon.className = 'ph ph-eye-slash';
+            }
         }
         async function doLogin() {
-            const btn=document.querySelector('#loginForm .authSubmit');
-            const username=document.getElementById('loginUser').value.trim().toLowerCase();
-            const password=document.getElementById('loginPass').value;
-            if (!username||!password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
-            btn.textContent='Kontrol ediliyor...'; btn.disabled=true;
-            const stored=await getUser(username);
-            btn.textContent='Giriş Yap →'; btn.disabled=false;
+            const btn = document.querySelector('#loginForm .authSubmit');
+            const username = document.getElementById('loginUser').value.trim().toLowerCase();
+            const password = document.getElementById('loginPass').value;
+            if (!username || !password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
+            btn.textContent = 'Kontrol ediliyor...'; btn.disabled = true;
+            const stored = await getUser(username);
+            btn.textContent = 'Giriş Yap →'; btn.disabled = false;
             if (!stored) return showAuthError('Kullanıcı bulunamadı.');
             if (stored !== await hashPw(password)) return showAuthError('Şifre hatalı.');
             localStorage.setItem(SESSION_KEY, username);
             startApp(username);
         }
         async function doRegister() {
-            const btn=document.querySelector('#registerForm .authSubmit');
-            const username=document.getElementById('regUser').value.trim().toLowerCase();
-            const pw=document.getElementById('regPass').value;
-            const pw2=document.getElementById('regPass2').value;
-            if (!username||!pw) return showAuthError('Tüm alanları doldurun.');
-            if (username.length<3) return showAuthError('Kullanıcı adı en az 3 karakter olmalı.');
-            if (pw.length<4) return showAuthError('Şifre en az 4 karakter olmalı.');
-            if (pw!==pw2) return showAuthError('Şifreler eşleşmiyor.');
-            btn.textContent='Oluşturuluyor...'; btn.disabled=true;
-            const existing=await getUser(username);
-            if (existing) { btn.textContent='Hesap Oluştur →'; btn.disabled=false; return showAuthError('Bu kullanıcı adı alınmış.'); }
+            const btn = document.querySelector('#registerForm .authSubmit');
+            const username = document.getElementById('regUser').value.trim().toLowerCase();
+            const pw = document.getElementById('regPass').value;
+            const pw2 = document.getElementById('regPass2').value;
+            if (!username || !pw) return showAuthError('Tüm alanları doldurun.');
+            if (username.length < 3) return showAuthError('Kullanıcı adı en az 3 karakter olmalı.');
+            if (pw.length < 4) return showAuthError('Şifre en az 4 karakter olmalı.');
+            if (pw !== pw2) return showAuthError('Şifreler eşleşmiyor.');
+            btn.textContent = 'Oluşturuluyor...'; btn.disabled = true;
+            const existing = await getUser(username);
+            if (existing) { btn.textContent = 'Hesap Oluştur →'; btn.disabled = false; return showAuthError('Bu kullanıcı adı alınmış.'); }
             await saveUserHash(username, await hashPw(pw));
-            btn.textContent='Hesap Oluştur →'; btn.disabled=false;
+            btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
             localStorage.setItem(SESSION_KEY, username);
-            const el=document.getElementById('authSuccessMsg');
-            el.textContent='Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display='block';
-            document.getElementById('authError').style.display='none';
-            setTimeout(()=>startApp(username), 700);
+            const el = document.getElementById('authSuccessMsg');
+            el.textContent = 'Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display = 'block';
+            document.getElementById('authError').style.display = 'none';
+            setTimeout(() => startApp(username), 700);
         }
         function startApp(username) {
-            currentUser=username;
-            document.getElementById('authScreen').style.display='none';
-            load().then(()=>render());
+            currentUser = username;
+            document.getElementById('authScreen').style.display = 'none';
+            load().then(() => render());
         }
         function doLogout() {
             localStorage.removeItem(SESSION_KEY);
-            currentUser=null; items=[];
-            document.getElementById('authScreen').style.display='flex';
-            document.getElementById('loginUser').value='';
-            document.getElementById('loginPass').value='';
-            document.getElementById('authError').style.display='none';
-            document.getElementById('authSuccessMsg').style.display='none';
+            currentUser = null; items = [];
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccessMsg').style.display = 'none';
             switchAuthTab('login');
             closeSettings();
         }
         function openSettings() {
-            document.getElementById('settingsUsernameDisplay').textContent=currentUser||'—';
-            document.getElementById('settingsAvatar').textContent=(currentUser||'?')[0].toUpperCase();
-            document.getElementById('pwError').style.display='none';
-            document.getElementById('pwSuccess').style.display='none';
-            document.getElementById('pwOld').value='';
-            document.getElementById('pwNew').value='';
-            document.getElementById('pwNew2').value='';
+            document.getElementById('settingsUsernameDisplay').textContent = currentUser || '—';
+            document.getElementById('settingsAvatar').textContent = (currentUser || '?')[0].toUpperCase();
+            document.getElementById('pwError').style.display = 'none';
+            document.getElementById('pwSuccess').style.display = 'none';
+            document.getElementById('pwOld').value = '';
+            document.getElementById('pwNew').value = '';
+            document.getElementById('pwNew2').value = '';
             // close all panels
-            document.querySelectorAll('.settingsPanelWrap').forEach(p=>p.classList.remove('open'));
-            document.querySelectorAll('.settingsTile').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('.settingsPanelWrap').forEach(p => p.classList.remove('open'));
+            document.querySelectorAll('.settingsTile').forEach(t => t.classList.remove('active'));
             renderThemeGrid();
-            const sb=document.getElementById('settingsBack');
-            sb.style.display='flex';
-            requestAnimationFrame(()=>sb.classList.add('show'));
-            document.body.style.overflow='hidden';
+            const sb = document.getElementById('settingsBack');
+            sb.style.display = 'flex';
+            requestAnimationFrame(() => sb.classList.add('show'));
+            document.body.style.overflow = 'hidden';
         }
         function toggleSettingsPanel(id) {
-            const panel=document.getElementById(id);
-            const isOpen=panel.classList.contains('open');
-            document.querySelectorAll('.settingsPanelWrap').forEach(p=>p.classList.remove('open'));
-            document.querySelectorAll('.settingsTile').forEach(t=>t.classList.remove('active'));
+            const panel = document.getElementById(id);
+            const isOpen = panel.classList.contains('open');
+            document.querySelectorAll('.settingsPanelWrap').forEach(p => p.classList.remove('open'));
+            document.querySelectorAll('.settingsTile').forEach(t => t.classList.remove('active'));
             if (!isOpen) {
                 panel.classList.add('open');
                 // mark corresponding tile active
-                const tiles=document.querySelectorAll('.settingsTile');
-                const map={'pwPanel':0,'themePanel':1,'langPanel':2,'resetPanel':3};
-                if (map[id]!==undefined) tiles[map[id]].classList.add('active');
+                const tiles = document.querySelectorAll('.settingsTile');
+                const map = { 'pwPanel': 0, 'themePanel': 1, 'langPanel': 2, 'resetPanel': 3 };
+                if (map[id] !== undefined) tiles[map[id]].classList.add('active');
             }
         }
         function closeSettings() {
-            const sb=document.getElementById('settingsBack');
+            const sb = document.getElementById('settingsBack');
             if (!sb) return;
             sb.classList.remove('show');
-            setTimeout(()=>{ sb.style.display='none'; }, 280);
-            document.body.style.overflow='';
+            setTimeout(() => { sb.style.display = 'none'; }, 280);
+            document.body.style.overflow = '';
         }
         async function doChangePassword() {
-            const oldPw=document.getElementById('pwOld').value;
-            const newPw=document.getElementById('pwNew').value;
-            const newPw2=document.getElementById('pwNew2').value;
-            const pwErr=document.getElementById('pwError');
-            const pwOk=document.getElementById('pwSuccess');
-            pwErr.style.display='none'; pwOk.style.display='none';
-            if (!oldPw||!newPw||!newPw2) { pwErr.textContent='Tüm alanları doldurun.'; pwErr.style.display='block'; return; }
-            if (newPw.length<4) { pwErr.textContent='Yeni şifre en az 4 karakter olmalı.'; pwErr.style.display='block'; return; }
-            if (newPw!==newPw2) { pwErr.textContent='Yeni şifreler eşleşmiyor.'; pwErr.style.display='block'; return; }
-            const stored=await getUser(currentUser);
-            if (stored !== await hashPw(oldPw)) { pwErr.textContent='Mevcut şifre hatalı.'; pwErr.style.display='block'; return; }
+            const oldPw = document.getElementById('pwOld').value;
+            const newPw = document.getElementById('pwNew').value;
+            const newPw2 = document.getElementById('pwNew2').value;
+            const pwErr = document.getElementById('pwError');
+            const pwOk = document.getElementById('pwSuccess');
+            pwErr.style.display = 'none'; pwOk.style.display = 'none';
+            if (!oldPw || !newPw || !newPw2) { pwErr.textContent = 'Tüm alanları doldurun.'; pwErr.style.display = 'block'; return; }
+            if (newPw.length < 4) { pwErr.textContent = 'Yeni şifre en az 4 karakter olmalı.'; pwErr.style.display = 'block'; return; }
+            if (newPw !== newPw2) { pwErr.textContent = 'Yeni şifreler eşleşmiyor.'; pwErr.style.display = 'block'; return; }
+            const stored = await getUser(currentUser);
+            if (stored !== await hashPw(oldPw)) { pwErr.textContent = 'Mevcut şifre hatalı.'; pwErr.style.display = 'block'; return; }
             await saveUserHash(currentUser, await hashPw(newPw));
-            document.getElementById('pwOld').value='';
-            document.getElementById('pwNew').value='';
-            document.getElementById('pwNew2').value='';
-            pwOk.textContent='Şifre başarıyla güncellendi! ✓'; pwOk.style.display='block';
+            document.getElementById('pwOld').value = '';
+            document.getElementById('pwNew').value = '';
+            document.getElementById('pwNew2').value = '';
+            pwOk.textContent = 'Şifre başarıyla güncellendi! ✓'; pwOk.style.display = 'block';
         }
         function confirmReset() {
             if (confirm('Tüm istek listeni silmek istediğine emin misin?')) {
-                items=[];
-                localStorage.removeItem('wishlist_v3_'+currentUser);
-                if (FB_ENABLED) fbSet('users/'+currentUser+'/items', null);
+                items = [];
+                localStorage.removeItem('wishlist_v3_' + currentUser);
+                if (FB_ENABLED) fbSet('users/' + currentUser + '/items', null);
                 render();
                 closeSettings();
                 showToast('🗑️ Liste sıfırlandı');
@@ -2757,11 +3587,12 @@
 
         /* ═══ THEME SYSTEM ═══ */
         const THEMES = [
-            { id:'pink',     label:'🌸 Pembe',   bg:['#ffe8f2','#f5e4ff'], accent:'#E8458B', sec:'#A87CFF' },
-            { id:'blue',     label:'💙 Mavi',    bg:['#e8f0ff','#e4eeff'], accent:'#3D7FE8', sec:'#7CB4FF' },
-            { id:'green',    label:'🌿 Yeşil',   bg:['#e8fff4','#e4fff2'], accent:'#2EB87A', sec:'#7CDFB4' },
-            { id:'peach',    label:'🍑 Şeftali', bg:['#fff0e8','#fff4e4'], accent:'#E8763D', sec:'#FFAA7C' },
-            { id:'charcoal', label:'🩶 Antrasit',bg:['#edf0f4','#e8edf4'], accent:'#7B8FA8', sec:'#A8B8CC' },
+            { id: 'pink', label: '🌸 Pembe', bg: ['#ffe8f2', '#f5e4ff'], accent: '#E8458B', sec: '#A87CFF' },
+            { id: 'blue', label: '💙 Mavi', bg: ['#e8f0ff', '#e4eeff'], accent: '#3D7FE8', sec: '#7CB4FF' },
+            { id: 'green', label: '🌿 Yeşil', bg: ['#e8fff4', '#e4fff2'], accent: '#2EB87A', sec: '#7CDFB4' },
+            { id: 'peach', label: '🍑 Şeftali', bg: ['#fff0e8', '#fff4e4'], accent: '#E8763D', sec: '#FFAA7C' },
+            { id: 'charcoal', label: '🩶 Antrasit', bg: ['#edf0f4', '#e8edf4'], accent: '#7B8FA8', sec: '#A8B8CC' },
+            { id: 'dark', label: '🌙 Gece', bg: ['#0f1923', '#141e2c'], accent: '#6C5CE7', sec: '#a29bfe' },
         ];
         const THEME_KEY = 'wl_theme_v1';
 
@@ -2792,30 +3623,30 @@
         }
 
         /* Load saved theme on start */
-        (function() {
+        (function () {
             const saved = localStorage.getItem(THEME_KEY);
             if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
         })();
-        document.addEventListener('keydown', e=>{
-            if (e.key!=='Enter') return;
-            const ls=document.getElementById('authScreen');
-            if (!ls||ls.style.display==='none') return;
-            const loginVisible=document.getElementById('loginForm').style.display!=='none';
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'Enter') return;
+            const ls = document.getElementById('authScreen');
+            if (!ls || ls.style.display === 'none') return;
+            const loginVisible = document.getElementById('loginForm').style.display !== 'none';
             if (loginVisible) doLogin(); else doRegister();
         });
         (function checkSession() {
-            const saved=localStorage.getItem(SESSION_KEY);
+            const saved = localStorage.getItem(SESSION_KEY);
             if (saved) {
-                const users=getLocalUsers();
+                const users = getLocalUsers();
                 if (users[saved]) {
-                    currentUser=saved;
-                    document.getElementById('authScreen').style.display='none';
+                    currentUser = saved;
+                    document.getElementById('authScreen').style.display = 'none';
                     return;
                 }
             }
         })();
 
-        const LS_KEY = currentUser ? 'wishlist_v3_'+currentUser : 'wishlist_v3';
+        const LS_KEY = currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3';
         let items = [];
         let activeId = null;
         let activeCat = "all";
@@ -2866,8 +3697,9 @@
             for (let i = 1; i <= 5; i++) {
                 const btn = document.createElement("div");
                 btn.className = "dBtn" + (i <= level ? " active" : "");
+                const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
                 btn.innerHTML = i <= level
-                    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="#E8458B"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+                    ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="' + accentColor + '"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
                     : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
                 btn.addEventListener("click", () => {
                     mPriority.value = i;
@@ -2880,10 +3712,11 @@
         /* Build desire meter for cards */
         function buildCardDesireMeter(level) {
             let html = '<span class="desireMeter">';
+            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
             for (let i = 1; i <= 5; i++) {
                 const filled = i <= level;
                 html += '<svg class="dHeart' + (filled ? ' filled' : '') + '" width="12" height="12" viewBox="0 0 24 24" '
-                    + (filled ? 'fill="#E8458B"' : 'fill="none" stroke="#dbb" stroke-width="1.5"')
+                    + (filled ? 'fill="' + accentColor + '"' : 'fill="none" stroke="#dbb" stroke-width="1.5"')
                     + '><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
             }
             html += '</span>';
@@ -2920,24 +3753,24 @@
         });
 
         /* ── Storage ── */
-        function getUserKey() { return currentUser ? 'wishlist_v3_'+currentUser : 'wishlist_v3'; }
+        function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
         async function load() {
             if (FB_ENABLED && currentUser) {
                 try {
-                    const fbItems = await fbGet('users/'+currentUser+'/items');
+                    const fbItems = await fbGet('users/' + currentUser + '/items');
                     if (fbItems && Array.isArray(fbItems)) {
                         items = fbItems;
                         localStorage.setItem(getUserKey(), JSON.stringify(items));
                         return;
                     }
-                } catch {}
+                } catch { }
             }
-            try { const raw=localStorage.getItem(getUserKey()); items=raw?JSON.parse(raw):[]; }
-            catch { items=[]; }
+            try { const raw = localStorage.getItem(getUserKey()); items = raw ? JSON.parse(raw) : []; }
+            catch { items = []; }
         }
         function persist() {
             localStorage.setItem(getUserKey(), JSON.stringify(items));
-            if (FB_ENABLED && currentUser) fbSet('users/'+currentUser+'/items', items);
+            if (FB_ENABLED && currentUser) fbSet('users/' + currentUser + '/items', items);
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
 
@@ -3386,7 +4219,7 @@
         /* ═══════════════════════════════════════════════════════════
            ═══ WISHLIST AI — EXPERT COUNCIL ENGINE ═══
            ═══════════════════════════════════════════════════════════ */
-        const AI_HIST_KEY = currentUser ? "wishlist_ai_history_"+currentUser : "wishlist_ai_history";
+        const AI_HIST_KEY = currentUser ? "wishlist_ai_history_" + currentUser : "wishlist_ai_history";
         let aiMode = null;
         let aiSelectedIds = [];
         let aiCurrentResult = null;
@@ -3876,12 +4709,12 @@
                 }, step.delay);
             });
 
-   // Run actual analysis via Groq API
-const productList = products.map((p, i) =>
-    `${i + 1}. ${p.name} — Fiyat: ₺${p.price || "?"}, Kategori: ${p.category || "?"}, Öncelik: ${p.priority || 3}/5`
-).join("\n");
+            // Run actual analysis via Groq API
+            const productList = products.map((p, i) =>
+                `${i + 1}. ${p.name} — Fiyat: ₺${p.price || "?"}, Kategori: ${p.category || "?"}, Öncelik: ${p.priority || 3}/5`
+            ).join("\n");
 
-const systemPrompt = `Sen bir alışveriş danışmanı panelisin. Aşağıdaki 6 uzman karakteri oynayacaksın:
+            const systemPrompt = `Sen bir alışveriş danışmanı panelisin. Aşağıdaki 6 uzman karakteri oynayacaksın:
 
 1. 💰 Bütçe Analisti (budget) — fiyat/değer odaklı, tutumlu
 2. 🎯 İhtiyaç Uzmanı (need) — gerçek ihtiyaç vs istek ayrımı yapar
@@ -3931,67 +4764,67 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
   }
 }`;
 
-const userMessage = `Şu ürünleri analiz et:\n${productList}`;
+            const userMessage = `Şu ürünleri analiz et:\n${productList}`;
 
-fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        systemPrompt,
-        messages: [{ role: 'user', content: userMessage }]
-    })
-})
-.then(r => r.json())
-.then(data => {
-    const text = data.choices[0].message.content;
-    const clean = text.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    systemPrompt,
+                    messages: [{ role: 'user', content: userMessage }]
+                })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    const text = data.choices[0].message.content;
+                    const clean = text.replace(/```json|```/g, '').trim();
+                    const result = JSON.parse(clean);
 
-    aiCurrentResult = {
-        id: Date.now().toString(36),
-        queryType: aiMode,
-        createdAt: Date.now(),
-        products,
-        budget,
-        pref,
-        expertAnalyses: result.experts.map(e => ({
-            ...e,
-            color: EXPERTS.find(x => x.id === e.id)?.color || "#888",
-            weightApplied: 1
-        })),
-        debate: result.debate.map(d => ({
-            ...d,
-            color: EXPERTS.find(x => x.icon === d.icon)?.color || "#888"
-        })),
-        finalDecision: {
-            ...result.finalDecision,
-            recommendedProducts: result.experts.flatMap(e => e.productScores)
-                .sort((a, b) => b.weightedScore - a.weightedScore)
-                .filter((v, i, arr) => arr.findIndex(x => x.prodName === v.prodName) === i)
-                .slice(0, 3)
-                .map(s => ({
-                    name: s.prodName,
-                    finalScore: s.weightedScore,
-                    expertConsensus: s.reasoning,
-                    reasoning: s.reasoning,
-                    imgData: products.find(p => p.name === s.prodName)?.imgData || ""
-                }))
-        }
-    };
+                    aiCurrentResult = {
+                        id: Date.now().toString(36),
+                        queryType: aiMode,
+                        createdAt: Date.now(),
+                        products,
+                        budget,
+                        pref,
+                        expertAnalyses: result.experts.map(e => ({
+                            ...e,
+                            color: EXPERTS.find(x => x.id === e.id)?.color || "#888",
+                            weightApplied: 1
+                        })),
+                        debate: result.debate.map(d => ({
+                            ...d,
+                            color: EXPERTS.find(x => x.icon === d.icon)?.color || "#888"
+                        })),
+                        finalDecision: {
+                            ...result.finalDecision,
+                            recommendedProducts: result.experts.flatMap(e => e.productScores)
+                                .sort((a, b) => b.weightedScore - a.weightedScore)
+                                .filter((v, i, arr) => arr.findIndex(x => x.prodName === v.prodName) === i)
+                                .slice(0, 3)
+                                .map(s => ({
+                                    name: s.prodName,
+                                    finalScore: s.weightedScore,
+                                    expertConsensus: s.reasoning,
+                                    reasoning: s.reasoning,
+                                    imgData: products.find(p => p.name === s.prodName)?.imgData || ""
+                                }))
+                        }
+                    };
 
-    avatars.forEach(a => { a.classList.remove("thinking"); a.classList.add("done"); });
-    progressEl.style.width = "100%";
-    statusEl.textContent = "✅ Analiz tamamlandı!";
+                    avatars.forEach(a => { a.classList.remove("thinking"); a.classList.add("done"); });
+                    progressEl.style.width = "100%";
+                    statusEl.textContent = "✅ Analiz tamamlandı!";
 
-    setTimeout(() => {
-        aiShowScreen("aiScreenResult");
-        renderAIResults(aiCurrentResult);
-    }, 600);
-})
-.catch(err => {
-    statusEl.textContent = "❌ Bir hata oluştu, tekrar dene.";
-    console.error(err);
-});
+                    setTimeout(() => {
+                        aiShowScreen("aiScreenResult");
+                        renderAIResults(aiCurrentResult);
+                    }, 600);
+                })
+                .catch(err => {
+                    statusEl.textContent = "❌ Bir hata oluştu, tekrar dene.";
+                    console.error(err);
+                });
         }
 
         /* Render results */
@@ -4084,7 +4917,7 @@ fetch('/api/chat', {
             // Referee final word
             debateHtml += `<div class="aiDebateMsg">
                 <span class="dbIcon">⚖️</span>
-                <div class="dbBubble" style="border-color:var(--accent);background:linear-gradient(135deg,rgba(232,69,139,0.05),rgba(168,124,255,0.05));">
+                <div class="dbBubble" style="border-color:var(--accent);background:var(--accentGradSubtle);">
                     <div class="dbName" style="color:#607D8B">Hakem — Nihai Karar</div>
                     <div>${fd.summary}</div>
                     <div style="margin-top:4px;font-size:11px;color:var(--accent);">${fd.preferenceAcknowledgment}</div>
@@ -4192,8 +5025,244 @@ fetch('/api/chat', {
             container.insertBefore(card, document.querySelector(".wrappedNote"));
         };
 
+        /* ═══ I18N LANGUAGE SYSTEM ═══ */
+        const I18N = {
+            tr: {
+                appName: 'Wishlistgül',
+                addBtn: '+ Ekle',
+                allCat: 'Tümü',
+                dateAsc: 'Tarih ↓', dateDsc: 'Tarih ↑',
+                prioAsc: 'Öncelik ↓', prioDsc: 'Öncelik ↑',
+                emptyTitle: 'Liste boş',
+                emptyDesc: 'İlk ürününü ekle ve listeni oluştur!',
+                addItem: 'Ürün Ekle',
+                editItem: 'Ürünü Düzenle',
+                itemName: 'Ürün adı',
+                category: 'Kategori',
+                price: 'Fiyat',
+                targetPrice: 'Hedef Fiyat (TL)',
+                whenBuy: 'Ne Zaman Almak İstiyorsun?',
+                url: 'Link (isteğe bağlı)',
+                note: 'Not (isteğe bağlı)',
+                desire: 'İstek Seviyesi',
+                save: 'Kaydet',
+                delete: 'Sil',
+                bought: 'Alındı ✓',
+                boughtLabel: 'Alındı',
+                boughtPrice: 'Alım Fiyatı',
+                settings: 'Ayarlar',
+                close: 'Kapat',
+                changePw: 'Şifre Değiştir',
+                themeColor: 'Tema Rengi',
+                langPref: 'Dil Tercihi',
+                resetList: 'Listeyi Sıfırla',
+                resetWarn: 'Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.',
+                resetConfirm: 'Evet, Sıfırla',
+                loginTitle: 'Giriş Yap',
+                registerTitle: 'Kayıt Ol',
+                username: 'Kullanıcı adı',
+                password: 'Şifre',
+                passwordRepeat: 'Şifre tekrar',
+                emailOptional: 'E-posta (isteğe bağlı)',
+                loginBtn: 'Giriş Yap →',
+                registerBtn: 'Hesap Oluştur →',
+                forgotPw: 'Şifremi unuttum',
+                authSub: 'Kendi istek listeni oluştur ✨',
+                update: 'Güncelle →',
+                oldPw: 'Mevcut şifre',
+                newPw: 'Yeni şifre',
+                newPwRepeat: 'Yeni şifre tekrar',
+                aiTip: 'Yapay zekâ analizinin doğruluğunu artırmak için ürünlere <b>öncelik</b>, <b>hedef fiyat</b> ve <b>planlanan alım zamanı</b> ekleyin.',
+                savingsLabel: 'Tasarruf',
+                balancedLabel: 'Dengeli',
+                experienceLabel: 'Deneyim',
+                photoBtn: '',
+                hamburgerSettings: 'Ayarlar',
+                hamburgerLogout: 'Çıkış Yap',
+            },
+            en: {
+                appName: 'Wishlistgül',
+                addBtn: '+ Add',
+                allCat: 'All',
+                dateAsc: 'Date ↓', dateDsc: 'Date ↑',
+                prioAsc: 'Priority ↓', prioDsc: 'Priority ↑',
+                emptyTitle: 'List is empty',
+                emptyDesc: 'Add your first item and create your list!',
+                addItem: 'Add Item',
+                editItem: 'Edit Item',
+                itemName: 'Item name',
+                category: 'Category',
+                price: 'Price',
+                targetPrice: 'Target Price (TL)',
+                whenBuy: 'When do you want to buy?',
+                url: 'Link (optional)',
+                note: 'Note (optional)',
+                desire: 'Desire Level',
+                save: 'Save',
+                delete: 'Delete',
+                bought: 'Bought ✓',
+                boughtLabel: 'Bought',
+                boughtPrice: 'Purchase Price',
+                settings: 'Settings',
+                close: 'Close',
+                changePw: 'Change Password',
+                themeColor: 'Theme Color',
+                langPref: 'Language',
+                resetList: 'Reset List',
+                resetWarn: 'Your entire wishlist will be permanently deleted. This cannot be undone.',
+                resetConfirm: 'Yes, Reset',
+                loginTitle: 'Sign In',
+                registerTitle: 'Sign Up',
+                username: 'Username',
+                password: 'Password',
+                passwordRepeat: 'Repeat password',
+                emailOptional: 'Email (optional)',
+                loginBtn: 'Sign In →',
+                registerBtn: 'Create Account →',
+                forgotPw: 'Forgot password',
+                authSub: 'Create your own wishlist ✨',
+                update: 'Update →',
+                oldPw: 'Current password',
+                newPw: 'New password',
+                newPwRepeat: 'New password again',
+                aiTip: 'To improve AI analysis accuracy, add <b>priority</b>, <b>target price</b>, and <b>planned purchase date</b> to your items.',
+                savingsLabel: 'Savings',
+                balancedLabel: 'Balanced',
+                experienceLabel: 'Experience',
+                photoBtn: '',
+                hamburgerSettings: 'Settings',
+                hamburgerLogout: 'Log Out',
+            }
+        };
+
+        let currentLang = localStorage.getItem('wl_lang') || 'tr';
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('wl_lang', lang);
+            document.documentElement.lang = lang;
+
+            // Update lang buttons
+            const lbTr = document.getElementById('langBtnTr');
+            const lbEn = document.getElementById('langBtnEn');
+            if (lbTr) lbTr.classList.toggle('active', lang === 'tr');
+            if (lbEn) lbEn.classList.toggle('active', lang === 'en');
+
+            const t = I18N[lang];
+
+            // Generic data-i18n update
+            const i18nMap = {
+                dropAI: 'WishlistAI',
+                dropSettings: t.hamburgerSettings,
+                dropLogout: t.hamburgerLogout,
+                catAll: t.allCat,
+                tilePw: t.changePw,
+                tileTheme: t.themeColor,
+                tileLang: t.langPref,
+                tileReset: t.resetList
+            };
+            Object.entries(i18nMap).forEach(([key, val]) => {
+                const el = document.querySelector('[data-i18n="' + key + '"]');
+                if (el) el.textContent = val;
+            });
+
+            // Header add button
+            const addBtn = document.querySelector('.headerActions .btn.primary');
+            if (addBtn) addBtn.innerHTML = '<i class="ph ph-plus"></i> ' + t.addBtn.replace('+ ', '');
+
+            // Auth screen
+            const authSub = document.querySelector('.authSub');
+            if (authSub) authSub.textContent = t.authSub;
+            const authTabLogin = document.getElementById('authTabLogin');
+            if (authTabLogin) authTabLogin.textContent = t.loginTitle;
+            const authTabReg = document.getElementById('authTabRegister');
+            if (authTabReg) authTabReg.textContent = t.registerTitle;
+            const loginBtn = document.querySelector('#loginForm .authSubmit');
+            if (loginBtn) loginBtn.textContent = t.loginBtn;
+            const regBtn = document.querySelector('#registerForm .authSubmit');
+            if (regBtn) regBtn.textContent = t.registerBtn;
+            const forgotLink = document.querySelector('.authForgot a');
+            if (forgotLink) forgotLink.textContent = t.forgotPw;
+
+            // Placeholders
+            const ph = {
+                loginUser: t.username, loginPass: t.password,
+                regUser: t.username, regEmail: t.emailOptional,
+                regPass: t.password, regPass2: t.passwordRepeat,
+                pwOld: t.oldPw, pwNew: t.newPw, pwNew2: t.newPwRepeat
+            };
+            Object.entries(ph).forEach(([id, val]) => {
+                const el = document.getElementById(id);
+                if (el) el.placeholder = val;
+            });
+
+            // Settings close & title
+            const closeBtn = document.querySelector('#settingsBack .sheetClose');
+            if (closeBtn) closeBtn.textContent = t.close;
+            const settingsTitle = document.querySelector('#settingsBack .sheetTitle');
+            if (settingsTitle) settingsTitle.textContent = t.settings;
+
+            // Settings panel titles
+            const panelTitles = document.querySelectorAll('.settingsPanelTitle');
+            const titleLabels = ['🔑 ' + t.changePw, '🎨 ' + t.themeColor, '🌍 ' + t.langPref, '🗑️ ' + t.resetList];
+            panelTitles.forEach((el, i) => { if (titleLabels[i]) el.textContent = titleLabels[i]; });
+
+            // Reset panel
+            const resetWarn = document.querySelector('#resetPanel .settingsPanel > div:nth-child(2)');
+            if (resetWarn) resetWarn.textContent = t.resetWarn;
+            const resetBtn2 = document.querySelector('#resetPanel .authSubmit');
+            if (resetBtn2) resetBtn2.textContent = t.resetConfirm;
+            const pwUpdateBtn = document.querySelector('#pwPanel .authSubmit');
+            if (pwUpdateBtn) pwUpdateBtn.textContent = t.update;
+
+            // AI tip
+            const aiTip = document.querySelector('.aiInfoTip span:last-child');
+            if (aiTip) aiTip.innerHTML = t.aiTip;
+
+            // AI slider labels
+            const prefLabels = document.querySelectorAll('.aiPrefSlider .prefLabels span');
+            if (prefLabels.length >= 3) {
+                prefLabels[0].innerHTML = '<i class="ph ph-piggy-bank"></i> ' + t.savingsLabel;
+                prefLabels[1].innerHTML = '<i class="ph ph-scales"></i> ' + t.balancedLabel;
+                prefLabels[2].innerHTML = '<i class="ph ph-confetti"></i> ' + t.experienceLabel;
+            }
+
+            // Empty state
+            const emptyTitle = document.querySelector('.empty h3');
+            if (emptyTitle) emptyTitle.textContent = t.emptyTitle;
+            const emptyDesc = document.querySelector('.empty p');
+            if (emptyDesc) emptyDesc.textContent = t.emptyDesc;
+
+            // Sort pills
+            const sortPills = document.querySelectorAll('.sortPill');
+            const sortLabels = [t.dateAsc, t.dateDsc, t.prioAsc, t.prioDsc];
+            sortPills.forEach((pill, i) => { if (sortLabels[i]) pill.textContent = sortLabels[i]; });
+
+            // Category pills
+            const catPills = document.querySelectorAll('.catPill');
+            const catTR = ['Tümü', 'Giyim', 'Makyaj & Cilt', 'Albüm', 'Parfüm', 'Saç Bakım', 'Diğer', 'Gizli', 'Alındı'];
+            const catEN = ['All', 'Clothing', 'Makeup & Skin', 'Album', 'Perfume', 'Hair Care', 'Other', 'Secret', 'Bought'];
+            const catFrom = lang === 'en' ? catTR : catEN;
+            const catTo = lang === 'en' ? catEN : catTR;
+            catPills.forEach(pill => {
+                const icon = pill.querySelector('i');
+                const text = pill.textContent.trim();
+                const idx = catFrom.indexOf(text);
+                if (idx >= 0) {
+                    pill.textContent = '';
+                    if (icon) pill.prepend(icon, ' ');
+                    pill.append(catTo[idx]);
+                }
+                // Also handle first pill by data-i18n
+                if (pill.dataset.i18n === 'catAll') pill.textContent = t.allCat;
+            });
+        }
+
+        // Apply saved language on load
+        if (currentLang !== 'tr') applyLanguage(currentLang);
+
         /* ═══ INIT ═══ */
-        if (currentUser) { load().then(()=>render()); }
+        if (currentUser) { load().then(() => render()); }
     </script>
 </body>
 
