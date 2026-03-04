@@ -5,7 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#fdf2f8" id="metaThemeColor" />
     <meta name="apple-mobile-web-app-title" content="Wishlistgül" />
     <meta name="application-name" content="Wishlistgül" />
     <link rel="manifest" href="manifest.json" />
@@ -724,7 +725,7 @@
             position: absolute;
             left: 8px;
             top: 8px;
-            padding: 4px 10px;
+            padding: 5px 10px;
             border-radius: 28px;
             background: var(--chipBg);
             border: 1px solid var(--chipBorder);
@@ -737,13 +738,15 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            height: 28px;
+            box-sizing: border-box;
         }
 
         .card .chipTR {
             position: absolute;
             right: 8px;
             top: 8px;
-            padding: 6px 10px;
+            padding: 5px 10px;
             border-radius: 28px;
             background: var(--chipBg);
             border: 1px solid var(--chipBorder);
@@ -754,6 +757,10 @@
             cursor: pointer;
             color: var(--btnText);
             transition: transform 0.1s ease;
+            height: 28px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
         }
 
         .card .chipTR:active {
@@ -1426,8 +1433,8 @@
         /* Secret card badge */
         .secretBadge {
             position: absolute;
-            top: 6px;
-            left: 6px;
+            bottom: 6px;
+            right: 6px;
             background: rgba(0, 0, 0, 0.55);
             color: #fff;
             font-size: 10px;
@@ -2694,8 +2701,13 @@
         }
 
         .settingsTileIcon {
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1;
+            width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
         }
 
         .settingsPanelWrap {
@@ -2840,7 +2852,7 @@
         <div class="modal" id="modal">
             <div class="handle"><span></span></div>
             <div class="mHead">
-                <strong>İstek Detayı</strong>
+                <strong>Ürün Detayları</strong>
                 <button id="closeModal" class="btn">Kapat</button>
             </div>
             <div class="mBody">
@@ -2938,7 +2950,7 @@
         <div class="modal" id="purchaseModal">
             <div class="handle"><span></span></div>
             <div class="mHead">
-                <strong>Ürün Alış Paneli</strong>
+                <strong>Satın Alma Onayı</strong>
                 <button id="closePurchase" class="btn">İptal</button>
             </div>
             <div class="purchaseBody">
@@ -3240,25 +3252,25 @@
                 </div>
                 <div class="settingsMenu">
                     <div class="settingsTile" onclick="toggleSettingsPanel('pwPanel')">
-                        <div class="settingsTileIcon">🔑</div>
+                        <div class="settingsTileIcon"><i class="ph ph-lock-key"></i></div>
                         <div data-i18n="tilePw">Şifre Değiştir</div>
                     </div>
                     <div class="settingsTile" onclick="toggleSettingsPanel('themePanel')">
-                        <div class="settingsTileIcon">🎨</div>
+                        <div class="settingsTileIcon"><i class="ph ph-paint-bucket"></i></div>
                         <div data-i18n="tileTheme">Tema Rengi</div>
                     </div>
                     <div class="settingsTile" onclick="toggleSettingsPanel('langPanel')">
-                        <div class="settingsTileIcon">🌍</div>
+                        <div class="settingsTileIcon"><i class="ph ph-translate"></i></div>
                         <div data-i18n="tileLang">Dil Tercihi</div>
                     </div>
                     <div class="settingsTile danger" onclick="toggleSettingsPanel('resetPanel')">
-                        <div class="settingsTileIcon">🗑️</div>
+                        <div class="settingsTileIcon"><i class="ph ph-trash"></i></div>
                         <div data-i18n="tileReset">Listeyi Sıfırla</div>
                     </div>
                 </div>
                 <div class="settingsPanelWrap" id="pwPanel">
                     <div class="settingsPanel">
-                        <div class="settingsPanelTitle">🔑 Şifre Değiştir</div>
+                        <div class="settingsPanelTitle"><i class="ph ph-lock-key"></i> Şifre Değiştir</div>
                         <div id="pwError" class="authError"></div>
                         <div id="pwSuccess" class="authSuccess"></div>
                         <div class="authField">
@@ -3288,13 +3300,13 @@
                 </div>
                 <div class="settingsPanelWrap" id="themePanel">
                     <div class="settingsPanel">
-                        <div class="settingsPanelTitle">🎨 Tema Rengi</div>
+                        <div class="settingsPanelTitle"><i class="ph ph-paint-bucket"></i> Tema Rengi</div>
                         <div class="themeGrid" id="themeGrid"></div>
                     </div>
                 </div>
                 <div class="settingsPanelWrap" id="langPanel">
                     <div class="settingsPanel">
-                        <div class="settingsPanelTitle">🌍 Dil Tercihi</div>
+                        <div class="settingsPanelTitle"><i class="ph ph-translate"></i> Dil Tercihi</div>
                         <div class="langGrid">
                             <button class="langBtn active" id="langBtnTr" onclick="applyLanguage('tr')">
                                 <span class="langFlag">🇹🇷</span>
@@ -3309,7 +3321,7 @@
                 </div>
                 <div class="settingsPanelWrap" id="resetPanel">
                     <div class="settingsPanel">
-                        <div class="settingsPanelTitle">🗑️ Listeyi Sıfırla</div>
+                        <div class="settingsPanelTitle"><i class="ph ph-trash"></i> Listeyi Sıfırla</div>
                         <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi
                             kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
                         <button class="authSubmit"
@@ -3424,6 +3436,7 @@
             load().then(() => render());
         }
         function doLogout() {
+            if (!confirm("Hesabınızdan çıkış yapmak istediğinizden emin misiniz?")) return;
             localStorage.removeItem(SESSION_KEY);
             currentUser = null; items = [];
             document.getElementById('authScreen').style.display = 'flex';
@@ -3518,6 +3531,10 @@
                 document.body.setAttribute('data-theme', id);
             }
             localStorage.setItem(THEME_KEY, id || 'pink');
+            /* Update Safari status bar color */
+            const themeColors = { pink: '#fdf2f8', blue: '#f0f7ff', green: '#f0fff8', charcoal: '#f2f5f8', peach: '#fff5f0', dark: '#0f1220' };
+            const meta = document.getElementById('metaThemeColor');
+            if (meta) meta.content = themeColors[id] || themeColors.pink;
             renderThemeGrid();
         }
 
@@ -3883,10 +3900,23 @@
         /* ═══ FILE PICK ═══ */
         function fileToDataURL(file) {
             return new Promise((res, rej) => {
-                const r = new FileReader();
-                r.onload = () => res(String(r.result));
-                r.onerror = rej;
-                r.readAsDataURL(file);
+                const img = new Image();
+                const url = URL.createObjectURL(file);
+                img.onload = () => {
+                    URL.revokeObjectURL(url);
+                    const MAX = 900;
+                    let w = img.naturalWidth, h = img.naturalHeight;
+                    if (w > MAX || h > MAX) {
+                        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+                        else       { w = Math.round(w * MAX / h); h = MAX; }
+                    }
+                    const c = document.createElement('canvas');
+                    c.width = w; c.height = h;
+                    c.getContext('2d').drawImage(img, 0, 0, w, h);
+                    res(c.toDataURL('image/jpeg', 0.82));
+                };
+                img.onerror = rej;
+                img.src = url;
             });
         }
 
@@ -3940,6 +3970,9 @@
             it.note = (mNote.value || "").trim();
             it.secret = document.getElementById("mSecret").checked;
             persist(); render(); closeDetailModal();
+            if (it.secret) {
+                showToast("🔒 Ürün gizli listene taşındı. Görüntülemek için kategoriler arasında \"Gizli\" sekmesine geçebilirsiniz.");
+            }
         });
 
         /* Delete */
@@ -4722,7 +4755,9 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                                     finalScore: s.weightedScore,
                                     expertConsensus: s.reasoning,
                                     reasoning: s.reasoning,
-                                    imgData: products.find(p => p.name === s.prodName)?.imgData || ""
+                                    imgData: products.find(p => p.name.toLowerCase().trim() === s.prodName.toLowerCase().trim())?.imgData
+                                          || products.find(p => s.prodName.toLowerCase().includes(p.name.toLowerCase()))?.imgData
+                                          || ""
                                 }))
                         }
                     };
