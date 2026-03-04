@@ -378,31 +378,22 @@
         }
 
         /* Dark mode specific overrides */
-        body[data-theme="dark"] #authScreen {
-            background: #0f1923;
+        body[data-theme="dark"] .auth-right {
+            background: rgba(15, 20, 35, 0.93);
         }
-
-        body[data-theme="dark"] .authCard {
-            background: rgba(20, 30, 44, 0.88);
-            border-color: rgba(255, 255, 255, 0.06);
-        }
-
         body[data-theme="dark"] .authInputWrap {
-            background: rgba(15, 22, 34, 0.70);
+            background: rgba(28, 36, 60, 0.80);
             border-color: rgba(255, 255, 255, 0.08);
         }
-
         body[data-theme="dark"] .authInputWrap:focus-within {
-            background: rgba(18, 28, 44, 0.85);
+            background: rgba(35, 45, 75, 0.90);
         }
-
         body[data-theme="dark"] .authTab.active {
-            background: rgba(108, 92, 231, 0.18);
+            background: rgba(40, 50, 80, 0.90);
             color: #a29bfe;
         }
-
-        body[data-theme="dark"] .authBlob {
-            opacity: 0.25;
+        body[data-theme="dark"] .authTabs {
+            background: rgba(28, 36, 60, 0.60);
         }
 
         body[data-theme="dark"] .dropdown {
@@ -2326,377 +2317,280 @@
             margin-top: 8px;
         }
 
-        /* ═══════════ AUTH SCREEN ═══════════ */
+        /* ═══════════ AUTH SCREEN — two-panel ═══════════ */
         #authScreen {
             position: fixed;
             inset: 0;
             z-index: 9999;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fdf2f8;
-            padding: 20px;
             overflow: hidden;
         }
 
-        .authBlob {
+        /* LEFT panel */
+        .auth-left {
+            flex: 1.1;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 130% 90% at 15% 15%, rgba(255,80,180,0.60) 0%, transparent 52%),
+                radial-gradient(ellipse 110% 80% at 85% 85%, rgba(168,124,255,0.50) 0%, transparent 52%),
+                linear-gradient(150deg, #ffb3d6 0%, #d4aaff 55%, #c0a0ff 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 48px 52px;
+        }
+        body[data-theme="blue"]     .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(61,127,232,.58) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(124,180,255,.48) 0%,transparent 52%), linear-gradient(150deg,#aac8f5 0%,#c8deff 55%,#b0ccff 100%); }
+        body[data-theme="green"]    .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(46,184,122,.55) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(124,223,180,.45) 0%,transparent 52%), linear-gradient(150deg,#a8e8c8 0%,#c8f5e0 55%,#aaefcf 100%); }
+        body[data-theme="peach"]    .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(232,118,61,.55) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(255,170,124,.45) 0%,transparent 52%), linear-gradient(150deg,#ffc8a0 0%,#ffddc0 55%,#ffcaaa 100%); }
+        body[data-theme="charcoal"] .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(123,143,168,.45) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(168,184,204,.38) 0%,transparent 52%), linear-gradient(150deg,#c8d4e0 0%,#dce6f0 55%,#ccdae8 100%); }
+        body[data-theme="dark"]     .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(108,92,231,.58) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(162,155,254,.45) 0%,transparent 52%), linear-gradient(150deg,#1a1535 0%,#231d4a 55%,#1c1840 100%); }
+
+        /* Auth top-left controls */
+        .auth-top-controls {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            will-change: transform;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
-        .authBlob1 {
-            width: 340px;
-            height: 340px;
-            background: var(--accent);
-            top: -80px;
-            left: -60px;
-            animation: blobFloat1 8s ease-in-out infinite;
+        .auth-ctrl-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 12px;
+            background: rgba(255,255,255,0.22);
+            border: 1px solid rgba(255,255,255,0.40);
+            border-radius: 99px;
+            cursor: pointer;
+            font-family: var(--font-text);
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background .18s, transform .15s;
+            letter-spacing: 0.2px;
         }
-
-        .authBlob2 {
-            width: 280px;
-            height: 280px;
-            background: var(--lilac);
-            bottom: -60px;
-            right: -40px;
-            animation: blobFloat2 10s ease-in-out infinite;
+        .auth-ctrl-btn:hover {
+            background: rgba(255,255,255,0.32);
+            transform: translateY(-1px);
         }
-
-        .authBlob3 {
-            width: 200px;
-            height: 200px;
-            background: var(--accent);
-            top: 50%;
-            left: 60%;
-            opacity: 0.35;
-            animation: blobFloat3 12s ease-in-out infinite;
+        .auth-ctrl-btn:active { transform: scale(0.95); }
+        .auth-ctrl-btn.active {
+            background: rgba(255,255,255,0.38);
+            border-color: rgba(255,255,255,0.65);
         }
-
-        @keyframes blobFloat1 {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            33% {
-                transform: translate(40px, 30px) scale(1.05);
-            }
-
-            66% {
-                transform: translate(-20px, 50px) scale(0.95);
-            }
+        .auth-ctrl-sep {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.30);
         }
-
-        @keyframes blobFloat2 {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            33% {
-                transform: translate(-30px, -40px) scale(1.08);
-            }
-
-            66% {
-                transform: translate(20px, -20px) scale(0.96);
-            }
-        }
-
-        @keyframes blobFloat3 {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(-40px, 30px) scale(1.1);
-            }
-        }
-
-        .authNoise {
+        .auth-ctrl-icon { font-size: 14px; line-height: 1; }
             position: absolute;
             inset: 0;
-            opacity: 0.03;
             pointer-events: none;
+            overflow: hidden;
         }
-
-        .authCard {
-            width: min(420px, 92vw);
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 28px;
-            box-shadow: 0 24px 64px var(--authShadow), 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            padding: 40px 32px 36px;
-            opacity: 0;
-            animation: authCardIn 0.35s cubic-bezier(0.32, 0.72, 0.45, 1) 0.05s forwards;
+        #authCardStage {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
         }
-
-        @keyframes authCardIn {
-            from {
-                opacity: 0;
-                transform: translateY(28px) scale(0.97);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .authLogo {
-            font-family: var(--font-display);
-            font-size: 34px;
-            font-weight: 400;
-            font-style: italic;
-            background: var(--gradientHL);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            margin-bottom: 4px;
-            opacity: 0;
-            animation: authFadeUp 0.3s ease 0.1s forwards;
-        }
-
-        .authSub {
-            text-align: center;
-            font-size: 13px;
-            color: var(--textSecondary);
-            margin-bottom: 28px;
-            opacity: 0;
-            animation: authFadeUp 0.3s ease 0.12s forwards;
-        }
-
-        @keyframes authFadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .authTabs {
-            display: flex;
-            gap: 0;
-            background: var(--accentVeryLight);
-            border-radius: 12px;
-            padding: 3px;
-            margin-bottom: 22px;
-            opacity: 0;
-            animation: authFadeUp 0.3s ease 0.14s forwards;
-        }
-
-        .authTab {
-            flex: 1;
-            padding: 9px 0;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            font-family: var(--font-text);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--textSecondary);
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .authTab.active {
-            background: white;
-            color: var(--accent);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .authField {
-            margin-bottom: 14px;
-            opacity: 0;
-            animation: authFadeUp 0.3s ease 0.16s forwards;
-        }
-
-        .authField:nth-child(2) {
-            animation-delay: 0.18s;
-        }
-
-        .authField:nth-child(3) {
-            animation-delay: 0.20s;
-        }
-
-        .authField:nth-child(4) {
-            animation-delay: 0.22s;
-        }
-
-        .authInputWrap {
+        .ac {
+            position: absolute;
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(0, 0, 0, 0.06);
-            border-radius: 99px;
-            padding: 0 18px;
-            transition: border-color 0.22s, box-shadow 0.22s, background 0.22s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.48);
+            backdrop-filter: blur(14px) saturate(160%);
+            -webkit-backdrop-filter: blur(14px) saturate(160%);
+            border: 1px solid rgba(255,255,255,0.72);
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.80);
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .ac-emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
+        .ac-text  {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(40,10,70,0.80);
+            line-height: 1.2;
+            letter-spacing: 0.1px;
+        }
+        body[data-theme="dark"] .ac {
+            background: rgba(30,20,55,0.52);
+            border-color: rgba(255,255,255,0.18);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+        body[data-theme="dark"] .ac-text {
+            color: rgba(235,225,255,0.90);
+        }
+        .auth-left-content {
+            position: relative;
+            z-index: 2;
+        }
+        .authLogo {
+            font-family: var(--font-display);
+            font-size: clamp(38px, 4.5vw, 58px);
+            font-style: italic;
+            background: linear-gradient(135deg, #fff 20%, rgba(255,255,255,0.75) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .authSub {
+            font-size: 15px;
+            color: rgba(255,255,255,0.82);
+            margin-bottom: 28px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+        .auth-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .auth-feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .auth-feature-dot {
+            width: 36px; height: 36px; border-radius: 11px;
+            background: rgba(255,255,255,0.22);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.35);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px; flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        .auth-feature-text {
+            font-size: 13.5px; font-weight: 500;
+            color: rgba(255,255,255,0.92);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.10);
         }
 
+        /* RIGHT panel */
+        .auth-right {
+            width: 420px;
+            flex-shrink: 0;
+            background: rgba(255,252,255,0.94);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 40px;
+        }
+        .auth-form-wrap { width: 100%; max-width: 340px; }
+        .auth-form-title {
+            font-size: 26px; font-weight: 700; color: var(--textPrimary);
+            margin-bottom: 5px; letter-spacing: -0.4px;
+        }
+        .auth-form-sub { font-size: 13px; color: var(--textSecondary); margin-bottom: 26px; }
+
+        .authTabs {
+            display: flex;
+            background: var(--accentVeryLight);
+            border-radius: 12px; padding: 3px; margin-bottom: 22px;
+        }
+        .authTab {
+            flex: 1; padding: 9px 0; border: none; background: transparent;
+            border-radius: 10px; font-family: var(--font-text); font-size: 13px; font-weight: 600;
+            color: var(--textSecondary); cursor: pointer; transition: all 0.25s ease;
+        }
+        .authTab.active { background: white; color: var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+
+        .authField { margin-bottom: 13px; }
+        .authInputWrap {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.65);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(0,0,0,0.06); border-radius: 99px; padding: 0 18px;
+            transition: border-color .22s, box-shadow .22s, background .22s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
         .authInputWrap:focus-within {
             border-color: var(--accentBorderFocus);
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255,255,255,0.85);
             box-shadow: 0 0 0 4px var(--accentFocusRing), 0 4px 20px var(--accentFocusGlow);
         }
-
         .authInputIcon {
-            color: var(--accent);
-            opacity: 0.45;
-            flex-shrink: 0;
-            font-size: 17px;
-            transition: opacity 0.22s;
-            display: flex;
-            align-items: center;
+            color: var(--accent); opacity: 0.42; flex-shrink: 0; font-size: 17px;
+            display: flex; align-items: center; transition: opacity .22s;
         }
-
-        .authInputWrap:focus-within .authInputIcon {
-            opacity: 1;
-        }
-
-        .authInputDivider {
-            width: 1px;
-            height: 16px;
-            background: rgba(0, 0, 0, 0.08);
-            flex-shrink: 0;
-        }
-
+        .authInputWrap:focus-within .authInputIcon { opacity: 1; }
+        .authInputDivider { width:1px; height:16px; background:rgba(0,0,0,0.08); flex-shrink:0; }
         .authInputWrap input {
-            flex: 1;
-            min-width: 0;
-            border: none !important;
-            background: transparent !important;
-            padding: 14px 0;
-            font-size: 14px;
-            color: var(--textPrimary);
-            outline: none !important;
-            font-family: var(--font-text);
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            -webkit-appearance: none;
+            flex: 1; min-width: 0; border: none !important; background: transparent !important;
+            padding: 14px 0; font-size: 14px; color: var(--textPrimary); outline: none !important;
+            font-family: var(--font-text); box-shadow: none !important;
+            border-radius: 0 !important; -webkit-appearance: none;
         }
-
-        .authInputWrap input::placeholder {
-            color: var(--textSecondary);
-            opacity: 0.55;
-        }
-
+        .authInputWrap input::placeholder { color: var(--textSecondary); opacity: 0.55; }
         .authEyeToggle {
-            background: none;
-            border: none;
-            color: var(--textSecondary);
-            font-size: 17px;
-            cursor: pointer;
-            padding: 4px;
-            opacity: 0.5;
-            transition: opacity 0.2s;
-            display: flex;
-            align-items: center;
+            background: none; border: none; color: var(--textSecondary); font-size: 17px;
+            cursor: pointer; padding: 4px; opacity: 0.45; transition: opacity .2s;
+            display: flex; align-items: center;
         }
-
-        .authEyeToggle:hover {
-            opacity: 1;
-        }
-
+        .authEyeToggle:hover { opacity: 1; }
         .authSubmit {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 99px;
-            background: var(--authBtnGrad);
-            color: white;
-            font-family: var(--font-text);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.18s, box-shadow 0.18s;
-            box-shadow: 0 6px 22px var(--glow);
-            margin-top: 8px;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            animation: authFadeUp 0.3s ease 0.22s forwards;
+            width: 100%; padding: 14px; border: none; border-radius: 99px;
+            background: var(--authBtnGrad); color: white;
+            font-family: var(--font-text); font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: transform .18s, box-shadow .18s;
+            box-shadow: 0 6px 22px var(--glow); margin-top: 8px;
+            position: relative; overflow: hidden;
         }
-
         .authSubmit::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent);
-            border-radius: 99px 99px 0 0;
-            pointer-events: none;
+            content: ''; position: absolute; top:0; left:0; right:0; height:50%;
+            background: linear-gradient(180deg,rgba(255,255,255,0.18),transparent);
+            border-radius: 99px 99px 0 0; pointer-events: none;
         }
+        .authSubmit:active { transform: scale(0.97); }
+        .authSubmit:hover  { transform: translateY(-1px); box-shadow: 0 10px 30px var(--glow); }
 
-        .authSubmit:active {
-            transform: scale(0.97);
+        .authForgot { text-align: center; margin-top: 14px; }
+        .authForgot a { font-size: 12px; color: var(--textSecondary); text-decoration: none; transition: color .2s; }
+        .authForgot a:hover { color: var(--accent); }
+
+        @keyframes authFadeUp {
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0); }
         }
-
-        .authSubmit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 30px var(--glow);
-        }
-
-        .authForgot {
-            text-align: center;
-            margin-top: 14px;
-            opacity: 0;
-            animation: authFadeUp 0.3s ease 0.24s forwards;
-        }
-
-        .authForgot a {
-            font-size: 12px;
-            color: var(--textSecondary);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .authForgot a:hover {
-            color: var(--accent);
-        }
-
         .authError {
-            background: rgba(220, 38, 38, 0.06);
-            border: 1px solid rgba(220, 38, 38, 0.18);
-            border-radius: 12px;
-            padding: 10px 16px;
-            font-size: 12px;
-            color: #c0125e;
-            margin-bottom: 12px;
-            display: none;
-            text-align: center;
+            background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.18);
+            border-radius: 12px; padding: 10px 16px; font-size: 12px; color: #c0125e;
+            margin-bottom: 12px; display: none; text-align: center;
         }
-
         .authSuccess {
-            background: rgba(72, 199, 142, 0.11);
-            border: 1px solid rgba(72, 199, 142, 0.28);
-            border-radius: 12px;
-            padding: 10px 16px;
-            font-size: 12px;
-            color: #1a7a4c;
-            margin-bottom: 12px;
-            display: none;
-            text-align: center;
+            background: rgba(72,199,142,0.11); border: 1px solid rgba(72,199,142,0.28);
+            border-radius: 12px; padding: 10px 16px; font-size: 12px; color: #1a7a4c;
+            margin-bottom: 12px; display: none; text-align: center;
+        }
+        @media (max-width: 768px) {
+            #authScreen { flex-direction: column; overflow-y: auto; }
+            .auth-left { flex: none; min-height: 52vh; padding: 28px 24px 56px; }
+            .auth-features { display: none; }
+            .authSub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; }
+            .auth-right {
+                width: 100%; padding: 32px 22px 44px;
+                border-radius: 28px 28px 0 0; margin-top: -28px;
+                position: relative; z-index: 2; justify-content: flex-start;
+            }
+            .auth-form-wrap { max-width: 100%; }
         }
 
         /* ═══════════ SETTINGS MODAL ═══════════ */
@@ -3227,82 +3121,103 @@
 
     <!-- ═══ AUTH SCREEN ═══ -->
     <div id="authScreen">
-        <div class="authBlob authBlob1"></div>
-        <div class="authBlob authBlob2"></div>
-        <div class="authBlob authBlob3"></div>
-        <svg class="authNoise" width="100%" height="100%">
-            <filter id="noise">
-                <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#noise)" />
-        </svg>
-        <div class="authCard">
-            <div class="authLogo">Wishlistgül</div>
-            <div class="authSub">Kendi istek listeni oluştur ✨</div>
-            <div class="authTabs">
-                <button class="authTab active" id="authTabLogin" onclick="switchAuthTab('login')">Giriş Yap</button>
-                <button class="authTab" id="authTabRegister" onclick="switchAuthTab('register')">Kayıt Ol</button>
+        <div class="auth-left">
+            <div id="authCardStage"></div>
+
+            <!-- Sol üst: dil + koyu mod -->
+            <div class="auth-top-controls">
+                <button class="auth-ctrl-btn" id="authLangTr" onclick="authSetLang('tr')">
+                    <span>🇹🇷</span><span>TR</span>
+                </button>
+                <button class="auth-ctrl-btn" id="authLangEn" onclick="authSetLang('en')">
+                    <span>🇬🇧</span><span>EN</span>
+                </button>
+                <div class="auth-ctrl-sep"></div>
+                <button class="auth-ctrl-btn" id="authDarkBtn" onclick="authToggleDark()" title="Koyu mod">
+                    <span class="auth-ctrl-icon" id="authDarkIcon">🌙</span>
+                </button>
             </div>
-            <div id="authError" class="authError"></div>
-            <div id="authSuccessMsg" class="authSuccess"></div>
-            <div id="loginForm">
-                <div class="authField">
-                    <div class="authInputWrap">
-                        <span class="authInputIcon"><i class="ph ph-user"></i></span>
-                        <div class="authInputDivider"></div>
-                        <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username"
-                            autocapitalize="none" />
+            <div class="auth-left-content">
+                <div class="authLogo">Wishlistgül</div>
+                <div class="authSub">Hayalindeki ürünleri listele, planla ve en doğru anda al.</div>
+                <div class="auth-features">
+                    <div class="auth-feature">
+                        <div class="auth-feature-dot">🤖</div>
+                        <div class="auth-feature-text">AI destekli alışveriş danışmanı</div>
+                    </div>
+                    <div class="auth-feature">
+                        <div class="auth-feature-dot">🎁</div>
+                        <div class="auth-feature-text">Aylık Wrapped istatistiklerin</div>
+                    </div>
+                    <div class="auth-feature">
+                        <div class="auth-feature-dot">🔒</div>
+                        <div class="auth-feature-text">Gizli liste &amp; öncelik yönetimi</div>
                     </div>
                 </div>
-                <div class="authField">
-                    <div class="authInputWrap">
-                        <span class="authInputIcon"><i class="ph ph-lock"></i></span>
-                        <div class="authInputDivider"></div>
-                        <input id="loginPass" type="password" placeholder="Şifre" autocomplete="current-password" />
-                        <button type="button" class="authEyeToggle"
-                            onclick="togglePasswordVisibility('loginPass', this)"><i
-                                class="ph ph-eye-slash"></i></button>
-                    </div>
-                </div>
-                <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
-                <div class="authForgot"><a href="#">Şifremi unuttum</a></div>
             </div>
-            <div id="registerForm" style="display:none;">
-                <div class="authField">
-                    <div class="authInputWrap">
-                        <span class="authInputIcon"><i class="ph ph-user-plus"></i></span>
-                        <div class="authInputDivider"></div>
-                        <input id="regUser" type="text" placeholder="Kullanıcı adı" autocomplete="username"
-                            autocapitalize="none" />
-                    </div>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form-wrap">
+                <div class="auth-form-title">Tekrar hoş geldin</div>
+                <div class="auth-form-sub">Listene devam etmeye hazır mısın?</div>
+                <div class="authTabs">
+                    <button class="authTab active" id="authTabLogin" onclick="switchAuthTab('login')">Giriş Yap</button>
+                    <button class="authTab" id="authTabRegister" onclick="switchAuthTab('register')">Kayıt Ol</button>
                 </div>
-                <div class="authField">
-                    <div class="authInputWrap">
-                        <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
-                        <div class="authInputDivider"></div>
-                        <input id="regEmail" type="email" placeholder="E-posta (isteğe bağlı)" autocomplete="email" />
+                <div id="authError" class="authError"></div>
+                <div id="authSuccessMsg" class="authSuccess"></div>
+                <div id="loginForm">
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-user"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
+                        </div>
                     </div>
-                </div>
-                <div class="authField">
-                    <div class="authInputWrap">
-                        <span class="authInputIcon"><i class="ph ph-lock"></i></span>
-                        <div class="authInputDivider"></div>
-                        <input id="regPass" type="password" placeholder="Şifre" autocomplete="new-password" />
-                        <button type="button" class="authEyeToggle"
-                            onclick="togglePasswordVisibility('regPass', this)"><i class="ph ph-eye-slash"></i></button>
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-lock"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="loginPass" type="password" placeholder="Şifre" autocomplete="current-password" />
+                            <button type="button" class="authEyeToggle" onclick="togglePasswordVisibility('loginPass', this)"><i class="ph ph-eye-slash"></i></button>
+                        </div>
                     </div>
+                    <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
+                    <div class="authForgot"><a href="#">Şifremi unuttum</a></div>
                 </div>
-                <div class="authField">
-                    <div class="authInputWrap">
-                        <span class="authInputIcon"><i class="ph ph-lock-key"></i></span>
-                        <div class="authInputDivider"></div>
-                        <input id="regPass2" type="password" placeholder="Şifre tekrar" autocomplete="new-password" />
-                        <button type="button" class="authEyeToggle"
-                            onclick="togglePasswordVisibility('regPass2', this)"><i
-                                class="ph ph-eye-slash"></i></button>
+                <div id="registerForm" style="display:none;">
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-user-plus"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="regUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
+                        </div>
                     </div>
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="regEmail" type="email" placeholder="E-posta (isteğe bağlı)" autocomplete="email" />
+                        </div>
+                    </div>
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-lock"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="regPass" type="password" placeholder="Şifre" autocomplete="new-password" />
+                            <button type="button" class="authEyeToggle" onclick="togglePasswordVisibility('regPass', this)"><i class="ph ph-eye-slash"></i></button>
+                        </div>
+                    </div>
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-lock-key"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="regPass2" type="password" placeholder="Şifre tekrar" autocomplete="new-password" />
+                            <button type="button" class="authEyeToggle" onclick="togglePasswordVisibility('regPass2', this)"><i class="ph ph-eye-slash"></i></button>
+                        </div>
+                    </div>
+                    <button class="authSubmit" onclick="doRegister()">Hesap Oluştur →</button>
                 </div>
-                <button class="authSubmit" onclick="doRegister()">Hesap Oluştur →</button>
             </div>
         </div>
     </div>
@@ -5263,6 +5178,174 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
 
         /* ═══ INIT ═══ */
         if (currentUser) { load().then(() => render()); }
+    </script>
+
+    <script>
+    /* ── KART ANİMASYONU — tek paylaşımlı rAF loop ── */
+    (function(){
+        var stage = document.getElementById('authCardStage');
+        if (!stage) return;
+
+        var ITEMS = [
+            {emoji:'👗', text:'Yeni kıyafet'},
+            {emoji:'💄', text:'Ruj bekliyorum'},
+            {emoji:'✨', text:"Wrapped çıktı!"},
+            {emoji:'👠', text:'Topuklu hedef'},
+            {emoji:'🛍️', text:'Alışveriş planı'},
+            {emoji:'💍', text:'Gizli listem'},
+            {emoji:'🌷', text:'WishlistAI'},
+            {emoji:'🎀', text:'Hediye listesi'},
+            {emoji:'👒', text:'Sezon trendi'},
+            {emoji:'🪞', text:'Stil takibi'},
+            {emoji:'💅', text:'Makyaj sırası'},
+            {emoji:'🧴', text:'Cilt bakımı'},
+            {emoji:'🎁', text:'Şubat wrapped'},
+            {emoji:'🌙', text:'Gece rutini'},
+            {emoji:'⭐', text:'Öncelikli ürün'},
+            {emoji:'🌸', text:'Özel koleksiyon'}
+        ];
+
+        var cards  = [];   /* aktif kartlar */
+        var nextSpawn = 0; /* ms cinsinden bir sonraki spawn zamanı */
+        var MAX = 6;
+
+        function r(a,b){ return a + Math.random()*(b-a); }
+        function ease(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
+        function bez(t,s,c1,c2,e){
+            var u=1-t;
+            return u*u*u*s + 3*u*u*t*c1 + 3*u*t*t*c2 + t*t*t*e;
+        }
+
+        function makeCard(){
+            var used = {};
+            cards.forEach(function(c){ used[c.emoji]=1; });
+            var pool = ITEMS.filter(function(it){ return !used[it.emoji]; });
+            if(!pool.length) return null;
+
+            var item = pool[Math.floor(Math.random()*pool.length)];
+            var W = stage.offsetWidth  || 500;
+            var H = stage.offsetHeight || 800;
+
+            /* Spawn: sol bölge, orta yükseklik */
+            var sx = r(20, W*0.38);
+            var sy = r(H*0.28, H*0.62);
+
+            /* Hedef: sağ üst */
+            var ex = r(W*0.60, W+100);
+            var ey = r(-120, H*0.22);
+
+            /* Bezier kontrol noktaları */
+            var c1x = sx + (ex-sx)*r(0.18,0.38) + r(-W*0.09, W*0.09);
+            var c1y = sy + (ey-sy)*r(0.08,0.32)  + r(-H*0.09, H*0.09);
+            var c2x = sx + (ex-sx)*r(0.55,0.75) + r(-W*0.09, W*0.09);
+            var c2y = sy + (ey-sy)*r(0.55,0.78)  + r(-H*0.09, H*0.05);
+
+            var dur   = r(7500, 11500);
+            var rot   = r(-2, 2);
+            var depth = Math.random();
+            var scl   = depth < 0.28 ? r(0.80,0.90) : depth > 0.72 ? r(1.05,1.14) : r(0.93,1.03);
+            var blurV = depth < 0.28 ? r(1,2).toFixed(1) : 0;
+            var zi    = depth < 0.28 ? 1 : depth > 0.72 ? 3 : 2;
+
+            var el = document.createElement('div');
+            el.className = 'ac';
+            el.innerHTML = '<span class="ac-emoji">'+item.emoji+'</span>'
+                         + '<span class="ac-text">'+item.text+'</span>';
+            el.style.cssText = 'left:0;top:0;opacity:0;z-index:'+zi+';'
+                + 'will-change:transform,opacity;'
+                + (blurV ? 'filter:blur('+blurV+'px);' : '');
+            stage.appendChild(el);
+
+            return {
+                emoji: item.emoji,
+                el: el,
+                sx:sx, sy:sy, ex:ex, ey:ey,
+                c1x:c1x, c1y:c1y, c2x:c2x, c2y:c2y,
+                dur:dur, rot:rot, scl:scl,
+                start: null
+            };
+        }
+
+        /* ─── Tek paylaşımlı rAF loop ─── */
+        function tick(ts){
+            /* Spawn zamanı geldiyse yeni kart oluştur */
+            if(ts >= nextSpawn && cards.length < MAX){
+                var nc = makeCard();
+                if(nc){
+                    nc.start = ts;
+                    cards.push(nc);
+                    nextSpawn = ts + r(1200, 3200);
+                } else {
+                    nextSpawn = ts + 800;
+                }
+            }
+
+            var i = cards.length;
+            while(i--){
+                var c = cards[i];
+                if(!c.start) c.start = ts;
+
+                var t  = Math.min((ts - c.start) / c.dur, 1);
+                var te = ease(t);
+
+                var px = bez(te, c.sx, c.c1x, c.c2x, c.ex);
+                var py = bez(te, c.sy, c.c1y, c.c2y, c.ey);
+
+                /* Opacity: aydınlanma → tam görünür → kararma */
+                var op;
+                if     (t < 0.12) op = t / 0.12;
+                else if(t > 0.82) op = (1 - t) / 0.18;
+                else               op = 1;
+
+                c.el.style.transform = 'translate('+px.toFixed(1)+'px,'+py.toFixed(1)+'px)'
+                                     + ' scale('+c.scl+')'
+                                     + ' rotate('+c.rot+'deg)';
+                c.el.style.opacity = op < 0 ? 0 : op > 1 ? 1 : op;
+
+                if(t >= 1){
+                    c.el.remove();
+                    cards.splice(i, 1);
+                    /* Bir sonraki spawn'u hemen planla */
+                    if(nextSpawn > ts + 2000) nextSpawn = ts + r(600, 1400);
+                }
+            }
+
+            requestAnimationFrame(tick);
+        }
+
+        /* İlk spawn zamanlarını dağıt */
+        nextSpawn = performance.now();
+        requestAnimationFrame(tick);
+
+        /* ── Dil ve koyu mod kontrolleri ── */
+        window.authSetLang = function(lang){
+            if(typeof applyLanguage==='function') applyLanguage(lang);
+            var tr=document.getElementById('authLangTr');
+            var en=document.getElementById('authLangEn');
+            if(tr) tr.classList.toggle('active', lang==='tr');
+            if(en) en.classList.toggle('active', lang==='en');
+        };
+        window.authToggleDark = function(){
+            var cur=localStorage.getItem('wl_theme_v1')||'pink';
+            var next=cur==='dark'?'pink':'dark';
+            if(typeof applyTheme==='function') applyTheme(next);
+            var icon=document.getElementById('authDarkIcon');
+            var btn=document.getElementById('authDarkBtn');
+            if(icon) icon.textContent=next==='dark'?'☀️':'🌙';
+            if(btn)  btn.classList.toggle('active', next==='dark');
+        };
+        /* Init buton durumları */
+        var lang0  = localStorage.getItem('wl_lang')||'tr';
+        var theme0 = localStorage.getItem('wl_theme_v1')||'pink';
+        var lTr=document.getElementById('authLangTr');
+        var lEn=document.getElementById('authLangEn');
+        var dBtn=document.getElementById('authDarkBtn');
+        var dIcon=document.getElementById('authDarkIcon');
+        if(lTr) lTr.classList.toggle('active', lang0==='tr');
+        if(lEn) lEn.classList.toggle('active', lang0==='en');
+        if(dBtn)  dBtn.classList.toggle('active', theme0==='dark');
+        if(dIcon) dIcon.textContent=theme0==='dark'?'☀️':'🌙';
+    })();
     </script>
 </body>
 
