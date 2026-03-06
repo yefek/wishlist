@@ -102,6 +102,18 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ── Custom scrollbar ── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            opacity: 0.35;
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover { opacity: 0.6; }
+        /* Firefox */
+        * { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+
         /* ═══════════ THEMES ═══════════ */
         body[data-theme="blue"] {
             --accent: #3D7FE8;
@@ -465,28 +477,68 @@
 
         .themePreview {
             width: 100%;
-            height: 72px;
+            height: 80px;
             position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            padding: 8px;
         }
 
-        .themePreviewBar {
-            width: 80%;
-            height: 7px;
+        /* Mini header bar */
+        .tpHeader {
+            height: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 7px;
+            gap: 4px;
+        }
+        .tpHeaderDot {
+            width: 14px; height: 5px;
             border-radius: 99px;
             opacity: 0.9;
         }
+        .tpHeaderLine {
+            flex: 1; height: 4px;
+            border-radius: 99px;
+            opacity: 0.25;
+            background: currentColor;
+        }
+        .tpHeaderBtn {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            opacity: 0.9;
+        }
 
-        .themePreviewCard {
-            width: 80%;
-            height: 16px;
-            border-radius: 7px;
+        /* Mini content area */
+        .tpBody {
+            flex: 1;
+            padding: 5px 6px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+            align-content: start;
+        }
+        .tpCard {
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .tpCardImg {
+            height: 22px;
+            opacity: 0.7;
+        }
+        .tpCardFoot {
+            height: 8px;
             opacity: 0.5;
+        }
+        .tpCardChip {
+            width: 60%;
+            height: 4px;
+            border-radius: 99px;
+            margin: 2px auto 0;
+            opacity: 0.8;
         }
 
         .themeLabel {
@@ -496,6 +548,11 @@
             text-align: center;
             padding: 5px 4px;
             background: rgba(255, 255, 255, 0.65);
+        }
+
+        body[data-theme="dark"] .themeLabel {
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.60);
         }
 
         /* ═══════════ HEADER ═══════════ */
@@ -988,13 +1045,291 @@
             max-height: 240px;
             margin: 0 auto 16px;
             background: var(--inputBg);
+            position: relative;
         }
 
         .preview img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             display: block;
+        }
+
+        /* Kırp butonu — fotoğrafın sağ alt köşesi */
+        .cropBtn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.52);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255,255,255,0.35);
+            color: #fff;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background .15s, transform .12s;
+        }
+        .cropBtn:hover  { background: rgba(0,0,0,0.72); }
+        .cropBtn:active { transform: scale(0.9); }
+
+        /* Kırpma overlay */
+        /* ── Ürün Detayları modal — daha geniş iç boşluklar ── */
+        #modal .mHead {
+            padding: 10px 20px 14px;
+        }
+        #modal .mBody {
+            padding: 20px 20px 8px;
+        }
+        #modal .fields {
+            gap: 22px;
+        }
+        #modal .label {
+            margin-bottom: 9px;
+            font-size: 10.5px;
+        }
+        #modal .three {
+            gap: 10px;
+        }
+        #modal .two {
+            gap: 12px;
+        }
+        #modal .desireSelector {
+            gap: 8px;
+        }
+        #modal .toggleField {
+            padding: 11px 0;
+        }
+        #modal .secretToggle {
+            padding: 14px 0 6px;
+            gap: 12px;
+        }
+        #modal .foot {
+            padding: 20px 0 0;
+            margin-top: 18px;
+        }
+        #modal .toggleContent {
+            padding: 2px 0 6px;
+        }
+        #cropOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            /* Arka plan: bulanık + renk tonu, tam siyah değil */
+            background: rgba(20, 10, 40, 0.55);
+            backdrop-filter: blur(28px) saturate(140%);
+            -webkit-backdrop-filter: blur(28px) saturate(140%);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Açılış animasyonu */
+            opacity: 0;
+            transition: opacity 0.22s ease;
+        }
+        #cropOverlay.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Başlık */
+        .cropTitle {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-style: italic;
+            font-weight: 400;
+            color: rgba(255,255,255,0.90);
+            margin-bottom: 16px;
+            letter-spacing: 0.2px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+        }
+
+        .cropStage {
+            position: relative;
+            width: min(88vw, 400px);
+            height: min(88vw, 400px);
+            overflow: hidden;
+            /* Yumuşak köşe + hafif cam çerçeve */
+            border-radius: 22px;
+            border: 1.5px solid rgba(255,255,255,0.28);
+            box-shadow:
+                0 24px 64px rgba(0,0,0,0.35),
+                0 0 0 6px rgba(255,255,255,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.18);
+            cursor: grab;
+            touch-action: none;
+            background: rgba(255,255,255,0.06);
+        }
+        .cropStage:active { cursor: grabbing; }
+
+        #cropImage {
+            position: absolute;
+            transform-origin: 0 0;
+            user-select: none;
+            -webkit-user-select: none;
+            pointer-events: none;
+            border-radius: 0;
+        }
+
+        /* Grid: ince, zarif */
+        .cropGrid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: 22px;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 33.33% 33.33%;
+        }
+        /* Köşe işaretçiler */
+        .cropGrid::before,
+        .cropGrid::after {
+            content: '';
+            position: absolute;
+            width: 22px; height: 22px;
+            border-color: rgba(255,255,255,0.70);
+            border-style: solid;
+        }
+        .cropGrid::before {
+            top: 10px; left: 10px;
+            border-width: 2px 0 0 2px;
+            border-radius: 3px 0 0 0;
+        }
+        .cropGrid::after {
+            bottom: 10px; right: 10px;
+            border-width: 0 2px 2px 0;
+            border-radius: 0 0 3px 0;
+        }
+
+        /* Bottom control panel: cam kutu */
+        .cropPanel {
+            margin-top: 18px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 18px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: min(88vw, 400px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.20);
+        }
+
+        .cropZoomRow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .cropZoomRow i {
+            color: rgba(255,255,255,0.55);
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .cropZoomRow input[type=range] {
+            flex: 1;
+            accent-color: var(--accent);
+            height: 3px;
+        }
+        .cropZoomLabel {
+            color: rgba(255,255,255,0.65);
+            font-family: var(--font-text);
+            font-size: 11px;
+            font-weight: 600;
+            min-width: 34px;
+            text-align: right;
+        }
+
+        .cropBtnRow {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .cropCancelBtn {
+            flex: 1;
+            padding: 11px 0;
+            border-radius: 99px;
+            border: 1.5px solid rgba(255,255,255,0.22);
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.80);
+            font-family: var(--font-text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s, transform .12s;
+        }
+        .cropCancelBtn:hover  { background: rgba(255,255,255,0.16); }
+        .cropCancelBtn:active { transform: scale(0.96); }
+        .cropConfirmBtn {
+            flex: 2;
+            padding: 11px 0;
+            border-radius: 99px;
+            border: none;
+            background: var(--authBtnGrad);
+            color: #fff;
+            font-family: var(--font-text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 18px var(--glow);
+            transition: transform .12s, box-shadow .12s;
+            position: relative;
+            overflow: hidden;
+        }
+        .cropConfirmBtn::after {
+            content: '';
+            position: absolute;
+            inset: 0 0 50% 0;
+            background: linear-gradient(180deg,rgba(255,255,255,0.15),transparent);
+            border-radius: 99px 99px 0 0;
+            pointer-events: none;
+        }
+        .cropConfirmBtn:hover  { transform: translateY(-1px); box-shadow: 0 8px 24px var(--glow); }
+        .cropConfirmBtn:active { transform: scale(0.96); }
+
+        .cropResetBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            width: 100%;
+            padding: 8px 0;
+            border-radius: 99px;
+            border: 1px dashed rgba(255,255,255,0.25);
+            background: transparent;
+            color: rgba(255,255,255,0.50);
+            font-family: var(--font-text);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s, color .15s, border-color .15s;
+            letter-spacing: 0.2px;
+        }
+        .cropResetBtn:hover {
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.75);
+            border-color: rgba(255,255,255,0.40);
+        }
+        .cropResetBtn:active { transform: scale(0.97); }
+        .cropResetBtn:disabled {
+            opacity: 0.28;
+            cursor: default;
+            pointer-events: none;
+        }
+            color: rgba(255,255,255,0.32);
+            font-size: 10.5px;
+            font-family: var(--font-text);
+            letter-spacing: 0.2px;
         }
 
         .fields {
@@ -1062,6 +1397,14 @@
             -webkit-appearance: none;
             appearance: none;
             transition: border-color 0.15s ease-out;
+        }
+
+        body[data-theme="dark"] input[type="url"],
+        body[data-theme="dark"] input[type="text"],
+        body[data-theme="dark"] input[type="number"],
+        body[data-theme="dark"] textarea,
+        body[data-theme="dark"] select {
+            border-color: rgba(255, 255, 255, 0.14);
         }
 
         input:focus,
@@ -2454,7 +2797,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.1;
+            line-height: 1.25;
+            padding-bottom: 0.12em;
             margin-bottom: 10px;
         }
         .authSub {
@@ -2856,7 +3200,10 @@
                 <button id="closeModal" class="btn">Kapat</button>
             </div>
             <div class="mBody">
-                <div class="preview"><img id="mImg" alt="preview" /></div>
+                <div class="preview">
+                    <img id="mImg" alt="preview" />
+                    <button class="cropBtn" id="cropBtn" title="Kırp / Düzenle"><i class="ph ph-crop"></i></button>
+                </div>
                 <div class="fields">
                     <!-- Link -->
                     <div>
@@ -3542,16 +3889,36 @@
             const grid = document.getElementById('themeGrid');
             if (!grid) return;
             const active = localStorage.getItem(THEME_KEY) || 'pink';
-            grid.innerHTML = THEMES.map(t => `
+            grid.innerHTML = THEMES.map(t => {
+                const isDark = t.id === 'dark';
+                const bg      = t.bg[0];
+                const bg2     = t.bg[1];
+                const cardBg  = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.72)';
+                const cardImg = isDark ? 'rgba(255,255,255,0.12)' : `${t.accent}22`;
+                const hdrBg   = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.60)';
+                const textClr = isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.18)';
+                return `
                 <div class="themeCard${t.id === active ? ' selected' : ''}" onclick="applyTheme('${t.id}')">
-                    <div class="themePreview" style="background:linear-gradient(135deg,${t.bg[0]},${t.bg[1]});">
-                        <div class="themePreviewBar" style="background:${t.accent};"></div>
-                        <div class="themePreviewBar" style="background:${t.sec};width:60%;"></div>
-                        <div class="themePreviewCard" style="background:${t.accent};"></div>
+                    <div class="themePreview" style="background:linear-gradient(160deg,${bg},${bg2});">
+                        <!-- mini header -->
+                        <div class="tpHeader" style="background:${hdrBg}; color:${textClr};">
+                            <div class="tpHeaderDot" style="background:${t.accent};"></div>
+                            <div class="tpHeaderLine"></div>
+                            <div class="tpHeaderBtn" style="background:${t.accent};"></div>
+                        </div>
+                        <!-- mini cards grid -->
+                        <div class="tpBody">
+                            ${[0,1,2].map(i => `
+                            <div class="tpCard" style="background:${cardBg};">
+                                <div class="tpCardImg" style="background:${i===0 ? t.accent+'55' : cardImg};"></div>
+                                <div class="tpCardFoot" style="background:${hdrBg};"></div>
+                                <div class="tpCardChip" style="background:${t.accent};"></div>
+                            </div>`).join('')}
+                        </div>
                     </div>
                     <div class="themeLabel">${t.label}</div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         /* Load saved theme on start */
@@ -3812,6 +4179,7 @@
             const it = items.find(x => x.id === id);
             if (!it) return;
             activeId = id;
+            window._cropActiveItem = it;   /* crop script için */
 
             mImg.src = it.imgData;
             mLink.value = it.link || "";
@@ -5213,6 +5581,273 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
 
         /* ═══ INIT ═══ */
         if (currentUser) { load().then(() => render()); }
+    </script>
+
+    <!-- ═══ CROP OVERLAY ═══ -->
+    <div id="cropOverlay">
+        <div class="cropTitle">Fotoğrafı Düzenle</div>
+        <div class="cropStage" id="cropStage">
+            <img id="cropImage" draggable="false" />
+            <div class="cropGrid"></div>
+        </div>
+        <div class="cropPanel">
+            <div class="cropZoomRow">
+                <i class="ph ph-magnifying-glass-minus"></i>
+                <input type="range" id="cropZoomSlider" min="100" max="400" value="100" step="1" />
+                <i class="ph ph-magnifying-glass-plus"></i>
+                <span class="cropZoomLabel" id="cropZoomLabel">100%</span>
+            </div>
+            <div class="cropBtnRow">
+                <button class="cropCancelBtn" id="cropCancelBtn">Vazgeç</button>
+                <button class="cropConfirmBtn" id="cropConfirmBtn"><i class="ph ph-check"></i> Uygula</button>
+            </div>
+            <div class="cropBtnRow" style="gap:8px;">
+                <button class="cropResetBtn" id="cropUndoBtn" disabled style="flex:1;">
+                    <i class="ph ph-clock-counter-clockwise"></i> Geri al
+                </button>
+                <button class="cropResetBtn" id="cropResetBtn" disabled style="flex:1;">
+                    <i class="ph ph-arrow-counter-clockwise"></i> Orijinale döndür
+                </button>
+            </div>
+            <div class="cropHint">Sürükle &nbsp;·&nbsp; Pinch veya kaydır ile yakınlaştır</div>
+        </div>
+    </div>
+
+    <script>
+    /* ═══ CROP LOGIC ═══ */
+    (function () {
+        const overlay    = document.getElementById('cropOverlay');
+        const stage      = document.getElementById('cropStage');
+        const cropImg    = document.getElementById('cropImage');
+        const zoomSlider = document.getElementById('cropZoomSlider');
+        const zoomLabel  = document.getElementById('cropZoomLabel');
+        const cancelBtn  = document.getElementById('cropCancelBtn');
+        const confirmBtn = document.getElementById('cropConfirmBtn');
+        const undoBtn    = document.getElementById('cropUndoBtn');    // → önceki kaydedilen versiyona
+        const resetBtn   = document.getElementById('cropResetBtn');   // → ilk yüklendiğindeki haline
+        const editBtn    = document.getElementById('cropBtn');
+
+        /* ── 3 katmanlı state ──
+           origImgData  : fotoğraf ilk yüklendiğinde saklanan, hiç değişmez
+           savedImgData : kırpma ekranı açıldığındaki mevcut imgData ("Geri al" hedefi)
+           currentSrc   : şu an cropImg'de yüklü olan src (değişiklik tespiti için)
+        */
+        let stageW = 0, stageH = 0;
+        let imgNatW = 0, imgNatH = 0;
+        let scale = 1, minScale = 1;
+        let ox = 0, oy = 0;
+        let dragging = false;
+        let dragStartX = 0, dragStartY = 0, dragStartOx = 0, dragStartOy = 0;
+        let lastPinchDist = 0;
+        let sessionSavedData = '';  // bu oturumda "uygula"ya son basıldığındaki imgData
+
+        /* Buton durumlarını güncelle */
+        function updateBtns() {
+            const it = window._cropActiveItem;
+            if (!it) { undoBtn.disabled = true; resetBtn.disabled = true; return; }
+            /* Geri al: oturum açılışından bu yana imgData değiştiyse */
+            undoBtn.disabled  = !sessionSavedData || (it.imgData === sessionSavedData);
+            /* Orijinale döndür: mevcut imgData ile orijinal farklıysa */
+            resetBtn.disabled = !it.origImgData || (it.imgData === it.origImgData);
+        }
+
+        /* ── Kırpma ekranını aç ── */
+        editBtn.addEventListener('click', () => {
+            const it = window._cropActiveItem;
+            if (!it || !it.imgData) return;
+            /* origImgData: ilk yüklendiğindeki hali, bir kez saklanır */
+            if (!it.origImgData) it.origImgData = it.imgData;
+            /* sessionSavedData: bu oturumda düzenleyici AÇILDIĞINDA ne vardı
+               "Geri al" bunu geri yükler — o andan bu yana yapılan tüm değişikliği atar */
+            sessionSavedData = it.imgData;
+            loadIntoStage(it.imgData, () => { updateBtns(); });
+        });
+
+        function loadIntoStage(src, onReady) {
+            overlay.classList.add('open');
+            const afterLoad = () => {
+                imgNatW = cropImg.naturalWidth;
+                imgNatH = cropImg.naturalHeight;
+                stageW  = stage.offsetWidth;
+                stageH  = stage.offsetHeight;
+                resetView();
+                if (onReady) onReady();
+            };
+            if (cropImg.getAttribute('data-src') === src && cropImg.complete && cropImg.naturalWidth) {
+                afterLoad();
+            } else {
+                cropImg.onload = afterLoad;
+                cropImg.setAttribute('data-src', src);
+                cropImg.src = src;
+            }
+        }
+
+        function resetView() {
+            minScale = Math.max(stageW / imgNatW, stageH / imgNatH);
+            scale = minScale;
+            centerImage();
+            syncSlider();
+        }
+
+        function centerImage() {
+            ox = (stageW - imgNatW * scale) / 2;
+            oy = (stageH - imgNatH * scale) / 2;
+            applyTransform();
+        }
+
+        function applyTransform() {
+            cropImg.style.width  = imgNatW * scale + 'px';
+            cropImg.style.height = imgNatH * scale + 'px';
+            ox = Math.min(0, Math.max(stageW - imgNatW * scale, ox));
+            oy = Math.min(0, Math.max(stageH - imgNatH * scale, oy));
+            cropImg.style.left = ox + 'px';
+            cropImg.style.top  = oy + 'px';
+        }
+
+        function syncSlider() {
+            zoomSlider.value = Math.min(400, Math.round((scale / minScale) * 100));
+            zoomLabel.textContent = Math.round(scale * 100) + '%';
+        }
+
+        /* Sürükle veya zoom yapıldığında confirmBtn'i aktif et */
+        function markDirty() {
+            confirmBtn.style.opacity = '';   // tam görünür
+        }
+
+        /* Zoom slider */
+        zoomSlider.addEventListener('input', () => {
+            const newScale = minScale * (zoomSlider.value / 100);
+            const cx = stageW / 2, cy = stageH / 2;
+            ox = cx - (cx - ox) * (newScale / scale);
+            oy = cy - (cy - oy) * (newScale / scale);
+            scale = newScale;
+            applyTransform();
+            zoomLabel.textContent = Math.round(scale * 100) + '%';
+            markDirty();
+        });
+
+        /* Mouse drag */
+        stage.addEventListener('mousedown', e => {
+            dragging = true;
+            dragStartX = e.clientX; dragStartY = e.clientY;
+            dragStartOx = ox; dragStartOy = oy;
+            e.preventDefault();
+        });
+        window.addEventListener('mousemove', e => {
+            if (!dragging) return;
+            ox = dragStartOx + (e.clientX - dragStartX);
+            oy = dragStartOy + (e.clientY - dragStartY);
+            applyTransform();
+            markDirty();
+        });
+        window.addEventListener('mouseup', () => { dragging = false; });
+
+        /* Mouse wheel zoom */
+        stage.addEventListener('wheel', e => {
+            e.preventDefault();
+            const delta    = e.deltaY > 0 ? 0.92 : 1.08;
+            const newScale = Math.max(minScale, Math.min(minScale * 4, scale * delta));
+            const rect     = stage.getBoundingClientRect();
+            const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+            ox = cx - (cx - ox) * (newScale / scale);
+            oy = cy - (cy - oy) * (newScale / scale);
+            scale = newScale;
+            applyTransform(); syncSlider(); markDirty();
+        }, { passive: false });
+
+        /* Touch drag + pinch */
+        stage.addEventListener('touchstart', e => {
+            if (e.touches.length === 1) {
+                dragging = true;
+                dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
+                dragStartOx = ox; dragStartOy = oy;
+            } else if (e.touches.length === 2) {
+                dragging = false;
+                lastPinchDist = pinchDist(e.touches);
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        stage.addEventListener('touchmove', e => {
+            if (e.touches.length === 1 && dragging) {
+                ox = dragStartOx + (e.touches[0].clientX - dragStartX);
+                oy = dragStartOy + (e.touches[0].clientY - dragStartY);
+                applyTransform(); markDirty();
+            } else if (e.touches.length === 2) {
+                const dist = pinchDist(e.touches);
+                const factor = dist / lastPinchDist;
+                lastPinchDist = dist;
+                const rect = stage.getBoundingClientRect();
+                const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+                const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+                const newScale = Math.max(minScale, Math.min(minScale * 4, scale * factor));
+                ox = cx - (cx - ox) * (newScale / scale);
+                oy = cy - (cy - oy) * (newScale / scale);
+                scale = newScale;
+                applyTransform(); syncSlider(); markDirty();
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        stage.addEventListener('touchend', () => { dragging = false; });
+
+        function pinchDist(t) {
+            const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        /* ── Vazgeç — hiçbir şey kaydetmeden kapat ── */
+        cancelBtn.addEventListener('click', () => { overlay.classList.remove('open'); });
+
+        /* ── Geri al — düzenleyiciyi açtığındaki versiyona dön ── */
+        undoBtn.addEventListener('click', () => {
+            if (!sessionSavedData) return;
+            const it = window._cropActiveItem;
+            it.imgData = sessionSavedData;
+            document.getElementById('mImg').src = sessionSavedData;
+            if (typeof persist === 'function') persist();
+            if (typeof render  === 'function') render();
+            /* Sahneyi o versiyonla yenile */
+            cropImg.setAttribute('data-src', '');
+            loadIntoStage(sessionSavedData, () => { updateBtns(); });
+        });
+
+        /* ── Orijinale döndür — ilk yüklendiğindeki haline ── */
+        resetBtn.addEventListener('click', () => {
+            const it = window._cropActiveItem;
+            if (!it || !it.origImgData) return;
+            it.imgData = it.origImgData;
+            document.getElementById('mImg').src = it.origImgData;
+            if (typeof persist === 'function') persist();
+            if (typeof render  === 'function') render();
+            cropImg.setAttribute('data-src', '');
+            loadIntoStage(it.origImgData, () => { updateBtns(); });
+        });
+
+        /* ── Uygula — kırpılmış görüntüyü kaydet ── */
+        confirmBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const out = 900;
+            canvas.width = out; canvas.height = out;
+            canvas.getContext('2d').drawImage(
+                cropImg,
+                -ox / scale, -oy / scale,
+                stageW / scale, stageH / scale,
+                0, 0, out, out
+            );
+            const newData = canvas.toDataURL('image/jpeg', 0.88);
+            const it = window._cropActiveItem;
+            if (it) {
+                it.imgData = newData;
+                document.getElementById('mImg').src = newData;
+                if (typeof persist === 'function') persist();
+                if (typeof render  === 'function') render();
+                updateBtns();
+            }
+            overlay.classList.remove('open');
+        });
+    })();
+    </script>
     </script>
 
     <script>
