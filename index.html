@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=DM+Sans:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=DM+Sans:wght@400;500;600&family=Outfit:wght@600;700&display=swap"
         rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
@@ -37,7 +37,7 @@
             --elev2: 0 16px 48px rgba(0, 0, 0, 0.10);
             --r1: 16px;
             --r2: 28px;
-            --font-display: 'DM Serif Display', serif;
+            --font-display: 'Outfit', 'DM Sans', sans-serif;
             --font-text: 'DM Sans', -apple-system, system-ui, sans-serif;
             /* ── derived tokens ── */
             --gradientHL: linear-gradient(135deg, #ff38aa, #9572ff);
@@ -572,7 +572,7 @@
         }
 
         .appName {
-            font-family: var(--font-display);
+            font-family: 'DM Serif Display', serif;
             font-size: 24px;
             font-weight: 400;
             font-style: italic;
@@ -1019,8 +1019,11 @@
         }
 
         .mHead strong {
-            font-family: var(--font-display);
-            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            font-style: normal;
         }
 
         .mBody {
@@ -1075,6 +1078,20 @@
         ══════════════════════════════════════════ */
 
         /* Preview row (shared header) */
+        .mNameRow { padding: 10px 16px 6px; }
+        .mNameInput {
+            width: 100%; border: none; border-bottom: 1.5px solid rgba(0,0,0,0.08);
+            background: transparent; padding: 0 2px 5px;
+            font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700;
+            color: var(--textPrimary); letter-spacing: -0.2px;
+            outline: none; transition: border-color .15s;
+            display: block; margin-bottom: 6px;
+        }
+        .mNameInput::placeholder { color: var(--textSecondary); font-weight: 500; font-size: 13px; }
+        .mNameInput:focus { border-bottom-color: var(--accent); }
+        body[data-theme="dark"] .mNameInput { border-bottom-color: rgba(255,255,255,0.12); }
+        body[data-theme="dark"] .mNameInput:focus { border-bottom-color: var(--accent); }
+
         .mPreviewRow {
             display: flex;
             gap: 12px;
@@ -1104,9 +1121,8 @@
         .mMetaChipGhost {
             background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07); color: var(--textSecondary);
         }
-        .mMetaHearts { display: flex; gap: 2px; }
         .mMetaHeart { display: inline-flex; line-height: 1; }
-        .mMetaHearts { display: flex; gap: 2px; align-items: center; margin-top: 4px; }
+        .mMetaHearts { display: flex; gap: 2px; align-items: center; }
         .mMetaHint { font-size: 10.5px; color: var(--textSecondary); }
 
         /* Tab bar */
@@ -1183,6 +1199,90 @@
             font-family: var(--font-text);
         }
         body[data-theme="dark"] .mDateCard select { color: var(--textPrimary); }
+
+        /* ── Custom Dropdown ── */
+        .cDropWrap {
+            position: relative;
+        }
+        .cDropBtn {
+            width: 100%; display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 13px; border-radius: 12px;
+            background: var(--inputBg); border: 1.5px solid rgba(0,0,0,0.13);
+            font-size: 13.5px; font-weight: 600; font-family: var(--font-text);
+            color: var(--textPrimary); cursor: pointer; text-align: left;
+            transition: border-color .15s, box-shadow .15s;
+            gap: 8px;
+        }
+        body[data-theme="dark"] .cDropBtn {
+            border-color: rgba(255,255,255,0.15);
+        }
+        .cDropBtn:focus, .cDropBtn.open {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accentSoft);
+            outline: none;
+        }
+        .cDropBtn .cDropIcon { color: var(--accent); font-size: 15px; flex-shrink: 0; margin-right: 2px; }
+        .cDropChevron {
+            color: var(--textSecondary); font-size: 14px; flex-shrink: 0;
+            transition: transform .2s;
+        }
+        .cDropBtn.open .cDropChevron { transform: rotate(180deg); }
+
+        /* Popup panel */
+        .cDropPanel {
+            position: absolute; left: 0; right: 0; top: calc(100% + 6px);
+            background: var(--surface);
+            border: 1.5px solid var(--accentMid);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+            overflow: hidden;
+            z-index: 999;
+            opacity: 0; transform: translateY(-6px) scale(0.98);
+            pointer-events: none;
+            transition: opacity .18s, transform .18s;
+        }
+        .cDropPanel.open {
+            opacity: 1; transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        body[data-theme="dark"] .cDropPanel {
+            background: #1a2840;
+            border-color: var(--accentMid);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .cDropOption {
+            display: flex; align-items: center; gap: 9px;
+            padding: 10px 14px; cursor: pointer;
+            font-size: 13px; font-weight: 500; font-family: var(--font-text);
+            color: var(--textPrimary);
+            transition: background .12s;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        .cDropOption:last-child { border-bottom: none; }
+        body[data-theme="dark"] .cDropOption { border-bottom-color: rgba(255,255,255,0.05); }
+        .cDropOption:hover { background: var(--accentSoft); }
+        .cDropOption.selected {
+            background: var(--accentSoft); color: var(--accent); font-weight: 700;
+        }
+        .cDropOption .cDropOptIcon { font-size: 15px; color: var(--accent); width: 18px; text-align: center; }
+        .cDropCheck { margin-left: auto; color: var(--accent); font-size: 14px; opacity: 0; }
+        .cDropOption.selected .cDropCheck { opacity: 1; }
+
+        /* Compact variant for date cards */
+        .cDropBtn.compact {
+            padding: 4px 8px 4px 10px; border-radius: 8px; font-size: 13px;
+            background: transparent; border: none;
+        }
+        .cDropBtn.compact:focus, .cDropBtn.compact.open {
+            background: var(--inputBg); border: 1.5px solid var(--accentMid);
+            box-shadow: 0 0 0 2px var(--accentSoft);
+        }
+        .cDropPanel.compact {
+            border-radius: 12px;
+            max-height: 220px; overflow-y: auto;
+        }
+
+        .mDateCard { position: relative; }
 
         /* Size chips */
         .mSizeChips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
@@ -1325,8 +1425,7 @@
         .cropTitle {
             font-family: var(--font-display);
             font-size: 18px;
-            font-style: italic;
-            font-weight: 400;
+            font-weight: 700;
             color: rgba(255,255,255,0.90);
             margin-bottom: 16px;
             letter-spacing: 0.2px;
@@ -2973,7 +3072,7 @@
             z-index: 2;
         }
         .authLogo {
-            font-family: var(--font-display);
+            font-family: 'DM Serif Display', serif;
             font-size: clamp(38px, 4.5vw, 58px);
             font-style: italic;
             background: linear-gradient(135deg, #fff 20%, rgba(255,255,255,0.75) 100%);
@@ -3152,13 +3251,13 @@
             background: rgba(255,255,255,0.22);
             border: 2px solid rgba(255,255,255,0.42);
             display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-display); font-size: 20px; color: #fff; font-style: italic;
+            font-family: var(--font-display); font-size: 20px; color: #fff; 
             flex-shrink: 0;
             box-shadow: 0 3px 14px rgba(0,0,0,0.15);
         }
         .sUserInfo { flex: 1; }
         .sUsername {
-            font-family: var(--font-display); font-style: italic;
+            font-family: var(--font-display); 
             font-size: 17px; color: #fff; letter-spacing: 0.1px;
         }
         .sUserSub { font-size: 11.5px; color: rgba(255,255,255,0.68); margin-top: 2px; }
@@ -3226,40 +3325,75 @@
         }
         .sLogout:hover { background: rgba(232,69,69,0.08); color: #e84545; border-color: rgba(232,69,69,0.15); }
 
-        /* Expand panel (kept same animation) */
-        .settingsPanelWrap {
+        /* ── Settings slide-page navigation ── */
+        #settingsModal {
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            max-height: 85vh;
+        }
+        .sPageStack {
+            position: relative;
+            width: 100%;
+            flex: 1;
             overflow: hidden;
-            max-height: 0;
-            opacity: 0;
-            transform: translateY(-8px);
-            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease, transform 0.25s ease;
+            min-height: 0;
         }
-        .settingsPanelWrap.open {
-            max-height: 500px; opacity: 1; transform: translateY(0);
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s;
+        /* Main page: normal flow, gives height to sPageStack */
+        .sPage.main {
+            width: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: var(--surfaceBg);
+            transition: transform 0.30s cubic-bezier(0.32, 0.72, 0.45, 1);
         }
-        .settingsPanel {
-            background: var(--settingsBg);
-            border: 1px solid var(--stroke);
-            border-radius: 14px;
-            padding: 15px 16px;
-            margin: 4px 14px 8px;
+        .sPage.main.pushed { transform: translateX(-30%); }
+        /* Sub pages: absolutely cover the stack, slide in from right */
+        .sPage.sub {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: var(--surfaceBg);
+            transform: translateX(100%);
+            transition: transform 0.30s cubic-bezier(0.32, 0.72, 0.45, 1);
+            will-change: transform;
         }
-        .settingsPanelTitle {
+        .sPage.sub.active { transform: translateX(0); }
+
+        /* Sub-page header */
+        .sSubHead {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            background: var(--surfaceBg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1;
+            flex-shrink: 0;
+        }
+        body[data-theme="dark"] .sSubHead {
+            border-bottom-color: rgba(255,255,255,0.06);
+        }
+        .sBackBtn {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--surface); border: 1px solid var(--stroke);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: var(--accent); cursor: pointer;
+            flex-shrink: 0; transition: background .14s;
+        }
+        .sBackBtn:hover { background: var(--accentSoft); }
+        .sSubTitle {
             font-family: var(--font-display);
-            font-size: 14px; font-style: italic;
-            background: var(--gradientHL);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            margin-bottom: 12px;
+            font-weight: 700; font-size: 16px; letter-spacing: -0.2px;
         }
+        .sSubBody { padding: 18px 16px 24px; display: flex; flex-direction: column; gap: 14px; }
 
         /* Dark mode overrides for new settings */
-        body[data-theme="dark"] .settingsPanel {
-            background: rgba(20, 30, 44, 0.85);
-            border-color: rgba(255,255,255,0.08);
-        }
         body[data-theme="dark"] .sRow:hover { background: rgba(255,255,255,0.05); }
         body[data-theme="dark"] .sRowIcon.pink { background: rgba(232,69,139,0.15); }
         body[data-theme="dark"] .sRowIcon.purple { background: rgba(168,124,255,0.15); }
@@ -3323,6 +3457,7 @@
                                     class="ph ph-brain"></i></span><span data-i18n="dropAI">WishlistAI</span></button>
                         <button class="dropItem" id="dropWrapped"><span class="dropIcon"><i
                                     class="ph ph-chart-bar"></i></span>Wrapped</button>
+                        <button class="dropItem" id="dropSavings"><span class="dropIcon"><i class="ph ph-piggy-bank"></i></span>Birikim</button>
                         <button class="dropItem" id="dropSettings" onclick="openSettings()"><span class="dropIcon"><i
                                     class="ph ph-gear"></i></span><span data-i18n="dropSettings">Ayarlar</span></button>
                         <button class="dropItem dropDanger" id="dropLogout" onclick="doLogout()"><span
@@ -3382,12 +3517,13 @@
                     <button class="cropBtn" id="cropBtn" title="Kırp / Düzenle"><i class="ph ph-crop"></i></button>
                 </div>
                 <div class="mMeta">
+                    <input type="text" id="mItemName" class="mNameInput" placeholder="İsim ver..." />
                     <div class="mMetaChips">
                         <span class="mMetaChip" id="mMetaCat">—</span>
                         <span class="mMetaChip mMetaChipGhost" id="mMetaDate">—</span>
+                        <div class="mMetaHearts" id="mMetaHearts"></div>
                     </div>
-                    <div class="mMetaHearts" id="mMetaHearts"></div>
-                    <div class="mMetaHint" id="mMetaHint"></div>
+                    <div class="mMetaHint" id="mMetaHint" style="display:none"></div>
                 </div>
             </div>
             <!-- Tab bar -->
@@ -3407,15 +3543,23 @@
                 </div>
                 <div class="mField">
                     <div class="mLabel">Kategori</div>
-                    <select id="mCategory">
-                        <option value="giyim">Giyim</option>
-                        <option value="ayakkabi">Ayakkabı</option>
-                        <option value="makyaj">Makyaj &amp; Cilt</option>
-                        <option value="album">Albüm</option>
-                        <option value="parfum">Parfüm</option>
-                        <option value="sac">Saç Bakım</option>
-                        <option value="diger">Diğer</option>
-                    </select>
+                    <input type="hidden" id="mCategory" value="diger" />
+                    <div class="cDropWrap" id="mCategoryDrop">
+                        <button type="button" class="cDropBtn" id="mCategoryBtn">
+                            <span class="cDropIcon"><i class="ph ph-tag"></i></span>
+                            <span class="cDropLabel">Diğer</span>
+                            <i class="ph ph-caret-down cDropChevron"></i>
+                        </button>
+                        <div class="cDropPanel" id="mCategoryPanel">
+                            <div class="cDropOption" data-val="giyim"><span class="cDropOptIcon"><i class="ph ph-t-shirt"></i></span>Giyim<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="ayakkabi"><span class="cDropOptIcon"><i class="ph ph-sneaker"></i></span>Ayakkabı<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="makyaj"><span class="cDropOptIcon"><i class="ph ph-sparkle"></i></span>Makyaj &amp; Cilt<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="album"><span class="cDropOptIcon"><i class="ph ph-vinyl-record"></i></span>Albüm<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="parfum"><span class="cDropOptIcon"><i class="ph ph-drop"></i></span>Parfüm<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="sac"><span class="cDropOptIcon"><i class="ph ph-scissors"></i></span>Saç Bakım<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption selected" data-val="diger"><span class="cDropOptIcon"><i class="ph ph-star"></i></span>Diğer<i class="ph ph-check cDropCheck"></i></div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Beden / Numara — kategori: giyim veya ayakkabi -->
                 <div class="mField" id="mSizeField" style="display:none">
@@ -3428,24 +3572,38 @@
                     <div class="mDateRow">
                         <div class="mDateCard">
                             <div class="mDateLabel">Ay</div>
-                            <select id="mTimeline">
-                                <option value="ocak">Ocak</option>
-                                <option value="subat">Şubat</option>
-                                <option value="mart">Mart</option>
-                                <option value="nisan">Nisan</option>
-                                <option value="mayis">Mayıs</option>
-                                <option value="haziran">Haziran</option>
-                                <option value="temmuz">Temmuz</option>
-                                <option value="agustos">Ağustos</option>
-                                <option value="eylul">Eylül</option>
-                                <option value="ekim">Ekim</option>
-                                <option value="kasim">Kasım</option>
-                                <option value="aralik">Aralık</option>
-                            </select>
+                            <input type="hidden" id="mTimeline" value="ocak" />
+                            <div class="cDropWrap">
+                                <button type="button" class="cDropBtn compact" id="mTimelineBtn">
+                                    <span class="cDropLabel">Ocak</span>
+                                    <i class="ph ph-caret-down cDropChevron"></i>
+                                </button>
+                                <div class="cDropPanel compact" id="mTimelinePanel">
+                                    <div class="cDropOption selected" data-val="ocak">Ocak<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="subat">Şubat<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="mart">Mart<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="nisan">Nisan<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="mayis">Mayıs<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="haziran">Haziran<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="temmuz">Temmuz<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="agustos">Ağustos<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="eylul">Eylül<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="ekim">Ekim<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="kasim">Kasım<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="aralik">Aralık<i class="ph ph-check cDropCheck"></i></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="mDateCard">
                             <div class="mDateLabel">Yıl</div>
-                            <select id="mYear"></select>
+                            <input type="hidden" id="mYear" value="" />
+                            <div class="cDropWrap">
+                                <button type="button" class="cDropBtn compact" id="mYearBtn">
+                                    <span class="cDropLabel">2025</span>
+                                    <i class="ph ph-caret-down cDropChevron"></i>
+                                </button>
+                                <div class="cDropPanel compact" id="mYearPanel"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3786,9 +3944,9 @@
                 <div id="loginForm">
                     <div class="authField">
                         <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-user"></i></span>
+                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
+                            <input id="loginUser" type="email" placeholder="E-posta" autocomplete="email" autocapitalize="none" />
                         </div>
                     </div>
                     <div class="authField">
@@ -3814,7 +3972,7 @@
                         <div class="authInputWrap">
                             <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="regEmail" type="email" placeholder="E-posta (isteğe bağlı)" autocomplete="email" />
+                            <input id="regEmail" type="email" placeholder="E-posta" autocomplete="email" required />
                         </div>
                     </div>
                     <div class="authField">
@@ -3841,8 +3999,8 @@
 
     <!-- ═══ SETTINGS MODAL ═══ -->
     <div id="settingsBack" class="modalBack" role="dialog" aria-modal="true">
-        <div class="modal" id="settingsModal" style="overflow:hidden; display:flex; flex-direction:column;">
-            <!-- Gradient header — handle içinde -->
+        <div class="modal" id="settingsModal">
+            <!-- Gradient header — always visible -->
             <div class="sHead">
                 <div class="sHeadHandle"><span></span></div>
                 <div class="sHeadRow">
@@ -3855,21 +4013,68 @@
                 </div>
             </div>
 
-            <!-- Scrollable body -->
-            <div class="sBody" style="overflow-y:auto; -webkit-overflow-scrolling:touch;">
+            <!-- Page stack -->
+            <div class="sPageStack">
 
-                <div class="sGroupLabel" data-i18n="settingsGroupAccount">Hesap</div>
-                <div class="sRow" onclick="toggleSettingsPanel('pwPanel')">
-                    <div class="sRowIcon pink"><i class="ph ph-lock-key"></i></div>
-                    <div class="sRowText">
-                        <div class="sRowTitle" data-i18n="tilePw">Şifre Değiştir</div>
-                        <div class="sRowDesc">Hesap güvenliğini güncelle</div>
+                <!-- ── Ana sayfa ── -->
+                <div class="sPage main" id="sPageMain">
+                    <div class="sBody">
+                        <div class="sGroupLabel">Hesap</div>
+                        <div class="sRow" onclick="openSettingsPage('sPagePw')">
+                            <div class="sRowIcon pink"><i class="ph ph-lock-key"></i></div>
+                            <div class="sRowText">
+                                <div class="sRowTitle" data-i18n="tilePw">Şifre Değiştir</div>
+                                <div class="sRowDesc">Hesap güvenliğini güncelle</div>
+                            </div>
+                            <i class="ph ph-caret-right sRowArrow"></i>
+                        </div>
+
+                        <div class="sDivider"></div>
+                        <div class="sGroupLabel">Görünüm &amp; Dil</div>
+
+                        <div class="sRow" onclick="openSettingsPage('sPageTheme')">
+                            <div class="sRowIcon purple"><i class="ph ph-paint-bucket"></i></div>
+                            <div class="sRowText">
+                                <div class="sRowTitle" data-i18n="tileTheme">Tema Rengi</div>
+                                <div class="sRowDesc" id="sThemeDesc">6 seçenek</div>
+                            </div>
+                            <i class="ph ph-caret-right sRowArrow"></i>
+                        </div>
+
+                        <div class="sRow" onclick="openSettingsPage('sPageLang')">
+                            <div class="sRowIcon blue"><i class="ph ph-translate"></i></div>
+                            <div class="sRowText">
+                                <div class="sRowTitle" data-i18n="tileLang">Dil Tercihi</div>
+                                <div class="sRowDesc" id="sLangDesc">Türkçe</div>
+                            </div>
+                            <i class="ph ph-caret-right sRowArrow"></i>
+                        </div>
+
+                        <div class="sDivider"></div>
+                        <div class="sGroupLabel">Tehlikeli Alan</div>
+
+                        <div class="sRow danger" onclick="openSettingsPage('sPageReset')">
+                            <div class="sRowIcon danger"><i class="ph ph-trash"></i></div>
+                            <div class="sRowText">
+                                <div class="sRowTitle" data-i18n="tileReset">Listeyi Sıfırla</div>
+                                <div class="sRowDesc">Tüm ürünleri kalıcı sil</div>
+                            </div>
+                            <i class="ph ph-caret-right sRowArrow"></i>
+                        </div>
+
+                        <button class="sLogout" onclick="doLogout()">
+                            <i class="ph ph-sign-out"></i> Çıkış Yap
+                        </button>
                     </div>
-                    <i class="ph ph-caret-right sRowArrow"></i>
                 </div>
-                <div class="settingsPanelWrap" id="pwPanel">
-                    <div class="settingsPanel">
-                        <div class="settingsPanelTitle"><i class="ph ph-lock-key"></i> Şifre Değiştir</div>
+
+                <!-- ── Şifre Değiştir sayfası ── -->
+                <div class="sPage sub" id="sPagePw">
+                    <div class="sSubHead">
+                        <button class="sBackBtn" onclick="closeSettingsPage()"><i class="ph ph-caret-left"></i></button>
+                        <div class="sSubTitle">Şifre Değiştir</div>
+                    </div>
+                    <div class="sSubBody">
                         <div id="pwError" class="authError"></div>
                         <div id="pwSuccess" class="authSuccess"></div>
                         <div class="authField">
@@ -3893,39 +4098,28 @@
                                 <input id="pwNew2" type="password" placeholder="Yeni şifre tekrar" />
                             </div>
                         </div>
-                        <button class="authSubmit" style="margin-top:4px" onclick="doChangePassword()">Güncelle →</button>
+                        <button class="authSubmit" onclick="doChangePassword()">Güncelle →</button>
                     </div>
                 </div>
 
-                <div class="sDivider"></div>
-                <div class="sGroupLabel" data-i18n="settingsGroupAppearance">Görünüm &amp; Dil</div>
-
-                <div class="sRow" onclick="toggleSettingsPanel('themePanel')">
-                    <div class="sRowIcon purple"><i class="ph ph-paint-bucket"></i></div>
-                    <div class="sRowText">
-                        <div class="sRowTitle" data-i18n="tileTheme">Tema Rengi</div>
-                        <div class="sRowDesc" id="sThemeDesc">Pembe · 6 seçenek</div>
+                <!-- ── Tema Rengi sayfası ── -->
+                <div class="sPage sub" id="sPageTheme">
+                    <div class="sSubHead">
+                        <button class="sBackBtn" onclick="closeSettingsPage()"><i class="ph ph-caret-left"></i></button>
+                        <div class="sSubTitle">Tema Rengi</div>
                     </div>
-                    <i class="ph ph-caret-right sRowArrow"></i>
-                </div>
-                <div class="settingsPanelWrap" id="themePanel">
-                    <div class="settingsPanel">
-                        <div class="settingsPanelTitle"><i class="ph ph-paint-bucket"></i> Tema Rengi</div>
+                    <div class="sSubBody">
                         <div class="themeGrid" id="themeGrid"></div>
                     </div>
                 </div>
 
-                <div class="sRow" onclick="toggleSettingsPanel('langPanel')">
-                    <div class="sRowIcon blue"><i class="ph ph-translate"></i></div>
-                    <div class="sRowText">
-                        <div class="sRowTitle" data-i18n="tileLang">Dil Tercihi</div>
-                        <div class="sRowDesc" id="sLangDesc">Türkçe</div>
+                <!-- ── Dil Tercihi sayfası ── -->
+                <div class="sPage sub" id="sPageLang">
+                    <div class="sSubHead">
+                        <button class="sBackBtn" onclick="closeSettingsPage()"><i class="ph ph-caret-left"></i></button>
+                        <div class="sSubTitle">Dil Tercihi</div>
                     </div>
-                    <i class="ph ph-caret-right sRowArrow"></i>
-                </div>
-                <div class="settingsPanelWrap" id="langPanel">
-                    <div class="settingsPanel">
-                        <div class="settingsPanelTitle"><i class="ph ph-translate"></i> Dil Tercihi</div>
+                    <div class="sSubBody">
                         <div class="langGrid">
                             <button class="langBtn active" id="langBtnTr" onclick="applyLanguage('tr')">
                                 <span class="langFlag">🇹🇷</span><span>Türkçe</span>
@@ -3937,72 +4131,156 @@
                     </div>
                 </div>
 
-                <div class="sDivider"></div>
-                <div class="sGroupLabel">Tehlikeli Alan</div>
-
-                <div class="sRow danger" onclick="toggleSettingsPanel('resetPanel')">
-                    <div class="sRowIcon danger"><i class="ph ph-trash"></i></div>
-                    <div class="sRowText">
-                        <div class="sRowTitle" data-i18n="tileReset">Listeyi Sıfırla</div>
-                        <div class="sRowDesc">Tüm ürünleri kalıcı sil</div>
+                <!-- ── Listeyi Sıfırla sayfası ── -->
+                <div class="sPage sub" id="sPageReset">
+                    <div class="sSubHead">
+                        <button class="sBackBtn" onclick="closeSettingsPage()"><i class="ph ph-caret-left"></i></button>
+                        <div class="sSubTitle">Listeyi Sıfırla</div>
                     </div>
-                    <i class="ph ph-caret-right sRowArrow"></i>
-                </div>
-                <div class="settingsPanelWrap" id="resetPanel">
-                    <div class="settingsPanel">
-                        <div class="settingsPanelTitle"><i class="ph ph-trash"></i> Listeyi Sıfırla</div>
-                        <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
+                    <div class="sSubBody">
+                        <div style="font-size:13px;color:var(--textSecondary);line-height:1.6;">
+                            Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.
+                        </div>
                         <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="confirmReset()">Evet, Sıfırla</button>
                     </div>
                 </div>
 
-                <button class="sLogout" onclick="doLogout()">
-                    <i class="ph ph-sign-out"></i> Çıkış Yap
-                </button>
-            </div>
+            </div><!-- /sPageStack -->
         </div>
     </div>
 
     <script>
 
         /* ═══ FIREBASE CONFIG ═══ */
+        /* ═══════════════════════════════════════════════════════
+           FIREBASE CONFIG
+           Firebase Console'dan:
+           1. Authentication → Sign-in method → Email/Password AÇ
+           2. Realtime Database → Rules → aşağıdaki kuralları yapıştır:
+           {
+             "rules": {
+               "users": {
+                 "$uid": {
+                   ".read":  "auth != null && auth.uid === $uid",
+                   ".write": "auth != null && auth.uid === $uid"
+                 }
+               }
+             }
+           }
+           3. Project Settings → Web API Key'i kopyala → FB_API_KEY'e yaz
+        ═══════════════════════════════════════════════════════ */
         const FB_DATABASE_URL = "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app";
-        const FB_ENABLED = FB_DATABASE_URL.startsWith("https://");
+        const FB_API_KEY      = "AIzaSyBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // ← Firebase Web API Key buraya
+        const FB_ENABLED      = FB_DATABASE_URL.startsWith("https://");
+        const FB_AUTH_BASE    = "https://identitytoolkit.googleapis.com/v1/accounts";
+        const FB_TOKEN_URL    = "https://securetoken.googleapis.com/v1/token";
 
+        /* ── Auth state ── */
+        const SESSION_KEY = 'wl_session_v2';
+        let authToken    = null;   // Firebase idToken
+        let authUid      = null;   // Firebase uid
+        let currentUser  = null;   // display username
+
+        /* ── Auth token refresh ── */
+        async function fbRefreshToken(refreshToken) {
+            try {
+                const r = await fetch(`${FB_TOKEN_URL}?key=${FB_API_KEY}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
+                });
+                const d = await r.json();
+                if (!r.ok) return null;
+                return { idToken: d.id_token, refreshToken: d.refresh_token };
+            } catch { return null; }
+        }
+
+        /* ── Firebase DB helpers (auth token required) ── */
         async function fbGet(path) {
-            if (!FB_ENABLED) return null;
-            try { const r = await fetch(FB_DATABASE_URL + '/' + path + '.json'); return r.ok ? await r.json() : null; }
-            catch { return null; }
+            if (!FB_ENABLED || !authToken) return null;
+            try {
+                const r = await fetch(`${FB_DATABASE_URL}/${path}.json?auth=${authToken}`);
+                if (r.status === 401) return null; // token expired
+                return r.ok ? await r.json() : null;
+            } catch { return null; }
         }
         async function fbSet(path, data) {
-            if (!FB_ENABLED) return false;
+            if (!FB_ENABLED || !authToken) return false;
             try {
-                const r = await fetch(FB_DATABASE_URL + '/' + path + '.json', {
-                    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+                const r = await fetch(`${FB_DATABASE_URL}/${path}.json?auth=${authToken}`, {
+                    method: 'PUT', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
                 });
                 return r.ok;
             } catch { return false; }
         }
+        async function fbDelete(path) {
+            if (!FB_ENABLED || !authToken) return false;
+            try {
+                const r = await fetch(`${FB_DATABASE_URL}/${path}.json?auth=${authToken}`, { method: 'DELETE' });
+                return r.ok;
+            } catch { return false; }
+        }
 
-        /* ═══ AUTH SYSTEM ═══ */
-        const USERS_KEY = 'wl_users_v1';
-        const SESSION_KEY = 'wl_session_v1';
-        let currentUser = null;
+        /* ── Firebase Auth REST ── */
+        async function fbSignIn(email, password) {
+            const r = await fetch(`${FB_AUTH_BASE}:signInWithPassword?key=${FB_API_KEY}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email, password, returnSecureToken: true })
+            });
+            const d = await r.json();
+            if (!r.ok) throw new Error(translateAuthError(d.error?.message));
+            return d; // { idToken, localId, refreshToken, displayName, ... }
+        }
+        async function fbSignUp(email, password, displayName) {
+            const r = await fetch(`${FB_AUTH_BASE}:signUp?key=${FB_API_KEY}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email, password, displayName, returnSecureToken: true })
+            });
+            const d = await r.json();
+            if (!r.ok) throw new Error(translateAuthError(d.error?.message));
+            return d;
+        }
+        async function fbUpdatePassword(idToken, newPassword) {
+            const r = await fetch(`${FB_AUTH_BASE}:update?key=${FB_API_KEY}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ idToken, password: newPassword, returnSecureToken: true })
+            });
+            const d = await r.json();
+            if (!r.ok) throw new Error(translateAuthError(d.error?.message));
+            return d;
+        }
+        function translateAuthError(code) {
+            const map = {
+                'EMAIL_EXISTS':             'Bu e-posta zaten kayıtlı.',
+                'INVALID_EMAIL':            'Geçersiz e-posta adresi.',
+                'WEAK_PASSWORD':            'Şifre en az 6 karakter olmalı.',
+                'EMAIL_NOT_FOUND':          'Bu e-posta ile kayıtlı hesap bulunamadı.',
+                'INVALID_PASSWORD':         'Şifre hatalı.',
+                'USER_DISABLED':            'Hesap devre dışı bırakılmış.',
+                'TOO_MANY_ATTEMPTS_TRY_LATER': 'Çok fazla deneme. Lütfen bekle.',
+                'INVALID_LOGIN_CREDENTIALS':'E-posta veya şifre hatalı.',
+            };
+            if (!code) return 'Bir hata oluştu.';
+            for (const [k, v] of Object.entries(map)) {
+                if (code.includes(k)) return v;
+            }
+            return 'Bir hata oluştu: ' + code;
+        }
 
-        async function hashPw(pw) {
-            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        /* ── Session save / restore ── */
+        function saveSession(uid, idToken, refreshToken, username, email) {
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ uid, idToken, refreshToken, username, email }));
         }
-        function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; } }
-        function saveLocalUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-        async function getUser(u) {
-            if (FB_ENABLED) { const h = await fbGet('users/' + u + '/hash'); if (h) return h; }
-            return getLocalUsers()[u] || null;
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+            authToken = null; authUid = null; currentUser = null;
         }
-        async function saveUserHash(u, h) {
-            if (FB_ENABLED) await fbSet('users/' + u + '/hash', h);
-            const us = getLocalUsers(); us[u] = h; saveLocalUsers(us);
+        function getSession() {
+            try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; }
         }
+
+        /* ── Auth UI helpers ── */
         function switchAuthTab(tab) {
             document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
             document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
@@ -4019,56 +4297,68 @@
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon = btn.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.className = 'ph ph-eye';
-            } else {
-                input.type = 'password';
-                icon.className = 'ph ph-eye-slash';
-            }
+            if (input.type === 'password') { input.type = 'text'; icon.className = 'ph ph-eye'; }
+            else { input.type = 'password'; icon.className = 'ph ph-eye-slash'; }
         }
+
+        /* ── Login ── */
         async function doLogin() {
             const btn = document.querySelector('#loginForm .authSubmit');
-            const username = document.getElementById('loginUser').value.trim().toLowerCase();
+            const email    = document.getElementById('loginUser').value.trim().toLowerCase();
             const password = document.getElementById('loginPass').value;
-            if (!username || !password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
+            if (!email || !password) return showAuthError('E-posta ve şifre gerekli.');
             btn.textContent = 'Kontrol ediliyor...'; btn.disabled = true;
-            const stored = await getUser(username);
-            btn.textContent = 'Giriş Yap →'; btn.disabled = false;
-            if (!stored) return showAuthError('Kullanıcı bulunamadı.');
-            if (stored !== await hashPw(password)) return showAuthError('Şifre hatalı.');
-            localStorage.setItem(SESSION_KEY, username);
-            startApp(username);
+            try {
+                const d = await fbSignIn(email, password);
+                const username = d.displayName || email.split('@')[0];
+                saveSession(d.localId, d.idToken, d.refreshToken, username, email);
+                authToken = d.idToken; authUid = d.localId; currentUser = username;
+                btn.textContent = 'Giriş Yap →'; btn.disabled = false;
+                startApp();
+            } catch (e) {
+                btn.textContent = 'Giriş Yap →'; btn.disabled = false;
+                showAuthError(e.message);
+            }
         }
+
+        /* ── Register ── */
         async function doRegister() {
             const btn = document.querySelector('#registerForm .authSubmit');
-            const username = document.getElementById('regUser').value.trim().toLowerCase();
-            const pw = document.getElementById('regPass').value;
-            const pw2 = document.getElementById('regPass2').value;
-            if (!username || !pw) return showAuthError('Tüm alanları doldurun.');
-            if (username.length < 3) return showAuthError('Kullanıcı adı en az 3 karakter olmalı.');
-            if (pw.length < 4) return showAuthError('Şifre en az 4 karakter olmalı.');
-            if (pw !== pw2) return showAuthError('Şifreler eşleşmiyor.');
+            const username = document.getElementById('regUser').value.trim();
+            const email    = document.getElementById('regEmail').value.trim().toLowerCase();
+            const pw       = document.getElementById('regPass').value;
+            const pw2      = document.getElementById('regPass2').value;
+            if (!username || !email || !pw) return showAuthError('Tüm alanları doldurun.');
+            if (username.length < 2)        return showAuthError('Kullanıcı adı en az 2 karakter olmalı.');
+            if (pw.length < 6)              return showAuthError('Şifre en az 6 karakter olmalı.');
+            if (pw !== pw2)                 return showAuthError('Şifreler eşleşmiyor.');
             btn.textContent = 'Oluşturuluyor...'; btn.disabled = true;
-            const existing = await getUser(username);
-            if (existing) { btn.textContent = 'Hesap Oluştur →'; btn.disabled = false; return showAuthError('Bu kullanıcı adı alınmış.'); }
-            await saveUserHash(username, await hashPw(pw));
-            btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
-            localStorage.setItem(SESSION_KEY, username);
-            const el = document.getElementById('authSuccessMsg');
-            el.textContent = 'Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display = 'block';
-            document.getElementById('authError').style.display = 'none';
-            setTimeout(() => startApp(username), 700);
+            try {
+                const d = await fbSignUp(email, pw, username);
+                saveSession(d.localId, d.idToken, d.refreshToken, username, email);
+                authToken = d.idToken; authUid = d.localId; currentUser = username;
+                btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
+                const el = document.getElementById('authSuccessMsg');
+                el.textContent = 'Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display = 'block';
+                document.getElementById('authError').style.display = 'none';
+                setTimeout(() => startApp(), 700);
+            } catch (e) {
+                btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
+                showAuthError(e.message);
+            }
         }
-        function startApp(username) {
-            currentUser = username;
+
+        /* ── Start app after auth ── */
+        function startApp() {
             document.getElementById('authScreen').style.display = 'none';
             load().then(() => render());
         }
+
+        /* ── Logout ── */
         function doLogout() {
             if (!confirm("Hesabınızdan çıkış yapmak istediğinizden emin misiniz?")) return;
-            localStorage.removeItem(SESSION_KEY);
-            currentUser = null; items = [];
+            clearSession();
+            items = [];
             document.getElementById('authScreen').style.display = 'flex';
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';
@@ -4085,18 +4375,26 @@
             document.getElementById('pwOld').value = '';
             document.getElementById('pwNew').value = '';
             document.getElementById('pwNew2').value = '';
-            document.querySelectorAll('.settingsPanelWrap').forEach(p => p.classList.remove('open'));
-            renderThemeGrid();
+            // reset page stack
+            document.getElementById('sPageMain').classList.remove('pushed');
+            document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
             const sb = document.getElementById('settingsBack');
             sb.style.display = 'flex';
             requestAnimationFrame(() => sb.classList.add('show'));
             document.body.style.overflow = 'hidden';
         }
-        function toggleSettingsPanel(id) {
-            const panel = document.getElementById(id);
-            const isOpen = panel.classList.contains('open');
-            document.querySelectorAll('.settingsPanelWrap').forEach(p => p.classList.remove('open'));
-            if (!isOpen) panel.classList.add('open');
+        function openSettingsPage(pageId) {
+            // push main page slightly left
+            document.getElementById('sPageMain').classList.add('pushed');
+            // hide all sub pages
+            document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
+            // show requested sub page
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'sPageTheme') renderThemeGrid();
+        }
+        function closeSettingsPage() {
+            document.getElementById('sPageMain').classList.remove('pushed');
+            document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
         }
         function closeSettings() {
             const sb = document.getElementById('settingsBack');
@@ -4110,14 +4408,30 @@
             const newPw = document.getElementById('pwNew').value;
             const newPw2 = document.getElementById('pwNew2').value;
             const pwErr = document.getElementById('pwError');
-            const pwOk = document.getElementById('pwSuccess');
+            const pwOk  = document.getElementById('pwSuccess');
             pwErr.style.display = 'none'; pwOk.style.display = 'none';
             if (!oldPw || !newPw || !newPw2) { pwErr.textContent = 'Tüm alanları doldurun.'; pwErr.style.display = 'block'; return; }
-            if (newPw.length < 4) { pwErr.textContent = 'Yeni şifre en az 4 karakter olmalı.'; pwErr.style.display = 'block'; return; }
+            if (newPw.length < 6) { pwErr.textContent = 'Yeni şifre en az 6 karakter olmalı.'; pwErr.style.display = 'block'; return; }
             if (newPw !== newPw2) { pwErr.textContent = 'Yeni şifreler eşleşmiyor.'; pwErr.style.display = 'block'; return; }
-            const stored = await getUser(currentUser);
-            if (stored !== await hashPw(oldPw)) { pwErr.textContent = 'Mevcut şifre hatalı.'; pwErr.style.display = 'block'; return; }
-            await saveUserHash(currentUser, await hashPw(newPw));
+            // Mevcut şifreyi doğrula: tekrar giriş yap
+            const sess = getSession();
+            if (!sess) { pwErr.textContent = 'Oturum bulunamadı, tekrar giriş yapın.'; pwErr.style.display = 'block'; return; }
+            try {
+                // Email'i almak için re-signin
+                const loginEl = document.getElementById('loginUser');
+                const emailForVerify = sess.email || (loginEl ? loginEl.value.trim() : '');
+                if (!emailForVerify) { pwErr.textContent = 'E-posta bulunamadı. Tekrar giriş yapın.'; pwErr.style.display = 'block'; return; }
+                // Önce eski şifre ile giriş yap (verify)
+                await fbSignIn(emailForVerify, oldPw);
+                // Şifreyi güncelle
+                const d = await fbUpdatePassword(authToken, newPw);
+                // Yeni token kaydet
+                authToken = d.idToken;
+                saveSession(authUid, d.idToken, d.refreshToken || sess.refreshToken, currentUser);
+            } catch(e) {
+                pwErr.textContent = e.message.includes('hatalı') ? 'Mevcut şifre hatalı.' : e.message;
+                pwErr.style.display = 'block'; return;
+            }
             document.getElementById('pwOld').value = '';
             document.getElementById('pwNew').value = '';
             document.getElementById('pwNew2').value = '';
@@ -4125,9 +4439,11 @@
         }
         function confirmReset() {
             if (confirm('Tüm istek listeni silmek istediğine emin misin?')) {
+                // Her item'ın fotoğrafını da sil
+                items.forEach(it => localStorage.removeItem(getImgKey(it.id)));
                 items = [];
-                localStorage.removeItem('wishlist_v3_' + currentUser);
-                if (FB_ENABLED) fbSet('users/' + currentUser + '/items', null);
+                localStorage.removeItem(getUserKey());
+                if (FB_ENABLED && authUid && authToken) fbDelete('users/' + authUid + '/items');
                 render();
                 closeSettings();
                 showToast('🗑️ Liste sıfırlandı');
@@ -4207,19 +4523,24 @@
             const loginVisible = document.getElementById('loginForm').style.display !== 'none';
             if (loginVisible) doLogin(); else doRegister();
         });
-        (function checkSession() {
-            const saved = localStorage.getItem(SESSION_KEY);
-            if (saved) {
-                const users = getLocalUsers();
-                if (users[saved]) {
-                    currentUser = saved;
-                    document.getElementById('authScreen').style.display = 'none';
-                    return;
-                }
+        /* ── Session restore on page load ── */
+        (async function checkSession() {
+            const sess = getSession();
+            if (!sess) return;
+            // Try to refresh the token (idTokens expire in 1h)
+            const refreshed = await fbRefreshToken(sess.refreshToken);
+            if (refreshed) {
+                authToken   = refreshed.idToken;
+                authUid     = sess.uid;
+                currentUser = sess.username;
+                saveSession(sess.uid, refreshed.idToken, refreshed.refreshToken, sess.username);
+                document.getElementById('authScreen').style.display = 'none';
+                load().then(() => render());
+            } else {
+                clearSession(); // token invalid, force re-login
             }
         })();
 
-        const LS_KEY = currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3';
         let items = [];
         let activeId = null;
         let activeCat = "all";
@@ -4251,16 +4572,92 @@
         const dropdownEl = document.getElementById("dropdown");
         const wrGalleryEl = document.getElementById("wrGallery");
 
-        /* ── Year select population ── */
-        (function initYearSelect() {
-            const now = new Date().getFullYear();
-            for (let y = 2026; y <= 2036; y++) {
-                const o = document.createElement("option");
-                o.value = y; o.textContent = y;
-                if (y === new Date().getFullYear()) o.selected = true;
-                mYear.appendChild(o);
+        /* ═══ CUSTOM DROPDOWN SYSTEM ═══ */
+        function initCustomDropdown(btnId, panelId, hiddenId, onChange) {
+            const btn = document.getElementById(btnId);
+            const panel = document.getElementById(panelId);
+            const hidden = document.getElementById(hiddenId);
+            if (!btn || !panel || !hidden) return;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = panel.classList.contains('open');
+                closeAllDropdowns();
+                if (!isOpen) {
+                    panel.classList.add('open');
+                    btn.classList.add('open');
+                    // Scroll selected into view
+                    const sel = panel.querySelector('.cDropOption.selected');
+                    if (sel) sel.scrollIntoView({ block: 'nearest' });
+                }
+            });
+
+            panel.querySelectorAll('.cDropOption').forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const val = opt.dataset.val;
+                    setDropdownValue(btnId, panelId, hiddenId, val);
+                    if (onChange) onChange(val);
+                });
+            });
+        }
+
+        function setDropdownValue(btnId, panelId, hiddenId, val) {
+            const btn = document.getElementById(btnId);
+            const panel = document.getElementById(panelId);
+            const hidden = document.getElementById(hiddenId);
+            if (!btn || !panel || !hidden) return;
+            // Update hidden input
+            hidden.value = val;
+            // Update selected state
+            panel.querySelectorAll('.cDropOption').forEach(o => {
+                o.classList.toggle('selected', o.dataset.val === val);
+            });
+            // Update button label
+            const selOpt = panel.querySelector(`.cDropOption[data-val="${val}"]`);
+            const labelEl = btn.querySelector('.cDropLabel');
+            if (labelEl && selOpt) {
+                // Get text without the check icon
+                const clone = selOpt.cloneNode(true);
+                clone.querySelector('.cDropCheck')?.remove();
+                clone.querySelector('.cDropOptIcon')?.remove();
+                labelEl.textContent = clone.textContent.trim();
             }
+            closeAllDropdowns();
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.cDropPanel.open').forEach(p => p.classList.remove('open'));
+            document.querySelectorAll('.cDropBtn.open').forEach(b => b.classList.remove('open'));
+        }
+
+        document.addEventListener('click', closeAllDropdowns);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllDropdowns(); });
+
+        /* ── Year dropdown population ── */
+        (function initYearDropdown() {
+            const now = new Date().getFullYear();
+            const panel = document.getElementById("mYearPanel");
+            for (let y = 2025; y <= 2036; y++) {
+                const opt = document.createElement('div');
+                opt.className = 'cDropOption' + (y === now ? ' selected' : '');
+                opt.dataset.val = y;
+                opt.innerHTML = `${y}<i class="ph ph-check cDropCheck"></i>`;
+                panel.appendChild(opt);
+            }
+            document.getElementById("mYear").value = now;
+            document.getElementById("mYearBtn").querySelector('.cDropLabel').textContent = now;
         })();
+
+        /* ── Init all detail modal dropdowns ── */
+        initCustomDropdown('mCategoryBtn', 'mCategoryPanel', 'mCategory', (val) => {
+            updateSizeField(val);
+            updateMetaChips();
+        });
+        initCustomDropdown('mTimelineBtn', 'mTimelinePanel', 'mTimeline', () => updateMetaChips());
+        initCustomDropdown('mYearBtn', 'mYearPanel', 'mYear', () => updateMetaChips());
+
+        /* ── Category change now uses hidden input via custom dropdown ── */
 
         /* ═══ SIGNATURE #2: DESIRE METER BUILDER ═══ */
         function updateMetaHearts(level) {
@@ -4332,25 +4729,63 @@
         enforceNumericInput(document.getElementById("mCurrentPrice"));
         enforceNumericInput(document.getElementById("mPrice"));
 
-        /* ── Storage ── */
-        function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
+        /* ── Storage ──
+           Strateji: imgData (base64) sadece localStorage'da tutulur.
+           Firebase'e sadece metadata gider → DB boyutu ~20x küçülür.
+           Silme: item silinince hem array'den hem localStorage image store'dan temizlenir.
+        ── */
+        function getUserKey() { return authUid ? 'wishlist_v3_' + authUid : 'wishlist_v3'; }
+        function getImgKey(itemId) { return 'wl_img_' + itemId; }
+
+        /* imgData'yı localStorage'a kaydet, items array'inden çıkar */
+        function saveImages(itemList) {
+            itemList.forEach(it => {
+                if (it.imgData) localStorage.setItem(getImgKey(it.id), it.imgData);
+            });
+        }
+        /* imgData'yı localStorage'dan ekle */
+        function mergeImages(itemList) {
+            return itemList.map(it => ({
+                ...it,
+                imgData: localStorage.getItem(getImgKey(it.id)) || it.imgData || ''
+            }));
+        }
+        /* Firebase'e gönderilecek: imgData olmadan */
+        function stripImages(itemList) {
+            return itemList.map(it => {
+                const { imgData, ...rest } = it;
+                return rest;
+            });
+        }
+
         async function load() {
-            if (FB_ENABLED && currentUser) {
+            if (FB_ENABLED && authUid && authToken) {
                 try {
-                    const fbItems = await fbGet('users/' + currentUser + '/items');
+                    const fbItems = await fbGet('users/' + authUid + '/items');
                     if (fbItems && Array.isArray(fbItems)) {
-                        items = fbItems;
+                        items = mergeImages(fbItems);
+                        // Yerel cache'i güncelle
                         localStorage.setItem(getUserKey(), JSON.stringify(items));
                         return;
                     }
                 } catch { }
             }
-            try { const raw = localStorage.getItem(getUserKey()); items = raw ? JSON.parse(raw) : []; }
-            catch { items = []; }
+            // Fallback: localStorage
+            try {
+                const raw = localStorage.getItem(getUserKey());
+                items = raw ? JSON.parse(raw) : [];
+            } catch { items = []; }
         }
+
         function persist() {
+            // 1. imgData'ları ayrı kaydet
+            saveImages(items);
+            // 2. Tam items'i yerel cache'e yaz
             localStorage.setItem(getUserKey(), JSON.stringify(items));
-            if (FB_ENABLED && currentUser) fbSet('users/' + currentUser + '/items', items);
+            // 3. Firebase'e imgData'sız gönder
+            if (FB_ENABLED && authUid && authToken) {
+                fbSet('users/' + authUid + '/items', stripImages(items));
+            }
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
 
@@ -4512,10 +4947,6 @@
                 });
             });
         }
-        document.getElementById("mCategory").addEventListener("change", function() {
-            updateSizeField(this.value);
-        });
-
         /* ── Meta header updater ── */
         const MONTH_LABELS = {ocak:"Oca",subat:"Şub",mart:"Mar",nisan:"Nis",mayis:"May",haziran:"Haz",temmuz:"Tem",agustos:"Ağu",eylul:"Eyl",ekim:"Eki",kasim:"Kas",aralik:"Ara"};
         const CAT_LABELS = {giyim:"Giyim",ayakkabi:"Ayakkabı",makyaj:"Makyaj",album:"Albüm",parfum:"Parfüm",sac:"Saç",diger:"Diğer"};
@@ -4526,9 +4957,6 @@
             document.getElementById("mMetaCat").textContent = CAT_LABELS[cat] || cat;
             document.getElementById("mMetaDate").textContent = (MONTH_LABELS[mon] || mon) + " " + yr;
         }
-        document.getElementById("mTimeline").addEventListener("change", updateMetaChips);
-        document.getElementById("mYear").addEventListener("change", updateMetaChips);
-
         /* ── Price diff ── */
         function updatePriceDiff() {
             const cur = parseInt((document.getElementById("mCurrentPrice").value||"").replace(/\D/g,""),10);
@@ -4624,6 +5052,9 @@
             activeId = id;
             window._cropActiveItem = it;
 
+            /* Name */
+            document.getElementById("mItemName").value = it.itemName || "";
+
             /* Image */
             mImg.src = it.imgData;
 
@@ -4631,7 +5062,7 @@
             buildLinkList(it.links && it.links.length ? it.links : (it.link ? [it.link] : []));
 
             /* Category */
-            mCategory.value = it.category || "diger";
+            setDropdownValue('mCategoryBtn','mCategoryPanel','mCategory', it.category || "diger");
             updateSizeField(it.category || "diger");
 
             /* Size */
@@ -4644,8 +5075,8 @@
             }
 
             /* Timeline */
-            mTimeline.value = it.timeline || "ocak";
-            mYear.value = it.timelineYear || new Date().getFullYear();
+            setDropdownValue('mTimelineBtn','mTimelinePanel','mTimeline', it.timeline || "ocak");
+            setDropdownValue('mYearBtn','mYearPanel','mYear', String(it.timelineYear || new Date().getFullYear()));
 
             /* Priority */
             buildDesireSelector(it.priority || 3);
@@ -4683,13 +5114,7 @@
             /* Meta header */
             updateMetaChips();
             updateMetaHearts(it.priority || 3);
-            const hints = [];
-            if (it.secret) hints.push("🔒 Gizli");
-            if (it.forWho === "gift") hints.push("🎁 Hediye");
-            if (it.reason === "need") hints.push("✓ İhtiyaç");
-            else if (it.reason === "consumption") hints.push("🔥 Tüketim");
-            else if (it.reason === "impulse") hints.push("⭐ Ani İstek");
-            document.getElementById("mMetaHint").textContent = hints.join(" · ");
+            document.getElementById("mMetaHint").textContent = "";
 
             /* Reset to Bilgi tab */
             document.querySelectorAll(".mTab").forEach(t => t.classList.remove("active"));
@@ -4776,7 +5201,7 @@
                 const imgData = await fileToDataURL(file);
                 items.push({
                     id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                    imgData, links: [], link: "", category: "diger", timeline: "ocak",
+                    imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
                     timelineYear: new Date().getFullYear(),
                     priority: 3, size: "", note: "", colorNote: "",
                     price: "", currentPrice: "", priceNote: "",
@@ -4797,7 +5222,7 @@
             const imgData = await fileToDataURL(file);
             items.push({
                 id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                imgData, links: [], link: "", category: "diger", timeline: "ocak",
+                imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
                 timelineYear: new Date().getFullYear(),
                 priority: 3, size: "", note: "", colorNote: "",
                 price: "", currentPrice: "", priceNote: "",
@@ -4814,6 +5239,7 @@
             if (!activeId) return;
             const it = items.find(x => x.id === activeId);
             if (!it) return;
+            it.itemName = document.getElementById("mItemName").value.trim();
             it.links = getLinks();
             it.link = it.links[0] || "";   // geriye dönük uyumluluk
             it.category = mCategory.value;
@@ -4837,6 +5263,8 @@
         }
         function doDeleteItem() {
             if (!activeId) return;
+            // Fotoğrafı localStorage'dan sil
+            localStorage.removeItem(getImgKey(activeId));
             items = items.filter(x => x.id !== activeId);
             persist(); render(); closeDetailModal();
         }
@@ -5035,7 +5463,7 @@
         /* ═══════════════════════════════════════════════════════════
            ═══ WISHLIST AI — EXPERT COUNCIL ENGINE ═══
            ═══════════════════════════════════════════════════════════ */
-        const AI_HIST_KEY = currentUser ? "wishlist_ai_history_" + currentUser : "wishlist_ai_history";
+        const AI_HIST_KEY = authUid ? "wishlist_ai_history_" + authUid : "wishlist_ai_history";
         let aiMode = null;
         let aiSelectedIds = [];
         let aiCurrentResult = null;
@@ -6026,11 +6454,11 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             panelTitles.forEach((el, i) => { if (titleLabels[i]) el.textContent = titleLabels[i]; });
 
             // Reset panel
-            const resetWarn = document.querySelector('#resetPanel .settingsPanel > div:nth-child(2)');
+            const resetWarn = document.querySelector('#sPageReset .sSubBody > div:first-child');
             if (resetWarn) resetWarn.textContent = t.resetWarn;
-            const resetBtn2 = document.querySelector('#resetPanel .authSubmit');
+            const resetBtn2 = document.querySelector('#sPageReset .authSubmit');
             if (resetBtn2) resetBtn2.textContent = t.resetConfirm;
-            const pwUpdateBtn = document.querySelector('#pwPanel .authSubmit');
+            const pwUpdateBtn = document.querySelector('#sPagePw .authSubmit');
             if (pwUpdateBtn) pwUpdateBtn.textContent = t.update;
 
             // AI tip
