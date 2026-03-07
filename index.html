@@ -418,16 +418,6 @@
             background: rgba(15, 22, 34, 0.98);
         }
 
-        body[data-theme="dark"] .settingsTile {
-            background: rgba(22, 34, 50, 0.70);
-            border-color: rgba(255, 255, 255, 0.06);
-        }
-
-        body[data-theme="dark"] .settingsPanel {
-            background: rgba(20, 30, 44, 0.85);
-            border-color: rgba(255, 255, 255, 0.06);
-        }
-
         body[data-theme="dark"] .themeCard {
             border-color: rgba(255, 255, 255, 0.08);
         }
@@ -1080,43 +1070,236 @@
         .cropBtn:active { transform: scale(0.9); }
 
         /* Kırpma overlay */
-        /* ── Ürün Detayları modal — daha geniş iç boşluklar ── */
-        #modal .mHead {
-            padding: 10px 20px 14px;
-        }
-        #modal .mBody {
-            padding: 20px 20px 8px;
-        }
-        #modal .fields {
-            gap: 22px;
-        }
-        #modal .label {
-            margin-bottom: 9px;
-            font-size: 10.5px;
-        }
-        #modal .three {
-            gap: 10px;
-        }
-        #modal .two {
+        /* ══════════════════════════════════════════
+           DETAIL MODAL — Tab layout
+        ══════════════════════════════════════════ */
+
+        /* Preview row (shared header) */
+        .mPreviewRow {
+            display: flex;
             gap: 12px;
+            padding: 0 16px 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        #modal .desireSelector {
-            gap: 8px;
+        .mThumb {
+            width: 80px; height: 80px;
+            border-radius: 14px;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+            background: var(--inputBg);
+            border: 1px solid var(--stroke);
         }
-        #modal .toggleField {
-            padding: 11px 0;
+        .mThumb img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
         }
-        #modal .secretToggle {
-            padding: 14px 0 6px;
-            gap: 12px;
+        .mMeta {
+            flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 2px;
         }
-        #modal .foot {
-            padding: 20px 0 0;
-            margin-top: 18px;
+        .mMetaChips { display: flex; flex-wrap: wrap; gap: 5px; }
+        .mMetaChip {
+            font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 99px;
+            background: var(--accentSoft); border: 1px solid var(--accentMid); color: var(--accent);
         }
-        #modal .toggleContent {
-            padding: 2px 0 6px;
+        .mMetaChipGhost {
+            background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07); color: var(--textSecondary);
         }
+        .mMetaHearts { display: flex; gap: 2px; }
+        .mMetaHeart { display: inline-flex; line-height: 1; }
+        .mMetaHearts { display: flex; gap: 2px; align-items: center; margin-top: 4px; }
+        .mMetaHint { font-size: 10.5px; color: var(--textSecondary); }
+
+        /* Tab bar */
+        .mTabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 0 16px;
+        }
+        .mTab {
+            flex: 1; padding: 9px 0; text-align: center;
+            font-size: 11px; font-weight: 600; color: var(--textSecondary);
+            cursor: pointer; border-bottom: 2px solid transparent;
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+            white-space: nowrap;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .mTab i { font-size: 12px; }
+        .mTab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .mTab[data-tab="niyet"].active { color: var(--lilac, #A87CFF); border-bottom-color: var(--lilac, #A87CFF); }
+
+        /* Tab body */
+        .mTabBody { padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+
+        /* Field wrapper */
+        .mField { display: flex; flex-direction: column; gap: 6px; }
+        .mLabel {
+            font-size: 10px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--textSecondary);
+            display: flex; align-items: center; gap: 5px;
+        }
+        .mLabel i { font-size: 11px; color: var(--accent); }
+        .mLabel .mCatBadge {
+            font-size: 8.5px; font-weight: 700; padding: 1px 5px; border-radius: 99px;
+            background: var(--accentSoft); color: var(--accent);
+        }
+
+        /* Link rows */
+        .mLinkEntry { display: flex; gap: 5px; margin-bottom: 5px; }
+        .mLinkEntry:last-child { margin-bottom: 0; }
+        .mLinkEntry input { flex: 1; min-width: 0; }
+        .mLinkIconBtn {
+            width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px;
+            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: var(--accent); cursor: pointer;
+            transition: background .15s;
+        }
+        .mLinkIconBtn.add {
+            background: var(--accentSoft); border: 1px dashed var(--accentBorder);
+        }
+        .mLinkIconBtn.remove {
+            background: rgba(232,69,69,0.07); border: 1px dashed rgba(232,69,69,0.25); color: #e84545;
+        }
+        .mLinkAddBtn {
+            display: flex; align-items: center; gap: 5px;
+            background: none; border: 1px dashed var(--accentBorder);
+            color: var(--accent); border-radius: 10px; padding: 7px 12px;
+            font-size: 12px; font-weight: 600; font-family: var(--font-text);
+            cursor: pointer; transition: background .15s;
+            align-self: flex-start;
+        }
+        .mLinkAddBtn:hover { background: var(--accentSoft); }
+
+        /* Date picker row */
+        .mDateRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .mDateCard {
+            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 10px; padding: 6px 10px; display: flex; flex-direction: column; gap: 3px;
+        }
+        .mDateLabel { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--textSecondary); }
+        .mDateCard select {
+            background: transparent; border: none; padding: 0;
+            font-size: 13px; font-weight: 600; color: var(--textPrimary);
+            font-family: var(--font-text);
+        }
+        body[data-theme="dark"] .mDateCard select { color: var(--textPrimary); }
+
+        /* Size chips */
+        .mSizeChips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
+        .mSizeChip {
+            font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 99px;
+            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.07);
+            color: var(--textSecondary); cursor: pointer; transition: all .15s;
+        }
+        .mSizeChip.on {
+            background: var(--accentSoft); border-color: var(--accentMid); color: var(--accent);
+        }
+        .mSizeInput { font-size: 13px !important; }
+
+        /* Price row */
+        .mPriceRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .mPriceCard {
+            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 5px;
+        }
+        .mPriceTarget { border-color: var(--accentBorder); background: var(--accentVeryLight); }
+        .mPriceCardLabel {
+            font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px;
+            color: var(--textSecondary);
+        }
+        .mPriceTarget .mPriceCardLabel { color: var(--accent); }
+        .mPriceCard input {
+            background: transparent !important; border: none !important;
+            padding: 0 !important; font-size: 16px !important; font-weight: 600 !important;
+            color: var(--textPrimary) !important;
+        }
+        .mPriceDiff {
+            font-size: 11px; font-weight: 600; color: #1a8a5a;
+            padding: 4px 10px; border-radius: 99px;
+            background: rgba(46,184,122,0.10); border: 1px solid rgba(46,184,122,0.20);
+            align-self: flex-start; display: none;
+        }
+        .mPriceDiff.show { display: block; }
+
+        /* Secret row */
+        .mSecretRow {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px; padding: 10px 13px;
+        }
+        .mSecretLeft {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 12.5px; font-weight: 500;
+        }
+        .mSecretLeft i { color: var(--accent); font-size: 14px; }
+
+        /* Reflect cards */
+        .mReflectCard {
+            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 13px; padding: 12px 14px; display: flex; flex-direction: column; gap: 9px;
+        }
+        .mReflectPurple {
+            border-color: rgba(168,124,255,0.18);
+            background: rgba(168,124,255,0.05);
+        }
+        body[data-theme="dark"] .mReflectPurple { background: rgba(168,124,255,0.08); }
+        .mReflectTitle {
+            font-size: 11.5px; font-weight: 600;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .mReflectTitle i { font-size: 13px; color: var(--lilac, #A87CFF); }
+
+        /* Chip selector */
+        .mChipSel { display: flex; flex-wrap: wrap; gap: 6px; }
+        .mChipBtn {
+            font-size: 12px; font-weight: 600; padding: 6px 13px; border-radius: 99px;
+            background: var(--surface); border: 1px solid rgba(0,0,0,0.08);
+            color: var(--textSecondary); cursor: pointer; font-family: var(--font-text);
+            display: flex; align-items: center; gap: 5px; transition: all .15s;
+        }
+        .mChipBtn i { font-size: 13px; }
+        .mChipBtn.active {
+            background: var(--accentSoft); border-color: var(--accentMid); color: var(--accent);
+        }
+        .mChipBtn.active-purple {
+            background: rgba(168,124,255,0.12);
+            border-color: rgba(168,124,255,0.28);
+            color: var(--lilac, #A87CFF);
+        }
+
+        /* Tab body fade transition */
+        .mTabBody { transition: opacity 0.15s ease; }
+
+        /* Dark mode: card/input borders visible */
+        body[data-theme="dark"] .mDateCard,
+        body[data-theme="dark"] .mPriceCard,
+        body[data-theme="dark"] .mSecretRow,
+        body[data-theme="dark"] .mReflectCard,
+        body[data-theme="dark"] .mSizeChip {
+            border-color: rgba(255,255,255,0.12);
+        }
+        body[data-theme="dark"] .mPriceTarget {
+            border-color: var(--accentBorder);
+        }
+
+        /* Dark mode: native select dropdown */
+        body[data-theme="dark"] select,
+        body[data-theme="dark"] .mDateCard select {
+            color-scheme: dark;
+        }
+        .mPriceInputRow {
+            display: flex; align-items: baseline; gap: 3px;
+        }
+        .mPriceCur {
+            font-size: 14px; font-weight: 600; color: var(--textSecondary); flex-shrink: 0;
+        }
+        .mPriceTarget .mPriceCur { color: var(--accent); }
+        .mFoot {
+            display: flex; gap: 8px;
+            padding-top: 6px; margin-top: 4px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        .mFoot .btn { flex: 1; justify-content: center; padding: 11px 0; border-radius: 99px; }
         #cropOverlay {
             display: none;
             position: fixed;
@@ -2945,152 +3128,143 @@
         }
 
         /* ═══════════ SETTINGS MODAL ═══════════ */
-        .settingsUserRow {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: var(--accentGradLight);
-            border: 1.5px solid var(--accentMid);
-            border-radius: 20px;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-        }
+        /* ═══════════════════════════════════
+           SETTINGS MODAL — B stili
+        ═══════════════════════════════════ */
 
-        .settingsAvatar {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
+        /* Gradient header */
+        .sHead {
             background: var(--authBtnGrad);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 18px;
+            padding: 14px 18px 20px;
+            position: relative;
+            overflow: hidden;
             flex-shrink: 0;
-            box-shadow: 0 4px 14px var(--glow);
+        }
+        .sHeadHandle { display: flex; justify-content: center; padding-bottom: 10px; }
+        .sHeadHandle span {
+            width: 30px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.35);
+        }
+        .sHeadRow {
+            display: flex; align-items: center; gap: 13px;
+        }
+        .sAvatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: rgba(255,255,255,0.22);
+            border: 2px solid rgba(255,255,255,0.42);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-size: 20px; color: #fff; font-style: italic;
+            flex-shrink: 0;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.15);
+        }
+        .sUserInfo { flex: 1; }
+        .sUsername {
+            font-family: var(--font-display); font-style: italic;
+            font-size: 17px; color: #fff; letter-spacing: 0.1px;
+        }
+        .sUserSub { font-size: 11.5px; color: rgba(255,255,255,0.68); margin-top: 2px; }
+        .sCloseBtn {
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.30);
+            color: #fff; border-radius: 99px;
+            font-size: 11px; font-weight: 600; padding: 5px 13px;
+            font-family: var(--font-text); cursor: pointer;
+            flex-shrink: 0;
         }
 
-        .settingsUsername {
-            font-family: var(--font-display);
-            font-size: 18px;
-            font-style: italic;
-            background: var(--gradientHL);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Body */
+        .sBody { padding: 10px 0 8px; }
+
+        /* Group label */
+        .sGroupLabel {
+            font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px;
+            color: var(--textSecondary); padding: 10px 16px 5px;
         }
 
-        .settingsEmail {
-            font-size: 11px;
-            color: var(--textSecondary);
-            margin-top: 2px;
-        }
-
-        .settingsMenu {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .settingsTile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 16px 10px;
-            border-radius: 16px;
-            border: 1.5px solid var(--stroke);
-            background: var(--surface);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        /* List row */
+        .sRow {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 16px;
             cursor: pointer;
-            transition: all 0.18s ease-out;
-            font-family: var(--font-text);
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--textPrimary);
-            text-align: center;
-            line-height: 1.3;
+            transition: background 0.14s;
+            border-radius: 0;
         }
-
-        .settingsTile:hover {
-            background: var(--surfaceHover);
-            border-color: var(--accentMid);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--glow);
+        .sRow:hover { background: var(--accentSoft); }
+        .sRow:active { background: var(--accentGradMid); }
+        .sRowIcon {
+            width: 36px; height: 36px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px; flex-shrink: 0;
         }
+        .sRowIcon.pink { background: var(--accentSoft); color: var(--accent); }
+        .sRowIcon.purple { background: rgba(168,124,255,0.12); color: var(--lilac, #A87CFF); }
+        .sRowIcon.blue { background: rgba(61,127,232,0.10); color: #3D7FE8; }
+        .sRowIcon.danger { background: rgba(232,69,69,0.10); color: #e84545; }
+        .sRowText { flex: 1; }
+        .sRowTitle { font-size: 13.5px; font-weight: 600; color: var(--textPrimary); }
+        .sRowDesc { font-size: 11.5px; color: var(--textSecondary); margin-top: 1px; }
+        .sRowArrow { color: var(--textSecondary); font-size: 16px; opacity: 0.5; }
 
-        .settingsTile:active {
-            transform: scale(0.96);
+        .sDivider { height: 1px; background: rgba(0,0,0,0.05); margin: 5px 16px; }
+        body[data-theme="dark"] .sDivider { background: rgba(255,255,255,0.06); }
+
+        /* Danger row */
+        .sRow.danger .sRowTitle { color: #e84545; }
+        .sRow.danger:hover { background: rgba(232,69,69,0.06); }
+
+        /* Logout row */
+        .sLogout {
+            display: flex; align-items: center; justify-content: center; gap: 7px;
+            margin: 6px 14px 12px;
+            padding: 11px; border-radius: 14px;
+            background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.06);
+            font-size: 13px; font-weight: 600; color: var(--textSecondary);
+            cursor: pointer; font-family: var(--font-text);
+            transition: background 0.14s;
         }
-
-        .settingsTile.active {
-            background: var(--accentGradMid);
-            border-color: var(--accentMid);
-            color: var(--btnText);
+        body[data-theme="dark"] .sLogout {
+            background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08);
         }
+        .sLogout:hover { background: rgba(232,69,69,0.08); color: #e84545; border-color: rgba(232,69,69,0.15); }
 
-        .settingsTile.danger {
-            border-color: var(--dangerBorder);
-            background: var(--dangerBg);
-            color: var(--accent);
-        }
-
-        .settingsTile.danger:hover {
-            background: var(--dangerHoverBg);
-            border-color: var(--dangerHoverBorder);
-        }
-
-        .settingsTileIcon {
-            font-size: 20px;
-            line-height: 1;
-            width: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-        }
-
+        /* Expand panel (kept same animation) */
         .settingsPanelWrap {
             overflow: hidden;
             max-height: 0;
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease,
-                transform 0.25s ease;
+                opacity 0.25s ease, transform 0.25s ease;
         }
-
         .settingsPanelWrap.open {
-            max-height: 500px;
-            opacity: 1;
-            transform: translateY(0);
+            max-height: 500px; opacity: 1; transform: translateY(0);
             transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease 0.05s,
-                transform 0.3s ease 0.05s;
+                opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s;
         }
-
         .settingsPanel {
             background: var(--settingsBg);
-            border: 1.5px solid var(--stroke);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 10px;
+            border: 1px solid var(--stroke);
+            border-radius: 14px;
+            padding: 15px 16px;
+            margin: 4px 14px 8px;
         }
-
         .settingsPanelTitle {
             font-family: var(--font-display);
-            font-size: 14px;
-            font-style: italic;
+            font-size: 14px; font-style: italic;
             background: var(--gradientHL);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             margin-bottom: 12px;
         }
+
+        /* Dark mode overrides for new settings */
+        body[data-theme="dark"] .settingsPanel {
+            background: rgba(20, 30, 44, 0.85);
+            border-color: rgba(255,255,255,0.08);
+        }
+        body[data-theme="dark"] .sRow:hover { background: rgba(255,255,255,0.05); }
+        body[data-theme="dark"] .sRowIcon.pink { background: rgba(232,69,139,0.15); }
+        body[data-theme="dark"] .sRowIcon.purple { background: rgba(168,124,255,0.15); }
+        body[data-theme="dark"] .sRowIcon.blue { background: rgba(61,127,232,0.15); }
+        body[data-theme="dark"] .sRowIcon.danger { background: rgba(232,69,69,0.15); }
 
         /* ═══════════ LANG PICKER ═══════════ */
         .langGrid {
@@ -3163,6 +3337,7 @@
     <div class="catBar" id="catBar">
         <div class="catPill active" data-cat="all" data-i18n="catAll">Tümü</div>
         <div class="catPill" data-cat="giyim"><i class="ph ph-t-shirt"></i> Giyim</div>
+        <div class="catPill" data-cat="ayakkabi"><i class="ph ph-sneaker"></i> Ayakkabı</div>
         <div class="catPill" data-cat="makyaj"><i class="ph ph-paint-brush"></i> Makyaj &amp; Cilt</div>
         <div class="catPill" data-cat="album"><i class="ph ph-vinyl-record"></i> Albüm</div>
         <div class="catPill" data-cat="parfum"><i class="ph ph-flower-lotus"></i> Parfüm</div>
@@ -3195,40 +3370,64 @@
     <div id="modalBack" class="modalBack" role="dialog" aria-modal="true">
         <div class="modal" id="modal">
             <div class="handle"><span></span></div>
+            <!-- Shared header -->
             <div class="mHead">
                 <strong>Ürün Detayları</strong>
                 <button id="closeModal" class="btn">Kapat</button>
             </div>
-            <div class="mBody">
-                <div class="preview">
+            <!-- Shared preview row -->
+            <div class="mPreviewRow">
+                <div class="mThumb">
                     <img id="mImg" alt="preview" />
                     <button class="cropBtn" id="cropBtn" title="Kırp / Düzenle"><i class="ph ph-crop"></i></button>
                 </div>
-                <div class="fields">
-                    <!-- Link -->
-                    <div>
-                        <div class="label">Link</div>
-                        <div class="linkRow">
-                            <input id="mLink" type="url" placeholder="https://..." />
-                            <button id="goLink" class="btn linkBtn" title="Linke git"><i
-                                    class="ph ph-link"></i></button>
-                        </div>
+                <div class="mMeta">
+                    <div class="mMetaChips">
+                        <span class="mMetaChip" id="mMetaCat">—</span>
+                        <span class="mMetaChip mMetaChipGhost" id="mMetaDate">—</span>
                     </div>
-                    <!-- Category + Month + Year -->
-                    <div class="three">
-                        <div>
-                            <div class="label">Kategori</div>
-                            <select id="mCategory">
-                                <option value="giyim">Giyim</option>
-                                <option value="makyaj">Makyaj</option>
-                                <option value="album">Albüm</option>
-                                <option value="parfum">Parfüm</option>
-                                <option value="sac">Saç</option>
-                                <option value="diger">Diğer</option>
-                            </select>
-                        </div>
-                        <div>
-                            <div class="label">Ay</div>
+                    <div class="mMetaHearts" id="mMetaHearts"></div>
+                    <div class="mMetaHint" id="mMetaHint"></div>
+                </div>
+            </div>
+            <!-- Tab bar -->
+            <div class="mTabs">
+                <div class="mTab active" data-tab="bilgi"><i class="ph ph-info"></i> Bilgi</div>
+                <div class="mTab" data-tab="not"><i class="ph ph-note-pencil"></i> Not</div>
+                <div class="mTab" data-tab="fiyat"><i class="ph ph-tag"></i> Fiyat</div>
+                <div class="mTab" data-tab="niyet"><i class="ph ph-sparkle"></i> Niyet</div>
+            </div>
+
+            <!-- ── Tab: Bilgi ── -->
+            <div class="mTabBody" id="tabBilgi">
+                <div class="mField">
+                    <div class="mLabel">Linkler</div>
+                    <div id="mLinkList"></div>
+                    <button class="mLinkAddBtn" id="mLinkAdd"><i class="ph ph-plus"></i> Link ekle</button>
+                </div>
+                <div class="mField">
+                    <div class="mLabel">Kategori</div>
+                    <select id="mCategory">
+                        <option value="giyim">Giyim</option>
+                        <option value="ayakkabi">Ayakkabı</option>
+                        <option value="makyaj">Makyaj &amp; Cilt</option>
+                        <option value="album">Albüm</option>
+                        <option value="parfum">Parfüm</option>
+                        <option value="sac">Saç Bakım</option>
+                        <option value="diger">Diğer</option>
+                    </select>
+                </div>
+                <!-- Beden / Numara — kategori: giyim veya ayakkabi -->
+                <div class="mField" id="mSizeField" style="display:none">
+                    <div class="mLabel" id="mSizeLabel">Beden</div>
+                    <div class="mSizeChips" id="mSizeChips"></div>
+                    <input type="text" id="mSize" class="mSizeInput" placeholder="veya yaz..." />
+                </div>
+                <div class="mField">
+                    <div class="mLabel"><i class="ph ph-calendar-blank"></i> Hedef Alım</div>
+                    <div class="mDateRow">
+                        <div class="mDateCard">
+                            <div class="mDateLabel">Ay</div>
                             <select id="mTimeline">
                                 <option value="ocak">Ocak</option>
                                 <option value="subat">Şubat</option>
@@ -3244,49 +3443,108 @@
                                 <option value="aralik">Aralık</option>
                             </select>
                         </div>
-                        <div>
-                            <div class="label">Yıl</div>
+                        <div class="mDateCard">
+                            <div class="mDateLabel">Yıl</div>
                             <select id="mYear"></select>
                         </div>
                     </div>
-                    <!-- Desire Meter (Signature #2) -->
-                    <div>
-                        <div class="label">Öncelik</div>
-                        <div class="desireSelector" id="desireSelector"></div>
-                        <input type="hidden" id="mPriority" value="3" />
-                    </div>
-                    <!-- Target Price (collapsible) -->
-                    <div>
-                        <div class="toggleField" id="togglePrice">
-                            <span class="tIcon">›</span>
-                            <span class="tLabel">Hedef Fiyat</span>
-                        </div>
-                        <div class="toggleContent" id="priceContent">
-                            <input id="mPrice" type="text" inputmode="numeric" placeholder="₺ 0" />
-                        </div>
-                    </div>
-                    <!-- Note (collapsible) -->
-                    <div>
-                        <div class="toggleField" id="toggleNote">
-                            <span class="tIcon">›</span>
-                            <span class="tLabel">Not</span>
-                        </div>
-                        <div class="toggleContent" id="noteContent">
-                            <textarea id="mNote" placeholder="Beden / renk / niye istiyorum..."></textarea>
-                        </div>
-                    </div>
                 </div>
-                <!-- Secret Toggle -->
-                <div class="secretToggle">
-                    <span class="stLabel"><i class="ph ph-lock"></i> Gizli olarak sakla</span>
+                <div class="mField">
+                    <div class="mLabel">İstek Yoğunluğu</div>
+                    <div class="desireSelector" id="desireSelector"></div>
+                    <input type="hidden" id="mPriority" value="3" />
+                </div>
+                <div class="mSecretRow">
+                    <div class="mSecretLeft"><i class="ph ph-lock"></i> Gizli olarak sakla</div>
                     <label class="switch">
                         <input type="checkbox" id="mSecret" />
                         <span class="slider"></span>
                     </label>
                 </div>
-                <div class="foot" id="modalFoot">
+                <div class="mFoot">
                     <button id="deleteItem" class="btn danger">Sil</button>
                     <button id="saveItem" class="btn primary">Kaydet</button>
+                </div>
+            </div>
+
+            <!-- ── Tab: Not ── -->
+            <div class="mTabBody" id="tabNot" style="display:none">
+                <div class="mField">
+                    <div class="mLabel">Renk / Desen Tercihi</div>
+                    <input type="text" id="mColorNote" placeholder="Renk, desen, baskı tercihin..." />
+                </div>
+                <div class="mField">
+                    <div class="mLabel">Notlar</div>
+                    <textarea id="mNote" placeholder="Beden detayı, niye istiyorum, alternatif..."></textarea>
+                </div>
+                <div class="mFoot">
+                    <button class="btn danger" id="deleteItem2">Sil</button>
+                    <button class="btn primary" id="saveItem2">Kaydet</button>
+                </div>
+            </div>
+
+            <!-- ── Tab: Fiyat ── -->
+            <div class="mTabBody" id="tabFiyat" style="display:none">
+                <div class="mField">
+                    <div class="mLabel">Fiyat Takibi</div>
+                    <div class="mPriceRow">
+                        <div class="mPriceCard">
+                            <div class="mPriceCardLabel">Mevcut Fiyat</div>
+                            <div class="mPriceInputRow">
+                                <span class="mPriceCur">₺</span>
+                                <input type="text" inputmode="numeric" id="mCurrentPrice" placeholder="0" />
+                            </div>
+                        </div>
+                        <div class="mPriceCard mPriceTarget">
+                            <div class="mPriceCardLabel">Hedef Fiyat</div>
+                            <div class="mPriceInputRow">
+                                <span class="mPriceCur">₺</span>
+                                <input type="text" inputmode="numeric" id="mPrice" placeholder="0" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mPriceDiff" id="mPriceDiff"></div>
+                </div>
+                <div class="mField">
+                    <div class="mLabel">Fiyat Notu</div>
+                    <textarea id="mPriceNote" placeholder="İndirim sezonu, platform notu..."></textarea>
+                </div>
+                <div class="mField" id="mBoughtPriceField" style="display:none">
+                    <div class="mLabel"><i class="ph ph-check-circle"></i> Alış Fiyatı</div>
+                    <input type="text" id="mBoughtPriceDisplay" placeholder="₺ —" disabled />
+                </div>
+                <div class="mFoot">
+                    <button class="btn danger" id="deleteItem3">Sil</button>
+                    <button class="btn primary" id="saveItem3">Kaydet</button>
+                </div>
+            </div>
+
+            <!-- ── Tab: Niyet ── -->
+            <div class="mTabBody" id="tabNiyet" style="display:none">
+                <div class="mReflectCard">
+                    <div class="mReflectTitle"><i class="ph ph-user-circle"></i> Kimin için?</div>
+                    <div class="mChipSel" id="mForWhoSel">
+                        <button class="mChipBtn active" data-val="self"><i class="ph ph-smiley"></i> Kendim</button>
+                        <button class="mChipBtn" data-val="gift"><i class="ph ph-gift"></i> Hediye</button>
+                    </div>
+                    <input type="hidden" id="mForWho" value="self" />
+                </div>
+                <div class="mReflectCard mReflectPurple">
+                    <div class="mReflectTitle"><i class="ph ph-brain"></i> Neden istiyorum?</div>
+                    <div class="mChipSel" id="mReasonSel">
+                        <button class="mChipBtn" data-val="need"><i class="ph ph-check-circle"></i> İhtiyaç</button>
+                        <button class="mChipBtn" data-val="consumption"><i class="ph ph-fire"></i> Tüketim Çılgınlığı</button>
+                        <button class="mChipBtn" data-val="impulse"><i class="ph ph-shooting-star"></i> Ani İstek</button>
+                    </div>
+                    <input type="hidden" id="mReason" value="" />
+                </div>
+                <div class="mField">
+                    <div class="mLabel">Niyet Notu <span style="font-weight:400;opacity:.55;">(opsiyonel)</span></div>
+                    <textarea id="mIntentNote" placeholder="Neden istediğin hakkında bir şeyler yaz..."></textarea>
+                </div>
+                <div class="mFoot">
+                    <button class="btn danger" id="deleteItem4">Sil</button>
+                    <button class="btn primary" id="saveItem4">Kaydet</button>
                 </div>
             </div>
         </div>
@@ -3583,37 +3841,31 @@
 
     <!-- ═══ SETTINGS MODAL ═══ -->
     <div id="settingsBack" class="modalBack" role="dialog" aria-modal="true">
-        <div class="modal" id="settingsModal">
-            <div class="handle"><span></span></div>
-            <div class="mHead">
-                <strong>Ayarlar</strong>
-                <button class="btn" onclick="closeSettings()">Kapat</button>
-            </div>
-            <div class="mBody">
-                <div class="settingsUserRow">
-                    <div class="settingsAvatar" id="settingsAvatar">?</div>
-                    <div>
-                        <div class="settingsUsername" id="settingsUsernameDisplay">—</div>
-                        <div class="settingsEmail">Wishlistgül hesabı</div>
+        <div class="modal" id="settingsModal" style="overflow:hidden; display:flex; flex-direction:column;">
+            <!-- Gradient header — handle içinde -->
+            <div class="sHead">
+                <div class="sHeadHandle"><span></span></div>
+                <div class="sHeadRow">
+                    <div class="sAvatar" id="settingsAvatar">?</div>
+                    <div class="sUserInfo">
+                        <div class="sUsername" id="settingsUsernameDisplay">—</div>
+                        <div class="sUserSub">Wishlistgül hesabı</div>
                     </div>
+                    <button class="sCloseBtn" onclick="closeSettings()">Kapat</button>
                 </div>
-                <div class="settingsMenu">
-                    <div class="settingsTile" onclick="toggleSettingsPanel('pwPanel')">
-                        <div class="settingsTileIcon"><i class="ph ph-lock-key"></i></div>
-                        <div data-i18n="tilePw">Şifre Değiştir</div>
+            </div>
+
+            <!-- Scrollable body -->
+            <div class="sBody" style="overflow-y:auto; -webkit-overflow-scrolling:touch;">
+
+                <div class="sGroupLabel" data-i18n="settingsGroupAccount">Hesap</div>
+                <div class="sRow" onclick="toggleSettingsPanel('pwPanel')">
+                    <div class="sRowIcon pink"><i class="ph ph-lock-key"></i></div>
+                    <div class="sRowText">
+                        <div class="sRowTitle" data-i18n="tilePw">Şifre Değiştir</div>
+                        <div class="sRowDesc">Hesap güvenliğini güncelle</div>
                     </div>
-                    <div class="settingsTile" onclick="toggleSettingsPanel('themePanel')">
-                        <div class="settingsTileIcon"><i class="ph ph-paint-bucket"></i></div>
-                        <div data-i18n="tileTheme">Tema Rengi</div>
-                    </div>
-                    <div class="settingsTile" onclick="toggleSettingsPanel('langPanel')">
-                        <div class="settingsTileIcon"><i class="ph ph-translate"></i></div>
-                        <div data-i18n="tileLang">Dil Tercihi</div>
-                    </div>
-                    <div class="settingsTile danger" onclick="toggleSettingsPanel('resetPanel')">
-                        <div class="settingsTileIcon"><i class="ph ph-trash"></i></div>
-                        <div data-i18n="tileReset">Listeyi Sıfırla</div>
-                    </div>
+                    <i class="ph ph-caret-right sRowArrow"></i>
                 </div>
                 <div class="settingsPanelWrap" id="pwPanel">
                     <div class="settingsPanel">
@@ -3622,28 +3874,39 @@
                         <div id="pwSuccess" class="authSuccess"></div>
                         <div class="authField">
                             <div class="authInputWrap">
-                                <span class="authInputIcon">🔓</span>
+                                <span class="authInputIcon"><i class="ph ph-lock-open"></i></span>
                                 <div class="authInputDivider"></div>
                                 <input id="pwOld" type="password" placeholder="Mevcut şifre" />
                             </div>
                         </div>
                         <div class="authField">
                             <div class="authInputWrap">
-                                <span class="authInputIcon">🔒</span>
+                                <span class="authInputIcon"><i class="ph ph-lock"></i></span>
                                 <div class="authInputDivider"></div>
                                 <input id="pwNew" type="password" placeholder="Yeni şifre" />
                             </div>
                         </div>
                         <div class="authField">
                             <div class="authInputWrap">
-                                <span class="authInputIcon">🔒</span>
+                                <span class="authInputIcon"><i class="ph ph-lock"></i></span>
                                 <div class="authInputDivider"></div>
                                 <input id="pwNew2" type="password" placeholder="Yeni şifre tekrar" />
                             </div>
                         </div>
-                        <button class="authSubmit" style="margin-top:4px" onclick="doChangePassword()">Güncelle
-                            →</button>
+                        <button class="authSubmit" style="margin-top:4px" onclick="doChangePassword()">Güncelle →</button>
                     </div>
+                </div>
+
+                <div class="sDivider"></div>
+                <div class="sGroupLabel" data-i18n="settingsGroupAppearance">Görünüm &amp; Dil</div>
+
+                <div class="sRow" onclick="toggleSettingsPanel('themePanel')">
+                    <div class="sRowIcon purple"><i class="ph ph-paint-bucket"></i></div>
+                    <div class="sRowText">
+                        <div class="sRowTitle" data-i18n="tileTheme">Tema Rengi</div>
+                        <div class="sRowDesc" id="sThemeDesc">Pembe · 6 seçenek</div>
+                    </div>
+                    <i class="ph ph-caret-right sRowArrow"></i>
                 </div>
                 <div class="settingsPanelWrap" id="themePanel">
                     <div class="settingsPanel">
@@ -3651,31 +3914,51 @@
                         <div class="themeGrid" id="themeGrid"></div>
                     </div>
                 </div>
+
+                <div class="sRow" onclick="toggleSettingsPanel('langPanel')">
+                    <div class="sRowIcon blue"><i class="ph ph-translate"></i></div>
+                    <div class="sRowText">
+                        <div class="sRowTitle" data-i18n="tileLang">Dil Tercihi</div>
+                        <div class="sRowDesc" id="sLangDesc">Türkçe</div>
+                    </div>
+                    <i class="ph ph-caret-right sRowArrow"></i>
+                </div>
                 <div class="settingsPanelWrap" id="langPanel">
                     <div class="settingsPanel">
                         <div class="settingsPanelTitle"><i class="ph ph-translate"></i> Dil Tercihi</div>
                         <div class="langGrid">
                             <button class="langBtn active" id="langBtnTr" onclick="applyLanguage('tr')">
-                                <span class="langFlag">🇹🇷</span>
-                                <span>Türkçe</span>
+                                <span class="langFlag">🇹🇷</span><span>Türkçe</span>
                             </button>
                             <button class="langBtn" id="langBtnEn" onclick="applyLanguage('en')">
-                                <span class="langFlag">🇬🇧</span>
-                                <span>English</span>
+                                <span class="langFlag">🇬🇧</span><span>English</span>
                             </button>
                         </div>
                     </div>
                 </div>
+
+                <div class="sDivider"></div>
+                <div class="sGroupLabel">Tehlikeli Alan</div>
+
+                <div class="sRow danger" onclick="toggleSettingsPanel('resetPanel')">
+                    <div class="sRowIcon danger"><i class="ph ph-trash"></i></div>
+                    <div class="sRowText">
+                        <div class="sRowTitle" data-i18n="tileReset">Listeyi Sıfırla</div>
+                        <div class="sRowDesc">Tüm ürünleri kalıcı sil</div>
+                    </div>
+                    <i class="ph ph-caret-right sRowArrow"></i>
+                </div>
                 <div class="settingsPanelWrap" id="resetPanel">
                     <div class="settingsPanel">
                         <div class="settingsPanelTitle"><i class="ph ph-trash"></i> Listeyi Sıfırla</div>
-                        <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi
-                            kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
-                        <button class="authSubmit"
-                            style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0"
-                            onclick="confirmReset()">Evet, Sıfırla</button>
+                        <div style="font-size:13px;color:var(--textSecondary);margin-bottom:12px;">Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.</div>
+                        <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="confirmReset()">Evet, Sıfırla</button>
                     </div>
                 </div>
+
+                <button class="sLogout" onclick="doLogout()">
+                    <i class="ph ph-sign-out"></i> Çıkış Yap
+                </button>
             </div>
         </div>
     </div>
@@ -3802,9 +4085,7 @@
             document.getElementById('pwOld').value = '';
             document.getElementById('pwNew').value = '';
             document.getElementById('pwNew2').value = '';
-            // close all panels
             document.querySelectorAll('.settingsPanelWrap').forEach(p => p.classList.remove('open'));
-            document.querySelectorAll('.settingsTile').forEach(t => t.classList.remove('active'));
             renderThemeGrid();
             const sb = document.getElementById('settingsBack');
             sb.style.display = 'flex';
@@ -3815,14 +4096,7 @@
             const panel = document.getElementById(id);
             const isOpen = panel.classList.contains('open');
             document.querySelectorAll('.settingsPanelWrap').forEach(p => p.classList.remove('open'));
-            document.querySelectorAll('.settingsTile').forEach(t => t.classList.remove('active'));
-            if (!isOpen) {
-                panel.classList.add('open');
-                // mark corresponding tile active
-                const tiles = document.querySelectorAll('.settingsTile');
-                const map = { 'pwPanel': 0, 'themePanel': 1, 'langPanel': 2, 'resetPanel': 3 };
-                if (map[id] !== undefined) tiles[map[id]].classList.add('active');
-            }
+            if (!isOpen) panel.classList.add('open');
         }
         function closeSettings() {
             const sb = document.getElementById('settingsBack');
@@ -3959,8 +4233,6 @@
         const modalBack = document.getElementById("modalBack");
         const closeModalBtn = document.getElementById("closeModal");
         const mImg = document.getElementById("mImg");
-        const mLink = document.getElementById("mLink");
-        const goLinkBtn = document.getElementById("goLink");
         const mCategory = document.getElementById("mCategory");
         const mTimeline = document.getElementById("mTimeline");
         const mYear = document.getElementById("mYear");
@@ -3991,6 +4263,23 @@
         })();
 
         /* ═══ SIGNATURE #2: DESIRE METER BUILDER ═══ */
+        function updateMetaHearts(level) {
+            const heartsEl = document.getElementById("mMetaHearts");
+            if (!heartsEl) return;
+            heartsEl.innerHTML = "";
+            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            for (let i = 1; i <= 5; i++) {
+                const s = document.createElement("span");
+                s.className = "mMetaHeart" + (i <= level ? " on" : "");
+                // Use SVG matching buildDesireSelector style for color consistency
+                if (i <= level) {
+                    s.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="${accentColor}"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+                } else {
+                    s.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="1.5" opacity="0.25"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+                }
+                heartsEl.appendChild(s);
+            }
+        }
         function buildDesireSelector(level) {
             desireSelectorEl.innerHTML = "";
             for (let i = 1; i <= 5; i++) {
@@ -3999,10 +4288,11 @@
                 const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
                 btn.innerHTML = i <= level
                     ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="' + accentColor + '"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
-                    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+                    : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + accentColor + '" stroke-width="1.5" opacity="0.3"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
                 btn.addEventListener("click", () => {
                     mPriority.value = i;
                     buildDesireSelector(i);
+                    updateMetaHearts(i);
                 });
                 desireSelectorEl.appendChild(btn);
             }
@@ -4039,17 +4329,8 @@
             });
         }
         enforceNumericInput(purchasePriceInput);
-        enforceNumericInput(mPrice);
-
-        /* ── Toggles ── */
-        document.getElementById("togglePrice").addEventListener("click", function () {
-            this.classList.toggle("open");
-            document.getElementById("priceContent").classList.toggle("show");
-        });
-        document.getElementById("toggleNote").addEventListener("click", function () {
-            this.classList.toggle("open");
-            document.getElementById("noteContent").classList.toggle("show");
-        });
+        enforceNumericInput(document.getElementById("mCurrentPrice"));
+        enforceNumericInput(document.getElementById("mPrice"));
 
         /* ── Storage ── */
         function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
@@ -4175,40 +4456,246 @@
         }
 
         /* ═══ DETAIL MODAL ═══ */
+
+        /* ── Tab switching with fade ── */
+        document.querySelectorAll(".mTab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                const currentBody = document.querySelector(".mTabBody:not([style*='display: none']):not([style*='display:none'])");
+                document.querySelectorAll(".mTab").forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                const idMap = { bilgi:"tabBilgi", not:"tabNot", fiyat:"tabFiyat", niyet:"tabNiyet" };
+                const nextId = idMap[tab.dataset.tab];
+                if (!nextId) return;
+                const next = document.getElementById(nextId);
+                if (currentBody && currentBody !== next) {
+                    currentBody.style.opacity = "0";
+                    setTimeout(() => {
+                        currentBody.style.display = "none";
+                        currentBody.style.opacity = "";
+                        next.style.display = "flex";
+                        next.style.opacity = "0";
+                        requestAnimationFrame(() => { next.style.opacity = "1"; });
+                    }, 120);
+                } else {
+                    next.style.display = "flex";
+                }
+            });
+        });
+
+        /* ── Category → size field ── */
+        function updateSizeField(cat) {
+            const field = document.getElementById("mSizeField");
+            const label = document.getElementById("mSizeLabel");
+            const chipsEl = document.getElementById("mSizeChips");
+            if (cat === "giyim") {
+                field.style.display = "flex";
+                label.innerHTML = '<i class="ph ph-t-shirt"></i> Beden <span class="mCatBadge">Giyim</span>';
+                chipsEl.innerHTML = ["XS","S","M","L","XL","XXL"].map(s =>
+                    `<span class="mSizeChip" data-val="${s}">${s}</span>`).join("");
+                initSizeChips();
+            } else if (cat === "ayakkabi") {
+                field.style.display = "flex";
+                label.innerHTML = '<i class="ph ph-sneaker"></i> Ayak Numarası <span class="mCatBadge">Ayakkabı</span>';
+                chipsEl.innerHTML = "";
+            } else {
+                field.style.display = "none";
+            }
+            updateMetaChips();
+        }
+        function initSizeChips() {
+            const sizeInput = document.getElementById("mSize");
+            document.querySelectorAll("#mSizeChips .mSizeChip").forEach(chip => {
+                chip.addEventListener("click", () => {
+                    document.querySelectorAll("#mSizeChips .mSizeChip").forEach(c => c.classList.remove("on"));
+                    chip.classList.add("on");
+                    sizeInput.value = chip.dataset.val;
+                });
+            });
+        }
+        document.getElementById("mCategory").addEventListener("change", function() {
+            updateSizeField(this.value);
+        });
+
+        /* ── Meta header updater ── */
+        const MONTH_LABELS = {ocak:"Oca",subat:"Şub",mart:"Mar",nisan:"Nis",mayis:"May",haziran:"Haz",temmuz:"Tem",agustos:"Ağu",eylul:"Eyl",ekim:"Eki",kasim:"Kas",aralik:"Ara"};
+        const CAT_LABELS = {giyim:"Giyim",ayakkabi:"Ayakkabı",makyaj:"Makyaj",album:"Albüm",parfum:"Parfüm",sac:"Saç",diger:"Diğer"};
+        function updateMetaChips() {
+            const cat = document.getElementById("mCategory").value;
+            const mon = document.getElementById("mTimeline").value;
+            const yr  = document.getElementById("mYear").value;
+            document.getElementById("mMetaCat").textContent = CAT_LABELS[cat] || cat;
+            document.getElementById("mMetaDate").textContent = (MONTH_LABELS[mon] || mon) + " " + yr;
+        }
+        document.getElementById("mTimeline").addEventListener("change", updateMetaChips);
+        document.getElementById("mYear").addEventListener("change", updateMetaChips);
+
+        /* ── Price diff ── */
+        function updatePriceDiff() {
+            const cur = parseInt((document.getElementById("mCurrentPrice").value||"").replace(/\D/g,""),10);
+            const tgt = parseInt((document.getElementById("mPrice").value||"").replace(/\D/g,""),10);
+            const el = document.getElementById("mPriceDiff");
+            if (cur > 0 && tgt > 0 && cur !== tgt) {
+                const diff = cur - tgt;
+                el.textContent = diff > 0 ? `₺${diff} daha düşmesi lazım` : `✓ Hedef fiyatın altında`;
+                el.classList.add("show");
+            } else { el.classList.remove("show"); }
+        }
+        document.getElementById("mCurrentPrice").addEventListener("input", updatePriceDiff);
+        document.getElementById("mPrice").addEventListener("input", updatePriceDiff);
+
+        /* ── Link list ── */
+        function refreshLinkRemoveBtns() {
+            const rows = document.querySelectorAll("#mLinkList .mLinkEntry");
+            rows.forEach((row, i) => {
+                const rmBtn = row.querySelector(".mLinkIconBtn.remove");
+                if (rmBtn) rmBtn.style.display = (rows.length > 1) ? "flex" : "none";
+            });
+        }
+        function makeLinkRow(url, listEl) {
+            const row = document.createElement("div");
+            row.className = "mLinkEntry";
+            const inp = document.createElement("input");
+            inp.type = "url"; inp.placeholder = "https://..."; inp.value = url || "";
+            const goBtn = document.createElement("button");
+            goBtn.className = "mLinkIconBtn"; goBtn.type = "button";
+            goBtn.innerHTML = '<i class="ph ph-arrow-square-out"></i>';
+            goBtn.title = "Linke git";
+            goBtn.addEventListener("click", () => {
+                const v = inp.value.trim();
+                if (!v) return;
+                window.open(v.match(/^https?:\/\//) ? v : "https://" + v, "_blank", "noopener");
+            });
+            const rmBtn = document.createElement("button");
+            rmBtn.className = "mLinkIconBtn remove"; rmBtn.type = "button";
+            rmBtn.style.display = "none";
+            rmBtn.innerHTML = '<i class="ph ph-minus"></i>';
+            rmBtn.addEventListener("click", () => {
+                row.remove();
+                refreshLinkRemoveBtns();
+            });
+            row.appendChild(inp); row.appendChild(goBtn); row.appendChild(rmBtn);
+            return row;
+        }
+        function buildLinkList(links) {
+            const el = document.getElementById("mLinkList");
+            el.innerHTML = "";
+            const arr = (links && links.length) ? links : [""];
+            arr.forEach(url => el.appendChild(makeLinkRow(url, el)));
+            refreshLinkRemoveBtns();
+        }
+        document.getElementById("mLinkAdd").addEventListener("click", () => {
+            const el = document.getElementById("mLinkList");
+            const row = makeLinkRow("", el);
+            el.appendChild(row);
+            refreshLinkRemoveBtns();
+            row.querySelector("input").focus();
+        });
+        function getLinks() {
+            return Array.from(document.querySelectorAll("#mLinkList .mLinkEntry input"))
+                .map(i => i.value.trim()).filter(Boolean);
+        }
+
+        /* ── ForWho chip sel ── */
+        document.querySelectorAll("#mForWhoSel .mChipBtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll("#mForWhoSel .mChipBtn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                document.getElementById("mForWho").value = btn.dataset.val;
+            });
+        });
+
+        /* ── Reason chip sel ── */
+        document.querySelectorAll("#mReasonSel .mChipBtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const wasActive = btn.classList.contains("active-purple");
+                document.querySelectorAll("#mReasonSel .mChipBtn").forEach(b => b.classList.remove("active-purple"));
+                if (!wasActive) {
+                    btn.classList.add("active-purple");
+                    document.getElementById("mReason").value = btn.dataset.val;
+                } else {
+                    document.getElementById("mReason").value = "";
+                }
+            });
+        });
+
         function openModal(id) {
             const it = items.find(x => x.id === id);
             if (!it) return;
             activeId = id;
-            window._cropActiveItem = it;   /* crop script için */
+            window._cropActiveItem = it;
 
+            /* Image */
             mImg.src = it.imgData;
-            mLink.value = it.link || "";
+
+            /* Links */
+            buildLinkList(it.links && it.links.length ? it.links : (it.link ? [it.link] : []));
+
+            /* Category */
             mCategory.value = it.category || "diger";
+            updateSizeField(it.category || "diger");
+
+            /* Size */
+            const sizeInput = document.getElementById("mSize");
+            sizeInput.value = it.size || "";
+            if (it.size) {
+                document.querySelectorAll("#mSizeChips .mSizeChip").forEach(c => {
+                    c.classList.toggle("on", c.dataset.val === it.size);
+                });
+            }
+
+            /* Timeline */
             mTimeline.value = it.timeline || "ocak";
             mYear.value = it.timelineYear || new Date().getFullYear();
-            mPrice.value = it.price || "";
-            mNote.value = it.note || "";
-            document.getElementById("mSecret").checked = !!it.secret;
+
+            /* Priority */
             buildDesireSelector(it.priority || 3);
             mPriority.value = it.priority || 3;
 
-            /* Reset toggles */
-            document.getElementById("togglePrice").classList.remove("open");
-            document.getElementById("priceContent").classList.remove("show");
-            document.getElementById("toggleNote").classList.remove("open");
-            document.getElementById("noteContent").classList.remove("show");
+            /* Secret */
+            document.getElementById("mSecret").checked = !!it.secret;
 
-            if (it.price) {
-                document.getElementById("togglePrice").classList.add("open");
-                document.getElementById("priceContent").classList.add("show");
-            }
-            if (it.note) {
-                document.getElementById("toggleNote").classList.add("open");
-                document.getElementById("noteContent").classList.add("show");
-            }
+            /* Note tab */
+            document.getElementById("mColorNote").value = it.colorNote || "";
+            document.getElementById("mNote").value = it.note || "";
 
-            /* Show foot buttons */
-            document.getElementById("modalFoot").classList.add("show");
+            /* Price tab */
+            document.getElementById("mCurrentPrice").value = it.currentPrice || "";
+            document.getElementById("mPrice").value = it.price || "";
+            document.getElementById("mPriceNote").value = it.priceNote || "";
+            document.getElementById("mBoughtPriceField").style.display = it.status === "bought" ? "flex" : "none";
+            document.getElementById("mBoughtPriceDisplay").value = it.boughtPrice ? "₺ " + it.boughtPrice : "";
+            updatePriceDiff();
+
+            /* Niyet tab */
+            const forWho = it.forWho || "self";
+            document.getElementById("mForWho").value = forWho;
+            document.querySelectorAll("#mForWhoSel .mChipBtn").forEach(b => {
+                b.classList.toggle("active", b.dataset.val === forWho);
+            });
+            const reason = it.reason || "";
+            document.getElementById("mReason").value = reason;
+            document.querySelectorAll("#mReasonSel .mChipBtn").forEach(b => {
+                b.classList.remove("active-purple");
+                if (b.dataset.val === reason) b.classList.add("active-purple");
+            });
+            document.getElementById("mIntentNote").value = it.intentNote || "";
+
+            /* Meta header */
+            updateMetaChips();
+            updateMetaHearts(it.priority || 3);
+            const hints = [];
+            if (it.secret) hints.push("🔒 Gizli");
+            if (it.forWho === "gift") hints.push("🎁 Hediye");
+            if (it.reason === "need") hints.push("✓ İhtiyaç");
+            else if (it.reason === "consumption") hints.push("🔥 Tüketim");
+            else if (it.reason === "impulse") hints.push("⭐ Ani İstek");
+            document.getElementById("mMetaHint").textContent = hints.join(" · ");
+
+            /* Reset to Bilgi tab */
+            document.querySelectorAll(".mTab").forEach(t => t.classList.remove("active"));
+            document.querySelectorAll(".mTabBody").forEach(b => b.style.display = "none");
+            document.querySelector('.mTab[data-tab="bilgi"]').classList.add("active");
+            document.getElementById("tabBilgi").style.display = "flex";
 
             modalBack.style.display = "flex";
             requestAnimationFrame(() => modalBack.classList.add("show"));
@@ -4222,13 +4709,7 @@
             activeId = null;
         }
 
-        /* Go link */
-        goLinkBtn.addEventListener("click", () => {
-            const url = (mLink.value || "").trim();
-            if (!url) return;
-            const href = url.match(/^https?:\/\//) ? url : "https://" + url;
-            window.open(href, "_blank", "noopener");
-        });
+        /* Go link — now handled inline per link row */
 
         /* ═══ PURCHASE MODAL ═══ */
         function openPurchaseModal(id) {
@@ -4295,10 +4776,12 @@
                 const imgData = await fileToDataURL(file);
                 items.push({
                     id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                    imgData, link: "", category: "diger", timeline: "ocak",
+                    imgData, links: [], link: "", category: "diger", timeline: "ocak",
                     timelineYear: new Date().getFullYear(),
-                    priority: 3, note: "", price: "", status: "want",
-                    boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
+                    priority: 3, size: "", note: "", colorNote: "",
+                    price: "", currentPrice: "", priceNote: "",
+                    forWho: "self", reason: "", intentNote: "",
+                    status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
                 });
             }
             persist(); render();
@@ -4314,41 +4797,58 @@
             const imgData = await fileToDataURL(file);
             items.push({
                 id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                imgData, link: "", category: "diger", timeline: "ocak",
+                imgData, links: [], link: "", category: "diger", timeline: "ocak",
                 timelineYear: new Date().getFullYear(),
-                priority: 3, note: "", price: "", status: "want",
-                boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
+                priority: 3, size: "", note: "", colorNote: "",
+                price: "", currentPrice: "", priceNote: "",
+                forWho: "self", reason: "", intentNote: "",
+                status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
             });
             persist(); render();
             openModal(items[items.length - 1].id);
             e.target.value = "";
         });
 
-        /* Save */
-        saveItemBtn.addEventListener("click", () => {
+        /* Save — tüm sekmelerdeki veriler */
+        function doSaveItem() {
             if (!activeId) return;
             const it = items.find(x => x.id === activeId);
             if (!it) return;
-            it.link = (mLink.value || "").trim();
+            it.links = getLinks();
+            it.link = it.links[0] || "";   // geriye dönük uyumluluk
             it.category = mCategory.value;
             it.timeline = mTimeline.value;
             it.timelineYear = parseInt(mYear.value, 10) || new Date().getFullYear();
             it.priority = clamp(parseInt(mPriority.value, 10) || 1, 1, 5);
-            it.price = (mPrice.value || "").trim();
-            it.note = (mNote.value || "").trim();
+            it.size = document.getElementById("mSize").value.trim();
             it.secret = document.getElementById("mSecret").checked;
+            it.colorNote = document.getElementById("mColorNote").value.trim();
+            it.note = document.getElementById("mNote").value.trim();
+            it.currentPrice = document.getElementById("mCurrentPrice").value.trim();
+            it.price = document.getElementById("mPrice").value.trim();
+            it.priceNote = document.getElementById("mPriceNote").value.trim();
+            it.forWho = document.getElementById("mForWho").value || "self";
+            it.reason = document.getElementById("mReason").value || "";
+            it.intentNote = document.getElementById("mIntentNote").value.trim();
             persist(); render(); closeDetailModal();
             if (it.secret) {
                 showToast("🔒 Ürün gizli listene taşındı. Görüntülemek için kategoriler arasında \"Gizli\" sekmesine geçebilirsiniz.");
             }
-        });
-
-        /* Delete */
-        deleteItemBtn.addEventListener("click", () => {
+        }
+        function doDeleteItem() {
             if (!activeId) return;
             items = items.filter(x => x.id !== activeId);
             persist(); render(); closeDetailModal();
-        });
+        }
+
+        saveItemBtn.addEventListener("click", doSaveItem);
+        deleteItemBtn.addEventListener("click", doDeleteItem);
+        document.getElementById("saveItem2").addEventListener("click", doSaveItem);
+        document.getElementById("deleteItem2").addEventListener("click", doDeleteItem);
+        document.getElementById("saveItem3").addEventListener("click", doSaveItem);
+        document.getElementById("deleteItem3").addEventListener("click", doDeleteItem);
+        document.getElementById("saveItem4").addEventListener("click", doSaveItem);
+        document.getElementById("deleteItem4").addEventListener("click", doDeleteItem);
 
         closeModalBtn.addEventListener("click", closeDetailModal);
         modalBack.addEventListener("click", e => { if (e.target === modalBack) closeDetailModal(); });
