@@ -634,6 +634,18 @@
         .hidden {
             display: none;
         }
+        /* iOS Safari'de display:none olan file input'lar label ile tetiklenmiyor.
+           type=file olanlar için görünmez ama erişilebilir hale getiriyoruz. */
+        input[type="file"].hidden {
+            display: block !important;
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
 
         /* ═══════════ CATEGORY PILLS ═══════════ */
         .catBar {
@@ -3438,6 +3450,193 @@
         .langFlag {
             font-size: 20px;
         }
+        /* ═══ BİRİKİM MODAL ═══ */
+        .savingsBody {
+            padding: 0 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .savingsSummary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--accentGradMid);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-top: 4px;
+        }
+        .savSumItem {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            flex: 1;
+        }
+        .savSumVal {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .savSumLabel {
+            font-size: 10px;
+            color: var(--textSub);
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+        .savSumDivider {
+            width: 1px;
+            height: 32px;
+            background: var(--borderColor);
+            opacity: 0.5;
+        }
+        .savingsList {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .savCard {
+            background: var(--cardBg);
+            border-radius: 14px;
+            border: 1.5px solid var(--borderColor);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .savCardTop {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .savCardImg {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--surfaceHover);
+        }
+        .savCardInfo {
+            flex: 1;
+            min-width: 0;
+        }
+        .savCardName {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--textMain);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 3px;
+        }
+        .savCardAmounts {
+            font-size: 12px;
+            color: var(--textSub);
+        }
+        .savCardAmounts strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .savProgress {
+            height: 6px;
+            background: var(--surfaceHover);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .savProgressFill {
+            height: 100%;
+            background: var(--accentGrad);
+            border-radius: 99px;
+            transition: width 0.4s cubic-bezier(0.32,0.72,0.45,1);
+            min-width: 4px;
+        }
+        .savCardBottom {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .savInput {
+            flex: 1;
+            height: 36px;
+            border: 1.5px solid var(--borderColor);
+            border-radius: 10px;
+            padding: 0 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--surfaceBg);
+            color: var(--textMain);
+            outline: none;
+            transition: border-color 0.18s;
+        }
+        .savInput:focus { border-color: var(--accent); }
+        .savInput::placeholder { color: var(--textSub); font-weight: 400; }
+        .savAddBtn {
+            height: 36px;
+            padding: 0 14px;
+            border-radius: 10px;
+            border: none;
+            background: var(--accentGrad);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.12s;
+            white-space: nowrap;
+        }
+        .savAddBtn:active { opacity: 0.8; transform: scale(0.97); }
+        .savResetBtn {
+            height: 36px;
+            width: 36px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            border: 1.5px solid var(--borderColor);
+            background: transparent;
+            color: var(--textSub);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .savResetBtn:hover { color: #e84545; border-color: #e84545; }
+        .savDoneTag {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 99px;
+            background: linear-gradient(135deg,#34d399,#10b981);
+            color: #fff;
+            align-self: center;
+            flex-shrink: 0;
+        }
+        .savingsEmpty {
+            text-align: center;
+            color: var(--textSub);
+            padding: 32px 0;
+            font-size: 13px;
+        }
+        .savingsEmpty i {
+            font-size: 40px;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .savTargetAmt {
+            color: var(--textSub);
+            font-weight: 500;
+        }
+        /* Number input spinner'ı gizle */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+
     </style>
 </head>
 
@@ -3762,6 +3961,40 @@
         </div>
     </div>
 
+    <!-- ═══ BİRİKİM MODAL ═══ -->
+    <div id="savingsBack" class="modalBack" role="dialog" aria-modal="true">
+        <div class="modal" id="savingsModal">
+            <div class="handle"><span></span></div>
+            <div class="mHead">
+                <strong><i class="ph ph-piggy-bank" style="margin-right:5px;"></i>Birikim</strong>
+                <button id="closeSavings" class="btn">Kapat</button>
+            </div>
+            <div class="savingsBody">
+                <div class="savingsSummary">
+                    <div class="savSumItem">
+                        <div class="savSumVal" id="savTotalSaved">₺0</div>
+                        <div class="savSumLabel">Toplam Biriken</div>
+                    </div>
+                    <div class="savSumDivider"></div>
+                    <div class="savSumItem">
+                        <div class="savSumVal" id="savTotalTarget">₺0</div>
+                        <div class="savSumLabel">Toplam Hedef</div>
+                    </div>
+                    <div class="savSumDivider"></div>
+                    <div class="savSumItem">
+                        <div class="savSumVal" id="savTotalRemaining">₺0</div>
+                        <div class="savSumLabel">Kalan</div>
+                    </div>
+                </div>
+                <div class="savingsList" id="savingsList"></div>
+                <div class="savingsEmpty" id="savingsEmpty" style="display:none;">
+                    <i class="ph ph-piggy-bank"></i>
+                    <p>Henüz ürün eklenmemiş.<br>+ Ekle ile başla.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══ WISHLIST AI MODAL ═══ -->
     <div class="aiBack" id="aiBack">
         <div class="aiHeader">
@@ -3944,9 +4177,9 @@
                 <div id="loginForm">
                     <div class="authField">
                         <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
+                            <span class="authInputIcon"><i class="ph ph-user"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="loginUser" type="email" placeholder="E-posta" autocomplete="email" autocapitalize="none" />
+                            <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
                         </div>
                     </div>
                     <div class="authField">
@@ -3965,14 +4198,7 @@
                         <div class="authInputWrap">
                             <span class="authInputIcon"><i class="ph ph-user-plus"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="regUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
-                        </div>
-                    </div>
-                    <div class="authField">
-                        <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
-                            <div class="authInputDivider"></div>
-                            <input id="regEmail" type="email" placeholder="E-posta" autocomplete="email" required />
+                            <input id="regUser" type="text" placeholder="Kullanıcı adı (harf, rakam, _)" autocomplete="username" autocapitalize="none" />
                         </div>
                     </div>
                     <div class="authField">
@@ -4159,6 +4385,12 @@
            2. Realtime Database → Rules → aşağıdaki kuralları yapıştır:
            {
              "rules": {
+               "usernames": {
+                 ".read": true,
+                 "$username": {
+                   ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)"
+                 }
+               },
                "users": {
                  "$uid": {
                    ".read":  "auth != null && auth.uid === $uid",
@@ -4170,115 +4402,62 @@
            3. Project Settings → Web API Key'i kopyala → FB_API_KEY'e yaz
         ═══════════════════════════════════════════════════════ */
         const FB_DATABASE_URL = "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app";
-        const FB_API_KEY      = "AIzaSyC_S_UoUpHMR_PAY0U_2W5hF_x5Xc3ioi4"; // ← Firebase Web API Key buraya
         const FB_ENABLED      = FB_DATABASE_URL.startsWith("https://");
-        const FB_AUTH_BASE    = "https://identitytoolkit.googleapis.com/v1/accounts";
-        const FB_TOKEN_URL    = "https://securetoken.googleapis.com/v1/token";
 
-        /* ── Auth state ── */
-        const SESSION_KEY = 'wl_session_v2';
-        let authToken    = null;   // Firebase idToken
-        let authUid      = null;   // Firebase uid
-        let currentUser  = null;   // display username
+        /* ═══ AUTH SYSTEM — kullanıcı adı + SHA-256 hash ═══ */
+        const SESSION_KEY  = 'wl_session_v2';
+        const USERS_KEY    = 'wl_users_v1';
+        let authToken  = null;   // Firebase DB token (sadece DB için)
+        let authUid    = null;   // kullanıcı kimliği
+        let currentUser = null;  // görünen kullanıcı adı
 
-        /* ── Auth token refresh ── */
-        async function fbRefreshToken(refreshToken) {
-            try {
-                const r = await fetch(`${FB_TOKEN_URL}?key=${FB_API_KEY}`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`
-                });
-                const d = await r.json();
-                if (!r.ok) return null;
-                return { idToken: d.id_token, refreshToken: d.refresh_token };
-            } catch { return null; }
+        /* ── Hash ── */
+        async function hashPw(pw) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
         }
 
-        /* ── Firebase DB helpers (auth token required) ── */
+        /* ── Yerel kullanıcı kaydı ── */
+        function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; } }
+        function saveLocalUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+
+        /* ── Firebase DB (sadece veri saklama için, auth yok) ── */
         async function fbGet(path) {
-            if (!FB_ENABLED || !authToken) return null;
-            try {
-                const r = await fetch(`${FB_DATABASE_URL}/${path}.json?auth=${authToken}`);
-                if (r.status === 401) return null; // token expired
-                return r.ok ? await r.json() : null;
-            } catch { return null; }
+            if (!FB_ENABLED) return null;
+            try { const r = await fetch(FB_DATABASE_URL + '/' + path + '.json'); return r.ok ? await r.json() : null; }
+            catch { return null; }
         }
         async function fbSet(path, data) {
-            if (!FB_ENABLED || !authToken) return false;
+            if (!FB_ENABLED) return false;
             try {
-                const r = await fetch(`${FB_DATABASE_URL}/${path}.json?auth=${authToken}`, {
-                    method: 'PUT', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
+                const r = await fetch(FB_DATABASE_URL + '/' + path + '.json', {
+                    method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
                 });
                 return r.ok;
             } catch { return false; }
         }
         async function fbDelete(path) {
-            if (!FB_ENABLED || !authToken) return false;
+            if (!FB_ENABLED) return false;
             try {
-                const r = await fetch(`${FB_DATABASE_URL}/${path}.json?auth=${authToken}`, { method: 'DELETE' });
+                const r = await fetch(FB_DATABASE_URL + '/' + path + '.json', { method: 'DELETE' });
                 return r.ok;
             } catch { return false; }
         }
 
-        /* ── Firebase Auth REST ── */
-        async function fbSignIn(email, password) {
-            const r = await fetch(`${FB_AUTH_BASE}:signInWithPassword?key=${FB_API_KEY}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ email, password, returnSecureToken: true })
-            });
-            const d = await r.json();
-            if (!r.ok) throw new Error(translateAuthError(d.error?.message));
-            return d; // { idToken, localId, refreshToken, displayName, ... }
+        /* ── Kullanıcı al/kaydet ── */
+        async function getUser(u) {
+            if (FB_ENABLED) { const h = await fbGet('users/' + u + '/hash'); if (h) return h; }
+            return getLocalUsers()[u] || null;
         }
-        async function fbSignUp(email, password, displayName) {
-            const r = await fetch(`${FB_AUTH_BASE}:signUp?key=${FB_API_KEY}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ email, password, displayName, returnSecureToken: true })
-            });
-            const d = await r.json();
-            if (!r.ok) throw new Error(translateAuthError(d.error?.message));
-            return d;
-        }
-        async function fbUpdatePassword(idToken, newPassword) {
-            const r = await fetch(`${FB_AUTH_BASE}:update?key=${FB_API_KEY}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ idToken, password: newPassword, returnSecureToken: true })
-            });
-            const d = await r.json();
-            if (!r.ok) throw new Error(translateAuthError(d.error?.message));
-            return d;
-        }
-        function translateAuthError(code) {
-            const map = {
-                'EMAIL_EXISTS':             'Bu e-posta zaten kayıtlı.',
-                'INVALID_EMAIL':            'Geçersiz e-posta adresi.',
-                'WEAK_PASSWORD':            'Şifre en az 6 karakter olmalı.',
-                'EMAIL_NOT_FOUND':          'Bu e-posta ile kayıtlı hesap bulunamadı.',
-                'INVALID_PASSWORD':         'Şifre hatalı.',
-                'USER_DISABLED':            'Hesap devre dışı bırakılmış.',
-                'TOO_MANY_ATTEMPTS_TRY_LATER': 'Çok fazla deneme. Lütfen bekle.',
-                'INVALID_LOGIN_CREDENTIALS':'E-posta veya şifre hatalı.',
-            };
-            if (!code) return 'Bir hata oluştu.';
-            for (const [k, v] of Object.entries(map)) {
-                if (code.includes(k)) return v;
-            }
-            return 'Bir hata oluştu: ' + code;
+        async function saveUserHash(u, h) {
+            if (FB_ENABLED) await fbSet('users/' + u + '/hash', h);
+            const us = getLocalUsers(); us[u] = h; saveLocalUsers(us);
         }
 
-        /* ── Session save / restore ── */
-        function saveSession(uid, idToken, refreshToken, username, email) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify({ uid, idToken, refreshToken, username, email }));
-        }
-        function clearSession() {
-            localStorage.removeItem(SESSION_KEY);
-            authToken = null; authUid = null; currentUser = null;
-        }
-        function getSession() {
-            try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; }
-        }
+        /* ── Session ── */
+        function saveSession(username) { localStorage.setItem(SESSION_KEY, username); }
+        function clearSession() { localStorage.removeItem(SESSION_KEY); authUid = null; currentUser = null; }
+        function getSession() { return localStorage.getItem(SESSION_KEY); }
 
         /* ── Auth UI helpers ── */
         function switchAuthTab(tab) {
@@ -4304,48 +4483,40 @@
         /* ── Login ── */
         async function doLogin() {
             const btn = document.querySelector('#loginForm .authSubmit');
-            const email    = document.getElementById('loginUser').value.trim().toLowerCase();
+            const username = document.getElementById('loginUser').value.trim().toLowerCase();
             const password = document.getElementById('loginPass').value;
-            if (!email || !password) return showAuthError('E-posta ve şifre gerekli.');
+            if (!username || !password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
             btn.textContent = 'Kontrol ediliyor...'; btn.disabled = true;
-            try {
-                const d = await fbSignIn(email, password);
-                const username = d.displayName || email.split('@')[0];
-                saveSession(d.localId, d.idToken, d.refreshToken, username, email);
-                authToken = d.idToken; authUid = d.localId; currentUser = username;
-                btn.textContent = 'Giriş Yap →'; btn.disabled = false;
-                startApp();
-            } catch (e) {
-                btn.textContent = 'Giriş Yap →'; btn.disabled = false;
-                showAuthError(e.message);
-            }
+            const stored = await getUser(username);
+            btn.textContent = 'Giriş Yap →'; btn.disabled = false;
+            if (!stored) return showAuthError('Kullanıcı bulunamadı.');
+            if (stored !== await hashPw(password)) return showAuthError('Şifre hatalı.');
+            saveSession(username);
+            authUid = username; currentUser = username;
+            startApp();
         }
 
         /* ── Register ── */
         async function doRegister() {
             const btn = document.querySelector('#registerForm .authSubmit');
-            const username = document.getElementById('regUser').value.trim();
-            const email    = document.getElementById('regEmail').value.trim().toLowerCase();
-            const pw       = document.getElementById('regPass').value;
-            const pw2      = document.getElementById('regPass2').value;
-            if (!username || !email || !pw) return showAuthError('Tüm alanları doldurun.');
-            if (username.length < 2)        return showAuthError('Kullanıcı adı en az 2 karakter olmalı.');
-            if (pw.length < 6)              return showAuthError('Şifre en az 6 karakter olmalı.');
-            if (pw !== pw2)                 return showAuthError('Şifreler eşleşmiyor.');
+            const username = document.getElementById('regUser').value.trim().toLowerCase();
+            const pw  = document.getElementById('regPass').value;
+            const pw2 = document.getElementById('regPass2').value;
+            if (!username || !pw) return showAuthError('Tüm alanları doldurun.');
+            if (username.length < 3) return showAuthError('Kullanıcı adı en az 3 karakter olmalı.');
+            if (pw.length < 4)       return showAuthError('Şifre en az 4 karakter olmalı.');
+            if (pw !== pw2)          return showAuthError('Şifreler eşleşmiyor.');
             btn.textContent = 'Oluşturuluyor...'; btn.disabled = true;
-            try {
-                const d = await fbSignUp(email, pw, username);
-                saveSession(d.localId, d.idToken, d.refreshToken, username, email);
-                authToken = d.idToken; authUid = d.localId; currentUser = username;
-                btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
-                const el = document.getElementById('authSuccessMsg');
-                el.textContent = 'Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display = 'block';
-                document.getElementById('authError').style.display = 'none';
-                setTimeout(() => startApp(), 700);
-            } catch (e) {
-                btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
-                showAuthError(e.message);
-            }
+            const existing = await getUser(username);
+            if (existing) { btn.textContent = 'Hesap Oluştur →'; btn.disabled = false; return showAuthError('Bu kullanıcı adı alınmış.'); }
+            await saveUserHash(username, await hashPw(pw));
+            btn.textContent = 'Hesap Oluştur →'; btn.disabled = false;
+            saveSession(username);
+            authUid = username; currentUser = username;
+            const el = document.getElementById('authSuccessMsg');
+            el.textContent = 'Hesap oluşturuldu! Giriş yapılıyor...'; el.style.display = 'block';
+            document.getElementById('authError').style.display = 'none';
+            setTimeout(() => startApp(), 700);
         }
 
         /* ── Start app after auth ── */
@@ -4411,27 +4582,11 @@
             const pwOk  = document.getElementById('pwSuccess');
             pwErr.style.display = 'none'; pwOk.style.display = 'none';
             if (!oldPw || !newPw || !newPw2) { pwErr.textContent = 'Tüm alanları doldurun.'; pwErr.style.display = 'block'; return; }
-            if (newPw.length < 6) { pwErr.textContent = 'Yeni şifre en az 6 karakter olmalı.'; pwErr.style.display = 'block'; return; }
+            if (newPw.length < 4) { pwErr.textContent = 'Yeni şifre en az 4 karakter olmalı.'; pwErr.style.display = 'block'; return; }
             if (newPw !== newPw2) { pwErr.textContent = 'Yeni şifreler eşleşmiyor.'; pwErr.style.display = 'block'; return; }
-            // Mevcut şifreyi doğrula: tekrar giriş yap
-            const sess = getSession();
-            if (!sess) { pwErr.textContent = 'Oturum bulunamadı, tekrar giriş yapın.'; pwErr.style.display = 'block'; return; }
-            try {
-                // Email'i almak için re-signin
-                const loginEl = document.getElementById('loginUser');
-                const emailForVerify = sess.email || (loginEl ? loginEl.value.trim() : '');
-                if (!emailForVerify) { pwErr.textContent = 'E-posta bulunamadı. Tekrar giriş yapın.'; pwErr.style.display = 'block'; return; }
-                // Önce eski şifre ile giriş yap (verify)
-                await fbSignIn(emailForVerify, oldPw);
-                // Şifreyi güncelle
-                const d = await fbUpdatePassword(authToken, newPw);
-                // Yeni token kaydet
-                authToken = d.idToken;
-                saveSession(authUid, d.idToken, d.refreshToken || sess.refreshToken, currentUser);
-            } catch(e) {
-                pwErr.textContent = e.message.includes('hatalı') ? 'Mevcut şifre hatalı.' : e.message;
-                pwErr.style.display = 'block'; return;
-            }
+            const stored = await getUser(currentUser);
+            if (stored !== await hashPw(oldPw)) { pwErr.textContent = 'Mevcut şifre hatalı.'; pwErr.style.display = 'block'; return; }
+            await saveUserHash(currentUser, await hashPw(newPw));
             document.getElementById('pwOld').value = '';
             document.getElementById('pwNew').value = '';
             document.getElementById('pwNew2').value = '';
@@ -4443,7 +4598,7 @@
                 items.forEach(it => localStorage.removeItem(getImgKey(it.id)));
                 items = [];
                 localStorage.removeItem(getUserKey());
-                if (FB_ENABLED && authUid && authToken) fbDelete('users/' + authUid + '/items');
+                if (FB_ENABLED && currentUser) fbSet('users/' + currentUser + '/items', null);
                 render();
                 closeSettings();
                 showToast('🗑️ Liste sıfırlandı');
@@ -4524,20 +4679,11 @@
             if (loginVisible) doLogin(); else doRegister();
         });
         /* ── Session restore on page load ── */
-        (async function checkSession() {
-            const sess = getSession();
-            if (!sess) return;
-            // Try to refresh the token (idTokens expire in 1h)
-            const refreshed = await fbRefreshToken(sess.refreshToken);
-            if (refreshed) {
-                authToken   = refreshed.idToken;
-                authUid     = sess.uid;
-                currentUser = sess.username;
-                saveSession(sess.uid, refreshed.idToken, refreshed.refreshToken, sess.username);
+        (function checkSession() {
+            const saved = getSession();
+            if (saved) {
+                authUid = saved; currentUser = saved;
                 document.getElementById('authScreen').style.display = 'none';
-                load().then(() => render());
-            } else {
-                clearSession(); // token invalid, force re-login
             }
         })();
 
@@ -4734,7 +4880,7 @@
            Firebase'e sadece metadata gider → DB boyutu ~20x küçülür.
            Silme: item silinince hem array'den hem localStorage image store'dan temizlenir.
         ── */
-        function getUserKey() { return authUid ? 'wishlist_v3_' + authUid : 'wishlist_v3'; }
+        function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
         function getImgKey(itemId) { return 'wl_img_' + itemId; }
 
         /* imgData'yı localStorage'a kaydet, items array'inden çıkar */
@@ -4752,25 +4898,20 @@
         }
         /* Firebase'e gönderilecek: imgData olmadan */
         function stripImages(itemList) {
-            return itemList.map(it => {
-                const { imgData, ...rest } = it;
-                return rest;
-            });
+            return itemList.map(it => { const { imgData, ...rest } = it; return rest; });
         }
 
         async function load() {
-            if (FB_ENABLED && authUid && authToken) {
+            if (FB_ENABLED && currentUser) {
                 try {
-                    const fbItems = await fbGet('users/' + authUid + '/items');
+                    const fbItems = await fbGet('users/' + currentUser + '/items');
                     if (fbItems && Array.isArray(fbItems)) {
                         items = mergeImages(fbItems);
-                        // Yerel cache'i güncelle
                         localStorage.setItem(getUserKey(), JSON.stringify(items));
                         return;
                     }
                 } catch { }
             }
-            // Fallback: localStorage
             try {
                 const raw = localStorage.getItem(getUserKey());
                 items = raw ? JSON.parse(raw) : [];
@@ -4778,13 +4919,10 @@
         }
 
         function persist() {
-            // 1. imgData'ları ayrı kaydet
             saveImages(items);
-            // 2. Tam items'i yerel cache'e yaz
             localStorage.setItem(getUserKey(), JSON.stringify(items));
-            // 3. Firebase'e imgData'sız gönder
-            if (FB_ENABLED && authUid && authToken) {
-                fbSet('users/' + authUid + '/items', stripImages(items));
+            if (FB_ENABLED && currentUser) {
+                fbSet('users/' + currentUser + '/items', stripImages(items));
             }
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
@@ -5198,17 +5336,23 @@
             const files = e.target.files;
             if (!files || !files.length) return;
             for (const file of files) {
-                const imgData = await fileToDataURL(file);
-                items.push({
-                    id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                    imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
-                    timelineYear: new Date().getFullYear(),
-                    priority: 3, size: "", note: "", colorNote: "",
-                    price: "", currentPrice: "", priceNote: "",
-                    forWho: "self", reason: "", intentNote: "",
-                    status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
-                });
+                try {
+                    const imgData = await fileToDataURL(file);
+                    items.push({
+                        id: Math.random().toString(16).slice(2) + Date.now().toString(16),
+                        imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
+                        timelineYear: new Date().getFullYear(),
+                        priority: 3, size: "", note: "", colorNote: "",
+                        price: "", currentPrice: "", priceNote: "",
+                        forWho: "self", reason: "", intentNote: "",
+                        status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0
+                    });
+                } catch (err) {
+                    console.error("Fotoğraf yüklenemedi:", err);
+                    showToast("⚠️ Fotoğraf yüklenemedi, tekrar dene");
+                }
             }
+            if (!items.length) { filePick.value = ""; return; }
             persist(); render();
             requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
             if (items.length) openModal(items[items.length - 1].id);
@@ -5219,18 +5363,23 @@
         document.getElementById("cameraPick").addEventListener("change", async e => {
             const file = e.target.files[0];
             if (!file) return;
-            const imgData = await fileToDataURL(file);
-            items.push({
-                id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
-                timelineYear: new Date().getFullYear(),
-                priority: 3, size: "", note: "", colorNote: "",
-                price: "", currentPrice: "", priceNote: "",
-                forWho: "self", reason: "", intentNote: "",
-                status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false
-            });
-            persist(); render();
-            openModal(items[items.length - 1].id);
+            try {
+                const imgData = await fileToDataURL(file);
+                items.push({
+                    id: Math.random().toString(16).slice(2) + Date.now().toString(16),
+                    imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
+                    timelineYear: new Date().getFullYear(),
+                    priority: 3, size: "", note: "", colorNote: "",
+                    price: "", currentPrice: "", priceNote: "",
+                    forWho: "self", reason: "", intentNote: "",
+                    status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0
+                });
+                persist(); render();
+                openModal(items[items.length - 1].id);
+            } catch (err) {
+                console.error("Kamera fotoğrafı yüklenemedi:", err);
+                showToast("⚠️ Fotoğraf yüklenemedi, tekrar dene");
+            }
             e.target.value = "";
         });
 
@@ -5461,9 +5610,122 @@
         wrappedBack.addEventListener("click", e => { if (e.target === wrappedBack) closeWrapped(); });
 
         /* ═══════════════════════════════════════════════════════════
+           ═══ BİRİKİM ═══
+           ═══════════════════════════════════════════════════════════ */
+        const savingsBack = document.getElementById("savingsBack");
+
+        function openSavings() {
+            renderSavings();
+            savingsBack.style.display = "flex";
+            requestAnimationFrame(() => savingsBack.classList.add("show"));
+            document.getElementById("dropdown").classList.remove("open");
+        }
+        function closeSavings() {
+            savingsBack.classList.remove("show");
+            setTimeout(() => { savingsBack.style.display = "none"; }, 280);
+        }
+
+        function renderSavings() {
+            const list = document.getElementById("savingsList");
+            const empty = document.getElementById("savingsEmpty");
+            const wantItems = items.filter(x => x.status !== "bought");
+
+            if (!wantItems.length) {
+                list.innerHTML = "";
+                empty.style.display = "block";
+                document.getElementById("savTotalSaved").textContent = "₺0";
+                document.getElementById("savTotalTarget").textContent = "₺0";
+                document.getElementById("savTotalRemaining").textContent = "₺0";
+                return;
+            }
+            empty.style.display = "none";
+
+            // Summary totals
+            const totalSaved   = wantItems.reduce((s, x) => s + (x.savedAmount || 0), 0);
+            const totalTarget  = wantItems.reduce((s, x) => s + (parseFloat(x.price) || 0), 0);
+            const totalRemain  = Math.max(0, totalTarget - totalSaved);
+            document.getElementById("savTotalSaved").textContent    = "₺" + totalSaved.toLocaleString("tr-TR");
+            document.getElementById("savTotalTarget").textContent   = "₺" + totalTarget.toLocaleString("tr-TR");
+            document.getElementById("savTotalRemaining").textContent = "₺" + totalRemain.toLocaleString("tr-TR");
+
+            list.innerHTML = "";
+            wantItems.forEach(it => {
+                const saved   = it.savedAmount || 0;
+                const target  = parseFloat(it.price) || 0;
+                const pct     = target > 0 ? Math.min(100, Math.round(saved / target * 100)) : (saved > 0 ? 100 : 0);
+                const done    = target > 0 && saved >= target;
+                const name    = it.itemName || "İsimsiz Ürün";
+                const imgSrc  = it.imgData || "";
+
+                const card = document.createElement("div");
+                card.className = "savCard";
+                card.innerHTML = `
+                    <div class="savCardTop">
+                        ${imgSrc ? `<img class="savCardImg" src="${imgSrc}" alt="">` : `<div class="savCardImg" style="display:flex;align-items:center;justify-content:center;font-size:22px;">🛍️</div>`}
+                        <div class="savCardInfo">
+                            <div class="savCardName">${name}</div>
+                            <div class="savCardAmounts">
+                                ${target > 0 ? `<span class="savTargetAmt">₺${target.toLocaleString("tr-TR")}</span> hedef &nbsp;·&nbsp; ` : ''}<strong>₺${saved.toLocaleString("tr-TR")}</strong> biriken${target > 0 ? ` &nbsp;·&nbsp; %${pct}` : ''}
+                            </div>
+                        </div>
+                        ${done ? `<div class="savDoneTag">✓ Tamam</div>` : ""}
+                    </div>
+                    ${target > 0 ? `<div class="savProgress"><div class="savProgressFill" style="width:${pct}%"></div></div>` : ''}
+                    <div class="savCardBottom">
+                        <input class="savInput" type="number" min="0" inputmode="decimal" placeholder="₺ ekle..." data-id="${it.id}" />
+                        <button class="savAddBtn" data-id="${it.id}">Ekle</button>
+                        <button class="savResetBtn" title="Sıfırla" data-id="${it.id}"><i class="ph ph-arrow-counter-clockwise"></i></button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            // Wire buttons
+            list.querySelectorAll(".savAddBtn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const id  = btn.dataset.id;
+                    const inp = list.querySelector(`.savInput[data-id="${id}"]`);
+                    const val = parseFloat(inp.value);
+                    if (!val || val <= 0) { inp.focus(); return; }
+                    const it  = items.find(x => x.id === id);
+                    if (!it) return;
+                    it.savedAmount = (it.savedAmount || 0) + val;
+                    inp.value = "";
+                    persist();
+                    renderSavings();
+                    showToast(`💰 ₺${val.toLocaleString("tr-TR")} eklendi`);
+                });
+            });
+            list.querySelectorAll(".savInput").forEach(inp => {
+                inp.addEventListener("keydown", e => {
+                    if (e.key === "Enter") {
+                        const btn = list.querySelector(`.savAddBtn[data-id="${inp.dataset.id}"]`);
+                        if (btn) btn.click();
+                    }
+                });
+            });
+            list.querySelectorAll(".savResetBtn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const it = items.find(x => x.id === btn.dataset.id);
+                    if (!it) return;
+                    if (!confirm(`"${it.itemName || "ürün"}" için biriken ₺${(it.savedAmount||0).toLocaleString("tr-TR")} sıfırlansın mı?`)) return;
+                    it.savedAmount = 0;
+                    persist();
+                    renderSavings();
+                });
+            });
+        }
+
+        document.getElementById("dropSavings").addEventListener("click", openSavings);
+        document.getElementById("closeSavings").addEventListener("click", closeSavings);
+        savingsBack.addEventListener("click", e => { if (e.target === savingsBack) closeSavings(); });
+
+
+
+        /* ═══════════════════════════════════════════════════════════
            ═══ WISHLIST AI — EXPERT COUNCIL ENGINE ═══
            ═══════════════════════════════════════════════════════════ */
-        const AI_HIST_KEY = authUid ? "wishlist_ai_history_" + authUid : "wishlist_ai_history";
+        const AI_HIST_KEY = currentUser ? "wishlist_ai_history_" + currentUser : "wishlist_ai_history";
         let aiMode = null;
         let aiSelectedIds = [];
         let aiCurrentResult = null;
