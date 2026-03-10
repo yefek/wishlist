@@ -2,7 +2,7 @@
   "name": "Wishlistgül",
   "short_name": "Wishlistgül",
   "description": "Kişisel istek listem ve alışveriş takibi",
-  "start_url": "./index_fixed.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fdf2f8",
   "theme_color": "#E8458B",
