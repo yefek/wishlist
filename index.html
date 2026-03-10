@@ -10,6 +10,11 @@
     <meta name="apple-mobile-web-app-title" content="Wishlistgül" />
     <meta name="application-name" content="Wishlistgül" />
     <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <title>Wishlistgül</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -4422,32 +4427,70 @@
         function saveLocalUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
 
         /* ── Firebase DB (sadece veri saklama için, auth yok) ── */
+        // Timeout helper - network sorunlarında sonsuz beklemeyi önler
+        function fetchWithTimeout(url, options, timeout = 10000) {
+            return Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Firebase timeout')), timeout)
+                )
+            ]);
+        }
+        
         async function fbGet(path) {
             if (!FB_ENABLED) return null;
-            try { const r = await fetch(FB_DATABASE_URL + '/' + path + '.json'); return r.ok ? await r.json() : null; }
-            catch { return null; }
+            try { 
+                const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', {}, 10000);
+                return r.ok ? await r.json() : null; 
+            } catch(e) { 
+                console.warn('Firebase GET error:', e); 
+                return null; 
+            }
         }
         async function fbSet(path, data) {
             if (!FB_ENABLED) return false;
             try {
-                const r = await fetch(FB_DATABASE_URL + '/' + path + '.json', {
-                    method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
-                });
+                const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', {
+                    method: 'PUT', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(data)
+                }, 15000);
                 return r.ok;
-            } catch { return false; }
+            } catch(e) { 
+                console.warn('Firebase SET error:', e); 
+                return false; 
+            }
         }
         async function fbDelete(path) {
             if (!FB_ENABLED) return false;
             try {
-                const r = await fetch(FB_DATABASE_URL + '/' + path + '.json', { method: 'DELETE' });
+                const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { 
+                    method: 'DELETE' 
+                }, 10000);
                 return r.ok;
-            } catch { return false; }
+            } catch(e) { 
+                console.warn('Firebase DELETE error:', e); 
+                return false; 
+            }
         }
 
         /* ── Kullanıcı al/kaydet ── */
         async function getUser(u) {
-            if (FB_ENABLED) { const h = await fbGet('users/' + u + '/hash'); if (h) return h; }
-            return getLocalUsers()[u] || null;
+            // Önce localStorage'dan kontrol et
+            const localHash = getLocalUsers()[u];
+            
+            // Eğer Firebase etkinse, Firebase'den de kontrol et
+            if (FB_ENABLED) { 
+                try {
+                    const fbHash = await fbGet('users/' + u + '/hash'); 
+                    if (fbHash) return fbHash;
+                } catch (e) {
+                    console.log('Firebase error, falling back to localStorage');
+                }
+            }
+            
+            // localStorage'dan döndür
+            return localHash || null;
         }
         async function saveUserHash(u, h) {
             if (FB_ENABLED) await fbSet('users/' + u + '/hash', h);
@@ -4522,7 +4565,15 @@
         /* ── Start app after auth ── */
         function startApp() {
             document.getElementById('authScreen').style.display = 'none';
-            load().then(() => render());
+            if (!isDataLoaded) {
+                isDataLoaded = true;
+                load().then(() => render()).catch(err => {
+                    console.error('Data load error:', err);
+                    showToast('⚠️ Veriler yüklenirken hata oluştu');
+                });
+            } else {
+                render(); // Veri zaten yüklü, sadece render et
+            }
         }
 
         /* ── Logout ── */
@@ -4679,6 +4730,8 @@
             if (loginVisible) doLogin(); else doRegister();
         });
         /* ── Session restore on page load ── */
+        let isDataLoaded = false; // Duplicate load çağrısını önlemek için flag
+        
         (function checkSession() {
             const saved = getSession();
             if (saved) {
@@ -4933,21 +4986,55 @@
             } catch { items = []; }
         }
 
+        // Debounce helper - çok sık persist çağrısını önler
+        let persistTimeout = null;
+        let quotaWarningShown = false;
+        
         function persist() {
-            // Her item'ın fotoğrafını ayrı anahtarda sakla
-            items.forEach(it => saveImg(it));
-            // Ana cache'e imgData'sız yaz (yer tasarrufu)
-            try {
-                localStorage.setItem(getUserKey(), JSON.stringify(stripImages(items)));
-            } catch(e) {
-                console.warn('persist localStorage hatası:', e);
-            }
-            // Firebase'e imgData'sız gönder
-            if (FB_ENABLED && currentUser) {
-                fbSet('users/' + currentUser + '/items', stripImages(items));
-            }
+            // Debounce - 300ms içinde tekrar çağrılırsa önceki iptal edilir
+            if (persistTimeout) clearTimeout(persistTimeout);
+            
+            persistTimeout = setTimeout(() => {
+                // Her item'ın fotoğrafını ayrı anahtarda sakla
+                items.forEach(it => saveImg(it));
+                
+                // Ana cache'e imgData'sız yaz (yer tasarrufu)
+                try {
+                    localStorage.setItem(getUserKey(), JSON.stringify(stripImages(items)));
+                    quotaWarningShown = false; // Başarılı kaydedildi, uyarıyı sıfırla
+                } catch(e) {
+                    console.warn('persist localStorage hatası:', e);
+                    
+                    // LocalStorage quota aşımı uyarısı (sadece bir kez göster)
+                    if (e.name === 'QuotaExceededError' && !quotaWarningShown) {
+                        quotaWarningShown = true;
+                        alert('⚠️ Depolama alanı doldu! Bazı eski ürünleri veya fotoğrafları silmeniz gerekebilir.');
+                    }
+                }
+                
+                // Firebase'e imgData'sız gönder (await etmeden, background'da)
+                if (FB_ENABLED && currentUser) {
+                    fbSet('users/' + currentUser + '/items', stripImages(items)).catch(err => {
+                        console.warn('Firebase save error:', err);
+                    });
+                }
+            }, 300);
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
+
+        /* ── XSS Protection: HTML escape ── */
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Input sanitization - trim ve max length kontrolü
+        function sanitizeInput(text, maxLength = 500) {
+            if (!text) return '';
+            return String(text).trim().substring(0, maxLength);
+        }
 
         /* ── Category filter ── */
         document.getElementById("catBar").addEventListener("click", e => {
@@ -5410,23 +5497,26 @@
             if (!activeId) return;
             const it = items.find(x => x.id === activeId);
             if (!it) return;
-            it.itemName = document.getElementById("mItemName").value.trim();
+            
+            // Input sanitization - XSS koruması ve max length kontrolü
+            it.itemName = sanitizeInput(document.getElementById("mItemName").value, 200);
             it.links = getLinks();
             it.link = it.links[0] || "";   // geriye dönük uyumluluk
             it.category = mCategory.value;
             it.timeline = mTimeline.value;
             it.timelineYear = parseInt(mYear.value, 10) || new Date().getFullYear();
             it.priority = clamp(parseInt(mPriority.value, 10) || 1, 1, 5);
-            it.size = document.getElementById("mSize").value.trim();
+            it.size = sanitizeInput(document.getElementById("mSize").value, 100);
             it.secret = document.getElementById("mSecret").checked;
-            it.colorNote = document.getElementById("mColorNote").value.trim();
-            it.note = document.getElementById("mNote").value.trim();
-            it.currentPrice = document.getElementById("mCurrentPrice").value.trim();
-            it.price = document.getElementById("mPrice").value.trim();
-            it.priceNote = document.getElementById("mPriceNote").value.trim();
+            it.colorNote = sanitizeInput(document.getElementById("mColorNote").value, 200);
+            it.note = sanitizeInput(document.getElementById("mNote").value, 1000);
+            it.currentPrice = sanitizeInput(document.getElementById("mCurrentPrice").value, 50);
+            it.price = sanitizeInput(document.getElementById("mPrice").value, 50);
+            it.priceNote = sanitizeInput(document.getElementById("mPriceNote").value, 200);
             it.forWho = document.getElementById("mForWho").value || "self";
             it.reason = document.getElementById("mReason").value || "";
-            it.intentNote = document.getElementById("mIntentNote").value.trim();
+            it.intentNote = sanitizeInput(document.getElementById("mIntentNote").value, 500);
+            
             persist(); render(); closeDetailModal();
             if (it.secret) {
                 showToast("🔒 Ürün gizli listene taşındı. Görüntülemek için kategoriler arasında \"Gizli\" sekmesine geçebilirsiniz.");
@@ -6792,7 +6882,13 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
         if (currentLang !== 'tr') applyLanguage(currentLang);
 
         /* ═══ INIT ═══ */
-        if (currentUser) { load().then(() => render()); }
+        if (currentUser && !isDataLoaded) { 
+            isDataLoaded = true;
+            load().then(() => render()).catch(err => {
+                console.error('Data load error:', err);
+                showToast('⚠️ Veriler yüklenirken hata oluştu');
+            });
+        }
     </script>
 
     <!-- ═══ CROP OVERLAY ═══ -->
