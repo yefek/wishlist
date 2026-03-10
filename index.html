@@ -4883,20 +4883,22 @@
         function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
         function getImgKey(itemId) { return 'wl_img_' + itemId; }
 
-        /* imgData'yı localStorage'a kaydet, items array'inden çıkar */
-        function saveImages(itemList) {
-            itemList.forEach(it => {
-                if (it.imgData) localStorage.setItem(getImgKey(it.id), it.imgData);
-            });
+        /* Fotoğrafı ayrı anahtarda sakla */
+        function saveImg(it) {
+            if (it.imgData) {
+                try { localStorage.setItem(getImgKey(it.id), it.imgData); } catch(e) {
+                    console.warn('Fotoğraf localStorage\'a yazılamadı:', e);
+                }
+            }
         }
-        /* imgData'yı localStorage'dan ekle */
+        /* items array'ine imgData'yı localStorage'dan ekle */
         function mergeImages(itemList) {
             return itemList.map(it => ({
                 ...it,
                 imgData: localStorage.getItem(getImgKey(it.id)) || it.imgData || ''
             }));
         }
-        /* Firebase'e gönderilecek: imgData olmadan */
+        /* imgData olmadan — hem localStorage cache hem Firebase için */
         function stripImages(itemList) {
             return itemList.map(it => { const { imgData, ...rest } = it; return rest; });
         }
@@ -4906,21 +4908,41 @@
                 try {
                     const fbItems = await fbGet('users/' + currentUser + '/items');
                     if (fbItems && Array.isArray(fbItems)) {
-                        items = mergeImages(fbItems);
-                        localStorage.setItem(getUserKey(), JSON.stringify(items));
+                        items = mergeImages(fbItems); // imgData'yı local'den ekle
+                        // Cache'e imgData'sız yaz
+                        localStorage.setItem(getUserKey(), JSON.stringify(stripImages(fbItems)));
                         return;
                     }
                 } catch { }
             }
             try {
                 const raw = localStorage.getItem(getUserKey());
-                items = raw ? JSON.parse(raw) : [];
+                const parsed = raw ? JSON.parse(raw) : [];
+                // Eski sistemden gelen imgData'ları ayrı anahtara taşı, ana cache'i küçült
+                let needsClean = false;
+                parsed.forEach(it => {
+                    if (it.imgData && !localStorage.getItem(getImgKey(it.id))) {
+                        try { localStorage.setItem(getImgKey(it.id), it.imgData); needsClean = true; } catch {}
+                    }
+                });
+                items = mergeImages(parsed);
+                if (needsClean) {
+                    // Ana cache'den imgData'yı temizle
+                    try { localStorage.setItem(getUserKey(), JSON.stringify(stripImages(parsed))); } catch {}
+                }
             } catch { items = []; }
         }
 
         function persist() {
-            saveImages(items);
-            localStorage.setItem(getUserKey(), JSON.stringify(items));
+            // Her item'ın fotoğrafını ayrı anahtarda sakla
+            items.forEach(it => saveImg(it));
+            // Ana cache'e imgData'sız yaz (yer tasarrufu)
+            try {
+                localStorage.setItem(getUserKey(), JSON.stringify(stripImages(items)));
+            } catch(e) {
+                console.warn('persist localStorage hatası:', e);
+            }
+            // Firebase'e imgData'sız gönder
             if (FB_ENABLED && currentUser) {
                 fbSet('users/' + currentUser + '/items', stripImages(items));
             }
