@@ -1,0 +1,39 @@
+// Service Worker - Instant Load & Offline Support
+const CACHE_NAME = 'wishlist-v1';
+const ASSETS = [
+    './',
+    './index.html',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png'
+];
+
+// Install - cache assets
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => cache.addAll(ASSETS))
+            .then(() => self.skipWaiting())
+    );
+});
+
+// Activate - clean old caches
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((keys) =>
+            Promise.all(
+                keys.filter((key) => key !== CACHE_NAME)
+                    .map((key) => caches.delete(key))
+            )
+        ).then(() => self.clients.claim())
+    );
+});
+
+// Fetch - cache first (instant load)
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request)
+            .then((response) => response || fetch(event.request))
+            .catch(() => caches.match('./index.html'))
+    );
+});
