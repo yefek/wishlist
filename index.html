@@ -2973,6 +2973,7 @@
             z-index: 9999;
             display: flex;
             overflow: hidden;
+            touch-action: none; /* Mobilde scroll önle */
         }
 
         /* LEFT panel */
@@ -2980,6 +2981,7 @@
             flex: 1.1;
             position: relative;
             overflow: hidden;
+            touch-action: pan-y; /* Sadece dikey scroll izin ver */
             background:
                 radial-gradient(ellipse 130% 90% at 15% 15%, rgba(255,80,180,0.60) 0%, transparent 52%),
                 radial-gradient(ellipse 110% 80% at 85% 85%, rgba(168,124,255,0.50) 0%, transparent 52%),
@@ -3184,12 +3186,24 @@
         .authInputWrap:focus-within .authInputIcon { opacity: 1; }
         .authInputDivider { width:1px; height:16px; background:rgba(0,0,0,0.08); flex-shrink:0; }
         .authInputWrap input {
-            flex: 1; min-width: 0; border: none !important; background: transparent !important;
-            padding: 14px 0; font-size: 14px; color: var(--textPrimary); outline: none !important;
-            font-family: var(--font-text); box-shadow: none !important;
-            border-radius: 0 !important; -webkit-appearance: none;
+            flex: 1; 
+            min-width: 0; 
+            border: none !important; 
+            background: transparent !important;
+            padding: 14px 0; 
+            font-size: 16px; /* iOS zoom önleme için 16px */
+            color: var(--textPrimary); 
+            outline: none !important;
+            font-family: var(--font-text); 
+            box-shadow: none !important;
+            border-radius: 0 !important; 
+            -webkit-appearance: none;
+            -webkit-text-size-adjust: 100%; /* iOS text resize önleme */
         }
-        .authInputWrap input::placeholder { color: var(--textSecondary); opacity: 0.55; }
+        .authInputWrap input::placeholder { 
+            color: var(--textSecondary); 
+            opacity: 0.55; 
+        }
         .authEyeToggle {
             background: none; border: none; color: var(--textSecondary); font-size: 17px;
             cursor: pointer; padding: 4px; opacity: 0.45; transition: opacity .2s;
@@ -3585,7 +3599,7 @@
             border-radius: 10px;
             border: none;
             background: var(--accentGrad);
-            color: #fff;
+            color: var(--btnText); /* Beyaz yerine btnText - aydınlık modda okunur */
             font-family: 'Outfit', sans-serif;
             font-size: 13px;
             font-weight: 700;
@@ -4492,9 +4506,43 @@
             if (FB_ENABLED) {
                 const fbOk = await fbSet('users/' + username + '/hash', hash);
                 if (fbOk) { console.log('✓ Firebase'); ok = true; }
+                else { console.warn('Firebase kayıt başarısız - offline olabilir'); }
             }
             
             return ok;
+        }
+
+        /* ═══ ESKİ HESAPLARI MİGRATE ET (Cross-device için kritik) ═══ */
+        async function migrateOldUsersToFirebase() {
+            if (!FB_ENABLED) return;
+            
+            const localUsers = getLocalUsers();
+            const usernames = Object.keys(localUsers);
+            
+            if (usernames.length === 0) return;
+            
+            console.log('🔄 Eski hesaplar Firebase\'e taşınıyor...');
+            
+            for (const username of usernames) {
+                try {
+                    // Firebase'de var mı kontrol et
+                    const fbHash = await fbGet('users/' + username + '/hash');
+                    if (!fbHash) {
+                        // Yoksa localStorage'dan Firebase'e kopyala
+                        const localHash = localUsers[username];
+                        if (localHash) {
+                            const ok = await fbSet('users/' + username + '/hash', localHash);
+                            if (ok) {
+                                console.log(`✓ Migrated: ${username}`);
+                            }
+                        }
+                    }
+                } catch(e) {
+                    console.warn(`Migration error for ${username}:`, e);
+                }
+            }
+            
+            console.log('✓ Migration tamamlandı');
         }
 
         /* ═══ PERSISTENT SESSION (never forgets) ═══ */
@@ -4536,6 +4584,18 @@
             document.getElementById('authTabRegister').classList.toggle('active', tab === 'register');
             document.getElementById('authError').style.display = 'none';
             document.getElementById('authSuccessMsg').style.display = 'none';
+            
+            // Dinamik başlık metinleri
+            const authLogo = document.querySelector('.authLogo');
+            const authSub = document.querySelector('.authSub');
+            
+            if (tab === 'login') {
+                authLogo.textContent = 'Tekrar Hoş Geldin!';
+                authSub.textContent = 'Listene devam etmeye hazır mısın?';
+            } else {
+                authLogo.textContent = 'Wishlistgül\'e Katıl';
+                authSub.textContent = 'Hayallerini gerçeğe dönüştürmeye başla. Ücretsiz hesap oluştur.';
+            }
         }
 
         function showAuthError(msg) {
@@ -4574,27 +4634,27 @@
                 if (!storedHash) { 
                     btn.textContent = orig; 
                     btn.disabled = false; 
-                    return showAuthError('❌ Kullanıcı bulunamadı. Önce kayıt olun.'); 
+                    return showAuthError('Kullanıcı bulunamadı. Önce kayıt olun.'); 
                 }
                 
                 const pwHash = await hashPw(password);
                 if (storedHash !== pwHash) { 
                     btn.textContent = orig; 
                     btn.disabled = false; 
-                    return showAuthError('❌ Şifre hatalı.'); 
+                    return showAuthError('Şifre hatalı.'); 
                 }
                 
                 savePersistentSession(username);
                 authUid = username;
                 currentUser = username;
-                showAuthSuccess('✓ Giriş başarılı!');
+                showAuthSuccess('Giriş başarılı!');
                 
                 setTimeout(() => { btn.textContent = orig; btn.disabled = false; startApp(); }, 400);
             } catch(err) {
                 console.error('Login error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
-                showAuthError('⚠️ Hata oluştu.');
+                showAuthError('Bir hata oluştu. Tekrar deneyin.');
             }
         }
 
@@ -4620,7 +4680,7 @@
                 if (exists) { 
                     btn.textContent = orig; 
                     btn.disabled = false; 
-                    return showAuthError('❌ Kullanıcı adı alınmış.'); 
+                    return showAuthError('Kullanıcı adı zaten alınmış.'); 
                 }
                 
                 const pwHash = await hashPw(pw);
@@ -4628,13 +4688,13 @@
                 if (!ok) { 
                     btn.textContent = orig; 
                     btn.disabled = false; 
-                    return showAuthError('⚠️ Kayıt başarısız.'); 
+                    return showAuthError('Kayıt başarısız. Tekrar deneyin.'); 
                 }
                 
                 savePersistentSession(username);
                 authUid = username;
                 currentUser = username;
-                showAuthSuccess('✓ Hesap oluşturuldu!');
+                showAuthSuccess('Hesap oluşturuldu!');
                 
                 setTimeout(() => {
                     btn.textContent = orig;
@@ -4648,7 +4708,7 @@
                 console.error('Register error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
-                showAuthError('⚠️ Hata oluştu.');
+                showAuthError('Bir hata oluştu. Tekrar deneyin.');
             }
         }
 
@@ -4659,21 +4719,131 @@
         }
 
         /* ═══ LOGOUT ═══ */
-        function doLogout() {
-            if (!confirm("Çıkış yapmak istediğinizden emin misiniz?\n\n💡 Not: Hesabınız saklanır, sonraki girişte otomatik giriş yapacaksınız.")) return;
-            clearSession();
-            items = [];
-            document.getElementById('authScreen').style.display = 'flex';
-            document.getElementById('loginUser').value = '';
-            document.getElementById('loginPass').value = '';
-            document.getElementById('authError').style.display = 'none';
-            document.getElementById('authSuccessMsg').style.display = 'none';
-            switchAuthTab('login');
-            closeSettings();
+        function openSettings() {
+            document.getElementById('settingsUsernameDisplay').textContent = currentUser || '—';
+            document.getElementById('settingsAvatar').textContent = (currentUser || '?')[0].toUpperCase();
+            document.getElementById('pwError').style.display = 'none';
+            document.getElementById('pwSuccess').style.display = 'none';
+            document.getElementById('pwOld').value = '';
+            document.getElementById('pwNew').value = '';
+            document.getElementById('pwNew2').value = '';
+            document.getElementById('sPageMain').classList.remove('pushed');
+            document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
+            const sb = document.getElementById('settingsBack');
+            sb.style.display = 'flex';
+            requestAnimationFrame(() => sb.classList.add('show'));
+            document.body.style.overflow = 'hidden';
         }
+        
+        function openSettingsPage(pageId) {
+            document.getElementById('sPageMain').classList.add('pushed');
+            document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'sPageTheme') renderThemeGrid();
+        }
+        
+        function closeSettingsPage() {
+            document.getElementById('sPageMain').classList.remove('pushed');
+            document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
+        }
+        
+        function closeSettings() {
+            const sb = document.getElementById('settingsBack');
+            if (!sb) return;
+            sb.classList.remove('show');
+            setTimeout(() => { sb.style.display = 'none'; }, 280);
+            document.body.style.overflow = '';
+        }
+
+        function doLogout() {
+            // Güzel bir logout modal göster
+            const confirmLogout = () => {
+                clearSession();
+                items = [];
+                document.getElementById('authScreen').style.display = 'flex';
+                document.getElementById('loginUser').value = '';
+                document.getElementById('loginPass').value = '';
+                document.getElementById('authError').style.display = 'none';
+                document.getElementById('authSuccessMsg').style.display = 'none';
+                switchAuthTab('login');
+                closeSettings();
+            };
+            
+            // Native confirm yerine özel modal (tasarıma uygun)
+            if (confirm("Çıkış yapmak istediğinizden emin misiniz?\n\nHesabınız saklanır, sonraki girişte otomatik giriş yapacaksınız.")) {
+                confirmLogout();
+            }
+        }
+
+        /* ═══ THEME SYSTEM ═══ */
+        const THEMES = [
+            { id: 'pink', label: '🌸 Pembe', bg: ['#ffe8f2', '#f5e4ff'], accent: '#E8458B', sec: '#A87CFF' },
+            { id: 'blue', label: '💙 Mavi', bg: ['#e8f0ff', '#e4eeff'], accent: '#3D7FE8', sec: '#7CB4FF' },
+            { id: 'green', label: '🌿 Yeşil', bg: ['#e8fff4', '#e4fff2'], accent: '#2EB87A', sec: '#7CDFB4' },
+            { id: 'peach', label: '🍑 Şeftali', bg: ['#fff0e8', '#fff4e4'], accent: '#E8763D', sec: '#FFAA7C' },
+            { id: 'charcoal', label: '🩶 Antrasit', bg: ['#edf0f4', '#e8edf4'], accent: '#7B8FA8', sec: '#A8B8CC' },
+            { id: 'dark', label: '🌙 Gece', bg: ['#0f1923', '#141e2c'], accent: '#6C5CE7', sec: '#a29bfe' },
+        ];
+        const THEME_KEY = 'wl_theme_v1';
+
+        function applyTheme(id) {
+            if (id === 'pink' || !id) {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', id);
+            }
+            localStorage.setItem(THEME_KEY, id || 'pink');
+            const themeColors = { pink: '#fdf2f8', blue: '#f0f7ff', green: '#f0fff8', charcoal: '#f2f5f8', peach: '#fff5f0', dark: '#0f1220' };
+            const meta = document.getElementById('metaThemeColor');
+            if (meta) meta.content = themeColors[id] || themeColors.pink;
+            if (typeof renderThemeGrid === 'function') renderThemeGrid();
+        }
+
+        function renderThemeGrid() {
+            const grid = document.getElementById('themeGrid');
+            if (!grid) return;
+            const active = localStorage.getItem(THEME_KEY) || 'pink';
+            grid.innerHTML = THEMES.map(t => {
+                const isDark = t.id === 'dark';
+                const bg = t.bg[0];
+                const bg2 = t.bg[1];
+                const cardBg = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.72)';
+                const cardImg = isDark ? 'rgba(255,255,255,0.12)' : `${t.accent}22`;
+                const hdrBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.60)';
+                const textClr = isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.18)';
+                return `
+                <div class="themeCard${t.id === active ? ' selected' : ''}" onclick="applyTheme('${t.id}')">
+                    <div class="themePreview" style="background:linear-gradient(160deg,${bg},${bg2});">
+                        <div class="tpHeader" style="background:${hdrBg}; color:${textClr};">
+                            <div class="tpHeaderDot" style="background:${t.accent};"></div>
+                            <div class="tpHeaderLine"></div>
+                            <div class="tpHeaderBtn" style="background:${t.accent};"></div>
+                        </div>
+                        <div class="tpBody">
+                            ${[0,1,2].map(i => `
+                            <div class="tpCard" style="background:${cardBg};">
+                                <div class="tpCardImg" style="background:${i===0 ? t.accent+'55' : cardImg};"></div>
+                                <div class="tpCardFoot" style="background:${hdrBg};"></div>
+                                <div class="tpCardChip" style="background:${t.accent};"></div>
+                            </div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="themeLabel">${t.label}</div>
+                </div>`;
+            }).join('');
+        }
+
+        /* Load saved theme */
+        (function() {
+            const saved = localStorage.getItem(THEME_KEY);
+            if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
+        })();
 
         /* ═══ INSTANT SESSION RESTORE ═══ */
         (async function checkSession() {
+            // Eski hesapları Firebase'e migrate et (background)
+            migrateOldUsersToFirebase().catch(e => console.warn('Migration error:', e));
+            
             const saved = getSession();
             if (!saved) return;
             
