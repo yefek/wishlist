@@ -3500,14 +3500,14 @@
         }
         .savSumLabel {
             font-size: 10px;
-            color: var(--textSub);
+            color: var(--textSecondary);
             font-weight: 500;
             letter-spacing: 0.2px;
         }
         .savSumDivider {
             width: 1px;
             height: 32px;
-            background: var(--borderColor);
+            background: var(--stroke);
             opacity: 0.5;
         }
         .savingsList {
@@ -3516,9 +3516,9 @@
             gap: 10px;
         }
         .savCard {
-            background: var(--cardBg);
+            background: var(--surface);
             border-radius: 14px;
-            border: 1.5px solid var(--borderColor);
+            border: 1.5px solid var(--stroke);
             padding: 12px 14px;
             display: flex;
             flex-direction: column;
@@ -3545,7 +3545,7 @@
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
             font-size: 13px;
-            color: var(--textMain);
+            color: var(--textPrimary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -3553,7 +3553,7 @@
         }
         .savCardAmounts {
             font-size: 12px;
-            color: var(--textSub);
+            color: var(--textSecondary);
         }
         .savCardAmounts strong {
             color: var(--accent);
@@ -3567,7 +3567,7 @@
         }
         .savProgressFill {
             height: 100%;
-            background: var(--accentGrad);
+            background: var(--gradientHL);
             border-radius: 99px;
             transition: width 0.4s cubic-bezier(0.32,0.72,0.45,1);
             min-width: 4px;
@@ -3580,25 +3580,25 @@
         .savInput {
             flex: 1;
             height: 36px;
-            border: 1.5px solid var(--borderColor);
+            border: 1.5px solid var(--stroke);
             border-radius: 10px;
             padding: 0 10px;
             font-family: 'Outfit', sans-serif;
             font-size: 13px;
             font-weight: 600;
             background: var(--surfaceBg);
-            color: var(--textMain);
+            color: var(--textPrimary);
             outline: none;
             transition: border-color 0.18s;
         }
         .savInput:focus { border-color: var(--accent); }
-        .savInput::placeholder { color: var(--textSub); font-weight: 400; }
+        .savInput::placeholder { color: var(--textSecondary); font-weight: 400; }
         .savAddBtn {
             height: 36px;
             padding: 0 14px;
             border-radius: 10px;
             border: none;
-            background: var(--accentGrad);
+            background: var(--gradientHL);
             color: var(--btnText); /* Beyaz yerine btnText - aydınlık modda okunur */
             font-family: 'Outfit', sans-serif;
             font-size: 13px;
@@ -3613,9 +3613,9 @@
             width: 36px;
             flex-shrink: 0;
             border-radius: 10px;
-            border: 1.5px solid var(--borderColor);
+            border: 1.5px solid var(--stroke);
             background: transparent;
-            color: var(--textSub);
+            color: var(--textSecondary);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -3636,7 +3636,7 @@
         }
         .savingsEmpty {
             text-align: center;
-            color: var(--textSub);
+            color: var(--textSecondary);
             padding: 32px 0;
             font-size: 13px;
         }
@@ -3648,7 +3648,7 @@
         }
 
         .savTargetAmt {
-            color: var(--textSub);
+            color: var(--textSecondary);
             font-weight: 500;
         }
         /* Number input spinner'ı gizle */
@@ -4585,16 +4585,17 @@
             document.getElementById('authError').style.display = 'none';
             document.getElementById('authSuccessMsg').style.display = 'none';
             
-            // Dinamik başlık metinleri
-            const authLogo = document.querySelector('.authLogo');
-            const authSub = document.querySelector('.authSub');
+            // Dinamik başlık metinleri — sağ paneldeki form üstü
+            const formTitle = document.querySelector('.auth-form-title');
+            const formSub = document.querySelector('.auth-form-sub');
+            const t = (typeof I18N !== 'undefined' && typeof currentLang !== 'undefined') ? I18N[currentLang] : null;
             
             if (tab === 'login') {
-                authLogo.textContent = 'Tekrar Hoş Geldin!';
-                authSub.textContent = 'Listene devam etmeye hazır mısın?';
+                formTitle.textContent = t ? t.authFormTitleLogin : 'Tekrar hoş geldin';
+                formSub.textContent = t ? t.authFormSubLogin : 'Listene devam etmeye hazır mısın?';
             } else {
-                authLogo.textContent = 'Wishlistgül\'e Katıl';
-                authSub.textContent = 'Hayallerini gerçeğe dönüştürmeye başla. Ücretsiz hesap oluştur.';
+                formTitle.textContent = t ? t.authFormTitleRegister : 'Hesap oluştur';
+                formSub.textContent = t ? t.authFormSubRegister : 'Hayallerini gerçeğe dönüştürmeye başla.';
             }
         }
 
@@ -6794,7 +6795,11 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 loginBtn: 'Giriş Yap →',
                 registerBtn: 'Hesap Oluştur →',
                 forgotPw: 'Şifremi unuttum',
-                authSub: 'Kendi istek listeni oluştur ✨',
+                authSub: 'Hayalindeki ürünleri listele, planla ve en doğru anda al.',
+                authFormTitleLogin: 'Tekrar hoş geldin',
+                authFormSubLogin: 'Listene devam etmeye hazır mısın?',
+                authFormTitleRegister: 'Hesap oluştur',
+                authFormSubRegister: 'Hayallerini gerçeğe dönüştürmeye başla.',
                 update: 'Güncelle →',
                 oldPw: 'Mevcut şifre',
                 newPw: 'Yeni şifre',
@@ -6847,7 +6852,11 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 loginBtn: 'Sign In →',
                 registerBtn: 'Create Account →',
                 forgotPw: 'Forgot password',
-                authSub: 'Create your own wishlist ✨',
+                authSub: 'List your dream items, plan, and buy at the right moment.',
+                authFormTitleLogin: 'Welcome back',
+                authFormSubLogin: 'Ready to continue your list?',
+                authFormTitleRegister: 'Create account',
+                authFormSubRegister: 'Start turning your dreams into reality.',
                 update: 'Update →',
                 oldPw: 'Current password',
                 newPw: 'New password',
@@ -6910,6 +6919,13 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             if (regBtn) regBtn.textContent = t.registerBtn;
             const forgotLink = document.querySelector('.authForgot a');
             if (forgotLink) forgotLink.textContent = t.forgotPw;
+            // Form başlıkları — aktif sekmeye göre güncelle
+            const activeTab = document.querySelector('.authTab.active');
+            const isLogin = activeTab && activeTab.id === 'authTabLogin';
+            const formTitle = document.querySelector('.auth-form-title');
+            const formSubEl = document.querySelector('.auth-form-sub');
+            if (formTitle) formTitle.textContent = isLogin ? t.authFormTitleLogin : t.authFormTitleRegister;
+            if (formSubEl) formSubEl.textContent = isLogin ? t.authFormSubLogin : t.authFormSubRegister;
 
             // Placeholders
             const ph = {
@@ -7256,7 +7272,6 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             overlay.classList.remove('open');
         });
     })();
-    </script>
     </script>
 
     <script>
