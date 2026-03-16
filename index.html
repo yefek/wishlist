@@ -745,6 +745,28 @@
             gap: 16px;
         }
 
+        /* ═══════════ MOOD BOARD MASONRY ═══════════ */
+        .grid.moodboard {
+            display: block;
+            column-count: 2;
+            column-gap: 16px;
+        }
+
+        .grid.moodboard .card {
+            display: inline-block; /* Prevent breaking across columns */
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .grid.moodboard .card img {
+            aspect-ratio: auto; /* Allow natural height for masonry effect */
+        }
+        
+        .grid.moodboard .chipTR {
+            /* In moodboard mode, hover to see or keep it subtle */
+            opacity: 0.8;
+        }
+
         /* ═══════════ SIGNATURE #1: FLOATING TILE ═══════════ */
         .card {
             position: relative;
@@ -1625,6 +1647,7 @@
             cursor: default;
             pointer-events: none;
         }
+        .cropHint {
             color: rgba(255,255,255,0.32);
             font-size: 10.5px;
             font-family: var(--font-text);
@@ -2425,6 +2448,7 @@
             width: 100%;
             accent-color: var(--accent);
             -webkit-appearance: none;
+            appearance: none;
             height: 6px;
             border-radius: 3px;
             background: linear-gradient(to right, var(--lilac), var(--accent));
@@ -3040,6 +3064,7 @@
             background: rgba(255,255,255,0.30);
         }
         .auth-ctrl-icon { font-size: 14px; line-height: 1; }
+        #authBgStage {
             position: absolute;
             inset: 0;
             pointer-events: none;
@@ -3198,6 +3223,7 @@
             box-shadow: none !important;
             border-radius: 0 !important; 
             -webkit-appearance: none;
+            appearance: none;
             -webkit-text-size-adjust: 100%; /* iOS text resize önleme */
         }
         .authInputWrap input::placeholder { 
@@ -3679,8 +3705,7 @@
                         <button class="dropItem" id="dropSettings" onclick="openSettings()"><span class="dropIcon"><i
                                     class="ph ph-gear"></i></span><span data-i18n="dropSettings">Ayarlar</span></button>
                         <button class="dropItem dropDanger" id="dropLogout" onclick="doLogout()"><span
-                                class="dropIcon"><i class="ph ph-sign-out"></i></span><span data-i18n="dropLogout">Çıkış
-                                Yap</span></button>
+                                class="dropIcon"><i class="ph ph-sign-out"></i></span><span data-i18n="dropLogout">Çıkış Yap</span></button>
                     </div>
                 </div>
             </div>
@@ -3701,11 +3726,16 @@
     </div>
 
     <!-- Sort bar -->
-    <div class="sortBar" id="sortBar">
-        <div class="sortPill active" data-sort="date-desc">Tarih ↓</div>
-        <div class="sortPill" data-sort="date-asc">Tarih ↑</div>
-        <div class="sortPill" data-sort="priority-desc">Öncelik ↓</div>
-        <div class="sortPill" data-sort="priority-asc">Öncelik ↑</div>
+    <div class="sortBar" id="sortBar" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 6px; overflow-x: auto; padding-right: 12px; scrollbar-width: none;">
+            <div class="sortPill active" data-sort="date-desc">Tarih ↓</div>
+            <div class="sortPill" data-sort="date-asc">Tarih ↑</div>
+            <div class="sortPill" data-sort="priority-desc">Öncelik ↓</div>
+            <div class="sortPill" data-sort="priority-asc">Öncelik ↑</div>
+        </div>
+        <button id="viewToggleBtn" style="background: var(--surface); border: 1px solid var(--stroke); color: var(--textPrimary); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;">
+            <i class="ph ph-squares-four" id="viewToggleIcon" style="font-size: 18px;"></i>
+        </button>
     </div>
 
     <main class="content">
@@ -4242,6 +4272,22 @@
         </div>
     </div>
 
+    <!-- ── CUSTOM CONFIRM MODAL ── -->
+    <div id="confirmBack" class="modalBack" role="dialog" aria-modal="true" style="z-index: 99999; align-items: center;">
+        <div class="modal" id="confirmModal" style="max-width: 360px; width: 92%; margin: auto; border-radius: 24px; padding: 24px 20px 20px;">
+            <div class="modalHeader" style="justify-content: center; border-bottom: none; padding-bottom: 8px;">
+                <h3 id="confirmTitle" style="text-align: center; width: 100%; margin:0; font-family: var(--font-display); font-size: 20px; color: var(--textPrimary);">Onay</h3>
+            </div>
+            <div class="modalBody" style="padding: 0 10px 24px; text-align: center; font-size: 14.5px; color: var(--textSecondary); line-height: 1.6;" id="confirmDesc">
+                Emin misiniz?
+            </div>
+            <div style="display: flex; gap: 12px; padding: 0;">
+                <button class="btn" style="flex: 1; justify-content: center; background: var(--inputBg); color: var(--textPrimary); border: 1.5px solid rgba(0,0,0,0.06); font-family: var(--font-text); font-weight: 600; padding: 14px 0; border-radius: 14px;" onclick="closeConfirmModal()">İptal</button>
+                <button class="authSubmit" id="confirmActionBtn" style="flex: 1; justify-content: center; margin: 0; padding: 14px 0; border-radius: 14px; font-size: 14.5px;">Evet</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══ SETTINGS MODAL ═══ -->
     <div id="settingsBack" class="modalBack" role="dialog" aria-modal="true">
         <div class="modal" id="settingsModal">
@@ -4305,6 +4351,14 @@
                                 <div class="sRowDesc">Tüm ürünleri kalıcı sil</div>
                             </div>
                             <i class="ph ph-caret-right sRowArrow"></i>
+                        </div>
+
+                        <div class="sRow danger" onclick="openSettingsPage('sPageDelete')">
+                            <div class="sRowIcon danger" style="background:rgba(232,69,69,0.1); color:#e84545;"><i class="ph ph-user-minus"></i></div>
+                            <div class="sRowText">
+                                <div class="sRowTitle">Hesabı Sil</div>
+                                <div class="sRowDesc">Tüm verileri kalıcı sil</div>
+                            </div>
                         </div>
 
                         <button class="sLogout" onclick="doLogout()">
@@ -4387,6 +4441,20 @@
                             Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.
                         </div>
                         <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="confirmReset()">Evet, Sıfırla</button>
+                    </div>
+                </div>
+
+                <!-- ── Hesabı Sil sayfası ── -->
+                <div class="sPage sub" id="sPageDelete">
+                    <div class="sSubHead">
+                        <button class="sBackBtn" onclick="closeSettingsPage()"><i class="ph ph-caret-left"></i></button>
+                        <div class="sSubTitle">Hesabı Sil</div>
+                    </div>
+                    <div class="sSubBody">
+                        <div style="font-size:13px;color:var(--textSecondary);line-height:1.6;">
+                            Hesabınıza ait tüm veriler (istek listesi, tema vb.) kalıcı olarak silinecek. Bu işlem geri alınamaz.
+                        </div>
+                        <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="deleteAccount()">Evet, Hesabımı Sil</button>
                     </div>
                 </div>
 
@@ -4756,8 +4824,27 @@
             document.body.style.overflow = '';
         }
 
+        function showConfirmModal(title, desc, confirmText, action) {
+            const cb = document.getElementById('confirmBack');
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmDesc').innerText = desc;
+            const btn = document.getElementById('confirmActionBtn');
+            btn.innerText = confirmText;
+            btn.onclick = () => {
+                closeConfirmModal();
+                action();
+            };
+            cb.style.display = 'flex';
+            requestAnimationFrame(() => cb.classList.add('show'));
+        }
+
+        function closeConfirmModal() {
+            const cb = document.getElementById('confirmBack');
+            cb.classList.remove('show');
+            setTimeout(() => { cb.style.display = 'none'; }, 280);
+        }
+
         function doLogout() {
-            // Güzel bir logout modal göster
             const confirmLogout = () => {
                 clearSession();
                 items = [];
@@ -4770,10 +4857,44 @@
                 closeSettings();
             };
             
-            // Native confirm yerine özel modal (tasarıma uygun)
-            if (confirm("Çıkış yapmak istediğinizden emin misiniz?\n\nHesabınız saklanır, sonraki girişte otomatik giriş yapacaksınız.")) {
-                confirmLogout();
+            showConfirmModal(
+                "Çıkış Yap",
+                "Çıkış yapmak istediğinizden emin misiniz?\n\nHesabınız saklanır, sonraki girişte otomatik giriş yapacaksınız.",
+                "Çıkış Yap",
+                confirmLogout
+            );
+        }
+
+        async function deleteAccount() {
+            if (!currentUser) return;
+            
+            // Custom modal cannot await on confirm cleanly like window.confirm. 
+            // So we execute logic immediately here because this function is now called AFTER the user confirms pressing the red button via sPageDelete logic (or directly via a modal, but right now it is triggered by sPageDelete form button)
+            // Wait, to keep it structurally simple since it's inside sPageDelete. The button in `sPageDelete` says "Evet, Hesabımı Sil" meaning they already saw the warning.
+            // But let's add one last layer of security using the custom modal just for extra safety like we did for doLogout. Wait, no, sPageReset just executes. Let's execute immediately since we are already inside a dedicated warning page.
+            
+            // Firebase'den sil
+            if (FB_ENABLED) {
+                await fbDelete('users/' + currentUser);
             }
+
+            // localStorage'dan sil
+            const localUsers = getLocalUsers();
+            if (localUsers[currentUser]) {
+                delete localUsers[currentUser];
+                saveLocalUsers(localUsers);
+            }
+            localStorage.removeItem(ITEMS_KEY + '_' + currentUser);
+            
+            clearSession();
+            items = [];
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccessMsg').style.display = 'none';
+            switchAuthTab('login');
+            closeSettings();
         }
 
         /* ═══ THEME SYSTEM ═══ */
@@ -4889,6 +5010,7 @@
         let activeId = null;
         let activeCat = "all";
         let activeSort = "date-desc";
+        let viewMode = localStorage.getItem("wishlistgul_viewMode") || "list";
         let purchaseTargetId = null;
 
         /* ── DOM refs ── */
@@ -5157,6 +5279,13 @@
             render();
         });
 
+        // View Toggle Butonu
+        document.getElementById("viewToggleBtn").addEventListener("click", () => {
+            viewMode = viewMode === "list" ? "moodboard" : "list";
+            localStorage.setItem("wishlistgul_viewMode", viewMode);
+            render();
+        });
+
         /* ── Sort filter ── */
         document.getElementById("sortBar").addEventListener("click", e => {
             const pill = e.target.closest(".sortPill");
@@ -5183,6 +5312,15 @@
         function render() {
             gridEl.innerHTML = "";
             let filtered;
+
+            // Görünüm moduna göre grid class'ını ayarla ve ikonu güncelle
+            if (viewMode === "moodboard") {
+                gridEl.classList.add("moodboard");
+                document.getElementById("viewToggleIcon").className = "ph ph-list"; // Next click will make it list
+            } else {
+                gridEl.classList.remove("moodboard");
+                document.getElementById("viewToggleIcon").className = "ph ph-squares-four"; // Next click will make it grid
+            }
             if (activeCat === "all") {
                 filtered = items.filter(x => x.status !== "bought" && !x.secret);
             } else if (activeCat === "bought") {
