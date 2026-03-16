@@ -108,16 +108,30 @@
         }
 
         /* ── Custom scrollbar ── */
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
         ::-webkit-scrollbar-thumb {
             background: var(--accent);
             opacity: 0.35;
             border-radius: 99px;
         }
-        ::-webkit-scrollbar-thumb:hover { opacity: 0.6; }
+
+        ::-webkit-scrollbar-thumb:hover {
+            opacity: 0.6;
+        }
+
         /* Firefox */
-        * { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+        }
 
         /* ═══════════ THEMES ═══════════ */
         body[data-theme="blue"] {
@@ -399,17 +413,21 @@
         body[data-theme="dark"] .auth-right {
             background: rgba(15, 20, 35, 0.93);
         }
+
         body[data-theme="dark"] .authInputWrap {
             background: rgba(28, 36, 60, 0.80);
             border-color: rgba(255, 255, 255, 0.08);
         }
+
         body[data-theme="dark"] .authInputWrap:focus-within {
             background: rgba(35, 45, 75, 0.90);
         }
+
         body[data-theme="dark"] .authTab.active {
             background: rgba(40, 50, 80, 0.90);
             color: #a29bfe;
         }
+
         body[data-theme="dark"] .authTabs {
             background: rgba(28, 36, 60, 0.60);
         }
@@ -488,19 +506,25 @@
             padding: 0 7px;
             gap: 4px;
         }
+
         .tpHeaderDot {
-            width: 14px; height: 5px;
+            width: 14px;
+            height: 5px;
             border-radius: 99px;
             opacity: 0.9;
         }
+
         .tpHeaderLine {
-            flex: 1; height: 4px;
+            flex: 1;
+            height: 4px;
             border-radius: 99px;
             opacity: 0.25;
             background: currentColor;
         }
+
         .tpHeaderBtn {
-            width: 10px; height: 10px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             opacity: 0.9;
         }
@@ -514,20 +538,24 @@
             gap: 4px;
             align-content: start;
         }
+
         .tpCard {
             border-radius: 5px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
+
         .tpCardImg {
             height: 22px;
             opacity: 0.7;
         }
+
         .tpCardFoot {
             height: 8px;
             opacity: 0.5;
         }
+
         .tpCardChip {
             width: 60%;
             height: 4px;
@@ -639,6 +667,7 @@
         .hidden {
             display: none;
         }
+
         /* iOS Safari'de display:none olan file input'lar label ile tetiklenmiyor.
            type=file olanlar için görünmez ama erişilebilir hale getiriyoruz. */
         input[type="file"].hidden {
@@ -753,15 +782,17 @@
         }
 
         .grid.moodboard .card {
-            display: inline-block; /* Prevent breaking across columns */
+            display: inline-block;
+            /* Prevent breaking across columns */
             width: 100%;
             margin-bottom: 16px;
         }
 
         .grid.moodboard .card img {
-            aspect-ratio: auto; /* Allow natural height for masonry effect */
+            aspect-ratio: auto;
+            /* Allow natural height for masonry effect */
         }
-        
+
         .grid.moodboard .chipTR {
             /* In moodboard mode, hover to see or keep it subtle */
             opacity: 0.8;
@@ -1095,10 +1126,10 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(0,0,0,0.52);
+            background: rgba(0, 0, 0, 0.52);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(255,255,255,0.35);
+            border: 1.5px solid rgba(255, 255, 255, 0.35);
             color: #fff;
             font-size: 15px;
             display: flex;
@@ -1108,8 +1139,14 @@
             z-index: 10;
             transition: background .15s, transform .12s;
         }
-        .cropBtn:hover  { background: rgba(0,0,0,0.72); }
-        .cropBtn:active { transform: scale(0.9); }
+
+        .cropBtn:hover {
+            background: rgba(0, 0, 0, 0.72);
+        }
+
+        .cropBtn:active {
+            transform: scale(0.9);
+        }
 
         /* Kırpma overlay */
         /* ══════════════════════════════════════════
@@ -1117,28 +1154,55 @@
         ══════════════════════════════════════════ */
 
         /* Preview row (shared header) */
-        .mNameRow { padding: 10px 16px 6px; }
-        .mNameInput {
-            width: 100%; border: none; border-bottom: 1.5px solid rgba(0,0,0,0.08);
-            background: transparent; padding: 0 2px 5px;
-            font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700;
-            color: var(--textPrimary); letter-spacing: -0.2px;
-            outline: none; transition: border-color .15s;
-            display: block; margin-bottom: 6px;
+        .mNameRow {
+            padding: 10px 16px 6px;
         }
-        .mNameInput::placeholder { color: var(--textSecondary); font-weight: 500; font-size: 13px; }
-        .mNameInput:focus { border-bottom-color: var(--accent); }
-        body[data-theme="dark"] .mNameInput { border-bottom-color: rgba(255,255,255,0.12); }
-        body[data-theme="dark"] .mNameInput:focus { border-bottom-color: var(--accent); }
+
+        .mNameInput {
+            width: 100%;
+            border: none;
+            border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+            background: transparent;
+            padding: 0 2px 5px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            letter-spacing: -0.2px;
+            outline: none;
+            transition: border-color .15s;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .mNameInput::placeholder {
+            color: var(--textSecondary);
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .mNameInput:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        body[data-theme="dark"] .mNameInput {
+            border-bottom-color: rgba(255, 255, 255, 0.12);
+        }
+
+        body[data-theme="dark"] .mNameInput:focus {
+            border-bottom-color: var(--accent);
+        }
 
         .mPreviewRow {
             display: flex;
             gap: 12px;
             padding: 0 16px 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
+
         .mThumb {
-            width: 80px; height: 80px;
+            width: 80px;
+            height: 80px;
             border-radius: 14px;
             overflow: hidden;
             flex-shrink: 0;
@@ -1146,268 +1210,589 @@
             background: var(--inputBg);
             border: 1px solid var(--stroke);
         }
+
         .mThumb img {
-            width: 100%; height: 100%; object-fit: cover; display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
+
         .mMeta {
-            flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 2px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-top: 2px;
         }
-        .mMetaChips { display: flex; flex-wrap: wrap; gap: 5px; }
+
+        .mMetaChips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
         .mMetaChip {
-            font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 99px;
-            background: var(--accentSoft); border: 1px solid var(--accentMid); color: var(--accent);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 9px;
+            border-radius: 99px;
+            background: var(--accentSoft);
+            border: 1px solid var(--accentMid);
+            color: var(--accent);
         }
+
         .mMetaChipGhost {
-            background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07); color: var(--textSecondary);
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            color: var(--textSecondary);
         }
-        .mMetaHeart { display: inline-flex; line-height: 1; }
-        .mMetaHearts { display: flex; gap: 2px; align-items: center; }
-        .mMetaHint { font-size: 10.5px; color: var(--textSecondary); }
+
+        .mMetaHeart {
+            display: inline-flex;
+            line-height: 1;
+        }
+
+        .mMetaHearts {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+        }
+
+        .mMetaHint {
+            font-size: 10.5px;
+            color: var(--textSecondary);
+        }
 
         /* Tab bar */
         .mTabs {
             display: flex;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             padding: 0 16px;
         }
+
         .mTab {
-            flex: 1; padding: 9px 0; text-align: center;
-            font-size: 11px; font-weight: 600; color: var(--textSecondary);
-            cursor: pointer; border-bottom: 2px solid transparent;
-            display: flex; align-items: center; justify-content: center; gap: 4px;
+            flex: 1;
+            padding: 9px 0;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
             white-space: nowrap;
             transition: color 0.15s, border-color 0.15s;
         }
-        .mTab i { font-size: 12px; }
-        .mTab.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .mTab[data-tab="niyet"].active { color: var(--lilac, #A87CFF); border-bottom-color: var(--lilac, #A87CFF); }
+
+        .mTab i {
+            font-size: 12px;
+        }
+
+        .mTab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .mTab[data-tab="niyet"].active {
+            color: var(--lilac, #A87CFF);
+            border-bottom-color: var(--lilac, #A87CFF);
+        }
 
         /* Tab body */
-        .mTabBody { padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+        .mTabBody {
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
         /* Field wrapper */
-        .mField { display: flex; flex-direction: column; gap: 6px; }
-        .mLabel {
-            font-size: 10px; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 0.5px; color: var(--textSecondary);
-            display: flex; align-items: center; gap: 5px;
+        .mField {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
-        .mLabel i { font-size: 11px; color: var(--accent); }
+
+        .mLabel {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--textSecondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .mLabel i {
+            font-size: 11px;
+            color: var(--accent);
+        }
+
         .mLabel .mCatBadge {
-            font-size: 8.5px; font-weight: 700; padding: 1px 5px; border-radius: 99px;
-            background: var(--accentSoft); color: var(--accent);
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 99px;
+            background: var(--accentSoft);
+            color: var(--accent);
         }
 
         /* Link rows */
-        .mLinkEntry { display: flex; gap: 5px; margin-bottom: 5px; }
-        .mLinkEntry:last-child { margin-bottom: 0; }
-        .mLinkEntry input { flex: 1; min-width: 0; }
+        .mLinkEntry {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .mLinkEntry:last-child {
+            margin-bottom: 0;
+        }
+
+        .mLinkEntry input {
+            flex: 1;
+            min-width: 0;
+        }
+
         .mLinkIconBtn {
-            width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px;
-            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; color: var(--accent); cursor: pointer;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--accent);
+            cursor: pointer;
             transition: background .15s;
         }
+
         .mLinkIconBtn.add {
-            background: var(--accentSoft); border: 1px dashed var(--accentBorder);
+            background: var(--accentSoft);
+            border: 1px dashed var(--accentBorder);
         }
+
         .mLinkIconBtn.remove {
-            background: rgba(232,69,69,0.07); border: 1px dashed rgba(232,69,69,0.25); color: #e84545;
+            background: rgba(232, 69, 69, 0.07);
+            border: 1px dashed rgba(232, 69, 69, 0.25);
+            color: #e84545;
         }
+
         .mLinkAddBtn {
-            display: flex; align-items: center; gap: 5px;
-            background: none; border: 1px dashed var(--accentBorder);
-            color: var(--accent); border-radius: 10px; padding: 7px 12px;
-            font-size: 12px; font-weight: 600; font-family: var(--font-text);
-            cursor: pointer; transition: background .15s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: 1px dashed var(--accentBorder);
+            color: var(--accent);
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: var(--font-text);
+            cursor: pointer;
+            transition: background .15s;
             align-self: flex-start;
         }
-        .mLinkAddBtn:hover { background: var(--accentSoft); }
+
+        .mLinkAddBtn:hover {
+            background: var(--accentSoft);
+        }
 
         /* Date picker row */
-        .mDateRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .mDateCard {
-            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 10px; padding: 6px 10px; display: flex; flex-direction: column; gap: 3px;
+        .mDateRow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
-        .mDateLabel { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--textSecondary); }
+
+        .mDateCard {
+            background: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 10px;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .mDateLabel {
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--textSecondary);
+        }
+
         .mDateCard select {
-            background: transparent; border: none; padding: 0;
-            font-size: 13px; font-weight: 600; color: var(--textPrimary);
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--textPrimary);
             font-family: var(--font-text);
         }
-        body[data-theme="dark"] .mDateCard select { color: var(--textPrimary); }
+
+        body[data-theme="dark"] .mDateCard select {
+            color: var(--textPrimary);
+        }
 
         /* ── Custom Dropdown ── */
         .cDropWrap {
             position: relative;
         }
+
         .cDropBtn {
-            width: 100%; display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 13px; border-radius: 12px;
-            background: var(--inputBg); border: 1.5px solid rgba(0,0,0,0.13);
-            font-size: 13.5px; font-weight: 600; font-family: var(--font-text);
-            color: var(--textPrimary); cursor: pointer; text-align: left;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 13px;
+            border-radius: 12px;
+            background: var(--inputBg);
+            border: 1.5px solid rgba(0, 0, 0, 0.13);
+            font-size: 13.5px;
+            font-weight: 600;
+            font-family: var(--font-text);
+            color: var(--textPrimary);
+            cursor: pointer;
+            text-align: left;
             transition: border-color .15s, box-shadow .15s;
             gap: 8px;
         }
+
         body[data-theme="dark"] .cDropBtn {
-            border-color: rgba(255,255,255,0.15);
+            border-color: rgba(255, 255, 255, 0.15);
         }
-        .cDropBtn:focus, .cDropBtn.open {
+
+        .cDropBtn:focus,
+        .cDropBtn.open {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accentSoft);
             outline: none;
         }
-        .cDropBtn .cDropIcon { color: var(--accent); font-size: 15px; flex-shrink: 0; margin-right: 2px; }
+
+        .cDropBtn .cDropIcon {
+            color: var(--accent);
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-right: 2px;
+        }
+
         .cDropChevron {
-            color: var(--textSecondary); font-size: 14px; flex-shrink: 0;
+            color: var(--textSecondary);
+            font-size: 14px;
+            flex-shrink: 0;
             transition: transform .2s;
         }
-        .cDropBtn.open .cDropChevron { transform: rotate(180deg); }
+
+        .cDropBtn.open .cDropChevron {
+            transform: rotate(180deg);
+        }
 
         /* Popup panel */
         .cDropPanel {
-            position: absolute; left: 0; right: 0; top: calc(100% + 6px);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 6px);
             background: var(--surface);
             border: 1.5px solid var(--accentMid);
             border-radius: 14px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
             overflow: hidden;
             z-index: 999;
-            opacity: 0; transform: translateY(-6px) scale(0.98);
+            opacity: 0;
+            transform: translateY(-6px) scale(0.98);
             pointer-events: none;
             transition: opacity .18s, transform .18s;
         }
+
         .cDropPanel.open {
-            opacity: 1; transform: translateY(0) scale(1);
+            opacity: 1;
+            transform: translateY(0) scale(1);
             pointer-events: auto;
         }
+
         body[data-theme="dark"] .cDropPanel {
             background: #1a2840;
             border-color: var(--accentMid);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
+
         .cDropOption {
-            display: flex; align-items: center; gap: 9px;
-            padding: 10px 14px; cursor: pointer;
-            font-size: 13px; font-weight: 500; font-family: var(--font-text);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: var(--font-text);
             color: var(--textPrimary);
             transition: background .12s;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
-        .cDropOption:last-child { border-bottom: none; }
-        body[data-theme="dark"] .cDropOption { border-bottom-color: rgba(255,255,255,0.05); }
-        .cDropOption:hover { background: var(--accentSoft); }
+
+        .cDropOption:last-child {
+            border-bottom: none;
+        }
+
+        body[data-theme="dark"] .cDropOption {
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .cDropOption:hover {
+            background: var(--accentSoft);
+        }
+
         .cDropOption.selected {
-            background: var(--accentSoft); color: var(--accent); font-weight: 700;
+            background: var(--accentSoft);
+            color: var(--accent);
+            font-weight: 700;
         }
-        .cDropOption .cDropOptIcon { font-size: 15px; color: var(--accent); width: 18px; text-align: center; }
-        .cDropCheck { margin-left: auto; color: var(--accent); font-size: 14px; opacity: 0; }
-        .cDropOption.selected .cDropCheck { opacity: 1; }
+
+        .cDropOption .cDropOptIcon {
+            font-size: 15px;
+            color: var(--accent);
+            width: 18px;
+            text-align: center;
+        }
+
+        .cDropCheck {
+            margin-left: auto;
+            color: var(--accent);
+            font-size: 14px;
+            opacity: 0;
+        }
+
+        .cDropOption.selected .cDropCheck {
+            opacity: 1;
+        }
 
         /* Compact variant for date cards */
         .cDropBtn.compact {
-            padding: 4px 8px 4px 10px; border-radius: 8px; font-size: 13px;
-            background: transparent; border: none;
+            padding: 4px 8px 4px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            background: transparent;
+            border: none;
         }
-        .cDropBtn.compact:focus, .cDropBtn.compact.open {
-            background: var(--inputBg); border: 1.5px solid var(--accentMid);
+
+        .cDropBtn.compact:focus,
+        .cDropBtn.compact.open {
+            background: var(--inputBg);
+            border: 1.5px solid var(--accentMid);
             box-shadow: 0 0 0 2px var(--accentSoft);
         }
+
         .cDropPanel.compact {
             border-radius: 12px;
-            max-height: 220px; overflow-y: auto;
+            max-height: 220px;
+            overflow-y: auto;
         }
 
-        .mDateCard { position: relative; }
+        .mDateCard {
+            position: relative;
+        }
 
         /* Size chips */
-        .mSizeChips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
+        .mSizeChips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
         .mSizeChip {
-            font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 99px;
-            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.07);
-            color: var(--textSecondary); cursor: pointer; transition: all .15s;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 99px;
+            background: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            color: var(--textSecondary);
+            cursor: pointer;
+            transition: all .15s;
         }
+
         .mSizeChip.on {
-            background: var(--accentSoft); border-color: var(--accentMid); color: var(--accent);
+            background: var(--accentSoft);
+            border-color: var(--accentMid);
+            color: var(--accent);
         }
-        .mSizeInput { font-size: 13px !important; }
+
+        .mSizeInput {
+            font-size: 13px !important;
+        }
 
         /* Price row */
-        .mPriceRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .mPriceCard {
-            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 5px;
+        .mPriceRow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
-        .mPriceTarget { border-color: var(--accentBorder); background: var(--accentVeryLight); }
+
+        .mPriceCard {
+            background: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .mPriceTarget {
+            border-color: var(--accentBorder);
+            background: var(--accentVeryLight);
+        }
+
         .mPriceCardLabel {
-            font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .4px;
             color: var(--textSecondary);
         }
-        .mPriceTarget .mPriceCardLabel { color: var(--accent); }
+
+        .mPriceTarget .mPriceCardLabel {
+            color: var(--accent);
+        }
+
         .mPriceCard input {
-            background: transparent !important; border: none !important;
-            padding: 0 !important; font-size: 16px !important; font-weight: 600 !important;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
             color: var(--textPrimary) !important;
         }
+
         .mPriceDiff {
-            font-size: 11px; font-weight: 600; color: #1a8a5a;
-            padding: 4px 10px; border-radius: 99px;
-            background: rgba(46,184,122,0.10); border: 1px solid rgba(46,184,122,0.20);
-            align-self: flex-start; display: none;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1a8a5a;
+            padding: 4px 10px;
+            border-radius: 99px;
+            background: rgba(46, 184, 122, 0.10);
+            border: 1px solid rgba(46, 184, 122, 0.20);
+            align-self: flex-start;
+            display: none;
         }
-        .mPriceDiff.show { display: block; }
+
+        .mPriceDiff.show {
+            display: block;
+        }
 
         /* Secret row */
         .mSecretRow {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 12px; padding: 10px 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 10px 13px;
         }
+
         .mSecretLeft {
-            display: flex; align-items: center; gap: 7px;
-            font-size: 12.5px; font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12.5px;
+            font-weight: 500;
         }
-        .mSecretLeft i { color: var(--accent); font-size: 14px; }
+
+        .mSecretLeft i {
+            color: var(--accent);
+            font-size: 14px;
+        }
 
         /* Reflect cards */
         .mReflectCard {
-            background: var(--inputBg); border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 13px; padding: 12px 14px; display: flex; flex-direction: column; gap: 9px;
+            background: var(--inputBg);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 13px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
         }
+
         .mReflectPurple {
-            border-color: rgba(168,124,255,0.18);
-            background: rgba(168,124,255,0.05);
+            border-color: rgba(168, 124, 255, 0.18);
+            background: rgba(168, 124, 255, 0.05);
         }
-        body[data-theme="dark"] .mReflectPurple { background: rgba(168,124,255,0.08); }
+
+        body[data-theme="dark"] .mReflectPurple {
+            background: rgba(168, 124, 255, 0.08);
+        }
+
         .mReflectTitle {
-            font-size: 11.5px; font-weight: 600;
-            display: flex; align-items: center; gap: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .mReflectTitle i { font-size: 13px; color: var(--lilac, #A87CFF); }
+
+        .mReflectTitle i {
+            font-size: 13px;
+            color: var(--lilac, #A87CFF);
+        }
 
         /* Chip selector */
-        .mChipSel { display: flex; flex-wrap: wrap; gap: 6px; }
+        .mChipSel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
         .mChipBtn {
-            font-size: 12px; font-weight: 600; padding: 6px 13px; border-radius: 99px;
-            background: var(--surface); border: 1px solid rgba(0,0,0,0.08);
-            color: var(--textSecondary); cursor: pointer; font-family: var(--font-text);
-            display: flex; align-items: center; gap: 5px; transition: all .15s;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 13px;
+            border-radius: 99px;
+            background: var(--surface);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: var(--textSecondary);
+            cursor: pointer;
+            font-family: var(--font-text);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all .15s;
         }
-        .mChipBtn i { font-size: 13px; }
+
+        .mChipBtn i {
+            font-size: 13px;
+        }
+
         .mChipBtn.active {
-            background: var(--accentSoft); border-color: var(--accentMid); color: var(--accent);
+            background: var(--accentSoft);
+            border-color: var(--accentMid);
+            color: var(--accent);
         }
+
         .mChipBtn.active-purple {
-            background: rgba(168,124,255,0.12);
-            border-color: rgba(168,124,255,0.28);
+            background: rgba(168, 124, 255, 0.12);
+            border-color: rgba(168, 124, 255, 0.28);
             color: var(--lilac, #A87CFF);
         }
 
         /* Tab body fade transition */
-        .mTabBody { transition: opacity 0.15s ease; }
+        .mTabBody {
+            transition: opacity 0.15s ease;
+        }
 
         /* Dark mode: card/input borders visible */
         body[data-theme="dark"] .mDateCard,
@@ -1415,8 +1800,9 @@
         body[data-theme="dark"] .mSecretRow,
         body[data-theme="dark"] .mReflectCard,
         body[data-theme="dark"] .mSizeChip {
-            border-color: rgba(255,255,255,0.12);
+            border-color: rgba(255, 255, 255, 0.12);
         }
+
         body[data-theme="dark"] .mPriceTarget {
             border-color: var(--accentBorder);
         }
@@ -1426,19 +1812,39 @@
         body[data-theme="dark"] .mDateCard select {
             color-scheme: dark;
         }
+
         .mPriceInputRow {
-            display: flex; align-items: baseline; gap: 3px;
+            display: flex;
+            align-items: baseline;
+            gap: 3px;
         }
+
         .mPriceCur {
-            font-size: 14px; font-weight: 600; color: var(--textSecondary); flex-shrink: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            flex-shrink: 0;
         }
-        .mPriceTarget .mPriceCur { color: var(--accent); }
+
+        .mPriceTarget .mPriceCur {
+            color: var(--accent);
+        }
+
         .mFoot {
-            display: flex; gap: 8px;
-            padding-top: 6px; margin-top: 4px;
-            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            gap: 8px;
+            padding-top: 6px;
+            margin-top: 4px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
-        .mFoot .btn { flex: 1; justify-content: center; padding: 11px 0; border-radius: 99px; }
+
+        .mFoot .btn {
+            flex: 1;
+            justify-content: center;
+            padding: 11px 0;
+            border-radius: 99px;
+        }
+
         #cropOverlay {
             display: none;
             position: fixed;
@@ -1455,6 +1861,7 @@
             opacity: 0;
             transition: opacity 0.22s ease;
         }
+
         #cropOverlay.open {
             display: flex;
             opacity: 1;
@@ -1465,10 +1872,10 @@
             font-family: var(--font-display);
             font-size: 18px;
             font-weight: 700;
-            color: rgba(255,255,255,0.90);
+            color: rgba(255, 255, 255, 0.90);
             margin-bottom: 16px;
             letter-spacing: 0.2px;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
         }
 
         .cropStage {
@@ -1478,16 +1885,19 @@
             overflow: hidden;
             /* Yumuşak köşe + hafif cam çerçeve */
             border-radius: 22px;
-            border: 1.5px solid rgba(255,255,255,0.28);
+            border: 1.5px solid rgba(255, 255, 255, 0.28);
             box-shadow:
-                0 24px 64px rgba(0,0,0,0.35),
-                0 0 0 6px rgba(255,255,255,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.18);
+                0 24px 64px rgba(0, 0, 0, 0.35),
+                0 0 0 6px rgba(255, 255, 255, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
             cursor: grab;
             touch-action: none;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
         }
-        .cropStage:active { cursor: grabbing; }
+
+        .cropStage:active {
+            cursor: grabbing;
+        }
 
         #cropImage {
             position: absolute;
@@ -1505,26 +1915,32 @@
             pointer-events: none;
             border-radius: 22px;
             background-image:
-                linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
             background-size: 33.33% 33.33%;
         }
+
         /* Köşe işaretçiler */
         .cropGrid::before,
         .cropGrid::after {
             content: '';
             position: absolute;
-            width: 22px; height: 22px;
-            border-color: rgba(255,255,255,0.70);
+            width: 22px;
+            height: 22px;
+            border-color: rgba(255, 255, 255, 0.70);
             border-style: solid;
         }
+
         .cropGrid::before {
-            top: 10px; left: 10px;
+            top: 10px;
+            left: 10px;
             border-width: 2px 0 0 2px;
             border-radius: 3px 0 0 0;
         }
+
         .cropGrid::after {
-            bottom: 10px; right: 10px;
+            bottom: 10px;
+            right: 10px;
             border-width: 0 2px 2px 0;
             border-radius: 0 0 3px 0;
         }
@@ -1532,10 +1948,10 @@
         /* Bottom control panel: cam kutu */
         .cropPanel {
             margin-top: 18px;
-            background: rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.22);
+            border: 1px solid rgba(255, 255, 255, 0.22);
             border-radius: 18px;
             padding: 14px 18px;
             display: flex;
@@ -1543,7 +1959,7 @@
             align-items: center;
             gap: 12px;
             width: min(88vw, 400px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.20);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.20);
         }
 
         .cropZoomRow {
@@ -1552,18 +1968,21 @@
             gap: 10px;
             width: 100%;
         }
+
         .cropZoomRow i {
-            color: rgba(255,255,255,0.55);
+            color: rgba(255, 255, 255, 0.55);
             font-size: 15px;
             flex-shrink: 0;
         }
+
         .cropZoomRow input[type=range] {
             flex: 1;
             accent-color: var(--accent);
             height: 3px;
         }
+
         .cropZoomLabel {
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 0.65);
             font-family: var(--font-text);
             font-size: 11px;
             font-weight: 600;
@@ -1576,21 +1995,29 @@
             gap: 10px;
             width: 100%;
         }
+
         .cropCancelBtn {
             flex: 1;
             padding: 11px 0;
             border-radius: 99px;
-            border: 1.5px solid rgba(255,255,255,0.22);
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.80);
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.80);
             font-family: var(--font-text);
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: background .15s, transform .12s;
         }
-        .cropCancelBtn:hover  { background: rgba(255,255,255,0.16); }
-        .cropCancelBtn:active { transform: scale(0.96); }
+
+        .cropCancelBtn:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .cropCancelBtn:active {
+            transform: scale(0.96);
+        }
+
         .cropConfirmBtn {
             flex: 2;
             padding: 11px 0;
@@ -1607,16 +2034,24 @@
             position: relative;
             overflow: hidden;
         }
+
         .cropConfirmBtn::after {
             content: '';
             position: absolute;
             inset: 0 0 50% 0;
-            background: linear-gradient(180deg,rgba(255,255,255,0.15),transparent);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent);
             border-radius: 99px 99px 0 0;
             pointer-events: none;
         }
-        .cropConfirmBtn:hover  { transform: translateY(-1px); box-shadow: 0 8px 24px var(--glow); }
-        .cropConfirmBtn:active { transform: scale(0.96); }
+
+        .cropConfirmBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px var(--glow);
+        }
+
+        .cropConfirmBtn:active {
+            transform: scale(0.96);
+        }
 
         .cropResetBtn {
             display: flex;
@@ -1626,9 +2061,9 @@
             width: 100%;
             padding: 8px 0;
             border-radius: 99px;
-            border: 1px dashed rgba(255,255,255,0.25);
+            border: 1px dashed rgba(255, 255, 255, 0.25);
             background: transparent;
-            color: rgba(255,255,255,0.50);
+            color: rgba(255, 255, 255, 0.50);
             font-family: var(--font-text);
             font-size: 11.5px;
             font-weight: 600;
@@ -1636,19 +2071,25 @@
             transition: background .15s, color .15s, border-color .15s;
             letter-spacing: 0.2px;
         }
+
         .cropResetBtn:hover {
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.75);
-            border-color: rgba(255,255,255,0.40);
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.75);
+            border-color: rgba(255, 255, 255, 0.40);
         }
-        .cropResetBtn:active { transform: scale(0.97); }
+
+        .cropResetBtn:active {
+            transform: scale(0.97);
+        }
+
         .cropResetBtn:disabled {
             opacity: 0.28;
             cursor: default;
             pointer-events: none;
         }
+
         .cropHint {
-            color: rgba(255,255,255,0.32);
+            color: rgba(255, 255, 255, 0.32);
             font-size: 10.5px;
             font-family: var(--font-text);
             letter-spacing: 0.2px;
@@ -2997,7 +3438,8 @@
             z-index: 9999;
             display: flex;
             overflow: hidden;
-            touch-action: none; /* Mobilde scroll önle */
+            touch-action: none;
+            /* Mobilde scroll önle */
         }
 
         /* LEFT panel */
@@ -3005,21 +3447,37 @@
             flex: 1.1;
             position: relative;
             overflow: hidden;
-            touch-action: pan-y; /* Sadece dikey scroll izin ver */
+            touch-action: pan-y;
+            /* Sadece dikey scroll izin ver */
             background:
-                radial-gradient(ellipse 130% 90% at 15% 15%, rgba(255,80,180,0.60) 0%, transparent 52%),
-                radial-gradient(ellipse 110% 80% at 85% 85%, rgba(168,124,255,0.50) 0%, transparent 52%),
+                radial-gradient(ellipse 130% 90% at 15% 15%, rgba(255, 80, 180, 0.60) 0%, transparent 52%),
+                radial-gradient(ellipse 110% 80% at 85% 85%, rgba(168, 124, 255, 0.50) 0%, transparent 52%),
                 linear-gradient(150deg, #ffb3d6 0%, #d4aaff 55%, #c0a0ff 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             padding: 48px 52px;
         }
-        body[data-theme="blue"]     .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(61,127,232,.58) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(124,180,255,.48) 0%,transparent 52%), linear-gradient(150deg,#aac8f5 0%,#c8deff 55%,#b0ccff 100%); }
-        body[data-theme="green"]    .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(46,184,122,.55) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(124,223,180,.45) 0%,transparent 52%), linear-gradient(150deg,#a8e8c8 0%,#c8f5e0 55%,#aaefcf 100%); }
-        body[data-theme="peach"]    .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(232,118,61,.55) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(255,170,124,.45) 0%,transparent 52%), linear-gradient(150deg,#ffc8a0 0%,#ffddc0 55%,#ffcaaa 100%); }
-        body[data-theme="charcoal"] .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(123,143,168,.45) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(168,184,204,.38) 0%,transparent 52%), linear-gradient(150deg,#c8d4e0 0%,#dce6f0 55%,#ccdae8 100%); }
-        body[data-theme="dark"]     .auth-left { background: radial-gradient(ellipse 130% 90% at 15% 15%,rgba(108,92,231,.58) 0%,transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%,rgba(162,155,254,.45) 0%,transparent 52%), linear-gradient(150deg,#1a1535 0%,#231d4a 55%,#1c1840 100%); }
+
+        body[data-theme="blue"] .auth-left {
+            background: radial-gradient(ellipse 130% 90% at 15% 15%, rgba(61, 127, 232, .58) 0%, transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%, rgba(124, 180, 255, .48) 0%, transparent 52%), linear-gradient(150deg, #aac8f5 0%, #c8deff 55%, #b0ccff 100%);
+        }
+
+        body[data-theme="green"] .auth-left {
+            background: radial-gradient(ellipse 130% 90% at 15% 15%, rgba(46, 184, 122, .55) 0%, transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%, rgba(124, 223, 180, .45) 0%, transparent 52%), linear-gradient(150deg, #a8e8c8 0%, #c8f5e0 55%, #aaefcf 100%);
+        }
+
+        body[data-theme="peach"] .auth-left {
+            background: radial-gradient(ellipse 130% 90% at 15% 15%, rgba(232, 118, 61, .55) 0%, transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%, rgba(255, 170, 124, .45) 0%, transparent 52%), linear-gradient(150deg, #ffc8a0 0%, #ffddc0 55%, #ffcaaa 100%);
+        }
+
+        body[data-theme="charcoal"] .auth-left {
+            background: radial-gradient(ellipse 130% 90% at 15% 15%, rgba(123, 143, 168, .45) 0%, transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%, rgba(168, 184, 204, .38) 0%, transparent 52%), linear-gradient(150deg, #c8d4e0 0%, #dce6f0 55%, #ccdae8 100%);
+        }
+
+        body[data-theme="dark"] .auth-left {
+            background: radial-gradient(ellipse 130% 90% at 15% 15%, rgba(108, 92, 231, .58) 0%, transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%, rgba(162, 155, 254, .45) 0%, transparent 52%), linear-gradient(150deg, #1a1535 0%, #231d4a 55%, #1c1840 100%);
+        }
 
         /* Auth top-left controls */
         .auth-top-controls {
@@ -3031,95 +3489,119 @@
             align-items: center;
             gap: 8px;
         }
+
         .auth-ctrl-btn {
             display: flex;
             align-items: center;
             gap: 5px;
             padding: 7px 12px;
-            background: rgba(255,255,255,0.22);
-            border: 1px solid rgba(255,255,255,0.40);
+            background: rgba(255, 255, 255, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.40);
             border-radius: 99px;
             cursor: pointer;
             font-family: var(--font-text);
             font-size: 12px;
             font-weight: 600;
-            color: rgba(255,255,255,0.92);
+            color: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: background .18s, transform .15s;
             letter-spacing: 0.2px;
         }
+
         .auth-ctrl-btn:hover {
-            background: rgba(255,255,255,0.32);
+            background: rgba(255, 255, 255, 0.32);
             transform: translateY(-1px);
         }
-        .auth-ctrl-btn:active { transform: scale(0.95); }
-        .auth-ctrl-btn.active {
-            background: rgba(255,255,255,0.38);
-            border-color: rgba(255,255,255,0.65);
+
+        .auth-ctrl-btn:active {
+            transform: scale(0.95);
         }
+
+        .auth-ctrl-btn.active {
+            background: rgba(255, 255, 255, 0.38);
+            border-color: rgba(255, 255, 255, 0.65);
+        }
+
         .auth-ctrl-sep {
             width: 1px;
             height: 18px;
-            background: rgba(255,255,255,0.30);
+            background: rgba(255, 255, 255, 0.30);
         }
-        .auth-ctrl-icon { font-size: 14px; line-height: 1; }
+
+        .auth-ctrl-icon {
+            font-size: 14px;
+            line-height: 1;
+        }
+
         #authBgStage {
             position: absolute;
             inset: 0;
             pointer-events: none;
             overflow: hidden;
         }
+
         #authCardStage {
             position: absolute;
             inset: 0;
             pointer-events: none;
             overflow: hidden;
         }
+
         .ac {
             position: absolute;
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px 16px;
-            background: rgba(255,255,255,0.48);
+            background: rgba(255, 255, 255, 0.48);
             backdrop-filter: blur(14px) saturate(160%);
             -webkit-backdrop-filter: blur(14px) saturate(160%);
-            border: 1px solid rgba(255,255,255,0.72);
+            border: 1px solid rgba(255, 255, 255, 0.72);
             border-radius: 18px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.80);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.80);
             will-change: transform, opacity;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             user-select: none;
             white-space: nowrap;
         }
-        .ac-emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
-        .ac-text  {
+
+        .ac-emoji {
+            font-size: 22px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .ac-text {
             font-family: 'DM Sans', sans-serif;
             font-size: 12px;
             font-weight: 600;
-            color: rgba(40,10,70,0.80);
+            color: rgba(40, 10, 70, 0.80);
             line-height: 1.2;
             letter-spacing: 0.1px;
         }
+
         body[data-theme="dark"] .ac {
-            background: rgba(30,20,55,0.52);
-            border-color: rgba(255,255,255,0.18);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+            background: rgba(30, 20, 55, 0.52);
+            border-color: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.12);
         }
+
         body[data-theme="dark"] .ac-text {
-            color: rgba(235,225,255,0.90);
+            color: rgba(235, 225, 255, 0.90);
         }
+
         .auth-left-content {
             position: relative;
             z-index: 2;
         }
+
         .authLogo {
             font-family: 'DM Serif Display', serif;
             font-size: clamp(38px, 4.5vw, 58px);
             font-style: italic;
-            background: linear-gradient(135deg, #fff 20%, rgba(255,255,255,0.75) 100%);
+            background: linear-gradient(135deg, #fff 20%, rgba(255, 255, 255, 0.75) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -3127,42 +3609,54 @@
             padding-bottom: 0.12em;
             margin-bottom: 10px;
         }
+
         .authSub {
             font-size: 15px;
-            color: rgba(255,255,255,0.82);
+            color: rgba(255, 255, 255, 0.82);
             margin-bottom: 28px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.12);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
         }
+
         .auth-features {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+
         .auth-feature {
             display: flex;
             align-items: center;
             gap: 13px;
         }
+
         .auth-feature-dot {
-            width: 36px; height: 36px; border-radius: 11px;
-            background: rgba(255,255,255,0.22);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.35);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 17px; flex-shrink: 0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
         }
+
         .auth-feature-text {
-            font-size: 13.5px; font-weight: 500;
-            color: rgba(255,255,255,0.92);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.10);
+            font-size: 13.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
         }
 
         /* RIGHT panel */
         .auth-right {
             width: 420px;
             flex-shrink: 0;
-            background: rgba(255,252,255,0.94);
+            background: rgba(255, 252, 255, 0.94);
             backdrop-filter: blur(28px) saturate(180%);
             -webkit-backdrop-filter: blur(28px) saturate(180%);
             display: flex;
@@ -3171,116 +3665,267 @@
             justify-content: center;
             padding: 48px 40px;
         }
-        .auth-form-wrap { width: 100%; max-width: 340px; }
-        .auth-form-title {
-            font-size: 26px; font-weight: 700; color: var(--textPrimary);
-            margin-bottom: 5px; letter-spacing: -0.4px;
+
+        .auth-form-wrap {
+            width: 100%;
+            max-width: 340px;
         }
-        .auth-form-sub { font-size: 13px; color: var(--textSecondary); margin-bottom: 26px; }
+
+        .auth-form-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--textPrimary);
+            margin-bottom: 5px;
+            letter-spacing: -0.4px;
+        }
+
+        .auth-form-sub {
+            font-size: 13px;
+            color: var(--textSecondary);
+            margin-bottom: 26px;
+        }
 
         .authTabs {
             display: flex;
             background: var(--accentVeryLight);
-            border-radius: 12px; padding: 3px; margin-bottom: 22px;
+            border-radius: 12px;
+            padding: 3px;
+            margin-bottom: 22px;
         }
-        .authTab {
-            flex: 1; padding: 9px 0; border: none; background: transparent;
-            border-radius: 10px; font-family: var(--font-text); font-size: 13px; font-weight: 600;
-            color: var(--textSecondary); cursor: pointer; transition: all 0.25s ease;
-        }
-        .authTab.active { background: white; color: var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
 
-        .authField { margin-bottom: 13px; }
-        .authInputWrap {
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(255,255,255,0.65);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(0,0,0,0.06); border-radius: 99px; padding: 0 18px;
-            transition: border-color .22s, box-shadow .22s, background .22s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        .authTab {
+            flex: 1;
+            padding: 9px 0;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            font-family: var(--font-text);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            cursor: pointer;
+            transition: all 0.25s ease;
         }
+
+        .authTab.active {
+            background: white;
+            color: var(--accent);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .authField {
+            margin-bottom: 13px;
+        }
+
+        .authInputWrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(0, 0, 0, 0.06);
+            border-radius: 99px;
+            padding: 0 18px;
+            transition: border-color .22s, box-shadow .22s, background .22s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
         .authInputWrap:focus-within {
             border-color: var(--accentBorderFocus);
-            background: rgba(255,255,255,0.85);
+            background: rgba(255, 255, 255, 0.85);
             box-shadow: 0 0 0 4px var(--accentFocusRing), 0 4px 20px var(--accentFocusGlow);
         }
+
         .authInputIcon {
-            color: var(--accent); opacity: 0.42; flex-shrink: 0; font-size: 17px;
-            display: flex; align-items: center; transition: opacity .22s;
+            color: var(--accent);
+            opacity: 0.42;
+            flex-shrink: 0;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            transition: opacity .22s;
         }
-        .authInputWrap:focus-within .authInputIcon { opacity: 1; }
-        .authInputDivider { width:1px; height:16px; background:rgba(0,0,0,0.08); flex-shrink:0; }
+
+        .authInputWrap:focus-within .authInputIcon {
+            opacity: 1;
+        }
+
+        .authInputDivider {
+            width: 1px;
+            height: 16px;
+            background: rgba(0, 0, 0, 0.08);
+            flex-shrink: 0;
+        }
+
         .authInputWrap input {
-            flex: 1; 
-            min-width: 0; 
-            border: none !important; 
+            flex: 1;
+            min-width: 0;
+            border: none !important;
             background: transparent !important;
-            padding: 14px 0; 
-            font-size: 16px; /* iOS zoom önleme için 16px */
-            color: var(--textPrimary); 
+            padding: 14px 0;
+            font-size: 16px;
+            /* iOS zoom önleme için 16px */
+            color: var(--textPrimary);
             outline: none !important;
-            font-family: var(--font-text); 
+            font-family: var(--font-text);
             box-shadow: none !important;
-            border-radius: 0 !important; 
+            border-radius: 0 !important;
             -webkit-appearance: none;
             appearance: none;
-            -webkit-text-size-adjust: 100%; /* iOS text resize önleme */
+            -webkit-text-size-adjust: 100%;
+            /* iOS text resize önleme */
         }
-        .authInputWrap input::placeholder { 
-            color: var(--textSecondary); 
-            opacity: 0.55; 
-        }
-        .authEyeToggle {
-            background: none; border: none; color: var(--textSecondary); font-size: 17px;
-            cursor: pointer; padding: 4px; opacity: 0.45; transition: opacity .2s;
-            display: flex; align-items: center;
-        }
-        .authEyeToggle:hover { opacity: 1; }
-        .authSubmit {
-            width: 100%; padding: 14px; border: none; border-radius: 99px;
-            background: var(--authBtnGrad); color: white;
-            font-family: var(--font-text); font-size: 14px; font-weight: 600;
-            cursor: pointer; transition: transform .18s, box-shadow .18s;
-            box-shadow: 0 6px 22px var(--glow); margin-top: 8px;
-            position: relative; overflow: hidden;
-        }
-        .authSubmit::after {
-            content: ''; position: absolute; top:0; left:0; right:0; height:50%;
-            background: linear-gradient(180deg,rgba(255,255,255,0.18),transparent);
-            border-radius: 99px 99px 0 0; pointer-events: none;
-        }
-        .authSubmit:active { transform: scale(0.97); }
-        .authSubmit:hover  { transform: translateY(-1px); box-shadow: 0 10px 30px var(--glow); }
 
-        .authForgot { text-align: center; margin-top: 14px; }
-        .authForgot a { font-size: 12px; color: var(--textSecondary); text-decoration: none; transition: color .2s; }
-        .authForgot a:hover { color: var(--accent); }
+        .authInputWrap input::placeholder {
+            color: var(--textSecondary);
+            opacity: 0.55;
+        }
+
+        .authEyeToggle {
+            background: none;
+            border: none;
+            color: var(--textSecondary);
+            font-size: 17px;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.45;
+            transition: opacity .2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .authEyeToggle:hover {
+            opacity: 1;
+        }
+
+        .authSubmit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 99px;
+            background: var(--authBtnGrad);
+            color: white;
+            font-family: var(--font-text);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform .18s, box-shadow .18s;
+            box-shadow: 0 6px 22px var(--glow);
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .authSubmit::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent);
+            border-radius: 99px 99px 0 0;
+            pointer-events: none;
+        }
+
+        .authSubmit:active {
+            transform: scale(0.97);
+        }
+
+        .authSubmit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .authForgot {
+            text-align: center;
+            margin-top: 14px;
+        }
+
+        .authForgot a {
+            font-size: 12px;
+            color: var(--textSecondary);
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .authForgot a:hover {
+            color: var(--accent);
+        }
 
         @keyframes authFadeUp {
-            from { opacity:0; transform:translateY(10px); }
-            to   { opacity:1; transform:translateY(0); }
-        }
-        .authError {
-            background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.18);
-            border-radius: 12px; padding: 10px 16px; font-size: 12px; color: #c0125e;
-            margin-bottom: 12px; display: none; text-align: center;
-        }
-        .authSuccess {
-            background: rgba(72,199,142,0.11); border: 1px solid rgba(72,199,142,0.28);
-            border-radius: 12px; padding: 10px 16px; font-size: 12px; color: #1a7a4c;
-            margin-bottom: 12px; display: none; text-align: center;
-        }
-        @media (max-width: 768px) {
-            #authScreen { flex-direction: column; overflow-y: auto; }
-            .auth-left { flex: none; min-height: 52vh; padding: 28px 24px 56px; }
-            .auth-features { display: none; }
-            .authSub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0; }
-            .auth-right {
-                width: 100%; padding: 32px 22px 44px;
-                border-radius: 28px 28px 0 0; margin-top: -28px;
-                position: relative; z-index: 2; justify-content: flex-start;
+            from {
+                opacity: 0;
+                transform: translateY(10px);
             }
-            .auth-form-wrap { max-width: 100%; }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .authError {
+            background: rgba(220, 38, 38, 0.06);
+            border: 1px solid rgba(220, 38, 38, 0.18);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: #c0125e;
+            margin-bottom: 12px;
+            display: none;
+            text-align: center;
+        }
+
+        .authSuccess {
+            background: rgba(72, 199, 142, 0.11);
+            border: 1px solid rgba(72, 199, 142, 0.28);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: #1a7a4c;
+            margin-bottom: 12px;
+            display: none;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            #authScreen {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+
+            .auth-left {
+                flex: none;
+                min-height: 52vh;
+                padding: 28px 24px 56px;
+            }
+
+            .auth-features {
+                display: none;
+            }
+
+            .authSub {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 0;
+            }
+
+            .auth-right {
+                width: 100%;
+                padding: 32px 22px 44px;
+                border-radius: 28px 28px 0 0;
+                margin-top: -28px;
+                position: relative;
+                z-index: 2;
+                justify-content: flex-start;
+            }
+
+            .auth-form-wrap {
+                max-width: 100%;
+            }
         }
 
         /* ═══════════ SETTINGS MODAL ═══════════ */
@@ -3296,91 +3941,207 @@
             overflow: hidden;
             flex-shrink: 0;
         }
-        .sHeadHandle { display: flex; justify-content: center; padding-bottom: 10px; }
+
+        .sHeadHandle {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 10px;
+        }
+
         .sHeadHandle span {
-            width: 30px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.35);
+            width: 30px;
+            height: 4px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.35);
         }
+
         .sHeadRow {
-            display: flex; align-items: center; gap: 13px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
         }
+
         .sAvatar {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: rgba(255,255,255,0.22);
-            border: 2px solid rgba(255,255,255,0.42);
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-display); font-size: 20px; color: #fff; 
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.22);
+            border: 2px solid rgba(255, 255, 255, 0.42);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 20px;
+            color: #fff;
             flex-shrink: 0;
-            box-shadow: 0 3px 14px rgba(0,0,0,0.15);
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
         }
-        .sUserInfo { flex: 1; }
+
+        .sUserInfo {
+            flex: 1;
+        }
+
         .sUsername {
-            font-family: var(--font-display); 
-            font-size: 17px; color: #fff; letter-spacing: 0.1px;
+            font-family: var(--font-display);
+            font-size: 17px;
+            color: #fff;
+            letter-spacing: 0.1px;
         }
-        .sUserSub { font-size: 11.5px; color: rgba(255,255,255,0.68); margin-top: 2px; }
+
+        .sUserSub {
+            font-size: 11.5px;
+            color: rgba(255, 255, 255, 0.68);
+            margin-top: 2px;
+        }
+
         .sCloseBtn {
-            background: rgba(255,255,255,0.18);
-            border: 1px solid rgba(255,255,255,0.30);
-            color: #fff; border-radius: 99px;
-            font-size: 11px; font-weight: 600; padding: 5px 13px;
-            font-family: var(--font-text); cursor: pointer;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.30);
+            color: #fff;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 13px;
+            font-family: var(--font-text);
+            cursor: pointer;
             flex-shrink: 0;
         }
 
         /* Body */
-        .sBody { padding: 10px 0 8px; }
+        .sBody {
+            padding: 10px 0 8px;
+        }
 
         /* Group label */
         .sGroupLabel {
-            font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px;
-            color: var(--textSecondary); padding: 10px 16px 5px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: var(--textSecondary);
+            padding: 10px 16px 5px;
         }
 
         /* List row */
         .sRow {
-            display: flex; align-items: center; gap: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 11px 16px;
             cursor: pointer;
             transition: background 0.14s;
             border-radius: 0;
         }
-        .sRow:hover { background: var(--accentSoft); }
-        .sRow:active { background: var(--accentGradMid); }
-        .sRowIcon {
-            width: 36px; height: 36px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 17px; flex-shrink: 0;
-        }
-        .sRowIcon.pink { background: var(--accentSoft); color: var(--accent); }
-        .sRowIcon.purple { background: rgba(168,124,255,0.12); color: var(--lilac, #A87CFF); }
-        .sRowIcon.blue { background: rgba(61,127,232,0.10); color: #3D7FE8; }
-        .sRowIcon.danger { background: rgba(232,69,69,0.10); color: #e84545; }
-        .sRowText { flex: 1; }
-        .sRowTitle { font-size: 13.5px; font-weight: 600; color: var(--textPrimary); }
-        .sRowDesc { font-size: 11.5px; color: var(--textSecondary); margin-top: 1px; }
-        .sRowArrow { color: var(--textSecondary); font-size: 16px; opacity: 0.5; }
 
-        .sDivider { height: 1px; background: rgba(0,0,0,0.05); margin: 5px 16px; }
-        body[data-theme="dark"] .sDivider { background: rgba(255,255,255,0.06); }
+        .sRow:hover {
+            background: var(--accentSoft);
+        }
+
+        .sRow:active {
+            background: var(--accentGradMid);
+        }
+
+        .sRowIcon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .sRowIcon.pink {
+            background: var(--accentSoft);
+            color: var(--accent);
+        }
+
+        .sRowIcon.purple {
+            background: rgba(168, 124, 255, 0.12);
+            color: var(--lilac, #A87CFF);
+        }
+
+        .sRowIcon.blue {
+            background: rgba(61, 127, 232, 0.10);
+            color: #3D7FE8;
+        }
+
+        .sRowIcon.danger {
+            background: rgba(232, 69, 69, 0.10);
+            color: #e84545;
+        }
+
+        .sRowText {
+            flex: 1;
+        }
+
+        .sRowTitle {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--textPrimary);
+        }
+
+        .sRowDesc {
+            font-size: 11.5px;
+            color: var(--textSecondary);
+            margin-top: 1px;
+        }
+
+        .sRowArrow {
+            color: var(--textSecondary);
+            font-size: 16px;
+            opacity: 0.5;
+        }
+
+        .sDivider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 5px 16px;
+        }
+
+        body[data-theme="dark"] .sDivider {
+            background: rgba(255, 255, 255, 0.06);
+        }
 
         /* Danger row */
-        .sRow.danger .sRowTitle { color: #e84545; }
-        .sRow.danger:hover { background: rgba(232,69,69,0.06); }
+        .sRow.danger .sRowTitle {
+            color: #e84545;
+        }
+
+        .sRow.danger:hover {
+            background: rgba(232, 69, 69, 0.06);
+        }
 
         /* Logout row */
         .sLogout {
-            display: flex; align-items: center; justify-content: center; gap: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
             margin: 6px 14px 12px;
-            padding: 11px; border-radius: 14px;
-            background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.06);
-            font-size: 13px; font-weight: 600; color: var(--textSecondary);
-            cursor: pointer; font-family: var(--font-text);
+            padding: 11px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--textSecondary);
+            cursor: pointer;
+            font-family: var(--font-text);
             transition: background 0.14s;
         }
+
         body[data-theme="dark"] .sLogout {
-            background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
         }
-        .sLogout:hover { background: rgba(232,69,69,0.08); color: #e84545; border-color: rgba(232,69,69,0.15); }
+
+        .sLogout:hover {
+            background: rgba(232, 69, 69, 0.08);
+            color: #e84545;
+            border-color: rgba(232, 69, 69, 0.15);
+        }
 
         /* ── Settings slide-page navigation ── */
         #settingsModal {
@@ -3389,6 +4150,7 @@
             flex-direction: column !important;
             max-height: 85vh;
         }
+
         .sPageStack {
             position: relative;
             width: 100%;
@@ -3396,6 +4158,7 @@
             overflow: hidden;
             min-height: 0;
         }
+
         /* Main page: normal flow, gives height to sPageStack */
         .sPage.main {
             width: 100%;
@@ -3404,7 +4167,11 @@
             background: var(--surfaceBg);
             transition: transform 0.30s cubic-bezier(0.32, 0.72, 0.45, 1);
         }
-        .sPage.main.pushed { transform: translateX(-30%); }
+
+        .sPage.main.pushed {
+            transform: translateX(-30%);
+        }
+
         /* Sub pages: absolutely cover the stack, slide in from right */
         .sPage.sub {
             position: absolute;
@@ -3416,7 +4183,10 @@
             transition: transform 0.30s cubic-bezier(0.32, 0.72, 0.45, 1);
             will-change: transform;
         }
-        .sPage.sub.active { transform: translateX(0); }
+
+        .sPage.sub.active {
+            transform: translateX(0);
+        }
 
         /* Sub-page header */
         .sSubHead {
@@ -3424,7 +4194,7 @@
             align-items: center;
             gap: 10px;
             padding: 14px 16px 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             background: var(--surfaceBg);
@@ -3433,29 +4203,65 @@
             z-index: 1;
             flex-shrink: 0;
         }
+
         body[data-theme="dark"] .sSubHead {
-            border-bottom-color: rgba(255,255,255,0.06);
+            border-bottom-color: rgba(255, 255, 255, 0.06);
         }
+
         .sBackBtn {
-            width: 34px; height: 34px; border-radius: 50%;
-            background: var(--surface); border: 1px solid var(--stroke);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: var(--accent); cursor: pointer;
-            flex-shrink: 0; transition: background .14s;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--stroke);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background .14s;
         }
-        .sBackBtn:hover { background: var(--accentSoft); }
+
+        .sBackBtn:hover {
+            background: var(--accentSoft);
+        }
+
         .sSubTitle {
             font-family: var(--font-display);
-            font-weight: 700; font-size: 16px; letter-spacing: -0.2px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: -0.2px;
         }
-        .sSubBody { padding: 18px 16px 24px; display: flex; flex-direction: column; gap: 14px; }
+
+        .sSubBody {
+            padding: 18px 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
         /* Dark mode overrides for new settings */
-        body[data-theme="dark"] .sRow:hover { background: rgba(255,255,255,0.05); }
-        body[data-theme="dark"] .sRowIcon.pink { background: rgba(232,69,139,0.15); }
-        body[data-theme="dark"] .sRowIcon.purple { background: rgba(168,124,255,0.15); }
-        body[data-theme="dark"] .sRowIcon.blue { background: rgba(61,127,232,0.15); }
-        body[data-theme="dark"] .sRowIcon.danger { background: rgba(232,69,69,0.15); }
+        body[data-theme="dark"] .sRow:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="dark"] .sRowIcon.pink {
+            background: rgba(232, 69, 139, 0.15);
+        }
+
+        body[data-theme="dark"] .sRowIcon.purple {
+            background: rgba(168, 124, 255, 0.15);
+        }
+
+        body[data-theme="dark"] .sRowIcon.blue {
+            background: rgba(61, 127, 232, 0.15);
+        }
+
+        body[data-theme="dark"] .sRowIcon.danger {
+            background: rgba(232, 69, 69, 0.15);
+        }
 
         /* ═══════════ LANG PICKER ═══════════ */
         .langGrid {
@@ -3495,6 +4301,7 @@
         .langFlag {
             font-size: 20px;
         }
+
         /* ═══ BİRİKİM MODAL ═══ */
         .savingsBody {
             padding: 0 16px 24px;
@@ -3502,6 +4309,7 @@
             flex-direction: column;
             gap: 14px;
         }
+
         .savingsSummary {
             display: flex;
             align-items: center;
@@ -3511,6 +4319,7 @@
             padding: 14px 16px;
             margin-top: 4px;
         }
+
         .savSumItem {
             display: flex;
             flex-direction: column;
@@ -3518,29 +4327,34 @@
             gap: 3px;
             flex: 1;
         }
+
         .savSumVal {
             font-family: 'Outfit', sans-serif;
             font-size: 18px;
             font-weight: 700;
             color: var(--accent);
         }
+
         .savSumLabel {
             font-size: 10px;
             color: var(--textSecondary);
             font-weight: 500;
             letter-spacing: 0.2px;
         }
+
         .savSumDivider {
             width: 1px;
             height: 32px;
             background: var(--stroke);
             opacity: 0.5;
         }
+
         .savingsList {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
+
         .savCard {
             background: var(--surface);
             border-radius: 14px;
@@ -3550,11 +4364,13 @@
             flex-direction: column;
             gap: 10px;
         }
+
         .savCardTop {
             display: flex;
             align-items: center;
             gap: 12px;
         }
+
         .savCardImg {
             width: 52px;
             height: 52px;
@@ -3563,10 +4379,12 @@
             flex-shrink: 0;
             background: var(--surfaceHover);
         }
+
         .savCardInfo {
             flex: 1;
             min-width: 0;
         }
+
         .savCardName {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
@@ -3577,32 +4395,38 @@
             text-overflow: ellipsis;
             margin-bottom: 3px;
         }
+
         .savCardAmounts {
             font-size: 12px;
             color: var(--textSecondary);
         }
+
         .savCardAmounts strong {
             color: var(--accent);
             font-weight: 700;
         }
+
         .savProgress {
             height: 6px;
             background: var(--surfaceHover);
             border-radius: 99px;
             overflow: hidden;
         }
+
         .savProgressFill {
             height: 100%;
             background: var(--gradientHL);
             border-radius: 99px;
-            transition: width 0.4s cubic-bezier(0.32,0.72,0.45,1);
+            transition: width 0.4s cubic-bezier(0.32, 0.72, 0.45, 1);
             min-width: 4px;
         }
+
         .savCardBottom {
             display: flex;
             gap: 8px;
             align-items: center;
         }
+
         .savInput {
             flex: 1;
             height: 36px;
@@ -3617,15 +4441,24 @@
             outline: none;
             transition: border-color 0.18s;
         }
-        .savInput:focus { border-color: var(--accent); }
-        .savInput::placeholder { color: var(--textSecondary); font-weight: 400; }
+
+        .savInput:focus {
+            border-color: var(--accent);
+        }
+
+        .savInput::placeholder {
+            color: var(--textSecondary);
+            font-weight: 400;
+        }
+
         .savAddBtn {
             height: 36px;
             padding: 0 14px;
             border-radius: 10px;
             border: none;
             background: var(--gradientHL);
-            color: var(--btnText); /* Beyaz yerine btnText - aydınlık modda okunur */
+            color: var(--btnText);
+            /* Beyaz yerine btnText - aydınlık modda okunur */
             font-family: 'Outfit', sans-serif;
             font-size: 13px;
             font-weight: 700;
@@ -3633,7 +4466,12 @@
             transition: opacity 0.15s, transform 0.12s;
             white-space: nowrap;
         }
-        .savAddBtn:active { opacity: 0.8; transform: scale(0.97); }
+
+        .savAddBtn:active {
+            opacity: 0.8;
+            transform: scale(0.97);
+        }
+
         .savResetBtn {
             height: 36px;
             width: 36px;
@@ -3649,23 +4487,30 @@
             font-size: 16px;
             transition: color 0.15s, border-color 0.15s;
         }
-        .savResetBtn:hover { color: #e84545; border-color: #e84545; }
+
+        .savResetBtn:hover {
+            color: #e84545;
+            border-color: #e84545;
+        }
+
         .savDoneTag {
             font-size: 11px;
             font-weight: 700;
             padding: 2px 8px;
             border-radius: 99px;
-            background: linear-gradient(135deg,#34d399,#10b981);
+            background: linear-gradient(135deg, #34d399, #10b981);
             color: #fff;
             align-self: center;
             flex-shrink: 0;
         }
+
         .savingsEmpty {
             text-align: center;
             color: var(--textSecondary);
             padding: 32px 0;
             font-size: 13px;
         }
+
         .savingsEmpty i {
             font-size: 40px;
             opacity: 0.3;
@@ -3677,11 +4522,18 @@
             color: var(--textSecondary);
             font-weight: 500;
         }
+
         /* Number input spinner'ı gizle */
         input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
     </style>
 </head>
 
@@ -3694,6 +4546,7 @@
                 <input id="filePick" class="hidden" type="file" accept="image/*,.webp,.gif,.avif,.svg,.png" multiple />
                 <label class="btn cameraBtn" for="cameraPick" title="Kamera"><i class="ph ph-camera"></i></label>
                 <input id="cameraPick" class="hidden" type="file" accept="image/*" capture="environment" />
+                <button id="linkPickBtn" class="btn cameraBtn" title="Linkten Ekle"><i class="ph ph-link"></i></button>
                 <div class="menuWrap">
                     <button id="menuBtn" class="btn menuBtn" title="Menü"><i class="ph ph-list"></i></button>
                     <div class="dropdown" id="dropdown">
@@ -3701,11 +4554,13 @@
                                     class="ph ph-brain"></i></span><span data-i18n="dropAI">WishlistAI</span></button>
                         <button class="dropItem" id="dropWrapped"><span class="dropIcon"><i
                                     class="ph ph-chart-bar"></i></span>Wrapped</button>
-                        <button class="dropItem" id="dropSavings"><span class="dropIcon"><i class="ph ph-piggy-bank"></i></span>Birikim</button>
+                        <button class="dropItem" id="dropSavings"><span class="dropIcon"><i
+                                    class="ph ph-piggy-bank"></i></span>Birikim</button>
                         <button class="dropItem" id="dropSettings" onclick="openSettings()"><span class="dropIcon"><i
                                     class="ph ph-gear"></i></span><span data-i18n="dropSettings">Ayarlar</span></button>
                         <button class="dropItem dropDanger" id="dropLogout" onclick="doLogout()"><span
-                                class="dropIcon"><i class="ph ph-sign-out"></i></span><span data-i18n="dropLogout">Çıkış Yap</span></button>
+                                class="dropIcon"><i class="ph ph-sign-out"></i></span><span data-i18n="dropLogout">Çıkış
+                                Yap</span></button>
                     </div>
                 </div>
             </div>
@@ -3733,9 +4588,6 @@
             <div class="sortPill" data-sort="priority-desc">Öncelik ↓</div>
             <div class="sortPill" data-sort="priority-asc">Öncelik ↑</div>
         </div>
-        <button id="viewToggleBtn" style="background: var(--surface); border: 1px solid var(--stroke); color: var(--textPrimary); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;">
-            <i class="ph ph-squares-four" id="viewToggleIcon" style="font-size: 18px;"></i>
-        </button>
     </div>
 
     <main class="content">
@@ -3799,13 +4651,25 @@
                             <i class="ph ph-caret-down cDropChevron"></i>
                         </button>
                         <div class="cDropPanel" id="mCategoryPanel">
-                            <div class="cDropOption" data-val="giyim"><span class="cDropOptIcon"><i class="ph ph-t-shirt"></i></span>Giyim<i class="ph ph-check cDropCheck"></i></div>
-                            <div class="cDropOption" data-val="ayakkabi"><span class="cDropOptIcon"><i class="ph ph-sneaker"></i></span>Ayakkabı<i class="ph ph-check cDropCheck"></i></div>
-                            <div class="cDropOption" data-val="makyaj"><span class="cDropOptIcon"><i class="ph ph-sparkle"></i></span>Makyaj &amp; Cilt<i class="ph ph-check cDropCheck"></i></div>
-                            <div class="cDropOption" data-val="album"><span class="cDropOptIcon"><i class="ph ph-vinyl-record"></i></span>Albüm<i class="ph ph-check cDropCheck"></i></div>
-                            <div class="cDropOption" data-val="parfum"><span class="cDropOptIcon"><i class="ph ph-drop"></i></span>Parfüm<i class="ph ph-check cDropCheck"></i></div>
-                            <div class="cDropOption" data-val="sac"><span class="cDropOptIcon"><i class="ph ph-scissors"></i></span>Saç Bakım<i class="ph ph-check cDropCheck"></i></div>
-                            <div class="cDropOption selected" data-val="diger"><span class="cDropOptIcon"><i class="ph ph-star"></i></span>Diğer<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="giyim"><span class="cDropOptIcon"><i
+                                        class="ph ph-t-shirt"></i></span>Giyim<i class="ph ph-check cDropCheck"></i>
+                            </div>
+                            <div class="cDropOption" data-val="ayakkabi"><span class="cDropOptIcon"><i
+                                        class="ph ph-sneaker"></i></span>Ayakkabı<i class="ph ph-check cDropCheck"></i>
+                            </div>
+                            <div class="cDropOption" data-val="makyaj"><span class="cDropOptIcon"><i
+                                        class="ph ph-sparkle"></i></span>Makyaj &amp; Cilt<i
+                                    class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="album"><span class="cDropOptIcon"><i
+                                        class="ph ph-vinyl-record"></i></span>Albüm<i
+                                    class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="parfum"><span class="cDropOptIcon"><i
+                                        class="ph ph-drop"></i></span>Parfüm<i class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption" data-val="sac"><span class="cDropOptIcon"><i
+                                        class="ph ph-scissors"></i></span>Saç Bakım<i
+                                    class="ph ph-check cDropCheck"></i></div>
+                            <div class="cDropOption selected" data-val="diger"><span class="cDropOptIcon"><i
+                                        class="ph ph-star"></i></span>Diğer<i class="ph ph-check cDropCheck"></i></div>
                         </div>
                     </div>
                 </div>
@@ -3827,18 +4691,30 @@
                                     <i class="ph ph-caret-down cDropChevron"></i>
                                 </button>
                                 <div class="cDropPanel compact" id="mTimelinePanel">
-                                    <div class="cDropOption selected" data-val="ocak">Ocak<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="subat">Şubat<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="mart">Mart<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="nisan">Nisan<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="mayis">Mayıs<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="haziran">Haziran<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="temmuz">Temmuz<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="agustos">Ağustos<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="eylul">Eylül<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="ekim">Ekim<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="kasim">Kasım<i class="ph ph-check cDropCheck"></i></div>
-                                    <div class="cDropOption" data-val="aralik">Aralık<i class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption selected" data-val="ocak">Ocak<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="subat">Şubat<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="mart">Mart<i class="ph ph-check cDropCheck"></i>
+                                    </div>
+                                    <div class="cDropOption" data-val="nisan">Nisan<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="mayis">Mayıs<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="haziran">Haziran<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="temmuz">Temmuz<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="agustos">Ağustos<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="eylul">Eylül<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="ekim">Ekim<i class="ph ph-check cDropCheck"></i>
+                                    </div>
+                                    <div class="cDropOption" data-val="kasim">Kasım<i
+                                            class="ph ph-check cDropCheck"></i></div>
+                                    <div class="cDropOption" data-val="aralik">Aralık<i
+                                            class="ph ph-check cDropCheck"></i></div>
                                 </div>
                             </div>
                         </div>
@@ -3939,8 +4815,10 @@
                     <div class="mReflectTitle"><i class="ph ph-brain"></i> Neden istiyorum?</div>
                     <div class="mChipSel" id="mReasonSel">
                         <button class="mChipBtn" data-val="need"><i class="ph ph-check-circle"></i> İhtiyaç</button>
-                        <button class="mChipBtn" data-val="consumption"><i class="ph ph-fire"></i> Tüketim Çılgınlığı</button>
-                        <button class="mChipBtn" data-val="impulse"><i class="ph ph-shooting-star"></i> Ani İstek</button>
+                        <button class="mChipBtn" data-val="consumption"><i class="ph ph-fire"></i> Tüketim
+                            Çılgınlığı</button>
+                        <button class="mChipBtn" data-val="impulse"><i class="ph ph-shooting-star"></i> Ani
+                            İstek</button>
                     </div>
                     <input type="hidden" id="mReason" value="" />
                 </div>
@@ -3969,6 +4847,43 @@
                 <input id="purchasePrice" type="text" inputmode="numeric" placeholder="₺ 0" />
                 <div class="purchaseBtns">
                     <button id="confirmPurchase" class="btn primary">Onayla</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ BİRİKİM MODAL ═══ -->
+    <div id="savingsBack" class="modalBack" role="dialog" aria-modal="true">
+        <div class="modal" id="savingsModal">
+            <div class="handle"><span></span></div>
+            <div class="mHead">
+                <strong>Birikim</strong>
+                <button id="closeSavings" class="btn">Kapat</button>
+            </div>
+            <div class="savingsBody">
+                <div id="savingsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Prompt Modal -->
+    <div id="linkPromptBack" class="modalBack" role="dialog" aria-modal="true">
+        <div class="modal" id="linkPromptModal">
+            <div class="handle"><span></span></div>
+            <div class="mHead">
+                <strong>Linkten Ekle</strong>
+                <button id="closeLinkPrompt" class="btn">İptal</button>
+            </div>
+            <div class="purchaseBody" style="padding-top: 10px;">
+                <h3 style="margin-bottom: 12px; font-weight: 500; color: var(--textSecondary); font-size: 14px;">Ürün
+                    linkini yapıştırın</h3>
+                <input id="linkPromptInput" type="url" placeholder="https://..."
+                    style="width: 100%; border: 1px solid var(--stroke); padding: 12px; border-radius: 12px; font-family: var(--font-text); font-size: 14px; background: var(--surface); color: var(--textPrimary); margin-bottom: 16px;"
+                    autocomplete="off" />
+                <div class="purchaseBtns">
+                    <button id="confirmLinkPrompt" class="btn primary"
+                        style="width: 100%; justify-content: center; padding: 12px; font-weight: 600;">Verileri Çek <i
+                            class="ph ph-magic-wand" style="margin-left: 6px;"></i></button>
                 </div>
             </div>
         </div>
@@ -4228,7 +5143,8 @@
                         <div class="authInputWrap">
                             <span class="authInputIcon"><i class="ph ph-user"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none" />
+                            <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username"
+                                autocapitalize="none" />
                         </div>
                     </div>
                     <div class="authField">
@@ -4236,7 +5152,9 @@
                             <span class="authInputIcon"><i class="ph ph-lock"></i></span>
                             <div class="authInputDivider"></div>
                             <input id="loginPass" type="password" placeholder="Şifre" autocomplete="current-password" />
-                            <button type="button" class="authEyeToggle" onclick="togglePasswordVisibility('loginPass', this)"><i class="ph ph-eye-slash"></i></button>
+                            <button type="button" class="authEyeToggle"
+                                onclick="togglePasswordVisibility('loginPass', this)"><i
+                                    class="ph ph-eye-slash"></i></button>
                         </div>
                     </div>
                     <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
@@ -4247,7 +5165,8 @@
                         <div class="authInputWrap">
                             <span class="authInputIcon"><i class="ph ph-user-plus"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="regUser" type="text" placeholder="Kullanıcı adı (harf, rakam, _)" autocomplete="username" autocapitalize="none" />
+                            <input id="regUser" type="text" placeholder="Kullanıcı adı (harf, rakam, _)"
+                                autocomplete="username" autocapitalize="none" />
                         </div>
                     </div>
                     <div class="authField">
@@ -4255,15 +5174,20 @@
                             <span class="authInputIcon"><i class="ph ph-lock"></i></span>
                             <div class="authInputDivider"></div>
                             <input id="regPass" type="password" placeholder="Şifre" autocomplete="new-password" />
-                            <button type="button" class="authEyeToggle" onclick="togglePasswordVisibility('regPass', this)"><i class="ph ph-eye-slash"></i></button>
+                            <button type="button" class="authEyeToggle"
+                                onclick="togglePasswordVisibility('regPass', this)"><i
+                                    class="ph ph-eye-slash"></i></button>
                         </div>
                     </div>
                     <div class="authField">
                         <div class="authInputWrap">
                             <span class="authInputIcon"><i class="ph ph-lock-key"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="regPass2" type="password" placeholder="Şifre tekrar" autocomplete="new-password" />
-                            <button type="button" class="authEyeToggle" onclick="togglePasswordVisibility('regPass2', this)"><i class="ph ph-eye-slash"></i></button>
+                            <input id="regPass2" type="password" placeholder="Şifre tekrar"
+                                autocomplete="new-password" />
+                            <button type="button" class="authEyeToggle"
+                                onclick="togglePasswordVisibility('regPass2', this)"><i
+                                    class="ph ph-eye-slash"></i></button>
                         </div>
                     </div>
                     <button class="authSubmit" onclick="doRegister()">Hesap Oluştur →</button>
@@ -4273,17 +5197,26 @@
     </div>
 
     <!-- ── CUSTOM CONFIRM MODAL ── -->
-    <div id="confirmBack" class="modalBack" role="dialog" aria-modal="true" style="z-index: 99999; align-items: center;">
-        <div class="modal" id="confirmModal" style="max-width: 360px; width: 92%; margin: auto; border-radius: 24px; padding: 24px 20px 20px;">
+    <div id="confirmBack" class="modalBack" role="dialog" aria-modal="true"
+        style="z-index: 99999; align-items: center;">
+        <div class="modal" id="confirmModal"
+            style="max-width: 360px; width: 92%; margin: auto; border-radius: 24px; padding: 24px 20px 20px;">
             <div class="modalHeader" style="justify-content: center; border-bottom: none; padding-bottom: 8px;">
-                <h3 id="confirmTitle" style="text-align: center; width: 100%; margin:0; font-family: var(--font-display); font-size: 20px; color: var(--textPrimary);">Onay</h3>
+                <h3 id="confirmTitle"
+                    style="text-align: center; width: 100%; margin:0; font-family: var(--font-display); font-size: 20px; color: var(--textPrimary);">
+                    Onay</h3>
             </div>
-            <div class="modalBody" style="padding: 0 10px 24px; text-align: center; font-size: 14.5px; color: var(--textSecondary); line-height: 1.6;" id="confirmDesc">
+            <div class="modalBody"
+                style="padding: 0 10px 24px; text-align: center; font-size: 14.5px; color: var(--textSecondary); line-height: 1.6;"
+                id="confirmDesc">
                 Emin misiniz?
             </div>
             <div style="display: flex; gap: 12px; padding: 0;">
-                <button class="btn" style="flex: 1; justify-content: center; background: var(--inputBg); color: var(--textPrimary); border: 1.5px solid rgba(0,0,0,0.06); font-family: var(--font-text); font-weight: 600; padding: 14px 0; border-radius: 14px;" onclick="closeConfirmModal()">İptal</button>
-                <button class="authSubmit" id="confirmActionBtn" style="flex: 1; justify-content: center; margin: 0; padding: 14px 0; border-radius: 14px; font-size: 14.5px;">Evet</button>
+                <button class="btn"
+                    style="flex: 1; justify-content: center; background: var(--inputBg); color: var(--textPrimary); border: 1.5px solid rgba(0,0,0,0.06); font-family: var(--font-text); font-weight: 600; padding: 14px 0; border-radius: 14px;"
+                    onclick="closeConfirmModal()">İptal</button>
+                <button class="authSubmit" id="confirmActionBtn"
+                    style="flex: 1; justify-content: center; margin: 0; padding: 14px 0; border-radius: 14px; font-size: 14.5px;">Evet</button>
             </div>
         </div>
     </div>
@@ -4323,6 +5256,15 @@
                         <div class="sDivider"></div>
                         <div class="sGroupLabel">Görünüm &amp; Dil</div>
 
+                        <div class="sRow" onclick="openSettingsPage('sPageLayout')">
+                            <div class="sRowIcon green"><i class="ph ph-squares-four"></i></div>
+                            <div class="sRowText">
+                                <div class="sRowTitle" data-i18n="tileLayout">Arayüz Düzeni</div>
+                                <div class="sRowDesc" id="sLayoutDesc">Liste</div>
+                            </div>
+                            <i class="ph ph-caret-right sRowArrow"></i>
+                        </div>
+
                         <div class="sRow" onclick="openSettingsPage('sPageTheme')">
                             <div class="sRowIcon purple"><i class="ph ph-paint-bucket"></i></div>
                             <div class="sRowText">
@@ -4354,7 +5296,8 @@
                         </div>
 
                         <div class="sRow danger" onclick="openSettingsPage('sPageDelete')">
-                            <div class="sRowIcon danger" style="background:rgba(232,69,69,0.1); color:#e84545;"><i class="ph ph-user-minus"></i></div>
+                            <div class="sRowIcon danger" style="background:rgba(232,69,69,0.1); color:#e84545;"><i
+                                    class="ph ph-user-minus"></i></div>
                             <div class="sRowText">
                                 <div class="sRowTitle">Hesabı Sil</div>
                                 <div class="sRowDesc">Tüm verileri kalıcı sil</div>
@@ -4401,6 +5344,62 @@
                     </div>
                 </div>
 
+                <!-- ── Arayüz Düzeni sayfası ── -->
+                <div class="sPage sub" id="sPageLayout">
+                    <div class="sSubHead">
+                        <button class="sBackBtn" onclick="closeSettingsPage()"><i class="ph ph-caret-left"></i></button>
+                        <div class="sSubTitle">Arayüz Düzeni</div>
+                    </div>
+                    <div class="sSubBody">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="layoutOption" id="layoutOptList" onclick="setLayoutMode('list')"
+                                style="border: 2px solid var(--stroke); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; background: var(--surface); display: flex; flex-direction: column; align-items: center;">
+                                <div
+                                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 12px; height: 42px; width: 42px;">
+                                    <div style="background: var(--textSecondary); border-radius: 4px; opacity: 0.5;">
+                                    </div>
+                                    <div style="background: var(--textSecondary); border-radius: 4px; opacity: 0.5;">
+                                    </div>
+                                    <div style="background: var(--textSecondary); border-radius: 4px; opacity: 0.5;">
+                                    </div>
+                                    <div style="background: var(--textSecondary); border-radius: 4px; opacity: 0.5;">
+                                    </div>
+                                </div>
+                                <div style="font-weight: 600; font-size: 13.5px; color: var(--textPrimary);">Klasik
+                                    Liste</div>
+                                <div style="font-size: 11px; color: var(--textSecondary); margin-top: 4px;">Düzenli
+                                    ızgara görünümü</div>
+                            </div>
+                            <div class="layoutOption" id="layoutOptMood" onclick="setLayoutMode('moodboard')"
+                                style="border: 2px solid var(--stroke); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; background: var(--surface); display: flex; flex-direction: column; align-items: center;">
+                                <div
+                                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 12px; height: 42px; width: 42px; align-items: start;">
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div
+                                            style="background: var(--textSecondary); border-radius: 4px; height: 24px; opacity: 0.5;">
+                                        </div>
+                                        <div
+                                            style="background: var(--textSecondary); border-radius: 4px; height: 14px; opacity: 0.5;">
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div
+                                            style="background: var(--textSecondary); border-radius: 4px; height: 16px; opacity: 0.5;">
+                                        </div>
+                                        <div
+                                            style="background: var(--textSecondary); border-radius: 4px; height: 22px; opacity: 0.5;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="font-weight: 600; font-size: 13.5px; color: var(--textPrimary);">İlham
+                                    Panosu</div>
+                                <div style="font-size: 11px; color: var(--textSecondary); margin-top: 4px;">Karma
+                                    (Masonry) kolaj</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ── Tema Rengi sayfası ── -->
                 <div class="sPage sub" id="sPageTheme">
                     <div class="sSubHead">
@@ -4440,7 +5439,9 @@
                         <div style="font-size:13px;color:var(--textSecondary);line-height:1.6;">
                             Tüm istek listesi kalıcı olarak silinecek. Bu işlem geri alınamaz.
                         </div>
-                        <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="confirmReset()">Evet, Sıfırla</button>
+                        <button class="authSubmit"
+                            style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0"
+                            onclick="confirmReset()">Evet, Sıfırla</button>
                     </div>
                 </div>
 
@@ -4452,9 +5453,12 @@
                     </div>
                     <div class="sSubBody">
                         <div style="font-size:13px;color:var(--textSecondary);line-height:1.6;">
-                            Hesabınıza ait tüm veriler (istek listesi, tema vb.) kalıcı olarak silinecek. Bu işlem geri alınamaz.
+                            Hesabınıza ait tüm veriler (istek listesi, tema vb.) kalıcı olarak silinecek. Bu işlem geri
+                            alınamaz.
                         </div>
-                        <button class="authSubmit" style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0" onclick="deleteAccount()">Evet, Hesabımı Sil</button>
+                        <button class="authSubmit"
+                            style="background:linear-gradient(135deg,#e84545,#ff6b6b);box-shadow:0 6px 20px rgba(232,69,69,0.35);margin-top:0"
+                            onclick="deleteAccount()">Evet, Hesabımı Sil</button>
                     </div>
                 </div>
 
@@ -4508,12 +5512,12 @@
         /* ── Hash ── */
         async function hashPw(pw) {
             const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         /* ── localStorage ── */
         function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; } }
-        function saveLocalUsers(u) { try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch(e) { console.warn('localStorage error:', e); } }
+        function saveLocalUsers(u) { try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch (e) { console.warn('localStorage error:', e); } }
 
         /* ── Fetch with timeout ── */
         function fetchWithTimeout(url, opts = {}, timeout = 8000) {
@@ -4523,26 +5527,26 @@
         /* ── Firebase ── */
         async function fbGet(path) {
             if (!FB_ENABLED) return null;
-            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', {}, 8000); return r.ok ? await r.json() : null; } catch(e) { return null; }
+            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', {}, 8000); return r.ok ? await r.json() : null; } catch (e) { return null; }
         }
         async function fbSet(path, data) {
             if (!FB_ENABLED) return false;
-            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) }, 10000); return r.ok; } catch(e) { return false; }
+            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, 10000); return r.ok; } catch (e) { return false; }
         }
         async function fbDelete(path) {
             if (!FB_ENABLED) return false;
-            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { method: 'DELETE' }, 8000); return r.ok; } catch(e) { return false; }
+            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { method: 'DELETE' }, 8000); return r.ok; } catch (e) { return false; }
         }
 
         /* ── User Management (3-tier: localStorage > Firebase > sync) ── */
         async function getUser(username) {
             if (!username) return null;
             username = username.toLowerCase().trim();
-            
+
             // 1. localStorage (instant)
             const local = getLocalUsers();
             if (local[username]) return local[username];
-            
+
             // 2. Firebase (sync)
             if (FB_ENABLED) {
                 const fbHash = await fbGet('users/' + username + '/hash');
@@ -4552,7 +5556,7 @@
                     return fbHash;
                 }
             }
-            
+
             return null;
         }
 
@@ -4560,37 +5564,37 @@
             if (!username || !hash) return false;
             username = username.toLowerCase().trim();
             let ok = false;
-            
+
             // localStorage
-            try { 
-                const local = getLocalUsers(); 
-                local[username] = hash; 
-                saveLocalUsers(local); 
-                console.log('✓ localStorage'); 
-                ok = true; 
-            } catch(e) {}
-            
+            try {
+                const local = getLocalUsers();
+                local[username] = hash;
+                saveLocalUsers(local);
+                console.log('✓ localStorage');
+                ok = true;
+            } catch (e) { }
+
             // Firebase
             if (FB_ENABLED) {
                 const fbOk = await fbSet('users/' + username + '/hash', hash);
                 if (fbOk) { console.log('✓ Firebase'); ok = true; }
                 else { console.warn('Firebase kayıt başarısız - offline olabilir'); }
             }
-            
+
             return ok;
         }
 
         /* ═══ ESKİ HESAPLARI MİGRATE ET (Cross-device için kritik) ═══ */
         async function migrateOldUsersToFirebase() {
             if (!FB_ENABLED) return;
-            
+
             const localUsers = getLocalUsers();
             const usernames = Object.keys(localUsers);
-            
+
             if (usernames.length === 0) return;
-            
+
             console.log('🔄 Eski hesaplar Firebase\'e taşınıyor...');
-            
+
             for (const username of usernames) {
                 try {
                     // Firebase'de var mı kontrol et
@@ -4605,11 +5609,11 @@
                             }
                         }
                     }
-                } catch(e) {
+                } catch (e) {
                     console.warn(`Migration error for ${username}:`, e);
                 }
             }
-            
+
             console.log('✓ Migration tamamlandı');
         }
 
@@ -4652,12 +5656,12 @@
             document.getElementById('authTabRegister').classList.toggle('active', tab === 'register');
             document.getElementById('authError').style.display = 'none';
             document.getElementById('authSuccessMsg').style.display = 'none';
-            
+
             // Dinamik başlık metinleri — sağ paneldeki form üstü
             const formTitle = document.querySelector('.auth-form-title');
             const formSub = document.querySelector('.auth-form-sub');
             const t = (typeof I18N !== 'undefined' && typeof currentLang !== 'undefined') ? I18N[currentLang] : null;
-            
+
             if (tab === 'login') {
                 formTitle.textContent = t ? t.authFormTitleLogin : 'Tekrar hoş geldin';
                 formSub.textContent = t ? t.authFormSubLogin : 'Listene devam etmeye hazır mısın?';
@@ -4691,35 +5695,35 @@
             const btn = document.querySelector('#loginForm .authSubmit');
             const username = document.getElementById('loginUser').value.trim().toLowerCase();
             const password = document.getElementById('loginPass').value;
-            
+
             if (!username || !password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
-            
+
             const orig = btn.textContent;
             btn.textContent = 'Giriş yapılıyor...';
             btn.disabled = true;
-            
+
             try {
                 const storedHash = await getUser(username);
-                if (!storedHash) { 
-                    btn.textContent = orig; 
-                    btn.disabled = false; 
-                    return showAuthError('Kullanıcı bulunamadı. Önce kayıt olun.'); 
+                if (!storedHash) {
+                    btn.textContent = orig;
+                    btn.disabled = false;
+                    return showAuthError('Kullanıcı bulunamadı. Önce kayıt olun.');
                 }
-                
+
                 const pwHash = await hashPw(password);
-                if (storedHash !== pwHash) { 
-                    btn.textContent = orig; 
-                    btn.disabled = false; 
-                    return showAuthError('Şifre hatalı.'); 
+                if (storedHash !== pwHash) {
+                    btn.textContent = orig;
+                    btn.disabled = false;
+                    return showAuthError('Şifre hatalı.');
                 }
-                
+
                 savePersistentSession(username);
                 authUid = username;
                 currentUser = username;
                 showAuthSuccess('Giriş başarılı!');
-                
+
                 setTimeout(() => { btn.textContent = orig; btn.disabled = false; startApp(); }, 400);
-            } catch(err) {
+            } catch (err) {
                 console.error('Login error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
@@ -4733,38 +5737,38 @@
             const username = document.getElementById('regUser').value.trim().toLowerCase();
             const pw = document.getElementById('regPass').value;
             const pw2 = document.getElementById('regPass2').value;
-            
+
             if (!username || !pw || !pw2) return showAuthError('Tüm alanları doldurun.');
             if (username.length < 3) return showAuthError('Kullanıcı adı min 3 karakter.');
             if (!/^[a-z0-9_]+$/.test(username)) return showAuthError('Sadece küçük harf, rakam, _');
             if (pw.length < 4) return showAuthError('Şifre min 4 karakter.');
             if (pw !== pw2) return showAuthError('Şifreler eşleşmiyor.');
-            
+
             const orig = btn.textContent;
             btn.textContent = 'Kaydediliyor...';
             btn.disabled = true;
-            
+
             try {
                 const exists = await getUser(username);
-                if (exists) { 
-                    btn.textContent = orig; 
-                    btn.disabled = false; 
-                    return showAuthError('Kullanıcı adı zaten alınmış.'); 
+                if (exists) {
+                    btn.textContent = orig;
+                    btn.disabled = false;
+                    return showAuthError('Kullanıcı adı zaten alınmış.');
                 }
-                
+
                 const pwHash = await hashPw(pw);
                 const ok = await saveUserHash(username, pwHash);
-                if (!ok) { 
-                    btn.textContent = orig; 
-                    btn.disabled = false; 
-                    return showAuthError('Kayıt başarısız. Tekrar deneyin.'); 
+                if (!ok) {
+                    btn.textContent = orig;
+                    btn.disabled = false;
+                    return showAuthError('Kayıt başarısız. Tekrar deneyin.');
                 }
-                
+
                 savePersistentSession(username);
                 authUid = username;
                 currentUser = username;
                 showAuthSuccess('Hesap oluşturuldu!');
-                
+
                 setTimeout(() => {
                     btn.textContent = orig;
                     btn.disabled = false;
@@ -4773,7 +5777,7 @@
                     document.getElementById('regPass2').value = '';
                     startApp();
                 }, 600);
-            } catch(err) {
+            } catch (err) {
                 console.error('Register error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
@@ -4803,19 +5807,23 @@
             requestAnimationFrame(() => sb.classList.add('show'));
             document.body.style.overflow = 'hidden';
         }
-        
+
         function openSettingsPage(pageId) {
             document.getElementById('sPageMain').classList.add('pushed');
             document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             if (pageId === 'sPageTheme') renderThemeGrid();
+            if (pageId === 'sPageLayout') {
+                // Initialize border state when opened
+                setLayoutMode(viewMode);
+            }
         }
-        
+
         function closeSettingsPage() {
             document.getElementById('sPageMain').classList.remove('pushed');
             document.querySelectorAll('.sPage.sub').forEach(p => p.classList.remove('active'));
         }
-        
+
         function closeSettings() {
             const sb = document.getElementById('settingsBack');
             if (!sb) return;
@@ -4856,7 +5864,7 @@
                 switchAuthTab('login');
                 closeSettings();
             };
-            
+
             showConfirmModal(
                 "Çıkış Yap",
                 "Çıkış yapmak istediğinizden emin misiniz?\n\nHesabınız saklanır, sonraki girişte otomatik giriş yapacaksınız.",
@@ -4867,12 +5875,12 @@
 
         async function deleteAccount() {
             if (!currentUser) return;
-            
+
             // Custom modal cannot await on confirm cleanly like window.confirm. 
             // So we execute logic immediately here because this function is now called AFTER the user confirms pressing the red button via sPageDelete logic (or directly via a modal, but right now it is triggered by sPageDelete form button)
             // Wait, to keep it structurally simple since it's inside sPageDelete. The button in `sPageDelete` says "Evet, Hesabımı Sil" meaning they already saw the warning.
             // But let's add one last layer of security using the custom modal just for extra safety like we did for doLogout. Wait, no, sPageReset just executes. Let's execute immediately since we are already inside a dedicated warning page.
-            
+
             // Firebase'den sil
             if (FB_ENABLED) {
                 await fbDelete('users/' + currentUser);
@@ -4885,7 +5893,7 @@
                 saveLocalUsers(localUsers);
             }
             localStorage.removeItem(ITEMS_KEY + '_' + currentUser);
-            
+
             clearSession();
             items = [];
             document.getElementById('authScreen').style.display = 'flex';
@@ -4942,9 +5950,9 @@
                             <div class="tpHeaderBtn" style="background:${t.accent};"></div>
                         </div>
                         <div class="tpBody">
-                            ${[0,1,2].map(i => `
+                            ${[0, 1, 2].map(i => `
                             <div class="tpCard" style="background:${cardBg};">
-                                <div class="tpCardImg" style="background:${i===0 ? t.accent+'55' : cardImg};"></div>
+                                <div class="tpCardImg" style="background:${i === 0 ? t.accent + '55' : cardImg};"></div>
                                 <div class="tpCardFoot" style="background:${hdrBg};"></div>
                                 <div class="tpCardChip" style="background:${t.accent};"></div>
                             </div>`).join('')}
@@ -4956,7 +5964,7 @@
         }
 
         /* Load saved theme */
-        (function() {
+        (function () {
             const saved = localStorage.getItem(THEME_KEY);
             if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
         })();
@@ -4965,17 +5973,17 @@
         (async function checkSession() {
             // Eski hesapları Firebase'e migrate et (background)
             migrateOldUsersToFirebase().catch(e => console.warn('Migration error:', e));
-            
+
             const saved = getSession();
             if (!saved) return;
-            
+
             // HIZLI: localStorage check (instant)
             const local = getLocalUsers();
             if (local[saved]) {
                 authUid = saved;
                 currentUser = saved;
                 document.getElementById('authScreen').style.display = 'none';
-                
+
                 // Background sync
                 if (FB_ENABLED) {
                     fbGet('users/' + saved + '/hash').then(fbHash => {
@@ -4983,11 +5991,11 @@
                             local[saved] = fbHash;
                             saveLocalUsers(local);
                         }
-                    }).catch(() => {});
+                    }).catch(() => { });
                 }
                 return;
             }
-            
+
             // YAVAŞ: Firebase check
             const hash = await getUser(saved);
             if (hash) {
@@ -5206,7 +6214,7 @@
         /* Fotoğrafı ayrı anahtarda sakla */
         function saveImg(it) {
             if (it.imgData) {
-                try { localStorage.setItem(getImgKey(it.id), it.imgData); } catch(e) {
+                try { localStorage.setItem(getImgKey(it.id), it.imgData); } catch (e) {
                     console.warn('Fotoğraf localStorage\'a yazılamadı:', e);
                 }
             }
@@ -5242,13 +6250,13 @@
                 let needsClean = false;
                 parsed.forEach(it => {
                     if (it.imgData && !localStorage.getItem(getImgKey(it.id))) {
-                        try { localStorage.setItem(getImgKey(it.id), it.imgData); needsClean = true; } catch {}
+                        try { localStorage.setItem(getImgKey(it.id), it.imgData); needsClean = true; } catch { }
                     }
                 });
                 items = mergeImages(parsed);
                 if (needsClean) {
                     // Ana cache'den imgData'yı temizle
-                    try { localStorage.setItem(getUserKey(), JSON.stringify(stripImages(parsed))); } catch {}
+                    try { localStorage.setItem(getUserKey(), JSON.stringify(stripImages(parsed))); } catch { }
                 }
             } catch { items = []; }
         }
@@ -5259,7 +6267,7 @@
             // Ana cache'e imgData'sız yaz (yer tasarrufu)
             try {
                 localStorage.setItem(getUserKey(), JSON.stringify(stripImages(items)));
-            } catch(e) {
+            } catch (e) {
                 console.warn('persist localStorage hatası:', e);
             }
             // Firebase'e imgData'sız gönder
@@ -5279,12 +6287,26 @@
             render();
         });
 
-        // View Toggle Butonu
-        document.getElementById("viewToggleBtn").addEventListener("click", () => {
-            viewMode = viewMode === "list" ? "moodboard" : "list";
+        // View Toggle settings logic
+        function setLayoutMode(mode) {
+            viewMode = mode;
             localStorage.setItem("wishlistgul_viewMode", viewMode);
+
+            // Update UI selection outline
+            const oList = document.getElementById("layoutOptList");
+            const oMood = document.getElementById("layoutOptMood");
+            if (oList && oMood) {
+                oList.style.borderColor = mode === "list" ? "var(--accent)" : "var(--stroke)";
+                oList.style.boxShadow = mode === "list" ? "0 0 0 2px var(--accentSoft)" : "none";
+                oMood.style.borderColor = mode === "moodboard" ? "var(--accent)" : "var(--stroke)";
+                oMood.style.boxShadow = mode === "moodboard" ? "0 0 0 2px var(--accentSoft)" : "none";
+            }
+
+            const desc = document.getElementById("sLayoutDesc");
+            if (desc) desc.textContent = mode === "list" ? "Klasik Liste" : "İlham Panosu";
+
             render();
-        });
+        }
 
         /* ── Sort filter ── */
         document.getElementById("sortBar").addEventListener("click", e => {
@@ -5313,13 +6335,11 @@
             gridEl.innerHTML = "";
             let filtered;
 
-            // Görünüm moduna göre grid class'ını ayarla ve ikonu güncelle
+            // Görünüm moduna göre grid class'ını ayarla
             if (viewMode === "moodboard") {
                 gridEl.classList.add("moodboard");
-                document.getElementById("viewToggleIcon").className = "ph ph-list"; // Next click will make it list
             } else {
                 gridEl.classList.remove("moodboard");
-                document.getElementById("viewToggleIcon").className = "ph ph-squares-four"; // Next click will make it grid
             }
             if (activeCat === "all") {
                 filtered = items.filter(x => x.status !== "bought" && !x.secret);
@@ -5394,7 +6414,7 @@
                 const currentBody = document.querySelector(".mTabBody:not([style*='display: none']):not([style*='display:none'])");
                 document.querySelectorAll(".mTab").forEach(t => t.classList.remove("active"));
                 tab.classList.add("active");
-                const idMap = { bilgi:"tabBilgi", not:"tabNot", fiyat:"tabFiyat", niyet:"tabNiyet" };
+                const idMap = { bilgi: "tabBilgi", not: "tabNot", fiyat: "tabFiyat", niyet: "tabNiyet" };
                 const nextId = idMap[tab.dataset.tab];
                 if (!nextId) return;
                 const next = document.getElementById(nextId);
@@ -5421,7 +6441,7 @@
             if (cat === "giyim") {
                 field.style.display = "flex";
                 label.innerHTML = '<i class="ph ph-t-shirt"></i> Beden <span class="mCatBadge">Giyim</span>';
-                chipsEl.innerHTML = ["XS","S","M","L","XL","XXL"].map(s =>
+                chipsEl.innerHTML = ["XS", "S", "M", "L", "XL", "XXL"].map(s =>
                     `<span class="mSizeChip" data-val="${s}">${s}</span>`).join("");
                 initSizeChips();
             } else if (cat === "ayakkabi") {
@@ -5444,19 +6464,19 @@
             });
         }
         /* ── Meta header updater ── */
-        const MONTH_LABELS = {ocak:"Oca",subat:"Şub",mart:"Mar",nisan:"Nis",mayis:"May",haziran:"Haz",temmuz:"Tem",agustos:"Ağu",eylul:"Eyl",ekim:"Eki",kasim:"Kas",aralik:"Ara"};
-        const CAT_LABELS = {giyim:"Giyim",ayakkabi:"Ayakkabı",makyaj:"Makyaj",album:"Albüm",parfum:"Parfüm",sac:"Saç",diger:"Diğer"};
+        const MONTH_LABELS = { ocak: "Oca", subat: "Şub", mart: "Mar", nisan: "Nis", mayis: "May", haziran: "Haz", temmuz: "Tem", agustos: "Ağu", eylul: "Eyl", ekim: "Eki", kasim: "Kas", aralik: "Ara" };
+        const CAT_LABELS = { giyim: "Giyim", ayakkabi: "Ayakkabı", makyaj: "Makyaj", album: "Albüm", parfum: "Parfüm", sac: "Saç", diger: "Diğer" };
         function updateMetaChips() {
             const cat = document.getElementById("mCategory").value;
             const mon = document.getElementById("mTimeline").value;
-            const yr  = document.getElementById("mYear").value;
+            const yr = document.getElementById("mYear").value;
             document.getElementById("mMetaCat").textContent = CAT_LABELS[cat] || cat;
             document.getElementById("mMetaDate").textContent = (MONTH_LABELS[mon] || mon) + " " + yr;
         }
         /* ── Price diff ── */
         function updatePriceDiff() {
-            const cur = parseInt((document.getElementById("mCurrentPrice").value||"").replace(/\D/g,""),10);
-            const tgt = parseInt((document.getElementById("mPrice").value||"").replace(/\D/g,""),10);
+            const cur = parseInt((document.getElementById("mCurrentPrice").value || "").replace(/\D/g, ""), 10);
+            const tgt = parseInt((document.getElementById("mPrice").value || "").replace(/\D/g, ""), 10);
             const el = document.getElementById("mPriceDiff");
             if (cur > 0 && tgt > 0 && cur !== tgt) {
                 const diff = cur - tgt;
@@ -5558,7 +6578,7 @@
             buildLinkList(it.links && it.links.length ? it.links : (it.link ? [it.link] : []));
 
             /* Category */
-            setDropdownValue('mCategoryBtn','mCategoryPanel','mCategory', it.category || "diger");
+            setDropdownValue('mCategoryBtn', 'mCategoryPanel', 'mCategory', it.category || "diger");
             updateSizeField(it.category || "diger");
 
             /* Size */
@@ -5571,8 +6591,8 @@
             }
 
             /* Timeline */
-            setDropdownValue('mTimelineBtn','mTimelinePanel','mTimeline', it.timeline || "ocak");
-            setDropdownValue('mYearBtn','mYearPanel','mYear', String(it.timelineYear || new Date().getFullYear()));
+            setDropdownValue('mTimelineBtn', 'mTimelinePanel', 'mTimeline', it.timeline || "ocak");
+            setDropdownValue('mYearBtn', 'mYearPanel', 'mYear', String(it.timelineYear || new Date().getFullYear()));
 
             /* Priority */
             buildDesireSelector(it.priority || 3);
@@ -5678,7 +6698,7 @@
                     let w = img.naturalWidth, h = img.naturalHeight;
                     if (w > MAX || h > MAX) {
                         if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-                        else       { w = Math.round(w * MAX / h); h = MAX; }
+                        else { w = Math.round(w * MAX / h); h = MAX; }
                     }
                     const c = document.createElement('canvas');
                     c.width = w; c.height = h;
@@ -5739,6 +6759,118 @@
                 showToast("⚠️ Fotoğraf yüklenemedi, tekrar dene");
             }
             e.target.value = "";
+        });
+
+        /* ── Linkten Ekle (Scraping) ── */
+        document.getElementById("linkPickBtn").addEventListener("click", () => {
+            const modal = document.getElementById("linkPromptBack");
+            modal.style.display = "flex";
+            setTimeout(() => modal.classList.add("show"), 10);
+            document.getElementById("linkPromptInput").value = "";
+            document.getElementById("linkPromptInput").focus();
+        });
+
+        document.getElementById("closeLinkPrompt").addEventListener("click", () => {
+            const modal = document.getElementById("linkPromptBack");
+            modal.classList.remove("show");
+            setTimeout(() => modal.style.display = "none", 250);
+        });
+
+        document.getElementById("confirmLinkPrompt").addEventListener("click", async () => {
+            const linkInput = document.getElementById("linkPromptInput").value.trim();
+            if (!linkInput) {
+                showToast("Lütfen bir link yapıştırın!");
+                return;
+            }
+
+            const fetchUrl = linkInput.match(/^https?:\/\//) ? linkInput : "https://" + linkInput;
+            const btn = document.getElementById("confirmLinkPrompt");
+            btn.disabled = true;
+            btn.innerHTML = 'Veriler Çekiliyor <i class="ph ph-spinner ph-spin" style="margin-left: 6px;"></i>';
+
+            let title = "", image = "", priceText = "", numericPrice = "";
+
+            try {
+                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(fetchUrl)}`);
+                if (!response.ok) throw new Error("Ağ hatası");
+                const data = await response.json();
+                if (!data.contents) throw new Error("İçerik çekilemedi");
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data.contents, "text/html");
+
+                // İsim Çekme
+                let rawTitle = doc.querySelector('meta[property="og:title"]')?.content || doc.title || "";
+                title = rawTitle.substring(0, 100).trim();
+
+                // Görsel Çekme (Base64'e hazır blob olarak al)
+                let rawImage = doc.querySelector('meta[property="og:image"]')?.content || "";
+                if (rawImage) {
+                    try {
+                        const imgUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawImage)}`;
+                        const imgRes = await fetch(imgUrl);
+                        const blob = await imgRes.blob();
+
+                        // FileReader ile base64'e çevirip bekleyelim
+                        image = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.onerror = () => resolve("");
+                            reader.readAsDataURL(blob);
+                        });
+                    } catch (e) {
+                        console.error("Görsel indirilemedi", e);
+                    }
+                }
+
+                // Fiyat Çekme
+                priceText = doc.querySelector('meta[property="product:price:amount"]')?.content || "";
+                if (!priceText) {
+                    const allText = doc.body.innerText;
+                    const priceMatch = allText.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i);
+                    if (priceMatch) priceText = priceMatch[1];
+                }
+                if (priceText) {
+                    numericPrice = priceText.replace(/[^0-9]/g, "");
+                }
+
+            } catch (error) {
+                console.error("Scraping hatası:", error);
+                showToast("Bu siteden otomatik veri çekilemedi. Lütfen manuel ekleyin.");
+                btn.disabled = false;
+                btn.innerHTML = 'Verileri Çek <i class="ph ph-magic-wand" style="margin-left: 6px;"></i>';
+                return; // Başarısız olursa formu AÇMA, ekleme iptal edilsin
+            }
+
+            // Eğer buraya kadar geldiysek, scraping kısmını aşmışız (başarılı olmuş) demektir. 
+            // İsim veya en azından site bağlanmış demektir, yeni öğe yaratıyoruz.
+            const newItemId = Math.random().toString(16).slice(2) + Date.now().toString(16);
+            items.push({
+                id: newItemId,
+                imgData: image || "",
+                itemName: title || "",
+                links: [linkInput],
+                link: linkInput,
+                category: "diger", timeline: "ocak",
+                timelineYear: new Date().getFullYear(),
+                priority: 3, size: "", note: "", colorNote: "",
+                price: numericPrice || "", currentPrice: numericPrice || "", priceNote: "",
+                forWho: "self", reason: "", intentNote: "",
+                status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0
+            });
+
+            persist(); render();
+
+            // Modalı kapat
+            btn.disabled = false;
+            btn.innerHTML = 'Verileri Çek <i class="ph ph-magic-wand" style="margin-left: 6px;"></i>';
+            const modal = document.getElementById("linkPromptBack");
+            modal.classList.remove("show");
+            setTimeout(() => modal.style.display = "none", 250);
+
+            // Detay formunu aç
+            showToast("Ürün başarıyla çekildi ✨");
+            openModal(newItemId);
         });
 
         /* Save — tüm sekmelerdeki veriler */
@@ -5999,21 +7131,21 @@
             empty.style.display = "none";
 
             // Summary totals
-            const totalSaved   = wantItems.reduce((s, x) => s + (x.savedAmount || 0), 0);
-            const totalTarget  = wantItems.reduce((s, x) => s + (parseFloat(x.price) || 0), 0);
-            const totalRemain  = Math.max(0, totalTarget - totalSaved);
-            document.getElementById("savTotalSaved").textContent    = "₺" + totalSaved.toLocaleString("tr-TR");
-            document.getElementById("savTotalTarget").textContent   = "₺" + totalTarget.toLocaleString("tr-TR");
+            const totalSaved = wantItems.reduce((s, x) => s + (x.savedAmount || 0), 0);
+            const totalTarget = wantItems.reduce((s, x) => s + (parseFloat(x.price) || 0), 0);
+            const totalRemain = Math.max(0, totalTarget - totalSaved);
+            document.getElementById("savTotalSaved").textContent = "₺" + totalSaved.toLocaleString("tr-TR");
+            document.getElementById("savTotalTarget").textContent = "₺" + totalTarget.toLocaleString("tr-TR");
             document.getElementById("savTotalRemaining").textContent = "₺" + totalRemain.toLocaleString("tr-TR");
 
             list.innerHTML = "";
             wantItems.forEach(it => {
-                const saved   = it.savedAmount || 0;
-                const target  = parseFloat(it.price) || 0;
-                const pct     = target > 0 ? Math.min(100, Math.round(saved / target * 100)) : (saved > 0 ? 100 : 0);
-                const done    = target > 0 && saved >= target;
-                const name    = it.itemName || "İsimsiz Ürün";
-                const imgSrc  = it.imgData || "";
+                const saved = it.savedAmount || 0;
+                const target = parseFloat(it.price) || 0;
+                const pct = target > 0 ? Math.min(100, Math.round(saved / target * 100)) : (saved > 0 ? 100 : 0);
+                const done = target > 0 && saved >= target;
+                const name = it.itemName || "İsimsiz Ürün";
+                const imgSrc = it.imgData || "";
 
                 const card = document.createElement("div");
                 card.className = "savCard";
@@ -6041,11 +7173,11 @@
             // Wire buttons
             list.querySelectorAll(".savAddBtn").forEach(btn => {
                 btn.addEventListener("click", () => {
-                    const id  = btn.dataset.id;
+                    const id = btn.dataset.id;
                     const inp = list.querySelector(`.savInput[data-id="${id}"]`);
                     const val = parseFloat(inp.value);
                     if (!val || val <= 0) { inp.focus(); return; }
-                    const it  = items.find(x => x.id === id);
+                    const it = items.find(x => x.id === id);
                     if (!it) return;
                     it.savedAmount = (it.savedAmount || 0) + val;
                     inp.value = "";
@@ -6066,7 +7198,7 @@
                 btn.addEventListener("click", () => {
                     const it = items.find(x => x.id === btn.dataset.id);
                     if (!it) return;
-                    if (!confirm(`"${it.itemName || "ürün"}" için biriken ₺${(it.savedAmount||0).toLocaleString("tr-TR")} sıfırlansın mı?`)) return;
+                    if (!confirm(`"${it.itemName || "ürün"}" için biriken ₺${(it.savedAmount || 0).toLocaleString("tr-TR")} sıfırlansın mı?`)) return;
                     it.savedAmount = 0;
                     persist();
                     renderSavings();
@@ -6672,8 +7804,8 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                                     expertConsensus: s.reasoning,
                                     reasoning: s.reasoning,
                                     imgData: products.find(p => p.name.toLowerCase().trim() === s.prodName.toLowerCase().trim())?.imgData
-                                          || products.find(p => s.prodName.toLowerCase().includes(p.name.toLowerCase()))?.imgData
-                                          || ""
+                                        || products.find(p => s.prodName.toLowerCase().includes(p.name.toLowerCase()))?.imgData
+                                        || ""
                                 }))
                         }
                     };
@@ -7177,418 +8309,418 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
     </div>
 
     <script>
-    /* ═══ CROP LOGIC ═══ */
-    (function () {
-        const overlay    = document.getElementById('cropOverlay');
-        const stage      = document.getElementById('cropStage');
-        const cropImg    = document.getElementById('cropImage');
-        const zoomSlider = document.getElementById('cropZoomSlider');
-        const zoomLabel  = document.getElementById('cropZoomLabel');
-        const cancelBtn  = document.getElementById('cropCancelBtn');
-        const confirmBtn = document.getElementById('cropConfirmBtn');
-        const undoBtn    = document.getElementById('cropUndoBtn');    // → önceki kaydedilen versiyona
-        const resetBtn   = document.getElementById('cropResetBtn');   // → ilk yüklendiğindeki haline
-        const editBtn    = document.getElementById('cropBtn');
+        /* ═══ CROP LOGIC ═══ */
+        (function () {
+            const overlay = document.getElementById('cropOverlay');
+            const stage = document.getElementById('cropStage');
+            const cropImg = document.getElementById('cropImage');
+            const zoomSlider = document.getElementById('cropZoomSlider');
+            const zoomLabel = document.getElementById('cropZoomLabel');
+            const cancelBtn = document.getElementById('cropCancelBtn');
+            const confirmBtn = document.getElementById('cropConfirmBtn');
+            const undoBtn = document.getElementById('cropUndoBtn');    // → önceki kaydedilen versiyona
+            const resetBtn = document.getElementById('cropResetBtn');   // → ilk yüklendiğindeki haline
+            const editBtn = document.getElementById('cropBtn');
 
-        /* ── 3 katmanlı state ──
-           origImgData  : fotoğraf ilk yüklendiğinde saklanan, hiç değişmez
-           savedImgData : kırpma ekranı açıldığındaki mevcut imgData ("Geri al" hedefi)
-           currentSrc   : şu an cropImg'de yüklü olan src (değişiklik tespiti için)
-        */
-        let stageW = 0, stageH = 0;
-        let imgNatW = 0, imgNatH = 0;
-        let scale = 1, minScale = 1;
-        let ox = 0, oy = 0;
-        let dragging = false;
-        let dragStartX = 0, dragStartY = 0, dragStartOx = 0, dragStartOy = 0;
-        let lastPinchDist = 0;
-        let sessionSavedData = '';  // bu oturumda "uygula"ya son basıldığındaki imgData
+            /* ── 3 katmanlı state ──
+               origImgData  : fotoğraf ilk yüklendiğinde saklanan, hiç değişmez
+               savedImgData : kırpma ekranı açıldığındaki mevcut imgData ("Geri al" hedefi)
+               currentSrc   : şu an cropImg'de yüklü olan src (değişiklik tespiti için)
+            */
+            let stageW = 0, stageH = 0;
+            let imgNatW = 0, imgNatH = 0;
+            let scale = 1, minScale = 1;
+            let ox = 0, oy = 0;
+            let dragging = false;
+            let dragStartX = 0, dragStartY = 0, dragStartOx = 0, dragStartOy = 0;
+            let lastPinchDist = 0;
+            let sessionSavedData = '';  // bu oturumda "uygula"ya son basıldığındaki imgData
 
-        /* Buton durumlarını güncelle */
-        function updateBtns() {
-            const it = window._cropActiveItem;
-            if (!it) { undoBtn.disabled = true; resetBtn.disabled = true; return; }
-            /* Geri al: oturum açılışından bu yana imgData değiştiyse */
-            undoBtn.disabled  = !sessionSavedData || (it.imgData === sessionSavedData);
-            /* Orijinale döndür: mevcut imgData ile orijinal farklıysa */
-            resetBtn.disabled = !it.origImgData || (it.imgData === it.origImgData);
-        }
-
-        /* ── Kırpma ekranını aç ── */
-        editBtn.addEventListener('click', () => {
-            const it = window._cropActiveItem;
-            if (!it || !it.imgData) return;
-            /* origImgData: ilk yüklendiğindeki hali, bir kez saklanır */
-            if (!it.origImgData) it.origImgData = it.imgData;
-            /* sessionSavedData: bu oturumda düzenleyici AÇILDIĞINDA ne vardı
-               "Geri al" bunu geri yükler — o andan bu yana yapılan tüm değişikliği atar */
-            sessionSavedData = it.imgData;
-            loadIntoStage(it.imgData, () => { updateBtns(); });
-        });
-
-        function loadIntoStage(src, onReady) {
-            overlay.classList.add('open');
-            const afterLoad = () => {
-                imgNatW = cropImg.naturalWidth;
-                imgNatH = cropImg.naturalHeight;
-                stageW  = stage.offsetWidth;
-                stageH  = stage.offsetHeight;
-                resetView();
-                if (onReady) onReady();
-            };
-            if (cropImg.getAttribute('data-src') === src && cropImg.complete && cropImg.naturalWidth) {
-                afterLoad();
-            } else {
-                cropImg.onload = afterLoad;
-                cropImg.setAttribute('data-src', src);
-                cropImg.src = src;
+            /* Buton durumlarını güncelle */
+            function updateBtns() {
+                const it = window._cropActiveItem;
+                if (!it) { undoBtn.disabled = true; resetBtn.disabled = true; return; }
+                /* Geri al: oturum açılışından bu yana imgData değiştiyse */
+                undoBtn.disabled = !sessionSavedData || (it.imgData === sessionSavedData);
+                /* Orijinale döndür: mevcut imgData ile orijinal farklıysa */
+                resetBtn.disabled = !it.origImgData || (it.imgData === it.origImgData);
             }
-        }
 
-        function resetView() {
-            minScale = Math.max(stageW / imgNatW, stageH / imgNatH);
-            scale = minScale;
-            centerImage();
-            syncSlider();
-        }
+            /* ── Kırpma ekranını aç ── */
+            editBtn.addEventListener('click', () => {
+                const it = window._cropActiveItem;
+                if (!it || !it.imgData) return;
+                /* origImgData: ilk yüklendiğindeki hali, bir kez saklanır */
+                if (!it.origImgData) it.origImgData = it.imgData;
+                /* sessionSavedData: bu oturumda düzenleyici AÇILDIĞINDA ne vardı
+                   "Geri al" bunu geri yükler — o andan bu yana yapılan tüm değişikliği atar */
+                sessionSavedData = it.imgData;
+                loadIntoStage(it.imgData, () => { updateBtns(); });
+            });
 
-        function centerImage() {
-            ox = (stageW - imgNatW * scale) / 2;
-            oy = (stageH - imgNatH * scale) / 2;
-            applyTransform();
-        }
+            function loadIntoStage(src, onReady) {
+                overlay.classList.add('open');
+                const afterLoad = () => {
+                    imgNatW = cropImg.naturalWidth;
+                    imgNatH = cropImg.naturalHeight;
+                    stageW = stage.offsetWidth;
+                    stageH = stage.offsetHeight;
+                    resetView();
+                    if (onReady) onReady();
+                };
+                if (cropImg.getAttribute('data-src') === src && cropImg.complete && cropImg.naturalWidth) {
+                    afterLoad();
+                } else {
+                    cropImg.onload = afterLoad;
+                    cropImg.setAttribute('data-src', src);
+                    cropImg.src = src;
+                }
+            }
 
-        function applyTransform() {
-            cropImg.style.width  = imgNatW * scale + 'px';
-            cropImg.style.height = imgNatH * scale + 'px';
-            ox = Math.min(0, Math.max(stageW - imgNatW * scale, ox));
-            oy = Math.min(0, Math.max(stageH - imgNatH * scale, oy));
-            cropImg.style.left = ox + 'px';
-            cropImg.style.top  = oy + 'px';
-        }
+            function resetView() {
+                minScale = Math.max(stageW / imgNatW, stageH / imgNatH);
+                scale = minScale;
+                centerImage();
+                syncSlider();
+            }
 
-        function syncSlider() {
-            zoomSlider.value = Math.min(400, Math.round((scale / minScale) * 100));
-            zoomLabel.textContent = Math.round(scale * 100) + '%';
-        }
+            function centerImage() {
+                ox = (stageW - imgNatW * scale) / 2;
+                oy = (stageH - imgNatH * scale) / 2;
+                applyTransform();
+            }
 
-        /* Sürükle veya zoom yapıldığında confirmBtn'i aktif et */
-        function markDirty() {
-            confirmBtn.style.opacity = '';   // tam görünür
-        }
+            function applyTransform() {
+                cropImg.style.width = imgNatW * scale + 'px';
+                cropImg.style.height = imgNatH * scale + 'px';
+                ox = Math.min(0, Math.max(stageW - imgNatW * scale, ox));
+                oy = Math.min(0, Math.max(stageH - imgNatH * scale, oy));
+                cropImg.style.left = ox + 'px';
+                cropImg.style.top = oy + 'px';
+            }
 
-        /* Zoom slider */
-        zoomSlider.addEventListener('input', () => {
-            const newScale = minScale * (zoomSlider.value / 100);
-            const cx = stageW / 2, cy = stageH / 2;
-            ox = cx - (cx - ox) * (newScale / scale);
-            oy = cy - (cy - oy) * (newScale / scale);
-            scale = newScale;
-            applyTransform();
-            zoomLabel.textContent = Math.round(scale * 100) + '%';
-            markDirty();
-        });
+            function syncSlider() {
+                zoomSlider.value = Math.min(400, Math.round((scale / minScale) * 100));
+                zoomLabel.textContent = Math.round(scale * 100) + '%';
+            }
 
-        /* Mouse drag */
-        stage.addEventListener('mousedown', e => {
-            dragging = true;
-            dragStartX = e.clientX; dragStartY = e.clientY;
-            dragStartOx = ox; dragStartOy = oy;
-            e.preventDefault();
-        });
-        window.addEventListener('mousemove', e => {
-            if (!dragging) return;
-            ox = dragStartOx + (e.clientX - dragStartX);
-            oy = dragStartOy + (e.clientY - dragStartY);
-            applyTransform();
-            markDirty();
-        });
-        window.addEventListener('mouseup', () => { dragging = false; });
+            /* Sürükle veya zoom yapıldığında confirmBtn'i aktif et */
+            function markDirty() {
+                confirmBtn.style.opacity = '';   // tam görünür
+            }
 
-        /* Mouse wheel zoom */
-        stage.addEventListener('wheel', e => {
-            e.preventDefault();
-            const delta    = e.deltaY > 0 ? 0.92 : 1.08;
-            const newScale = Math.max(minScale, Math.min(minScale * 4, scale * delta));
-            const rect     = stage.getBoundingClientRect();
-            const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
-            ox = cx - (cx - ox) * (newScale / scale);
-            oy = cy - (cy - oy) * (newScale / scale);
-            scale = newScale;
-            applyTransform(); syncSlider(); markDirty();
-        }, { passive: false });
+            /* Zoom slider */
+            zoomSlider.addEventListener('input', () => {
+                const newScale = minScale * (zoomSlider.value / 100);
+                const cx = stageW / 2, cy = stageH / 2;
+                ox = cx - (cx - ox) * (newScale / scale);
+                oy = cy - (cy - oy) * (newScale / scale);
+                scale = newScale;
+                applyTransform();
+                zoomLabel.textContent = Math.round(scale * 100) + '%';
+                markDirty();
+            });
 
-        /* Touch drag + pinch */
-        stage.addEventListener('touchstart', e => {
-            if (e.touches.length === 1) {
+            /* Mouse drag */
+            stage.addEventListener('mousedown', e => {
                 dragging = true;
-                dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
+                dragStartX = e.clientX; dragStartY = e.clientY;
                 dragStartOx = ox; dragStartOy = oy;
-            } else if (e.touches.length === 2) {
-                dragging = false;
-                lastPinchDist = pinchDist(e.touches);
-            }
-            e.preventDefault();
-        }, { passive: false });
+                e.preventDefault();
+            });
+            window.addEventListener('mousemove', e => {
+                if (!dragging) return;
+                ox = dragStartOx + (e.clientX - dragStartX);
+                oy = dragStartOy + (e.clientY - dragStartY);
+                applyTransform();
+                markDirty();
+            });
+            window.addEventListener('mouseup', () => { dragging = false; });
 
-        stage.addEventListener('touchmove', e => {
-            if (e.touches.length === 1 && dragging) {
-                ox = dragStartOx + (e.touches[0].clientX - dragStartX);
-                oy = dragStartOy + (e.touches[0].clientY - dragStartY);
-                applyTransform(); markDirty();
-            } else if (e.touches.length === 2) {
-                const dist = pinchDist(e.touches);
-                const factor = dist / lastPinchDist;
-                lastPinchDist = dist;
+            /* Mouse wheel zoom */
+            stage.addEventListener('wheel', e => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? 0.92 : 1.08;
+                const newScale = Math.max(minScale, Math.min(minScale * 4, scale * delta));
                 const rect = stage.getBoundingClientRect();
-                const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
-                const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
-                const newScale = Math.max(minScale, Math.min(minScale * 4, scale * factor));
+                const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
                 ox = cx - (cx - ox) * (newScale / scale);
                 oy = cy - (cy - oy) * (newScale / scale);
                 scale = newScale;
                 applyTransform(); syncSlider(); markDirty();
+            }, { passive: false });
+
+            /* Touch drag + pinch */
+            stage.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                    dragging = true;
+                    dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
+                    dragStartOx = ox; dragStartOy = oy;
+                } else if (e.touches.length === 2) {
+                    dragging = false;
+                    lastPinchDist = pinchDist(e.touches);
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            stage.addEventListener('touchmove', e => {
+                if (e.touches.length === 1 && dragging) {
+                    ox = dragStartOx + (e.touches[0].clientX - dragStartX);
+                    oy = dragStartOy + (e.touches[0].clientY - dragStartY);
+                    applyTransform(); markDirty();
+                } else if (e.touches.length === 2) {
+                    const dist = pinchDist(e.touches);
+                    const factor = dist / lastPinchDist;
+                    lastPinchDist = dist;
+                    const rect = stage.getBoundingClientRect();
+                    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+                    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+                    const newScale = Math.max(minScale, Math.min(minScale * 4, scale * factor));
+                    ox = cx - (cx - ox) * (newScale / scale);
+                    oy = cy - (cy - oy) * (newScale / scale);
+                    scale = newScale;
+                    applyTransform(); syncSlider(); markDirty();
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            stage.addEventListener('touchend', () => { dragging = false; });
+
+            function pinchDist(t) {
+                const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+                return Math.sqrt(dx * dx + dy * dy);
             }
-            e.preventDefault();
-        }, { passive: false });
 
-        stage.addEventListener('touchend', () => { dragging = false; });
+            /* ── Vazgeç — hiçbir şey kaydetmeden kapat ── */
+            cancelBtn.addEventListener('click', () => { overlay.classList.remove('open'); });
 
-        function pinchDist(t) {
-            const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        /* ── Vazgeç — hiçbir şey kaydetmeden kapat ── */
-        cancelBtn.addEventListener('click', () => { overlay.classList.remove('open'); });
-
-        /* ── Geri al — düzenleyiciyi açtığındaki versiyona dön ── */
-        undoBtn.addEventListener('click', () => {
-            if (!sessionSavedData) return;
-            const it = window._cropActiveItem;
-            it.imgData = sessionSavedData;
-            document.getElementById('mImg').src = sessionSavedData;
-            if (typeof persist === 'function') persist();
-            if (typeof render  === 'function') render();
-            /* Sahneyi o versiyonla yenile */
-            cropImg.setAttribute('data-src', '');
-            loadIntoStage(sessionSavedData, () => { updateBtns(); });
-        });
-
-        /* ── Orijinale döndür — ilk yüklendiğindeki haline ── */
-        resetBtn.addEventListener('click', () => {
-            const it = window._cropActiveItem;
-            if (!it || !it.origImgData) return;
-            it.imgData = it.origImgData;
-            document.getElementById('mImg').src = it.origImgData;
-            if (typeof persist === 'function') persist();
-            if (typeof render  === 'function') render();
-            cropImg.setAttribute('data-src', '');
-            loadIntoStage(it.origImgData, () => { updateBtns(); });
-        });
-
-        /* ── Uygula — kırpılmış görüntüyü kaydet ── */
-        confirmBtn.addEventListener('click', () => {
-            const canvas = document.createElement('canvas');
-            const out = 900;
-            canvas.width = out; canvas.height = out;
-            canvas.getContext('2d').drawImage(
-                cropImg,
-                -ox / scale, -oy / scale,
-                stageW / scale, stageH / scale,
-                0, 0, out, out
-            );
-            const newData = canvas.toDataURL('image/jpeg', 0.88);
-            const it = window._cropActiveItem;
-            if (it) {
-                it.imgData = newData;
-                document.getElementById('mImg').src = newData;
+            /* ── Geri al — düzenleyiciyi açtığındaki versiyona dön ── */
+            undoBtn.addEventListener('click', () => {
+                if (!sessionSavedData) return;
+                const it = window._cropActiveItem;
+                it.imgData = sessionSavedData;
+                document.getElementById('mImg').src = sessionSavedData;
                 if (typeof persist === 'function') persist();
-                if (typeof render  === 'function') render();
-                updateBtns();
-            }
-            overlay.classList.remove('open');
-        });
-    })();
+                if (typeof render === 'function') render();
+                /* Sahneyi o versiyonla yenile */
+                cropImg.setAttribute('data-src', '');
+                loadIntoStage(sessionSavedData, () => { updateBtns(); });
+            });
+
+            /* ── Orijinale döndür — ilk yüklendiğindeki haline ── */
+            resetBtn.addEventListener('click', () => {
+                const it = window._cropActiveItem;
+                if (!it || !it.origImgData) return;
+                it.imgData = it.origImgData;
+                document.getElementById('mImg').src = it.origImgData;
+                if (typeof persist === 'function') persist();
+                if (typeof render === 'function') render();
+                cropImg.setAttribute('data-src', '');
+                loadIntoStage(it.origImgData, () => { updateBtns(); });
+            });
+
+            /* ── Uygula — kırpılmış görüntüyü kaydet ── */
+            confirmBtn.addEventListener('click', () => {
+                const canvas = document.createElement('canvas');
+                const out = 900;
+                canvas.width = out; canvas.height = out;
+                canvas.getContext('2d').drawImage(
+                    cropImg,
+                    -ox / scale, -oy / scale,
+                    stageW / scale, stageH / scale,
+                    0, 0, out, out
+                );
+                const newData = canvas.toDataURL('image/jpeg', 0.88);
+                const it = window._cropActiveItem;
+                if (it) {
+                    it.imgData = newData;
+                    document.getElementById('mImg').src = newData;
+                    if (typeof persist === 'function') persist();
+                    if (typeof render === 'function') render();
+                    updateBtns();
+                }
+                overlay.classList.remove('open');
+            });
+        })();
     </script>
 
     <script>
-    /* ── KART ANİMASYONU — tek paylaşımlı rAF loop ── */
-    (function(){
-        var stage = document.getElementById('authCardStage');
-        if (!stage) return;
+        /* ── KART ANİMASYONU — tek paylaşımlı rAF loop ── */
+        (function () {
+            var stage = document.getElementById('authCardStage');
+            if (!stage) return;
 
-        var ITEMS = [
-            {emoji:'👗', text:'Yeni kıyafet'},
-            {emoji:'💄', text:'Ruj bekliyorum'},
-            {emoji:'✨', text:"Wrapped çıktı!"},
-            {emoji:'👠', text:'Topuklu hedef'},
-            {emoji:'🛍️', text:'Alışveriş planı'},
-            {emoji:'💍', text:'Gizli listem'},
-            {emoji:'🌷', text:'WishlistAI'},
-            {emoji:'🎀', text:'Hediye listesi'},
-            {emoji:'👒', text:'Sezon trendi'},
-            {emoji:'🪞', text:'Stil takibi'},
-            {emoji:'💅', text:'Makyaj sırası'},
-            {emoji:'🧴', text:'Cilt bakımı'},
-            {emoji:'🎁', text:'Şubat wrapped'},
-            {emoji:'🌙', text:'Gece rutini'},
-            {emoji:'⭐', text:'Öncelikli ürün'},
-            {emoji:'🌸', text:'Özel koleksiyon'}
-        ];
+            var ITEMS = [
+                { emoji: '👗', text: 'Yeni kıyafet' },
+                { emoji: '💄', text: 'Ruj bekliyorum' },
+                { emoji: '✨', text: "Wrapped çıktı!" },
+                { emoji: '👠', text: 'Topuklu hedef' },
+                { emoji: '🛍️', text: 'Alışveriş planı' },
+                { emoji: '💍', text: 'Gizli listem' },
+                { emoji: '🌷', text: 'WishlistAI' },
+                { emoji: '🎀', text: 'Hediye listesi' },
+                { emoji: '👒', text: 'Sezon trendi' },
+                { emoji: '🪞', text: 'Stil takibi' },
+                { emoji: '💅', text: 'Makyaj sırası' },
+                { emoji: '🧴', text: 'Cilt bakımı' },
+                { emoji: '🎁', text: 'Şubat wrapped' },
+                { emoji: '🌙', text: 'Gece rutini' },
+                { emoji: '⭐', text: 'Öncelikli ürün' },
+                { emoji: '🌸', text: 'Özel koleksiyon' }
+            ];
 
-        var cards  = [];   /* aktif kartlar */
-        var nextSpawn = 0; /* ms cinsinden bir sonraki spawn zamanı */
-        var MAX = 6;
+            var cards = [];   /* aktif kartlar */
+            var nextSpawn = 0; /* ms cinsinden bir sonraki spawn zamanı */
+            var MAX = 6;
 
-        function r(a,b){ return a + Math.random()*(b-a); }
-        function ease(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
-        function bez(t,s,c1,c2,e){
-            var u=1-t;
-            return u*u*u*s + 3*u*u*t*c1 + 3*u*t*t*c2 + t*t*t*e;
-        }
-
-        function makeCard(){
-            var used = {};
-            cards.forEach(function(c){ used[c.emoji]=1; });
-            var pool = ITEMS.filter(function(it){ return !used[it.emoji]; });
-            if(!pool.length) return null;
-
-            var item = pool[Math.floor(Math.random()*pool.length)];
-            var W = stage.offsetWidth  || 500;
-            var H = stage.offsetHeight || 800;
-
-            /* Spawn: sol bölge, orta yükseklik */
-            var sx = r(20, W*0.38);
-            var sy = r(H*0.28, H*0.62);
-
-            /* Hedef: sağ üst */
-            var ex = r(W*0.60, W+100);
-            var ey = r(-120, H*0.22);
-
-            /* Bezier kontrol noktaları */
-            var c1x = sx + (ex-sx)*r(0.18,0.38) + r(-W*0.09, W*0.09);
-            var c1y = sy + (ey-sy)*r(0.08,0.32)  + r(-H*0.09, H*0.09);
-            var c2x = sx + (ex-sx)*r(0.55,0.75) + r(-W*0.09, W*0.09);
-            var c2y = sy + (ey-sy)*r(0.55,0.78)  + r(-H*0.09, H*0.05);
-
-            var dur   = r(7500, 11500);
-            var rot   = r(-2, 2);
-            var depth = Math.random();
-            var scl   = depth < 0.28 ? r(0.80,0.90) : depth > 0.72 ? r(1.05,1.14) : r(0.93,1.03);
-            var blurV = depth < 0.28 ? r(1,2).toFixed(1) : 0;
-            var zi    = depth < 0.28 ? 1 : depth > 0.72 ? 3 : 2;
-
-            var el = document.createElement('div');
-            el.className = 'ac';
-            el.innerHTML = '<span class="ac-emoji">'+item.emoji+'</span>'
-                         + '<span class="ac-text">'+item.text+'</span>';
-            el.style.cssText = 'left:0;top:0;opacity:0;z-index:'+zi+';'
-                + 'will-change:transform,opacity;'
-                + (blurV ? 'filter:blur('+blurV+'px);' : '');
-            stage.appendChild(el);
-
-            return {
-                emoji: item.emoji,
-                el: el,
-                sx:sx, sy:sy, ex:ex, ey:ey,
-                c1x:c1x, c1y:c1y, c2x:c2x, c2y:c2y,
-                dur:dur, rot:rot, scl:scl,
-                start: null
-            };
-        }
-
-        /* ─── Tek paylaşımlı rAF loop ─── */
-        function tick(ts){
-            /* Spawn zamanı geldiyse yeni kart oluştur */
-            if(ts >= nextSpawn && cards.length < MAX){
-                var nc = makeCard();
-                if(nc){
-                    nc.start = ts;
-                    cards.push(nc);
-                    nextSpawn = ts + r(1200, 3200);
-                } else {
-                    nextSpawn = ts + 800;
-                }
+            function r(a, b) { return a + Math.random() * (b - a); }
+            function ease(t) { return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+            function bez(t, s, c1, c2, e) {
+                var u = 1 - t;
+                return u * u * u * s + 3 * u * u * t * c1 + 3 * u * t * t * c2 + t * t * t * e;
             }
 
-            var i = cards.length;
-            while(i--){
-                var c = cards[i];
-                if(!c.start) c.start = ts;
+            function makeCard() {
+                var used = {};
+                cards.forEach(function (c) { used[c.emoji] = 1; });
+                var pool = ITEMS.filter(function (it) { return !used[it.emoji]; });
+                if (!pool.length) return null;
 
-                var t  = Math.min((ts - c.start) / c.dur, 1);
-                var te = ease(t);
+                var item = pool[Math.floor(Math.random() * pool.length)];
+                var W = stage.offsetWidth || 500;
+                var H = stage.offsetHeight || 800;
 
-                var px = bez(te, c.sx, c.c1x, c.c2x, c.ex);
-                var py = bez(te, c.sy, c.c1y, c.c2y, c.ey);
+                /* Spawn: sol bölge, orta yükseklik */
+                var sx = r(20, W * 0.38);
+                var sy = r(H * 0.28, H * 0.62);
 
-                /* Opacity: aydınlanma → tam görünür → kararma */
-                var op;
-                if     (t < 0.12) op = t / 0.12;
-                else if(t > 0.82) op = (1 - t) / 0.18;
-                else               op = 1;
+                /* Hedef: sağ üst */
+                var ex = r(W * 0.60, W + 100);
+                var ey = r(-120, H * 0.22);
 
-                c.el.style.transform = 'translate('+px.toFixed(1)+'px,'+py.toFixed(1)+'px)'
-                                     + ' scale('+c.scl+')'
-                                     + ' rotate('+c.rot+'deg)';
-                c.el.style.opacity = op < 0 ? 0 : op > 1 ? 1 : op;
+                /* Bezier kontrol noktaları */
+                var c1x = sx + (ex - sx) * r(0.18, 0.38) + r(-W * 0.09, W * 0.09);
+                var c1y = sy + (ey - sy) * r(0.08, 0.32) + r(-H * 0.09, H * 0.09);
+                var c2x = sx + (ex - sx) * r(0.55, 0.75) + r(-W * 0.09, W * 0.09);
+                var c2y = sy + (ey - sy) * r(0.55, 0.78) + r(-H * 0.09, H * 0.05);
 
-                if(t >= 1){
-                    c.el.remove();
-                    cards.splice(i, 1);
-                    /* Bir sonraki spawn'u hemen planla */
-                    if(nextSpawn > ts + 2000) nextSpawn = ts + r(600, 1400);
-                }
+                var dur = r(7500, 11500);
+                var rot = r(-2, 2);
+                var depth = Math.random();
+                var scl = depth < 0.28 ? r(0.80, 0.90) : depth > 0.72 ? r(1.05, 1.14) : r(0.93, 1.03);
+                var blurV = depth < 0.28 ? r(1, 2).toFixed(1) : 0;
+                var zi = depth < 0.28 ? 1 : depth > 0.72 ? 3 : 2;
+
+                var el = document.createElement('div');
+                el.className = 'ac';
+                el.innerHTML = '<span class="ac-emoji">' + item.emoji + '</span>'
+                    + '<span class="ac-text">' + item.text + '</span>';
+                el.style.cssText = 'left:0;top:0;opacity:0;z-index:' + zi + ';'
+                    + 'will-change:transform,opacity;'
+                    + (blurV ? 'filter:blur(' + blurV + 'px);' : '');
+                stage.appendChild(el);
+
+                return {
+                    emoji: item.emoji,
+                    el: el,
+                    sx: sx, sy: sy, ex: ex, ey: ey,
+                    c1x: c1x, c1y: c1y, c2x: c2x, c2y: c2y,
+                    dur: dur, rot: rot, scl: scl,
+                    start: null
+                };
             }
 
+            /* ─── Tek paylaşımlı rAF loop ─── */
+            function tick(ts) {
+                /* Spawn zamanı geldiyse yeni kart oluştur */
+                if (ts >= nextSpawn && cards.length < MAX) {
+                    var nc = makeCard();
+                    if (nc) {
+                        nc.start = ts;
+                        cards.push(nc);
+                        nextSpawn = ts + r(1200, 3200);
+                    } else {
+                        nextSpawn = ts + 800;
+                    }
+                }
+
+                var i = cards.length;
+                while (i--) {
+                    var c = cards[i];
+                    if (!c.start) c.start = ts;
+
+                    var t = Math.min((ts - c.start) / c.dur, 1);
+                    var te = ease(t);
+
+                    var px = bez(te, c.sx, c.c1x, c.c2x, c.ex);
+                    var py = bez(te, c.sy, c.c1y, c.c2y, c.ey);
+
+                    /* Opacity: aydınlanma → tam görünür → kararma */
+                    var op;
+                    if (t < 0.12) op = t / 0.12;
+                    else if (t > 0.82) op = (1 - t) / 0.18;
+                    else op = 1;
+
+                    c.el.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px)'
+                        + ' scale(' + c.scl + ')'
+                        + ' rotate(' + c.rot + 'deg)';
+                    c.el.style.opacity = op < 0 ? 0 : op > 1 ? 1 : op;
+
+                    if (t >= 1) {
+                        c.el.remove();
+                        cards.splice(i, 1);
+                        /* Bir sonraki spawn'u hemen planla */
+                        if (nextSpawn > ts + 2000) nextSpawn = ts + r(600, 1400);
+                    }
+                }
+
+                requestAnimationFrame(tick);
+            }
+
+            /* İlk spawn zamanlarını dağıt */
+            nextSpawn = performance.now();
             requestAnimationFrame(tick);
-        }
 
-        /* İlk spawn zamanlarını dağıt */
-        nextSpawn = performance.now();
-        requestAnimationFrame(tick);
-
-        /* ── Dil ve koyu mod kontrolleri ── */
-        window.authSetLang = function(lang){
-            if(typeof applyLanguage==='function') applyLanguage(lang);
-            var tr=document.getElementById('authLangTr');
-            var en=document.getElementById('authLangEn');
-            if(tr) tr.classList.toggle('active', lang==='tr');
-            if(en) en.classList.toggle('active', lang==='en');
-        };
-        window.authToggleDark = function(){
-            var cur=localStorage.getItem('wl_theme_v1')||'pink';
-            var next=cur==='dark'?'pink':'dark';
-            if(typeof applyTheme==='function') applyTheme(next);
-            var icon=document.getElementById('authDarkIcon');
-            var btn=document.getElementById('authDarkBtn');
-            if(icon) icon.textContent=next==='dark'?'☀️':'🌙';
-            if(btn)  btn.classList.toggle('active', next==='dark');
-        };
-        /* Init buton durumları */
-        var lang0  = localStorage.getItem('wl_lang')||'tr';
-        var theme0 = localStorage.getItem('wl_theme_v1')||'pink';
-        var lTr=document.getElementById('authLangTr');
-        var lEn=document.getElementById('authLangEn');
-        var dBtn=document.getElementById('authDarkBtn');
-        var dIcon=document.getElementById('authDarkIcon');
-        if(lTr) lTr.classList.toggle('active', lang0==='tr');
-        if(lEn) lEn.classList.toggle('active', lang0==='en');
-        if(dBtn)  dBtn.classList.toggle('active', theme0==='dark');
-        if(dIcon) dIcon.textContent=theme0==='dark'?'☀️':'🌙';
-    })();
+            /* ── Dil ve koyu mod kontrolleri ── */
+            window.authSetLang = function (lang) {
+                if (typeof applyLanguage === 'function') applyLanguage(lang);
+                var tr = document.getElementById('authLangTr');
+                var en = document.getElementById('authLangEn');
+                if (tr) tr.classList.toggle('active', lang === 'tr');
+                if (en) en.classList.toggle('active', lang === 'en');
+            };
+            window.authToggleDark = function () {
+                var cur = localStorage.getItem('wl_theme_v1') || 'pink';
+                var next = cur === 'dark' ? 'pink' : 'dark';
+                if (typeof applyTheme === 'function') applyTheme(next);
+                var icon = document.getElementById('authDarkIcon');
+                var btn = document.getElementById('authDarkBtn');
+                if (icon) icon.textContent = next === 'dark' ? '☀️' : '🌙';
+                if (btn) btn.classList.toggle('active', next === 'dark');
+            };
+            /* Init buton durumları */
+            var lang0 = localStorage.getItem('wl_lang') || 'tr';
+            var theme0 = localStorage.getItem('wl_theme_v1') || 'pink';
+            var lTr = document.getElementById('authLangTr');
+            var lEn = document.getElementById('authLangEn');
+            var dBtn = document.getElementById('authDarkBtn');
+            var dIcon = document.getElementById('authDarkIcon');
+            if (lTr) lTr.classList.toggle('active', lang0 === 'tr');
+            if (lEn) lEn.classList.toggle('active', lang0 === 'en');
+            if (dBtn) dBtn.classList.toggle('active', theme0 === 'dark');
+            if (dIcon) dIcon.textContent = theme0 === 'dark' ? '☀️' : '🌙';
+        })();
     </script>
 
     <!-- ═══ SERVICE WORKER - Instant Load & Offline Support ═══ -->
     <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('✓ Service Worker (instant load)'))
-                .catch(err => console.log('SW error:', err));
-        });
-    }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('✓ Service Worker (instant load)'))
+                    .catch(err => console.log('SW error:', err));
+            });
+        }
     </script>
 </body>
 
