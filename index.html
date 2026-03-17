@@ -23,6 +23,10 @@
         rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         /* ═══════════ DESIGN TOKENS ═══════════ */
         :root {
@@ -5500,152 +5504,28 @@
            ✓ IndexedDB (GB depolama)
            ✓ Offline support
         ═══════════════════════════════════════════════════════════ */
-        const FB_DATABASE_URL = "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app";
-        const FB_ENABLED = FB_DATABASE_URL.startsWith("https://");
-        const SESSION_KEY = 'wl_session_v3';
-        const USERS_KEY = 'wl_users_v2';
-        const PERSISTENT_LOGIN = 'wl_remember_me'; // ASLA silinmez
-        let authToken = null;
-        let authUid = null;
+        /* ═══ FIREBASE CONFIG ═══ */
+        /* Firebase Console'dan proje ayarlarınıza gidip Web API Key'i kopyalayın ve buradaki yapılandırmayı güncelleyin. 
+           Authentication (Email/Password) SDK'sının çalışması için apiKey zorunludur. */
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_S_UoUpHMR_PAY0U_2W5hF_x5Xc3ioi4",
+            authDomain: "wishlist-5bdfa.firebaseapp.com",
+            databaseURL: "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "wishlist-5bdfa"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
         let currentUser = null;
+        let authUid = null;
 
-        /* ── Hash ── */
-        async function hashPw(pw) {
-            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        function getEmailFromUsername(username) {
+            return username + '@wishlist.local';
         }
 
-        /* ── localStorage ── */
-        function getLocalUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; } }
-        function saveLocalUsers(u) { try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch (e) { console.warn('localStorage error:', e); } }
-
-        /* ── Fetch with timeout ── */
-        function fetchWithTimeout(url, opts = {}, timeout = 8000) {
-            return Promise.race([fetch(url, opts), new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))]);
-        }
-
-        /* ── Firebase ── */
-        async function fbGet(path) {
-            if (!FB_ENABLED) return null;
-            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', {}, 8000); return r.ok ? await r.json() : null; } catch (e) { return null; }
-        }
-        async function fbSet(path, data) {
-            if (!FB_ENABLED) return false;
-            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }, 10000); return r.ok; } catch (e) { return false; }
-        }
-        async function fbDelete(path) {
-            if (!FB_ENABLED) return false;
-            try { const r = await fetchWithTimeout(FB_DATABASE_URL + '/' + path + '.json', { method: 'DELETE' }, 8000); return r.ok; } catch (e) { return false; }
-        }
-
-        /* ── User Management (3-tier: localStorage > Firebase > sync) ── */
-        async function getUser(username) {
-            if (!username) return null;
-            username = username.toLowerCase().trim();
-
-            // 1. localStorage (instant)
-            const local = getLocalUsers();
-            if (local[username]) return local[username];
-
-            // 2. Firebase (sync)
-            if (FB_ENABLED) {
-                const fbHash = await fbGet('users/' + username + '/hash');
-                if (fbHash) {
-                    local[username] = fbHash;
-                    saveLocalUsers(local);
-                    return fbHash;
-                }
-            }
-
-            return null;
-        }
-
-        async function saveUserHash(username, hash) {
-            if (!username || !hash) return false;
-            username = username.toLowerCase().trim();
-            let ok = false;
-
-            // localStorage
-            try {
-                const local = getLocalUsers();
-                local[username] = hash;
-                saveLocalUsers(local);
-                console.log('✓ localStorage');
-                ok = true;
-            } catch (e) { }
-
-            // Firebase
-            if (FB_ENABLED) {
-                const fbOk = await fbSet('users/' + username + '/hash', hash);
-                if (fbOk) { console.log('✓ Firebase'); ok = true; }
-                else { console.warn('Firebase kayıt başarısız - offline olabilir'); }
-            }
-
-            return ok;
-        }
-
-        /* ═══ ESKİ HESAPLARI MİGRATE ET (Cross-device için kritik) ═══ */
-        async function migrateOldUsersToFirebase() {
-            if (!FB_ENABLED) return;
-
-            const localUsers = getLocalUsers();
-            const usernames = Object.keys(localUsers);
-
-            if (usernames.length === 0) return;
-
-            console.log('🔄 Eski hesaplar Firebase\'e taşınıyor...');
-
-            for (const username of usernames) {
-                try {
-                    // Firebase'de var mı kontrol et
-                    const fbHash = await fbGet('users/' + username + '/hash');
-                    if (!fbHash) {
-                        // Yoksa localStorage'dan Firebase'e kopyala
-                        const localHash = localUsers[username];
-                        if (localHash) {
-                            const ok = await fbSet('users/' + username + '/hash', localHash);
-                            if (ok) {
-                                console.log(`✓ Migrated: ${username}`);
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.warn(`Migration error for ${username}:`, e);
-                }
-            }
-
-            console.log('✓ Migration tamamlandı');
-        }
-
-        /* ═══ PERSISTENT SESSION (never forgets) ═══ */
-        function savePersistentSession(username) {
-            if (!username) return;
-            username = username.toLowerCase().trim();
-            localStorage.setItem(SESSION_KEY, username);
-            localStorage.setItem(PERSISTENT_LOGIN, username); // Kalıcı
-        }
-
-        function clearSession() {
-            localStorage.removeItem(SESSION_KEY);
-            // PERSISTENT_LOGIN silme - otomatik giriş için bırak
-            authUid = null;
-            currentUser = null;
-        }
-
-        function getSession() {
-            let u = localStorage.getItem(SESSION_KEY);
-            if (!u) {
-                u = localStorage.getItem(PERSISTENT_LOGIN);
-                if (u) localStorage.setItem(SESSION_KEY, u);
-            }
-            return u;
-        }
-
-        function forgetMe() {
-            localStorage.removeItem(SESSION_KEY);
-            localStorage.removeItem(PERSISTENT_LOGIN);
-            authUid = null;
-            currentUser = null;
+        function getUsernameFromEmail(email) {
+            return email.split('@')[0];
         }
 
         /* ── UI ── */
@@ -5703,30 +5583,16 @@
             btn.disabled = true;
 
             try {
-                const storedHash = await getUser(username);
-                if (!storedHash) {
-                    btn.textContent = orig;
-                    btn.disabled = false;
-                    return showAuthError('Kullanıcı bulunamadı. Önce kayıt olun.');
-                }
-
-                const pwHash = await hashPw(password);
-                if (storedHash !== pwHash) {
-                    btn.textContent = orig;
-                    btn.disabled = false;
-                    return showAuthError('Şifre hatalı.');
-                }
-
-                savePersistentSession(username);
-                authUid = username;
-                currentUser = username;
-                showAuthSuccess('Giriş başarılı!');
-
-                setTimeout(() => { btn.textContent = orig; btn.disabled = false; startApp(); }, 400);
+                const email = getEmailFromUsername(username);
+                await auth.signInWithEmailAndPassword(email, password);
+                btn.textContent = orig;
+                btn.disabled = false;
             } catch (err) {
                 console.error('Login error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
+                if(err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') return showAuthError('Kullanıcı bulunamadı veya şifre hatalı.');
+                if(err.code === 'auth/wrong-password') return showAuthError('Şifre hatalı.');
                 showAuthError('Bir hata oluştu. Tekrar deneyin.');
             }
         }
@@ -5749,38 +5615,18 @@
             btn.disabled = true;
 
             try {
-                const exists = await getUser(username);
-                if (exists) {
-                    btn.textContent = orig;
-                    btn.disabled = false;
-                    return showAuthError('Kullanıcı adı zaten alınmış.');
-                }
-
-                const pwHash = await hashPw(pw);
-                const ok = await saveUserHash(username, pwHash);
-                if (!ok) {
-                    btn.textContent = orig;
-                    btn.disabled = false;
-                    return showAuthError('Kayıt başarısız. Tekrar deneyin.');
-                }
-
-                savePersistentSession(username);
-                authUid = username;
-                currentUser = username;
-                showAuthSuccess('Hesap oluşturuldu!');
-
-                setTimeout(() => {
-                    btn.textContent = orig;
-                    btn.disabled = false;
-                    document.getElementById('regUser').value = '';
-                    document.getElementById('regPass').value = '';
-                    document.getElementById('regPass2').value = '';
-                    startApp();
-                }, 600);
+                const email = getEmailFromUsername(username);
+                await auth.createUserWithEmailAndPassword(email, pw);
+                btn.textContent = orig;
+                btn.disabled = false;
+                document.getElementById('regUser').value = '';
+                document.getElementById('regPass').value = '';
+                document.getElementById('regPass2').value = '';
             } catch (err) {
                 console.error('Register error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
+                if(err.code === 'auth/email-already-in-use') return showAuthError('Kullanıcı adı zaten alınmış.');
                 showAuthError('Bir hata oluştu. Tekrar deneyin.');
             }
         }
@@ -5814,7 +5660,6 @@
             document.getElementById(pageId).classList.add('active');
             if (pageId === 'sPageTheme') renderThemeGrid();
             if (pageId === 'sPageLayout') {
-                // Initialize border state when opened
                 setLayoutMode(viewMode);
             }
         }
@@ -5854,47 +5699,42 @@
 
         function doLogout() {
             const confirmLogout = () => {
-                clearSession();
-                items = [];
-                document.getElementById('authScreen').style.display = 'flex';
-                document.getElementById('loginUser').value = '';
-                document.getElementById('loginPass').value = '';
-                document.getElementById('authError').style.display = 'none';
-                document.getElementById('authSuccessMsg').style.display = 'none';
-                switchAuthTab('login');
-                closeSettings();
+                auth.signOut().then(() => {
+                    items = [];
+                    document.getElementById('authScreen').style.display = 'flex';
+                    document.getElementById('loginUser').value = '';
+                    document.getElementById('loginPass').value = '';
+                    document.getElementById('authError').style.display = 'none';
+                    document.getElementById('authSuccessMsg').style.display = 'none';
+                    switchAuthTab('login');
+                    closeSettings();
+                });
             };
 
             showConfirmModal(
                 "Çıkış Yap",
-                "Çıkış yapmak istediğinizden emin misiniz?\n\nHesabınız saklanır, sonraki girişte otomatik giriş yapacaksınız.",
+                "Çıkış yapmak istediğinizden emin misiniz?",
                 "Çıkış Yap",
                 confirmLogout
             );
         }
 
         async function deleteAccount() {
-            if (!currentUser) return;
-
-            // Custom modal cannot await on confirm cleanly like window.confirm. 
-            // So we execute logic immediately here because this function is now called AFTER the user confirms pressing the red button via sPageDelete logic (or directly via a modal, but right now it is triggered by sPageDelete form button)
-            // Wait, to keep it structurally simple since it's inside sPageDelete. The button in `sPageDelete` says "Evet, Hesabımı Sil" meaning they already saw the warning.
-            // But let's add one last layer of security using the custom modal just for extra safety like we did for doLogout. Wait, no, sPageReset just executes. Let's execute immediately since we are already inside a dedicated warning page.
-
-            // Firebase'den sil
-            if (FB_ENABLED) {
-                await fbDelete('users/' + currentUser);
+            if (!authUid) return;
+            try {
+                await db.ref('users/' + authUid).remove();
+            } catch(e) {}
+            
+            const user = auth.currentUser;
+            if(user) {
+                try {
+                    await user.delete();
+                } catch(e) {
+                    console.error("Firebase auth deletion", e);
+                }
             }
 
-            // localStorage'dan sil
-            const localUsers = getLocalUsers();
-            if (localUsers[currentUser]) {
-                delete localUsers[currentUser];
-                saveLocalUsers(localUsers);
-            }
-            localStorage.removeItem(ITEMS_KEY + '_' + currentUser);
-
-            clearSession();
+            localStorage.removeItem('wishlist_v3_' + currentUser);
             items = [];
             document.getElementById('authScreen').style.display = 'flex';
             document.getElementById('loginUser').value = '';
@@ -5969,43 +5809,21 @@
             if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
         })();
 
-        /* ═══ INSTANT SESSION RESTORE ═══ */
-        (async function checkSession() {
-            // Eski hesapları Firebase'e migrate et (background)
-            migrateOldUsersToFirebase().catch(e => console.warn('Migration error:', e));
-
-            const saved = getSession();
-            if (!saved) return;
-
-            // HIZLI: localStorage check (instant)
-            const local = getLocalUsers();
-            if (local[saved]) {
-                authUid = saved;
-                currentUser = saved;
+        /* ═══ STATE OBSERVER ═══ */
+        auth.onAuthStateChanged((user) => {
+            if(user) {
+                authUid = user.uid;
+                currentUser = getUsernameFromEmail(user.email);
+                showAuthSuccess('Giriş başarılı!');
                 document.getElementById('authScreen').style.display = 'none';
-
-                // Background sync
-                if (FB_ENABLED) {
-                    fbGet('users/' + saved + '/hash').then(fbHash => {
-                        if (fbHash && fbHash !== local[saved]) {
-                            local[saved] = fbHash;
-                            saveLocalUsers(local);
-                        }
-                    }).catch(() => { });
-                }
-                return;
-            }
-
-            // YAVAŞ: Firebase check
-            const hash = await getUser(saved);
-            if (hash) {
-                authUid = saved;
-                currentUser = saved;
-                document.getElementById('authScreen').style.display = 'none';
+                startApp();
             } else {
-                clearSession();
+                authUid = null;
+                currentUser = null;
+                items = [];
+                document.getElementById('authScreen').style.display = 'flex';
             }
-        })();
+        });
 
         // ENTER tuşu
         document.addEventListener('keypress', e => {
@@ -6232,16 +6050,17 @@
         }
 
         async function load() {
-            if (FB_ENABLED && currentUser) {
+            if (authUid) {
                 try {
-                    const fbItems = await fbGet('users/' + currentUser + '/items');
+                    const snapshot = await db.ref('users/' + authUid + '/items').once('value');
+                    const fbItems = snapshot.val();
                     if (fbItems && Array.isArray(fbItems)) {
                         items = mergeImages(fbItems); // imgData'yı local'den ekle
                         // Cache'e imgData'sız yaz
                         localStorage.setItem(getUserKey(), JSON.stringify(stripImages(fbItems)));
                         return;
                     }
-                } catch { }
+                } catch(e) { console.error("Firebase load error", e); }
             }
             try {
                 const raw = localStorage.getItem(getUserKey());
@@ -6271,8 +6090,8 @@
                 console.warn('persist localStorage hatası:', e);
             }
             // Firebase'e imgData'sız gönder
-            if (FB_ENABLED && currentUser) {
-                fbSet('users/' + currentUser + '/items', stripImages(items));
+            if (authUid) {
+                db.ref('users/' + authUid + '/items').set(stripImages(items)).catch(e => console.error(e));
             }
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
