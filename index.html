@@ -5591,8 +5591,8 @@
                 console.error('Login error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
-                if(err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') return showAuthError('Kullanıcı bulunamadı veya şifre hatalı.');
-                if(err.code === 'auth/wrong-password') return showAuthError('Şifre hatalı.');
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') return showAuthError('Kullanıcı bulunamadı veya şifre hatalı.');
+                if (err.code === 'auth/wrong-password') return showAuthError('Şifre hatalı.');
                 showAuthError('Bir hata oluştu. Tekrar deneyin.');
             }
         }
@@ -5626,7 +5626,7 @@
                 console.error('Register error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
-                if(err.code === 'auth/email-already-in-use') return showAuthError('Kullanıcı adı zaten alınmış.');
+                if (err.code === 'auth/email-already-in-use') return showAuthError('Kullanıcı adı zaten alınmış.');
                 showAuthError('Bir hata oluştu. Tekrar deneyin.');
             }
         }
@@ -5723,13 +5723,13 @@
             if (!authUid) return;
             try {
                 await db.ref('users/' + authUid).remove();
-            } catch(e) {}
-            
+            } catch (e) { }
+
             const user = auth.currentUser;
-            if(user) {
+            if (user) {
                 try {
                     await user.delete();
-                } catch(e) {
+                } catch (e) {
                     console.error("Firebase auth deletion", e);
                 }
             }
@@ -5811,7 +5811,7 @@
 
         /* ═══ STATE OBSERVER ═══ */
         auth.onAuthStateChanged((user) => {
-            if(user) {
+            if (user) {
                 authUid = user.uid;
                 currentUser = getUsernameFromEmail(user.email);
                 showAuthSuccess('Giriş başarılı!');
@@ -6060,7 +6060,7 @@
                         localStorage.setItem(getUserKey(), JSON.stringify(stripImages(fbItems)));
                         return;
                     }
-                } catch(e) { console.error("Firebase load error", e); }
+                } catch (e) { console.error("Firebase load error", e); }
             }
             try {
                 const raw = localStorage.getItem(getUserKey());
@@ -6608,68 +6608,101 @@
             btn.innerHTML = 'Veriler Çekiliyor <i class="ph ph-spinner ph-spin" style="margin-left: 6px;"></i>';
 
             let title = "", image = "", priceText = "", numericPrice = "";
+            let fetchSuccess = false;
 
-            try {
-                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(fetchUrl)}`);
-                if (!response.ok) throw new Error("Ağ hatası");
-                const data = await response.json();
-                if (!data.contents) throw new Error("İçerik çekilemedi");
+            const proxies = [
+                `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`,
+                `https://api.allorigins.win/get?url=${encodeURIComponent(fetchUrl)}`
+            ];
 
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data.contents, "text/html");
+            for (const proxyUrl of proxies) {
+                try {
+                    const response = await fetch(proxyUrl);
+                    if (!response.ok) continue; // Try next proxy
 
-                // İsim Çekme
-                let rawTitle = doc.querySelector('meta[property="og:title"]')?.content || doc.title || "";
-                title = rawTitle.substring(0, 100).trim();
-
-                // Görsel Çekme (Base64'e hazır blob olarak al)
-                let rawImage = doc.querySelector('meta[property="og:image"]')?.content || "";
-                if (rawImage) {
-                    try {
-                        const imgUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawImage)}`;
-                        const imgRes = await fetch(imgUrl);
-                        const blob = await imgRes.blob();
-
-                        // FileReader ile base64'e çevirip bekleyelim
-                        image = await new Promise((resolve) => {
-                            const reader = new FileReader();
-                            reader.onloadend = () => resolve(reader.result);
-                            reader.onerror = () => resolve("");
-                            reader.readAsDataURL(blob);
-                        });
-                    } catch (e) {
-                        console.error("Görsel indirilemedi", e);
+                    let htmlContent = "";
+                    if (proxyUrl.includes('allorigins')) {
+                        const data = await response.json();
+                        if (!data.contents) continue;
+                        htmlContent = data.contents;
+                    } else {
+                        htmlContent = await response.text();
                     }
-                }
 
-                // Fiyat Çekme
-                priceText = doc.querySelector('meta[property="product:price:amount"]')?.content || "";
-                if (!priceText) {
-                    const allText = doc.body.innerText;
-                    const priceMatch = allText.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i);
-                    if (priceMatch) priceText = priceMatch[1];
-                }
-                if (priceText) {
-                    numericPrice = priceText.replace(/[^0-9]/g, "");
-                }
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlContent, "text/html");
 
-            } catch (error) {
-                console.error("Scraping hatası:", error);
-                showToast("Bu siteden otomatik veri çekilemedi. Lütfen manuel ekleyin.");
-                btn.disabled = false;
-                btn.innerHTML = 'Verileri Çek <i class="ph ph-magic-wand" style="margin-left: 6px;"></i>';
-                return; // Başarısız olursa formu AÇMA, ekleme iptal edilsin
+                    // Title Extraction (Enhanced)
+                    let rawTitle = doc.querySelector('meta[property="og:title"]')?.content || 
+                                   doc.querySelector('meta[name="twitter:title"]')?.content || 
+                                   doc.title || "";
+                    title = rawTitle.substring(0, 100).trim();
+
+                    // Price Extraction (Enhanced)
+                    priceText = doc.querySelector('meta[property="product:price:amount"]')?.content || 
+                                doc.querySelector('.price, .current-price, [data-price], [itemprop="price"]')?.innerText || "";
+                                
+                    if (!priceText) {
+                        const allText = doc.body.innerText;
+                        const priceMatch = allText.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i);
+                        if (priceMatch) priceText = priceMatch[1];
+                    }
+                    if (priceText) {
+                        numericPrice = priceText.replace(/[^0-9]/g, "");
+                    }
+
+                    // Image Extraction
+                    let rawImage = doc.querySelector('meta[property="og:image"]')?.content || 
+                                   doc.querySelector('meta[name="twitter:image"]')?.content || "";
+                                   
+                    if (rawImage && rawImage.startsWith('http')) {
+                        try {
+                            const imgProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawImage)}`;
+                            const imgRes = await fetch(imgProxy);
+                            const blob = await imgRes.blob();
+                            image = await new Promise((resolve) => {
+                                const reader = new FileReader();
+                                reader.onloadend = () => resolve(reader.result);
+                                reader.onerror = () => resolve("");
+                                reader.readAsDataURL(blob);
+                            });
+                        } catch (e) {
+                            console.error("Görsel indirilemedi", e);
+                        }
+                    }
+
+                    fetchSuccess = true;
+                    break; // Success! Stop trying other proxies.
+                } catch (error) {
+                    console.error(`Proxy ${proxyUrl} failed:`, error);
+                }
             }
 
-            // Eğer buraya kadar geldiysek, scraping kısmını aşmışız (başarılı olmuş) demektir. 
-            // İsim veya en azından site bağlanmış demektir, yeni öğe yaratıyoruz.
+            // --- GRACEFUL FALLBACK ---
+            if (!fetchSuccess || !title) {
+                // We failed to parse meaningful data due to Cloudflare/JS-Rendering.
+                // Fallback: Just extract the domain name to give it a temporary name.
+                try {
+                    const urlObj = new URL(fetchUrl);
+                    let domain = urlObj.hostname.replace('www.', '');
+                    domain = domain.charAt(0).toUpperCase() + domain.slice(1);
+                    title = `${domain} Ürünü`;
+                } catch(e) {
+                    title = "Yeni Ürün";
+                }
+                showToast("Otomatik veri çekilemedi. Lütfen bilgileri tamamlayın.", "ph-warning");
+            } else {
+                showToast("Ürün bilgileri başarıyla çekildi ✨", "ph-check-circle");
+            }
+
+            // Always create the item, whether scraping succeeded or gracefully failed
             const newItemId = Math.random().toString(16).slice(2) + Date.now().toString(16);
             items.push({
                 id: newItemId,
                 imgData: image || "",
                 itemName: title || "",
-                links: [linkInput],
-                link: linkInput,
+                links: [linkInput], // Formatted input
+                link: linkInput,    // Legacy 
                 category: "diger", timeline: "ocak",
                 timelineYear: new Date().getFullYear(),
                 priority: 3, size: "", note: "", colorNote: "",
@@ -6687,8 +6720,7 @@
             modal.classList.remove("show");
             setTimeout(() => modal.style.display = "none", 250);
 
-            // Detay formunu aç
-            showToast("Ürün başarıyla çekildi ✨");
+            // Her halükarda düzenleme formunu aç ki kullanıcı eksikleri tamamlasın
             openModal(newItemId);
         });
 
