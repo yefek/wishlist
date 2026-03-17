@@ -5514,8 +5514,8 @@
             projectId: "wishlist-5bdfa"
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
+        window.auth = firebase.auth();
+        window.db = firebase.database();
 
         let currentUser = null;
         let authUid = null;
@@ -5830,8 +5830,8 @@
         // ENTER tuşu
         document.addEventListener('keypress', e => {
             if (e.key !== 'Enter') return;
-            const auth = document.getElementById('authScreen');
-            if (!auth || auth.style.display === 'none') return;
+            const authScreenEl = document.getElementById('authScreen');
+            if (!authScreenEl || authScreenEl.style.display === 'none') return;
             const loginVisible = document.getElementById('loginForm').style.display !== 'none';
             if (loginVisible) doLogin(); else doRegister();
         });
