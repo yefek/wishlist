@@ -5508,7 +5508,7 @@
         /* Firebase Console'dan proje ayarlarınıza gidip Web API Key'i kopyalayın ve buradaki yapılandırmayı güncelleyin. 
            Authentication (Email/Password) SDK'sının çalışması için apiKey zorunludur. */
         const firebaseConfig = {
-            apiKey: "AIzaSyC_S_UoUpHMR_PAY0U_2W5hF_x5Xc3ioi4",
+            apiKey: "AIzaSyCgXVagRdZ15lSXFzZePBKG7U5FmyQ9uOE",
             authDomain: "wishlist-5bdfa.firebaseapp.com",
             databaseURL: "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "wishlist-5bdfa"
@@ -5701,13 +5701,8 @@
             const confirmLogout = () => {
                 auth.signOut().then(() => {
                     items = [];
-                    document.getElementById('authScreen').style.display = 'flex';
-                    document.getElementById('loginUser').value = '';
-                    document.getElementById('loginPass').value = '';
-                    document.getElementById('authError').style.display = 'none';
-                    document.getElementById('authSuccessMsg').style.display = 'none';
-                    switchAuthTab('login');
-                    closeSettings();
+                    localStorage.removeItem(getUserKey());
+                    window.location.reload(); // Refresh to completely clear memory
                 });
             };
 
@@ -5717,6 +5712,19 @@
                 "Çıkış Yap",
                 confirmLogout
             );
+        }
+
+        async function confirmReset() {
+            if (!authUid) return;
+            try {
+                await db.ref('users/' + authUid + '/items').remove();
+            } catch (e) { }
+
+            items = [];
+            localStorage.removeItem(getUserKey());
+            render();
+            closeSettings();
+            showToast("Liste başarıyla sıfırlandı.", "ph-trash");
         }
 
         async function deleteAccount() {
@@ -5734,15 +5742,9 @@
                 }
             }
 
-            localStorage.removeItem('wishlist_v3_' + currentUser);
+            localStorage.removeItem(getUserKey());
             items = [];
-            document.getElementById('authScreen').style.display = 'flex';
-            document.getElementById('loginUser').value = '';
-            document.getElementById('loginPass').value = '';
-            document.getElementById('authError').style.display = 'none';
-            document.getElementById('authSuccessMsg').style.display = 'none';
-            switchAuthTab('login');
-            closeSettings();
+            window.location.reload(); // Force refresh to drop session state entirely
         }
 
         /* ═══ THEME SYSTEM ═══ */
@@ -6633,15 +6635,15 @@
                     const doc = parser.parseFromString(htmlContent, "text/html");
 
                     // Title Extraction (Enhanced)
-                    let rawTitle = doc.querySelector('meta[property="og:title"]')?.content || 
-                                   doc.querySelector('meta[name="twitter:title"]')?.content || 
-                                   doc.title || "";
+                    let rawTitle = doc.querySelector('meta[property="og:title"]')?.content ||
+                        doc.querySelector('meta[name="twitter:title"]')?.content ||
+                        doc.title || "";
                     title = rawTitle.substring(0, 100).trim();
 
                     // Price Extraction (Enhanced)
-                    priceText = doc.querySelector('meta[property="product:price:amount"]')?.content || 
-                                doc.querySelector('.price, .current-price, [data-price], [itemprop="price"]')?.innerText || "";
-                                
+                    priceText = doc.querySelector('meta[property="product:price:amount"]')?.content ||
+                        doc.querySelector('.price, .current-price, [data-price], [itemprop="price"]')?.innerText || "";
+
                     if (!priceText) {
                         const allText = doc.body.innerText;
                         const priceMatch = allText.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i);
@@ -6652,9 +6654,9 @@
                     }
 
                     // Image Extraction
-                    let rawImage = doc.querySelector('meta[property="og:image"]')?.content || 
-                                   doc.querySelector('meta[name="twitter:image"]')?.content || "";
-                                   
+                    let rawImage = doc.querySelector('meta[property="og:image"]')?.content ||
+                        doc.querySelector('meta[name="twitter:image"]')?.content || "";
+
                     if (rawImage && rawImage.startsWith('http')) {
                         try {
                             const imgProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawImage)}`;
@@ -6687,7 +6689,7 @@
                     let domain = urlObj.hostname.replace('www.', '');
                     domain = domain.charAt(0).toUpperCase() + domain.slice(1);
                     title = `${domain} Ürünü`;
-                } catch(e) {
+                } catch (e) {
                     title = "Yeni Ürün";
                 }
                 showToast("Otomatik veri çekilemedi. Lütfen bilgileri tamamlayın.", "ph-warning");
