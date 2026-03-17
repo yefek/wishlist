@@ -5193,6 +5193,9 @@
                                 onclick="togglePasswordVisibility('regPass2', this)"><i
                                     class="ph ph-eye-slash"></i></button>
                         </div>
+                        <div style="font-size: 11px; color: var(--textSecondary); margin-top: 6px; padding-left: 2px;">
+                            <i class="ph ph-info" style="vertical-align: middle; margin-right: 2px;"></i> Şifreniz en az 6 karakter olmalıdır.
+                        </div>
                     </div>
                     <button class="authSubmit" onclick="doRegister()">Hesap Oluştur →</button>
                 </div>
@@ -5606,8 +5609,8 @@
 
             if (!username || !pw || !pw2) return showAuthError('Tüm alanları doldurun.');
             if (username.length < 3) return showAuthError('Kullanıcı adı min 3 karakter.');
-            if (!/^[a-z0-9_]+$/.test(username)) return showAuthError('Sadece küçük harf, rakam, _');
-            if (pw.length < 4) return showAuthError('Şifre min 4 karakter.');
+            if (!/^[a-z0-9_]+$/.test(username)) return showAuthError('Kullanıcı adı sadece küçük harf, rakam ve alt çizgi içerebilir.');
+            if (pw.length < 6) return showAuthError('Şifre kurallara uymuyor (En az 6 karakter olmalıdır).');
             if (pw !== pw2) return showAuthError('Şifreler eşleşmiyor.');
 
             const orig = btn.textContent;
@@ -5627,7 +5630,7 @@
                 btn.textContent = orig;
                 btn.disabled = false;
                 if (err.code === 'auth/email-already-in-use') return showAuthError('Kullanıcı adı zaten alınmış.');
-                showAuthError('Bir hata oluştu. Tekrar deneyin.');
+                showAuthError('Teknik bir hata oluştu. Lütfen tekrar deneyin.');
             }
         }
 
@@ -6578,39 +6581,48 @@
                 // Microlink API Request
                 const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(fetchUrl)}`;
                 const response = await fetch(apiUrl);
-                const result = await response.json();
+                
+                if (response.status === 429) {
+                    showToast("Günlük otomatik veri çekme limitiniz (50/gün) doldu. 24 saat sonra açılacaktır.", "ph-hand-palm");
+                    fetchSuccess = false;
+                } else if (!response.ok) {
+                    console.error("Microlink API Http Error:", response.status);
+                    fetchSuccess = false;
+                } else {
+                    const result = await response.json();
 
-                if (result.status === "success" && result.data) {
-                    const data = result.data;
-                    
-                    title = data.title || "";
-                    if (data.image && data.image.url) {
-                        image = data.image.url; // Use URL directly, saves DB space!
-                    }
-
-                    // Bot Protection Check
-                    const lowerTitle = title.toLowerCase();
-                    if (lowerTitle.includes("sayfa bulunamadı") || 
-                        lowerTitle.includes("robot check") || 
-                        lowerTitle.includes("captcha") || 
-                        lowerTitle.includes("robot mısınız")) {
+                    if (result.status === "success" && result.data) {
+                        const data = result.data;
                         
-                        // Reject this response as it's a fake page served by bot protection
-                        title = "";
-                        image = "";
-                        fetchSuccess = false;
-                    } else {
-                        // Genuine Product Page - Try to dig price out of description or title
-                        const desc = data.description || "";
-                        const priceMatch = desc.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i) || 
-                                           title.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i);
-                        
-                        if (priceMatch) {
-                            priceText = priceMatch[1];
-                            numericPrice = priceText.replace(/[^0-9]/g, "");
+                        title = data.title || "";
+                        if (data.image && data.image.url) {
+                            image = data.image.url; // Use URL directly, saves DB space!
                         }
 
-                        fetchSuccess = true;
+                        // Bot Protection Check
+                        const lowerTitle = title.toLowerCase();
+                        if (lowerTitle.includes("sayfa bulunamadı") || 
+                            lowerTitle.includes("robot check") || 
+                            lowerTitle.includes("captcha") || 
+                            lowerTitle.includes("robot mısınız")) {
+                            
+                            // Reject this response as it's a fake page served by bot protection
+                            title = "";
+                            image = "";
+                            fetchSuccess = false;
+                        } else {
+                            // Genuine Product Page - Try to dig price out of description or title
+                            const desc = data.description || "";
+                            const priceMatch = desc.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i) || 
+                                               title.match(/(?:[₺]\s*|)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:TL|₺|₺)/i);
+                            
+                            if (priceMatch) {
+                                priceText = priceMatch[1];
+                                numericPrice = priceText.replace(/[^0-9]/g, "");
+                            }
+
+                            fetchSuccess = true;
+                        }
                     }
                 }
             } catch (error) {
