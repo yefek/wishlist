@@ -24,9 +24,9 @@
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
     <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-database-compat.js"></script>
     <style>
         /* ═══════════ DESIGN TOKENS ═══════════ */
         :root {
@@ -790,9 +790,14 @@
             /* Prevent breaking across columns */
             width: 100%;
             margin-bottom: 16px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+            -webkit-column-break-inside: avoid;
         }
 
         .grid.moodboard .card img {
+            width: 100%;
+            height: auto;
             aspect-ratio: auto;
             /* Allow natural height for masonry effect */
         }
@@ -4071,6 +4076,11 @@
             color: #3D7FE8;
         }
 
+        .sRowIcon.green {
+            background: rgba(52, 199, 89, 0.12);
+            color: #34C759;
+        }
+
         .sRowIcon.danger {
             background: rgba(232, 69, 69, 0.10);
             color: #e84545;
@@ -4123,8 +4133,9 @@
             align-items: center;
             justify-content: center;
             gap: 7px;
-            margin: 6px 14px 12px;
-            padding: 11px;
+            width: calc(100% - 32px);
+            margin: 12px auto 16px;
+            padding: 12px;
             border-radius: 14px;
             background: rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.06);
@@ -4161,15 +4172,24 @@
             flex: 1;
             overflow: hidden;
             min-height: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Main page: normal flow, gives height to sPageStack */
         .sPage.main {
             width: 100%;
+            height: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             background: var(--surfaceBg);
             transition: transform 0.30s cubic-bezier(0.32, 0.72, 0.45, 1);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sPage.main::-webkit-scrollbar {
+            display: none;
         }
 
         .sPage.main.pushed {
@@ -4261,6 +4281,10 @@
 
         body[data-theme="dark"] .sRowIcon.blue {
             background: rgba(61, 127, 232, 0.15);
+        }
+
+        body[data-theme="dark"] .sRowIcon.green {
+            background: rgba(52, 199, 89, 0.18);
         }
 
         body[data-theme="dark"] .sRowIcon.danger {
@@ -5264,7 +5288,7 @@
                         <div class="sGroupLabel">Görünüm &amp; Dil</div>
 
                         <div class="sRow" onclick="openSettingsPage('sPageLayout')">
-                            <div class="sRowIcon green"><i class="ph ph-squares-four"></i></div>
+                            <div class="sRowIcon green"><i class="ph ph-layout"></i></div>
                             <div class="sRowText">
                                 <div class="sRowTitle" data-i18n="tileLayout">Arayüz Düzeni</div>
                                 <div class="sRowDesc" id="sLayoutDesc">Liste</div>
@@ -5522,6 +5546,7 @@
 
         let currentUser = null;
         let authUid = null;
+        let items = [];
 
         function getEmailFromUsername(username) {
             return username + '@wishlist.local';
@@ -5594,9 +5619,19 @@
                 console.error('Login error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
-                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') return showAuthError('Kullanıcı bulunamadı veya şifre hatalı.');
-                if (err.code === 'auth/wrong-password') return showAuthError('Şifre hatalı.');
-                showAuthError('Bir hata oluştu. Tekrar deneyin.');
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials' || err.code === 'auth/wrong-password') {
+                    return showAuthError('Kullanıcı bulunamadı veya şifre hatalı.');
+                }
+                if (err.code === 'auth/invalid-email') {
+                    return showAuthError('Lütfen boşluksuz ve geçerli karakterler içeren bir kullanıcı adı girin.');
+                }
+                if (err.code === 'auth/too-many-requests') {
+                    return showAuthError('Çok fazla başarısız deneme. Lütfen bir süre bekleyin.');
+                }
+                if (err.code === 'auth/network-request-failed') {
+                    return showAuthError('İnternet bağlantısı hatası. Lütfen bağlantınızı kontrol edin.');
+                }
+                showAuthError('Bir hata oluştu: ' + (err.code || 'Tekrar deneyin.'));
             }
         }
 
@@ -5750,6 +5785,58 @@
             window.location.reload(); // Force refresh to drop session state entirely
         }
 
+        /* ═══ CHANGE PASSWORD ═══ */
+        async function doChangePassword() {
+            const oldPass = document.getElementById('pwOld').value;
+            const newPass = document.getElementById('pwNew').value;
+            const newPass2 = document.getElementById('pwNew2').value;
+
+            const showErr = (msg) => {
+                const el = document.getElementById('pwError');
+                el.textContent = msg; el.style.display = 'block';
+                document.getElementById('pwSuccess').style.display = 'none';
+            };
+            const showOk = (msg) => {
+                const el = document.getElementById('pwSuccess');
+                el.textContent = msg; el.style.display = 'block';
+                document.getElementById('pwError').style.display = 'none';
+            };
+
+            if (!oldPass || !newPass || !newPass2) return showErr('Tüm alanları doldurun.');
+            if (newPass.length < 6) return showErr('Yeni şifre en az 6 karakter olmalıdır.');
+            if (newPass !== newPass2) return showErr('Yeni şifreler eşleşmiyor.');
+
+            const btn = document.querySelector('#sPagePw .authSubmit');
+            const orig = btn ? btn.textContent : '';
+            if (btn) { btn.textContent = 'Güncelleniyor...'; btn.disabled = true; }
+
+            try {
+                const user = auth.currentUser;
+                if (!user) return showErr('Oturum bilgisi bulunamadı. Lütfen tekrar giriş yapın.');
+                // Re-authenticate first
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+                await user.reauthenticateWithCredential(credential);
+                await user.updatePassword(newPass);
+                document.getElementById('pwOld').value = '';
+                document.getElementById('pwNew').value = '';
+                document.getElementById('pwNew2').value = '';
+                showOk('Şifreniz başarıyla güncellendi.');
+            } catch (err) {
+                console.error('Change password error:', err);
+                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                    showErr('Mevcut şifreniz hatalı.');
+                } else if (err.code === 'auth/too-many-requests') {
+                    showErr('Çok fazla deneme. Lütfen bekleyin.');
+                } else if (err.code === 'auth/weak-password') {
+                    showErr('Yeni şifre çok zayıf. En az 6 karakter kullanın.');
+                } else {
+                    showErr('Bir hata oluştu: ' + (err.code || 'Tekrar deneyin.'));
+                }
+            } finally {
+                if (btn) { btn.textContent = orig; btn.disabled = false; }
+            }
+        }
+
         /* ═══ THEME SYSTEM ═══ */
         const THEMES = [
             { id: 'pink', label: '🌸 Pembe', bg: ['#ffe8f2', '#f5e4ff'], accent: '#E8458B', sec: '#A87CFF' },
@@ -5831,12 +5918,14 @@
         });
 
         // ENTER tuşu
-        document.addEventListener('keypress', e => {
+        document.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
+            if (e.isComposing || e.keyCode === 229) return;
             const authScreenEl = document.getElementById('authScreen');
             if (!authScreenEl || authScreenEl.style.display === 'none') return;
-            const loginVisible = document.getElementById('loginForm').style.display !== 'none';
-            if (loginVisible) doLogin(); else doRegister();
+            // Check which tab is active by the active class, not display style
+            const loginTabActive = document.getElementById('authTabLogin').classList.contains('active');
+            if (loginTabActive) doLogin(); else doRegister();
         });
         let activeId = null;
         let activeCat = "all";
