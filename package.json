@@ -1,0 +1,7 @@
+{
+  "name": "wishlistgul",
+  "version": "1.0.0",
+  "description": "Wishlistgül - Personal wishlist app",
+  "type": "module",
+  "private": true
+}
