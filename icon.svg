@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Wishlistgul icon">
+  <defs>
+    <linearGradient id="bg" x1="180" y1="120" x2="850" y2="930" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF8FC"/>
+      <stop offset="1" stop-color="#F3E7FF"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="230" y1="430" x2="770" y2="650" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E8458B"/>
+      <stop offset="1" stop-color="#A87CFF"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="720" y1="415" x2="830" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E8458B"/>
+      <stop offset="1" stop-color="#C976F2"/>
+    </linearGradient>
+  </defs>
+  <rect x="64" y="64" width="896" height="896" rx="220" fill="url(#bg)"/>
+  <rect x="91" y="91" width="842" height="842" rx="196" fill="none" stroke="#E8458B" stroke-opacity=".08" stroke-width="8"/>
+  <path d="M244 500 C292 692 382 710 440 526 C462 450 490 450 514 526 C570 706 674 702 748 482" fill="none" stroke="url(#mark)" stroke-width="74" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M724 430 C793 382 866 420 828 492 C779 500 742 475 724 430Z" fill="url(#leaf)"/>
+</svg>

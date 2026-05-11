@@ -1,11 +1,18 @@
-// Service Worker - Instant Load & Offline Support
-const CACHE_NAME = 'wishlist-v4';
+// Service Worker - offline support without trapping users on stale HTML
+const CACHE_NAME = 'wishlist-v6';
 const ASSETS = [
     './',
     './index.html',
     './manifest.json',
+    './manifest-dark.json',
+    './icon.svg',
+    './icon-dark.svg',
     './icon-192.png',
-    './icon-512.png'
+    './icon-512.png',
+    './icon-dark-192.png',
+    './icon-dark-512.png',
+    './apple-touch-icon.png',
+    './apple-touch-icon-dark.png'
 ];
 
 // Install - cache assets
@@ -29,11 +36,35 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch - cache first (instant load)
+// Fetch - HTML/network requests first, static assets cache-first.
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => response || fetch(event.request))
-            .catch(() => caches.match('./index.html'))
-    );
+    if (event.request.method !== 'GET') return;
+
+    const requestUrl = new URL(event.request.url);
+    const isHtml = event.request.mode === 'navigate' ||
+        event.request.headers.get('accept')?.includes('text/html');
+
+    if (isHtml) {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
+                    return response;
+                })
+                .catch(() => caches.match('./index.html'))
+        );
+        return;
+    }
+
+    if (requestUrl.origin === self.location.origin) {
+        event.respondWith(
+            caches.match(event.request)
+                .then((response) => response || fetch(event.request).then((fresh) => {
+                    const copy = fresh.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+                    return fresh;
+                }))
+        );
+    }
 });

@@ -9,12 +9,12 @@
     <meta name="theme-color" content="#fdf2f8" id="metaThemeColor" />
     <meta name="apple-mobile-web-app-title" content="Wishlistgül" />
     <meta name="application-name" content="Wishlistgül" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.json" id="manifestLink" />
+    <link rel="icon" type="image/svg+xml" href="icon.svg" id="faviconSvg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" id="faviconPng192" />
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" id="faviconPng512" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" id="appleTouchIcon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" id="appleTouchIcon180" />
     <title>Wishlistgül</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,6 +27,7 @@
     <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-storage-compat.js"></script>
     <style>
         /* ═══════════ DESIGN TOKENS ═══════════ */
         :root {
@@ -2158,6 +2159,7 @@
         }
 
         input[type="url"],
+        input[type="email"],
         input[type="text"],
         input[type="number"],
         textarea,
@@ -2177,6 +2179,7 @@
         }
 
         body[data-theme="dark"] input[type="url"],
+        body[data-theme="dark"] input[type="email"],
         body[data-theme="dark"] input[type="text"],
         body[data-theme="dark"] input[type="number"],
         body[data-theme="dark"] textarea,
@@ -4567,6 +4570,41 @@
             -moz-appearance: textfield;
             appearance: textfield;
         }
+
+
+        /* Stabilization patch: auth scroll, responsive layout, crop, moodboard */
+        #authScreen { overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; }
+        #authScreen::-webkit-scrollbar, .aiBack::-webkit-scrollbar, #cropOverlay::-webkit-scrollbar { display: none; }
+        .authInputWrap { cursor: text; }
+        .authInputWrap input { caret-color: var(--accent); line-height: 20px; min-height: 48px; }
+        .auth-right { min-height: 100%; }
+        .aiBack { scrollbar-width: none; -ms-overflow-style: none; }
+        .grid.moodboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 6px; gap: 16px; align-items: start; }
+        .grid.moodboard .card { display: block; width: 100%; margin-bottom: 0; break-inside: auto; }
+        .grid.moodboard .card img { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; background: var(--surfaceBgLight); }
+        .mCustomCategoryField { display: none; }
+        .mCustomCategoryField.show { display: flex; }
+        .mTabBody { min-height: 360px; transition: opacity 0.18s ease, transform 0.18s ease; }
+        .mTabBody.is-switching { opacity: 0; transform: translateY(6px); }
+        body[data-theme="dark"] .mSecretRow { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.14); }
+        body[data-theme="dark"] .mSecretLeft { color: rgba(255, 255, 255, 0.86); }
+        .photoBusy { position: fixed; inset: 0; z-index: 99998; display: none; align-items: center; justify-content: center; background: rgba(20, 10, 40, 0.20); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .photoBusy.show { display: flex; }
+        .photoBusyCard { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-radius: 16px; border: 1px solid var(--stroke); background: var(--surfaceBg); box-shadow: var(--elev2); color: var(--textPrimary); font-size: 13px; font-weight: 600; }
+        .photoBusyCard i { color: var(--accent); font-size: 18px; animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #cropOverlay { overflow-y: auto; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--surfaceBg) 88%, transparent); color: var(--textPrimary); scrollbar-width: none; justify-content: flex-start; }
+        .cropTitle { color: var(--textPrimary); text-shadow: none; margin-top: 10px; }
+        .cropStage { width: min(88vw, 420px); height: min(88vw, 420px); border-radius: var(--r2); border-color: var(--stroke); background: var(--inputBg); box-shadow: var(--elev2); }
+        .cropGrid { border-radius: var(--r2); }
+        .cropPanel { background: var(--surface); border-color: var(--stroke); color: var(--textPrimary); box-shadow: var(--elev1); }
+        .cropZoomRow i, .cropZoomLabel, .cropHint { color: var(--textSecondary); }
+        .cropCancelBtn, .cropResetBtn { background: var(--inputBg); border-color: var(--stroke); color: var(--textPrimary); }
+        .cropCancelBtn:hover, .cropResetBtn:hover { background: var(--surfaceHover); }
+        @media (min-width: 760px) { .hRow, .catBar, .sortBar, .content, .aiBody { max-width: min(1120px, calc(100vw - 48px)); } .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid.moodboard { grid-template-columns: repeat(3, minmax(0, 1fr)); } .modal { max-width: min(920px, calc(100vw - 48px)); border-radius: var(--r2); margin-bottom: 24px; } .modalBack { align-items: center; } .preview { max-height: 300px; } }
+        @media (min-width: 1180px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid.moodboard { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (max-width: 768px) { #authScreen { -webkit-overflow-scrolling: touch; } .auth-right { min-height: auto; } }
+
     </style>
 </head>
 
@@ -4706,7 +4744,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- Beden / Numara — kategori: giyim veya ayakkabi -->
+                <!-- Beden / Numara — kategori: giyim veya ayakkabi -->                <div class="mField mCustomCategoryField" id="mCustomCategoryField">
+                    <div class="mLabel">Diğer kategori adı</div>
+                    <input type="text" id="mCustomCategoryName" class="mSizeInput" placeholder="Örn. Kitap, dekor, hobi..." maxlength="32" />
+                </div>
+
                 <div class="mField" id="mSizeField" style="display:none">
                     <div class="mLabel" id="mSizeLabel">Beden</div>
                     <div class="mSizeChips" id="mSizeChips"></div>
@@ -5174,10 +5216,10 @@
                 <div id="loginForm">
                     <div class="authField">
                         <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-user"></i></span>
+                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="username"
-                                autocapitalize="none" />
+                            <input id="loginUser" type="email" placeholder="E-posta" autocomplete="email"
+                                autocapitalize="none" inputmode="email" />
                         </div>
                     </div>
                     <div class="authField">
@@ -5191,15 +5233,15 @@
                         </div>
                     </div>
                     <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
-                    <div class="authForgot"><a href="#">Şifremi unuttum</a></div>
+                    <div class="authForgot"><a href="#" onclick="sendPasswordReset(event)">Şifremi unuttum</a></div>
                 </div>
                 <div id="registerForm" style="display:none;">
                     <div class="authField">
                         <div class="authInputWrap">
-                            <span class="authInputIcon"><i class="ph ph-user-plus"></i></span>
+                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
                             <div class="authInputDivider"></div>
-                            <input id="regUser" type="text" placeholder="Kullanıcı adı (harf, rakam, _)"
-                                autocomplete="username" autocapitalize="none" />
+                            <input id="regUser" type="email" placeholder="E-posta"
+                                autocomplete="email" autocapitalize="none" inputmode="email" />
                         </div>
                     </div>
                     <div class="authField">
@@ -5544,22 +5586,35 @@
             apiKey: "AIzaSyCgXVagRdZ15lSXFzZePBKG7U5FmyQ9uOE",
             authDomain: "wishlist-5bdfa.firebaseapp.com",
             databaseURL: "https://wishlist-5bdfa-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "wishlist-5bdfa"
+            projectId: "wishlist-5bdfa",
+            storageBucket: "wishlist-5bdfa.appspot.com"
         };
         firebase.initializeApp(firebaseConfig);
         window.auth = firebase.auth();
         window.db = firebase.database();
+        window.storage = firebase.storage();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(e => console.warn("Auth persistence error", e));
 
         let currentUser = null;
         let authUid = null;
         let items = [];
 
-        function getEmailFromUsername(username) {
-            return username + '@wishlist.local';
+        function normalizeEmailInput(value) {
+            return (value || '').trim().toLowerCase();
+        }
+
+        function isValidEmail(value) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmailInput(value));
+        }
+
+        function getEmailFromUsername(value) {
+            const normalized = normalizeEmailInput(value);
+            return normalized.includes('@') ? normalized : normalized + '@wishlist.local';
         }
 
         function getUsernameFromEmail(email) {
-            return email.split('@')[0];
+            const normalized = normalizeEmailInput(email);
+            return normalized.endsWith('@wishlist.local') ? normalized.split('@')[0] : normalized;
         }
 
         /* ── UI ── */
@@ -5607,17 +5662,18 @@
         /* ═══ LOGIN ═══ */
         async function doLogin() {
             const btn = document.querySelector('#loginForm .authSubmit');
-            const username = document.getElementById('loginUser').value.trim().toLowerCase();
+            const loginInput = document.getElementById('loginUser').value;
             const password = document.getElementById('loginPass').value;
+            const email = getEmailFromUsername(loginInput);
 
-            if (!username || !password) return showAuthError('Kullanıcı adı ve şifre gerekli.');
+            if (!loginInput || !password) return showAuthError('E-posta ve şifre gerekli.');
+            if (loginInput.includes('@') && !isValidEmail(loginInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
 
             const orig = btn.textContent;
             btn.textContent = 'Giriş yapılıyor...';
             btn.disabled = true;
 
             try {
-                const email = getEmailFromUsername(username);
                 await auth.signInWithEmailAndPassword(email, password);
                 btn.textContent = orig;
                 btn.disabled = false;
@@ -5644,13 +5700,12 @@
         /* ═══ REGISTER ═══ */
         async function doRegister() {
             const btn = document.querySelector('#registerForm .authSubmit');
-            const username = document.getElementById('regUser').value.trim().toLowerCase();
+            const emailInput = document.getElementById('regUser').value;
             const pw = document.getElementById('regPass').value;
             const pw2 = document.getElementById('regPass2').value;
 
-            if (!username || !pw || !pw2) return showAuthError('Tüm alanları doldurun.');
-            if (username.length < 3) return showAuthError('Kullanıcı adı min 3 karakter.');
-            if (!/^[a-z0-9_]+$/.test(username)) return showAuthError('Kullanıcı adı sadece küçük harf, rakam ve alt çizgi içerebilir.');
+            if (!emailInput || !pw || !pw2) return showAuthError('Tüm alanları doldurun.');
+            if (!isValidEmail(emailInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
             if (pw.length < 6) return showAuthError('Şifre kurallara uymuyor (En az 6 karakter olmalıdır).');
             if (pw !== pw2) return showAuthError('Şifreler eşleşmiyor.');
 
@@ -5659,7 +5714,7 @@
             btn.disabled = true;
 
             try {
-                const email = getEmailFromUsername(username);
+                const email = normalizeEmailInput(emailInput);
                 await auth.createUserWithEmailAndPassword(email, pw);
                 btn.textContent = orig;
                 btn.disabled = false;
@@ -5845,14 +5900,45 @@
 
         /* ═══ THEME SYSTEM ═══ */
         const THEMES = [
-            { id: 'pink', label: '🌸 Pembe', bg: ['#ffe8f2', '#f5e4ff'], accent: '#E8458B', sec: '#A87CFF' },
-            { id: 'blue', label: '💙 Mavi', bg: ['#e8f0ff', '#e4eeff'], accent: '#3D7FE8', sec: '#7CB4FF' },
-            { id: 'green', label: '🌿 Yeşil', bg: ['#e8fff4', '#e4fff2'], accent: '#2EB87A', sec: '#7CDFB4' },
-            { id: 'peach', label: '🍑 Şeftali', bg: ['#fff0e8', '#fff4e4'], accent: '#E8763D', sec: '#FFAA7C' },
-            { id: 'charcoal', label: '🩶 Antrasit', bg: ['#edf0f4', '#e8edf4'], accent: '#7B8FA8', sec: '#A8B8CC' },
-            { id: 'dark', label: '🌙 Gece', bg: ['#0f1923', '#141e2c'], accent: '#6C5CE7', sec: '#a29bfe' },
+            { id: 'pink', label: 'Pembe', bg: ['#ffe8f2', '#f5e4ff'], accent: '#E8458B', sec: '#A87CFF' },
+            { id: 'blue', label: 'Mavi', bg: ['#e8f0ff', '#e4eeff'], accent: '#3D7FE8', sec: '#7CB4FF' },
+            { id: 'green', label: 'Yeşil', bg: ['#e8fff4', '#e4fff2'], accent: '#2EB87A', sec: '#7CDFB4' },
+            { id: 'peach', label: 'Şeftali', bg: ['#fff0e8', '#fff4e4'], accent: '#E8763D', sec: '#FFAA7C' },
+            { id: 'charcoal', label: 'Antrasit', bg: ['#edf0f4', '#e8edf4'], accent: '#7B8FA8', sec: '#A8B8CC' },
+            { id: 'dark', label: 'Gece', bg: ['#0f1923', '#141e2c'], accent: '#6C5CE7', sec: '#a29bfe' },
         ];
         const THEME_KEY = 'wl_theme_v1';
+
+        function updateAppIconTheme(themeId) {
+            const darkIcon = themeId === 'dark';
+            const assets = darkIcon
+                ? {
+                    manifest: 'manifest-dark.json',
+                    svg: 'icon-dark.svg',
+                    png192: 'icon-dark-192.png',
+                    png512: 'icon-dark-512.png',
+                    apple: 'apple-touch-icon-dark.png'
+                }
+                : {
+                    manifest: 'manifest.json',
+                    svg: 'icon.svg',
+                    png192: 'icon-192.png',
+                    png512: 'icon-512.png',
+                    apple: 'apple-touch-icon.png'
+                };
+
+            [
+                ['manifestLink', 'href', assets.manifest],
+                ['faviconSvg', 'href', assets.svg],
+                ['faviconPng192', 'href', assets.png192],
+                ['faviconPng512', 'href', assets.png512],
+                ['appleTouchIcon', 'href', assets.apple],
+                ['appleTouchIcon180', 'href', assets.apple]
+            ].forEach(([id, attr, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.setAttribute(attr, value);
+            });
+        }
 
         function applyTheme(id) {
             if (id === 'pink' || !id) {
@@ -5864,6 +5950,7 @@
             const themeColors = { pink: '#fdf2f8', blue: '#f0f7ff', green: '#f0fff8', charcoal: '#f2f5f8', peach: '#fff5f0', dark: '#0f1220' };
             const meta = document.getElementById('metaThemeColor');
             if (meta) meta.content = themeColors[id] || themeColors.pink;
+            updateAppIconTheme(id || 'pink');
             if (typeof renderThemeGrid === 'function') renderThemeGrid();
         }
 
@@ -5905,6 +5992,7 @@
         (function () {
             const saved = localStorage.getItem(THEME_KEY);
             if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
+            updateAppIconTheme(saved || 'pink');
         })();
 
         /* ═══ STATE OBSERVER ═══ */
@@ -5924,6 +6012,15 @@
         });
 
         // ENTER tuşu
+        document.querySelectorAll('.authInputWrap').forEach(wrap => {
+            wrap.dataset.authInputWrapFocusPatch = '1';
+            wrap.addEventListener('click', e => {
+                if (e.target.closest('button')) return;
+                const input = wrap.querySelector('input');
+                if (input) input.focus();
+            });
+        });
+
         document.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
             if (e.isComposing || e.keyCode === 229) return;
@@ -6044,6 +6141,7 @@
         /* ── Init all detail modal dropdowns ── */
         initCustomDropdown('mCategoryBtn', 'mCategoryPanel', 'mCategory', (val) => {
             updateSizeField(val);
+            updateCustomCategoryField(val);
             updateMetaChips();
         });
         initCustomDropdown('mTimelineBtn', 'mTimelinePanel', 'mTimeline', () => updateMetaChips());
@@ -6128,6 +6226,72 @@
         /* ── Storage ── */
         function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
 
+        /* Storage */
+        function getUserKey() {
+            return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3';
+        }
+
+        function getImageSrc(item) {
+            return (item && (item.imageUrl || item.imgData)) || '';
+        }
+
+        function dataURLToBlob(dataUrl) {
+            const parts = dataUrl.split(',');
+            const mime = (parts[0].match(/:(.*?);/) || [])[1] || 'image/jpeg';
+            const binary = atob(parts[1] || '');
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return new Blob([bytes], { type: mime });
+        }
+
+        function stripHeavyFields(item) {
+            const clean = { ...item };
+            if (clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
+            if (clean.origImgData && clean.origImgData.startsWith('data:')) delete clean.origImgData;
+            return clean;
+        }
+
+        function stripLocalFallback(item) {
+            const clean = { ...item };
+            if (clean.imageUrl && clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
+            if (clean.imageUrl && clean.origImgData && clean.origImgData.startsWith('data:')) delete clean.origImgData;
+            return clean;
+        }
+
+        async function uploadImageData(dataUrl, itemId) {
+            if (!authUid || !window.storage || !dataUrl || !dataUrl.startsWith('data:')) return { imgData: dataUrl || '' };
+            const path = 'users/' + authUid + '/images/' + itemId + '.jpg';
+            const ref = storage.ref(path);
+            await ref.put(dataURLToBlob(dataUrl), { contentType: 'image/jpeg' });
+            return { imageUrl: await ref.getDownloadURL(), imagePath: path, imgData: '' };
+        }
+
+        async function deleteStoredImage(item) {
+            if (!item || !item.imagePath || !window.storage) return;
+            try {
+                await storage.ref(item.imagePath).delete();
+            } catch (e) {
+                console.warn('Storage image delete skipped:', e);
+            }
+        }
+
+        function setPhotoBusy(show) {
+            const el = document.getElementById('photoBusy');
+            if (el) el.classList.toggle('show', !!show);
+        }
+
+        function nextFrame() {
+            return new Promise(resolve => requestAnimationFrame(() => resolve()));
+        }
+
+        function applyImagePayload(item, payload) {
+            if (!item || !payload) return item;
+            item.imageUrl = payload.imageUrl || '';
+            item.imagePath = payload.imagePath || '';
+            item.imgData = payload.imgData || '';
+            return item;
+        }
+
         async function load() {
             if (authUid) {
                 try {
@@ -6135,7 +6299,7 @@
                     const fbItems = snapshot.val();
                     if (fbItems && Array.isArray(fbItems)) {
                         items = fbItems;
-                        localStorage.setItem(getUserKey(), JSON.stringify(items));
+                        safeLocalPersist();
                         return;
                     }
                 } catch (e) { console.error("Firebase load error", e); }
@@ -6146,14 +6310,23 @@
             } catch { items = []; }
         }
 
-        function persist() {
+        function safeLocalPersist() {
             try {
-                localStorage.setItem(getUserKey(), JSON.stringify(items));
+                localStorage.setItem(getUserKey(), JSON.stringify(items.map(stripLocalFallback)));
             } catch (e) {
-                console.warn('persist localStorage hatası:', e);
+                console.warn('localStorage dolu, gorsel fallbackleri temizlenerek kaydediliyor:', e);
+                try {
+                    localStorage.setItem(getUserKey(), JSON.stringify(items.map(stripHeavyFields)));
+                } catch (err) {
+                    console.warn('persist localStorage hatasi:', err);
+                }
             }
+        }
+
+        function persist() {
+            safeLocalPersist();
             if (authUid) {
-                db.ref('users/' + authUid + '/items').set(items).catch(e => console.error(e));
+                db.ref('users/' + authUid + '/items').set(items.map(stripHeavyFields)).catch(e => console.error(e));
             }
         }
         function clamp(n, mn, mx) { return Math.max(mn, Math.min(mx, n)); }
@@ -6187,6 +6360,26 @@
             if (desc) desc.textContent = mode === "list" ? "Klasik Liste" : "İlham Panosu";
 
             render();
+        }
+
+        function relayoutMoodboard() {
+            if (viewMode !== "moodboard") return;
+            const styles = getComputedStyle(gridEl);
+            const row = parseFloat(styles.gridAutoRows) || 6;
+            const gap = parseFloat(styles.rowGap) || 16;
+            gridEl.querySelectorAll(".card").forEach(card => {
+                const img = card.querySelector("img");
+                const setSpan = () => {
+                    const height = card.getBoundingClientRect().height;
+                    card.style.gridRowEnd = "span " + Math.max(1, Math.ceil((height + gap) / (row + gap)));
+                };
+                if (img && !img.complete) {
+                    img.addEventListener("load", setSpan, { once: true });
+                    img.addEventListener("error", setSpan, { once: true });
+                } else {
+                    setSpan();
+                }
+            });
         }
 
         /* ── Sort filter ── */
@@ -6253,7 +6446,8 @@
                 }
 
                 const img = document.createElement("img");
-                img.src = it.imgData; img.alt = "wishlist"; img.loading = "lazy";
+                img.src = getImageSrc(it); img.alt = "wishlist"; img.loading = "lazy";
+                img.addEventListener("load", relayoutMoodboard, { once: true });
 
                 /* Signature #1: Floating tile chips */
                 const chipTL = document.createElement("div");
@@ -6285,6 +6479,7 @@
                 card.addEventListener("click", () => openModal(it.id));
                 gridEl.appendChild(card);
             });
+            requestAnimationFrame(relayoutMoodboard);
         }
 
         /* ═══ DETAIL MODAL ═══ */
@@ -6315,6 +6510,12 @@
         });
 
         /* ── Category → size field ── */
+        function updateCustomCategoryField(cat) {
+            const field = document.getElementById('mCustomCategoryField');
+            if (!field) return;
+            field.classList.toggle('show', cat === 'diger');
+        }
+
         function updateSizeField(cat) {
             const field = document.getElementById("mSizeField");
             const label = document.getElementById("mSizeLabel");
@@ -6453,7 +6654,7 @@
             document.getElementById("mItemName").value = it.itemName || "";
 
             /* Image */
-            mImg.src = it.imgData;
+            mImg.src = getImageSrc(it);
 
             /* Links */
             buildLinkList(it.links && it.links.length ? it.links : (it.link ? [it.link] : []));
@@ -6461,6 +6662,11 @@
             /* Category */
             setDropdownValue('mCategoryBtn', 'mCategoryPanel', 'mCategory', it.category || "diger");
             updateSizeField(it.category || "diger");
+            updateCustomCategoryField(it.category || "diger");
+
+            /* Custom category */
+            const customCategoryInput = document.getElementById("mCustomCategoryName");
+            if (customCategoryInput) customCategoryInput.value = it.customCategoryName || "";
 
             /* Size */
             const sizeInput = document.getElementById("mSize");
@@ -6591,58 +6797,89 @@
             });
         }
 
+        function withTimeout(promise, ms, label) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error(label + ' timeout')), ms))
+            ]);
+        }
+
+        function startImageUploadForItem(item, imgData) {
+            if (!item || !imgData || !imgData.startsWith('data:')) return;
+            withTimeout(uploadImageData(imgData, item.id), 10000, 'Storage upload')
+                .then(payload => {
+                    const live = items.find(x => x.id === item.id);
+                    if (!live) return;
+                    applyImagePayload(live, payload);
+                    persist();
+                    render();
+                    if (activeId === live.id) mImg.src = getImageSrc(live);
+                })
+                .catch(err => {
+                    console.warn('Storage upload skipped, local image kept:', err);
+                });
+        }
+
+        async function createPhotoItemFromFile(file) {
+            const id = Math.random().toString(16).slice(2) + Date.now().toString(16);
+            await nextFrame();
+            const imgData = await withTimeout(fileToDataURL(file), 12000, 'Image processing');
+            return {
+                id, itemName: "", links: [], link: "", category: "diger", customCategoryName: "", timeline: "ocak",
+                timelineYear: new Date().getFullYear(),
+                priority: 3, size: "", note: "", colorNote: "",
+                price: "", currentPrice: "", priceNote: "",
+                forWho: "self", reason: "", intentNote: "",
+                status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0,
+                imageUrl: "", imagePath: "", imgData
+            };
+        }
+
         filePick.addEventListener("change", async e => {
             const files = e.target.files;
             if (!files || !files.length) return;
-            for (const file of files) {
-                try {
-                    const imgData = await fileToDataURL(file);
-                    items.push({
-                        id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                        imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
-                        timelineYear: new Date().getFullYear(),
-                        priority: 3, size: "", note: "", colorNote: "",
-                        price: "", currentPrice: "", priceNote: "",
-                        forWho: "self", reason: "", intentNote: "",
-                        status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0
-                    });
-                } catch (err) {
-                    console.error("Fotoğraf yüklenemedi:", err);
-                    showToast("⚠️ Fotoğraf yüklenemedi, tekrar dene");
+            setPhotoBusy(true);
+            const created = [];
+            try {
+                for (const file of files) {
+                    created.push(await createPhotoItemFromFile(file));
                 }
+                items.push(...created);
+                persist(); render();
+                requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
+                if (created.length) openModal(created[created.length - 1].id);
+                created.forEach(item => startImageUploadForItem(item, item.imgData));
+            } catch (err) {
+                console.error("Foto?raf y?klenemedi:", err);
+                showToast("Foto?raf y?klenemedi, tekrar dene");
+            } finally {
+                setPhotoBusy(false);
+                filePick.value = "";
             }
-            if (!items.length) { filePick.value = ""; return; }
-            persist(); render();
-            requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
-            if (items.length) openModal(items[items.length - 1].id);
-            filePick.value = "";
         });
 
         /* Camera capture */
         document.getElementById("cameraPick").addEventListener("change", async e => {
             const file = e.target.files[0];
             if (!file) return;
+            setPhotoBusy(true);
             try {
-                const imgData = await fileToDataURL(file);
-                items.push({
-                    id: Math.random().toString(16).slice(2) + Date.now().toString(16),
-                    imgData, itemName: "", links: [], link: "", category: "diger", timeline: "ocak",
-                    timelineYear: new Date().getFullYear(),
-                    priority: 3, size: "", note: "", colorNote: "",
-                    price: "", currentPrice: "", priceNote: "",
-                    forWho: "self", reason: "", intentNote: "",
-                    status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0
-                });
+                const item = await createPhotoItemFromFile(file);
+                items.push(item);
                 persist(); render();
-                openModal(items[items.length - 1].id);
+                openModal(item.id);
+                startImageUploadForItem(item, item.imgData);
             } catch (err) {
-                console.error("Kamera fotoğrafı yüklenemedi:", err);
-                showToast("⚠️ Fotoğraf yüklenemedi, tekrar dene");
+                console.error("Kamera foto?raf? y?klenemedi:", err);
+                showToast("Foto?raf y?klenemedi, tekrar dene");
+            } finally {
+                setPhotoBusy(false);
+                e.target.value = "";
             }
-            e.target.value = "";
         });
 
-        /* ── Linkten Ekle (Scraping) ── */
+        /* Linkten Ekle */
+
         document.getElementById("linkPickBtn").addEventListener("click", () => {
             const modal = document.getElementById("linkPromptBack");
             modal.style.display = "flex";
@@ -6749,11 +6986,12 @@
             const newItemId = Math.random().toString(16).slice(2) + Date.now().toString(16);
             items.push({
                 id: newItemId,
-                imgData: image || "",
+                imageUrl: image || "",
+                imgData: "",
                 itemName: title || "",
                 links: [linkInput], // Formatted input
                 link: linkInput,    // Legacy 
-                category: "diger", timeline: "ocak",
+                category: "diger", customCategoryName: "", timeline: "ocak",
                 timelineYear: new Date().getFullYear(),
                 priority: 3, size: "", note: "", colorNote: "",
                 price: numericPrice || "", currentPrice: numericPrice || "", priceNote: "",
@@ -6783,6 +7021,7 @@
             it.links = getLinks();
             it.link = it.links[0] || "";   // geriye dönük uyumluluk
             it.category = mCategory.value;
+            it.customCategoryName = mCategory.value === "diger" ? document.getElementById("mCustomCategoryName").value.trim() : "";
             it.timeline = mTimeline.value;
             it.timelineYear = parseInt(mYear.value, 10) || new Date().getFullYear();
             it.priority = clamp(parseInt(mPriority.value, 10) || 1, 1, 5);
@@ -6803,6 +7042,8 @@
         }
         function doDeleteItem() {
             if (!activeId) return;
+            const itemToDelete = items.find(x => x.id === activeId);
+            if (itemToDelete) deleteStoredImage(itemToDelete);
             items = items.filter(x => x.id !== activeId);
             persist(); render(); closeDetailModal();
         }
@@ -6822,6 +7063,7 @@
         /* Clear all */
         function clearAll() {
             if (!confirm("⚠ DİKKAT: Tüm istek listesi silinecek!\n\nEklediğin tüm ürünler, fotoğraflar, notlar ve satın alma geçmişi kalıcı olarak silinecektir.\n\nBu işlem geri alınamaz. Devam etmek istiyor musun?")) return;
+            items.forEach(item => deleteStoredImage(item));
             items = [];
             persist();
             /* Clear legacy keys so Wrapped doesn't show stale data */
@@ -6938,7 +7180,7 @@
                     front.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0e0f0,#e0d0f0);font-size:32px;">🔒</div>';
                 } else {
                     const img = document.createElement("img");
-                    img.src = it.imgData;
+                    img.src = getImageSrc(it);
                     img.alt = "bought";
                     front.appendChild(img);
                 }
@@ -7044,7 +7286,7 @@
                 const pct = target > 0 ? Math.min(100, Math.round(saved / target * 100)) : (saved > 0 ? 100 : 0);
                 const done = target > 0 && saved >= target;
                 const name = it.itemName || "İsimsiz Ürün";
-                const imgSrc = it.imgData || "";
+                const imgSrc = getImageSrc(it) || "";
 
                 const card = document.createElement("div");
                 card.className = "savCard";
@@ -7504,7 +7746,7 @@
                 div.className = "aiProdItem";
                 div.dataset.id = it.id;
                 div.innerHTML = `
-                    <img src="${it.imgData}" alt="product" />
+                    <img src="${getImageSrc(it)}" alt="product" />
                     <div class="prodCheck"></div>
                     <div class="prodName">${it.category ? (CATEGORIES_TR[it.category] || it.category) : "Ürün"}</div>
                 `;
@@ -7560,7 +7802,7 @@
                     price: parseInt(it.price) || 0,
                     needScore: it.priority || 3,
                     category: it.category || "diger",
-                    imgData: it.imgData
+                    imgData: getImageSrc(it)
                 };
             }).filter(Boolean);
 
@@ -8014,7 +8256,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 resetConfirm: 'Yes, Reset',
                 loginTitle: 'Sign In',
                 registerTitle: 'Sign Up',
-                username: 'Username',
+                username: 'Email',
                 password: 'Password',
                 passwordRepeat: 'Repeat password',
                 emailOptional: 'Email (optional)',
@@ -8099,7 +8341,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             // Placeholders
             const ph = {
                 loginUser: t.username, loginPass: t.password,
-                regUser: t.username, regEmail: t.emailOptional,
+                regUser: t.username,
                 regPass: t.password, regPass2: t.passwordRepeat,
                 pwOld: t.oldPw, pwNew: t.newPw, pwNew2: t.newPwRepeat
             };
@@ -8178,6 +8420,10 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
     </script>
 
     <!-- ═══ CROP OVERLAY ═══ -->
+    <div id="photoBusy" class="photoBusy" aria-live="polite">
+        <div class="photoBusyCard"><i class="ph ph-spinner-gap"></i><span>Fotoğraf hazırlanıyor...</span></div>
+    </div>
+
     <div id="cropOverlay">
         <div class="cropTitle">Fotoğrafı Düzenle</div>
         <div class="cropStage" id="cropStage">
@@ -8240,21 +8486,22 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 const it = window._cropActiveItem;
                 if (!it) { undoBtn.disabled = true; resetBtn.disabled = true; return; }
                 /* Geri al: oturum açılışından bu yana imgData değiştiyse */
-                undoBtn.disabled = !sessionSavedData || (it.imgData === sessionSavedData);
+                undoBtn.disabled = !sessionSavedData || (getImageSrc(it) === sessionSavedData);
                 /* Orijinale döndür: mevcut imgData ile orijinal farklıysa */
-                resetBtn.disabled = !it.origImgData || (it.imgData === it.origImgData);
+                resetBtn.disabled = !it.origImgData || (getImageSrc(it) === it.origImgData);
             }
 
             /* ── Kırpma ekranını aç ── */
             editBtn.addEventListener('click', () => {
                 const it = window._cropActiveItem;
-                if (!it || !it.imgData) return;
+                const activeSrc = getImageSrc(it);
+                if (!it || !activeSrc) return;
                 /* origImgData: ilk yüklendiğindeki hali, bir kez saklanır */
-                if (!it.origImgData) it.origImgData = it.imgData;
+                if (!it.origImgData) it.origImgData = activeSrc;
                 /* sessionSavedData: bu oturumda düzenleyici AÇILDIĞINDA ne vardı
                    "Geri al" bunu geri yükler — o andan bu yana yapılan tüm değişikliği atar */
-                sessionSavedData = it.imgData;
-                loadIntoStage(it.imgData, () => { updateBtns(); });
+                sessionSavedData = activeSrc;
+                loadIntoStage(activeSrc, () => { updateBtns(); });
             });
 
             function loadIntoStage(src, onReady) {
@@ -8397,7 +8644,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             undoBtn.addEventListener('click', () => {
                 if (!sessionSavedData) return;
                 const it = window._cropActiveItem;
-                it.imgData = sessionSavedData;
+                applyImagePayload(it, sessionSavedData.startsWith('data:') ? { imgData: sessionSavedData } : { imageUrl: sessionSavedData, imgData: '' });
                 document.getElementById('mImg').src = sessionSavedData;
                 if (typeof persist === 'function') persist();
                 if (typeof render === 'function') render();
@@ -8410,7 +8657,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             resetBtn.addEventListener('click', () => {
                 const it = window._cropActiveItem;
                 if (!it || !it.origImgData) return;
-                it.imgData = it.origImgData;
+                applyImagePayload(it, it.origImgData.startsWith('data:') ? { imgData: it.origImgData } : { imageUrl: it.origImgData, imgData: '' });
                 document.getElementById('mImg').src = it.origImgData;
                 if (typeof persist === 'function') persist();
                 if (typeof render === 'function') render();
@@ -8419,7 +8666,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             });
 
             /* ── Uygula — kırpılmış görüntüyü kaydet ── */
-            confirmBtn.addEventListener('click', () => {
+            confirmBtn.addEventListener('click', async () => {
                 const canvas = document.createElement('canvas');
                 const out = 900;
                 canvas.width = out; canvas.height = out;
@@ -8432,8 +8679,17 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 const newData = canvas.toDataURL('image/jpeg', 0.88);
                 const it = window._cropActiveItem;
                 if (it) {
-                    it.imgData = newData;
-                    document.getElementById('mImg').src = newData;
+                    const oldImagePath = it.imagePath;
+                    let payload;
+                    try {
+                        payload = await withTimeout(uploadImageData(newData, it.id), 10000, 'Storage upload');
+                    } catch (err) {
+                        console.warn('Crop upload failed, keeping local image fallback:', err);
+                        payload = { imgData: newData };
+                    }
+                    applyImagePayload(it, payload);
+                    if (oldImagePath && oldImagePath !== it.imagePath) deleteStoredImage({ imagePath: oldImagePath });
+                    document.getElementById('mImg').src = getImageSrc(it);
                     if (typeof persist === 'function') persist();
                     if (typeof render === 'function') render();
                     updateBtns();
