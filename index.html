@@ -4571,12 +4571,29 @@
             appearance: textfield;
         }
 
+        /* Hide visual scrollbars everywhere while preserving scroll behavior */
+        * {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        *::-webkit-scrollbar {
+            width: 0 !important;
+            height: 0 !important;
+            display: none !important;
+        }
+
 
         /* Stabilization patch: auth scroll, responsive layout, crop, moodboard */
-        #authScreen { overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; }
+        #authScreen { position: fixed; inset: 0; z-index: 100000; min-height: 100vh; min-height: 100dvh; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; background: var(--authBg); isolation: isolate; transform: translateZ(0); }
+        body.auth-active { overflow: hidden; background: var(--authBg); }
+        body.auth-active > header,
+        body.auth-active > .catBar,
+        body.auth-active > .sortBar,
+        body.auth-active > .content { visibility: hidden; pointer-events: none; }
         #authScreen::-webkit-scrollbar, .aiBack::-webkit-scrollbar, #cropOverlay::-webkit-scrollbar { display: none; }
         .authInputWrap { cursor: text; }
-        .authInputWrap input { caret-color: var(--accent); line-height: 20px; min-height: 48px; }
+        .authInputWrap input { caret-color: var(--accent); line-height: 20px; min-height: 48px; position: relative; z-index: 2; pointer-events: auto; user-select: text; -webkit-user-select: text; }
         .auth-right { min-height: 100%; }
         .aiBack { scrollbar-width: none; -ms-overflow-style: none; }
         .grid.moodboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 6px; gap: 16px; align-items: start; }
@@ -4586,8 +4603,11 @@
         .mCustomCategoryField.show { display: flex; }
         .mTabBody { min-height: 360px; transition: opacity 0.18s ease, transform 0.18s ease; }
         .mTabBody.is-switching { opacity: 0; transform: translateY(6px); }
-        body[data-theme="dark"] .mSecretRow { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.14); }
+        body[data-theme="dark"] .mSecretRow { background: rgba(22, 34, 50, 0.92) !important; border-color: rgba(255, 255, 255, 0.14) !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
         body[data-theme="dark"] .mSecretLeft { color: rgba(255, 255, 255, 0.86); }
+        body[data-theme="dark"] .mSecretRow .slider { background: rgba(255, 255, 255, 0.18); }
+        body[data-theme="dark"] .mSecretRow .slider::before { background: rgba(255, 255, 255, 0.86); }
+        body[data-theme="dark"] .mSecretRow .switch input:checked + .slider { background: var(--accent); }
         .photoBusy { position: fixed; inset: 0; z-index: 99998; display: none; align-items: center; justify-content: center; background: rgba(20, 10, 40, 0.20); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .photoBusy.show { display: flex; }
         .photoBusyCard { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-radius: 16px; border: 1px solid var(--stroke); background: var(--surfaceBg); box-shadow: var(--elev2); color: var(--textPrimary); font-size: 13px; font-weight: 600; }
@@ -4745,7 +4765,7 @@
                     </div>
                 </div>
                 <!-- Beden / Numara — kategori: giyim veya ayakkabi -->                <div class="mField mCustomCategoryField" id="mCustomCategoryField">
-                    <div class="mLabel">Diğer kategori adı</div>
+                    <div class="mLabel">Alt kategori</div>
                     <input type="text" id="mCustomCategoryName" class="mSizeInput" placeholder="Örn. Kitap, dekor, hobi..." maxlength="32" />
                 </div>
 
@@ -4759,10 +4779,10 @@
                     <div class="mDateRow">
                         <div class="mDateCard">
                             <div class="mDateLabel">Ay</div>
-                            <input type="hidden" id="mTimeline" value="ocak" />
+                            <input type="hidden" id="mTimeline" value="" />
                             <div class="cDropWrap">
                                 <button type="button" class="cDropBtn compact" id="mTimelineBtn">
-                                    <span class="cDropLabel">Ocak</span>
+                                    <span class="cDropLabel">Ay seç</span>
                                     <i class="ph ph-caret-down cDropChevron"></i>
                                 </button>
                                 <div class="cDropPanel compact" id="mTimelinePanel">
@@ -5664,10 +5684,10 @@
             const btn = document.querySelector('#loginForm .authSubmit');
             const loginInput = document.getElementById('loginUser').value;
             const password = document.getElementById('loginPass').value;
-            const email = getEmailFromUsername(loginInput);
+            const email = normalizeEmailInput(loginInput);
 
             if (!loginInput || !password) return showAuthError('E-posta ve şifre gerekli.');
-            if (loginInput.includes('@') && !isValidEmail(loginInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
+            if (!isValidEmail(loginInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
 
             const orig = btn.textContent;
             btn.textContent = 'Giriş yapılıyor...';
@@ -5685,7 +5705,7 @@
                     return showAuthError('Kullanıcı bulunamadı veya şifre hatalı.');
                 }
                 if (err.code === 'auth/invalid-email') {
-                    return showAuthError('Lütfen boşluksuz ve geçerli karakterler içeren bir kullanıcı adı girin.');
+                    return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
                 }
                 if (err.code === 'auth/too-many-requests') {
                     return showAuthError('Çok fazla başarısız deneme. Lütfen bir süre bekleyin.');
@@ -5725,13 +5745,14 @@
                 console.error('Register error:', err);
                 btn.textContent = orig;
                 btn.disabled = false;
-                if (err.code === 'auth/email-already-in-use') return showAuthError('Kullanıcı adı zaten alınmış.');
+                if (err.code === 'auth/email-already-in-use') return showAuthError('Bu e-posta ile zaten hesap oluşturulmuş.');
                 showAuthError('Teknik bir hata oluştu. Lütfen tekrar deneyin.');
             }
         }
 
         /* ═══ START APP ═══ */
         function startApp() {
+            document.body.classList.remove('auth-active');
             document.getElementById('authScreen').style.display = 'none';
             load().then(() => render());
         }
@@ -6009,6 +6030,7 @@
                 authUid = null;
                 currentUser = null;
                 items = [];
+                document.body.classList.add('auth-active');
                 document.getElementById('authScreen').style.display = 'flex';
             }
         });
@@ -6126,10 +6148,24 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllDropdowns(); });
 
         /* ── Year dropdown population ── */
+        const MONTH_KEYS = ["ocak", "subat", "mart", "nisan", "mayis", "haziran", "temmuz", "agustos", "eylul", "ekim", "kasim", "aralik"];
+
+        function getCurrentTimelineDefaults() {
+            const now = new Date();
+            const month = MONTH_KEYS[now.getMonth()] || "ocak";
+            return { month, year: now.getFullYear() };
+        }
+
+        function setDefaultTimelineValue() {
+            const def = getCurrentTimelineDefaults();
+            setDropdownValue('mTimelineBtn', 'mTimelinePanel', 'mTimeline', def.month);
+            setDropdownValue('mYearBtn', 'mYearPanel', 'mYear', String(def.year));
+        }
+
         (function initYearDropdown() {
             const now = new Date().getFullYear();
             const panel = document.getElementById("mYearPanel");
-            for (let y = 2025; y <= 2036; y++) {
+            for (let y = now; y <= now + 11; y++) {
                 const opt = document.createElement('div');
                 opt.className = 'cDropOption' + (y === now ? ' selected' : '');
                 opt.dataset.val = y;
@@ -6148,6 +6184,7 @@
         });
         initCustomDropdown('mTimelineBtn', 'mTimelinePanel', 'mTimeline', () => updateMetaChips());
         initCustomDropdown('mYearBtn', 'mYearPanel', 'mYear', () => updateMetaChips());
+        setDefaultTimelineValue();
 
         /* ── Category change now uses hidden input via custom dropdown ── */
 
@@ -6292,7 +6329,7 @@
                         </filter>
                     </defs>
                     <rect width="900" height="900" rx="78" fill="url(#bg)"/>
-                    <rect x="38" y="38" width="824" height="824" rx="70" fill="${theme.card}" stroke="${theme.border}" stroke-width="2" filter="url(#softShadow)"/>
+                    <rect x="38" y="38" width="824" height="824" rx="70" fill="${theme.card}" filter="url(#softShadow)"/>
                     <g fill="none" stroke="url(#line)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M286 458 L373 371 Q392 354 411 373 L529 492"/>
                         <path d="M492 454 L540 405 Q559 386 579 405 L658 486"/>
@@ -6778,8 +6815,9 @@
             }
 
             /* Timeline */
-            setDropdownValue('mTimelineBtn', 'mTimelinePanel', 'mTimeline', it.timeline || "ocak");
-            setDropdownValue('mYearBtn', 'mYearPanel', 'mYear', String(it.timelineYear || new Date().getFullYear()));
+            const target = getCurrentTimelineDefaults();
+            setDropdownValue('mTimelineBtn', 'mTimelinePanel', 'mTimeline', it.timeline || target.month);
+            setDropdownValue('mYearBtn', 'mYearPanel', 'mYear', String(it.timelineYear || target.year));
 
             /* Priority */
             buildDesireSelector(it.priority || 3);
@@ -6925,11 +6963,12 @@
 
         async function createPhotoItemFromFile(file) {
             const id = Math.random().toString(16).slice(2) + Date.now().toString(16);
+            const target = getCurrentTimelineDefaults();
             await nextFrame();
             const imgData = await withTimeout(fileToDataURL(file), 12000, 'Image processing');
             return {
-                id, itemName: "", links: [], link: "", category: "diger", customCategoryName: "", timeline: "ocak",
-                timelineYear: new Date().getFullYear(),
+                id, itemName: "", links: [], link: "", category: "diger", customCategoryName: "", timeline: target.month,
+                timelineYear: target.year,
                 priority: 3, size: "", note: "", colorNote: "",
                 price: "", currentPrice: "", priceNote: "",
                 forWho: "self", reason: "", intentNote: "",
@@ -7087,6 +7126,7 @@
 
             // Always create the item, whether scraping succeeded or gracefully failed
             const newItemId = Math.random().toString(16).slice(2) + Date.now().toString(16);
+            const target = getCurrentTimelineDefaults();
             items.push({
                 id: newItemId,
                 imageUrl: image || "",
@@ -7094,8 +7134,8 @@
                 itemName: title || "",
                 links: [linkInput], // Formatted input
                 link: linkInput,    // Legacy 
-                category: "diger", customCategoryName: "", timeline: "ocak",
-                timelineYear: new Date().getFullYear(),
+                category: "diger", customCategoryName: "", timeline: target.month,
+                timelineYear: target.year,
                 priority: 3, size: "", note: "", colorNote: "",
                 price: numericPrice || "", currentPrice: numericPrice || "", priceNote: "",
                 forWho: "self", reason: "", intentNote: "",
@@ -8789,23 +8829,15 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                     stageW / scale, stageH / scale,
                     0, 0, out, out
                 );
-                const newData = canvas.toDataURL('image/jpeg', 0.88);
+                const newData = canvas.toDataURL('image/jpeg', 0.82);
                 const it = window._cropActiveItem;
                 if (it) {
-                    const oldImagePath = it.imagePath;
-                    let payload;
-                    try {
-                        payload = await withTimeout(uploadImageData(newData, it.id), 10000, 'Storage upload');
-                    } catch (err) {
-                        console.warn('Crop upload failed, keeping local image fallback:', err);
-                        payload = { imgData: newData };
-                    }
-                    applyImagePayload(it, payload);
-                    if (oldImagePath && oldImagePath !== it.imagePath) deleteStoredImage({ imagePath: oldImagePath });
+                    applyImagePayload(it, { imgData: newData });
                     document.getElementById('mImg').dataset.noPhoto = hasRealImage(it) ? "0" : "1";
                     document.getElementById('mImg').src = getImageSrc(it);
                     if (typeof persist === 'function') persist();
                     if (typeof render === 'function') render();
+                    if (typeof startImageUploadForItem === 'function') startImageUploadForItem(it, newData);
                     updateBtns();
                 }
                 overlay.classList.remove('open');
