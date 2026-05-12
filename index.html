@@ -6235,20 +6235,41 @@
 
         function getNoPhotoLabel() {
             const lang = localStorage.getItem('wl_lang') || 'tr';
-            return lang === 'en' ? 'No photo' : 'Fotoğraf yok';
+            return lang === 'en' ? 'No Photo' : 'Fotoğraf Yok';
         }
 
         function getNoPhotoTheme() {
             const theme = localStorage.getItem(THEME_KEY) || 'pink';
+            if (theme === 'dark') {
+                return {
+                    bg1: '#111b28',
+                    bg2: '#172235',
+                    card: '#131f2e',
+                    border: '#27364b',
+                    line1: '#d3d6df',
+                    line2: '#8f96a8',
+                    text: '#d8dae3',
+                    shadow: 'rgba(0,0,0,.36)'
+                };
+            }
             const themes = {
-                pink: { bg1: '#fff8fc', bg2: '#f3e7ff', accent: '#E8458B', sec: '#A87CFF', text: '#7c526b' },
-                blue: { bg1: '#f7fbff', bg2: '#e8f0ff', accent: '#3D7FE8', sec: '#7CB4FF', text: '#35557e' },
-                green: { bg1: '#f7fffb', bg2: '#e8fff4', accent: '#2EB87A', sec: '#7CDFB4', text: '#2f6a52' },
-                peach: { bg1: '#fffaf7', bg2: '#fff0e8', accent: '#E8763D', sec: '#FFAA7C', text: '#7a5038' },
-                charcoal: { bg1: '#f8fafc', bg2: '#edf0f4', accent: '#7B8FA8', sec: '#A8B8CC', text: '#4f5e70' },
-                dark: { bg1: '#101a26', bg2: '#182338', accent: '#FF73B4', sec: '#AFA6FF', text: '#d7d4ff' }
+                pink: { tint: '#E8458B' },
+                blue: { tint: '#3D7FE8' },
+                green: { tint: '#2EB87A' },
+                peach: { tint: '#E8763D' },
+                charcoal: { tint: '#7B8FA8' }
             };
-            return themes[theme] || themes.pink;
+            const picked = themes[theme] || themes.pink;
+            return {
+                bg1: '#ffffff',
+                bg2: '#f7f7f8',
+                card: '#fbfbfc',
+                border: '#ececef',
+                line1: picked.tint,
+                line2: '#8c8d93',
+                text: '#777982',
+                shadow: 'rgba(25,27,35,.12)'
+            };
         }
 
         function getNoPhotoPlaceholderSrc() {
@@ -6261,16 +6282,28 @@
                             <stop offset="0" stop-color="${theme.bg1}"/>
                             <stop offset="1" stop-color="${theme.bg2}"/>
                         </linearGradient>
-                        <linearGradient id="line" x1="270" y1="330" x2="630" y2="555" gradientUnits="userSpaceOnUse">
-                            <stop offset="0" stop-color="${theme.accent}"/>
-                            <stop offset="1" stop-color="${theme.sec}"/>
+                        <linearGradient id="line" x1="250" y1="285" x2="650" y2="590" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="${theme.line1}" stop-opacity=".72"/>
+                            <stop offset=".38" stop-color="${theme.line2}" stop-opacity=".72"/>
+                            <stop offset="1" stop-color="${theme.line2}" stop-opacity=".86"/>
                         </linearGradient>
+                        <filter id="softShadow" x="-18%" y="-18%" width="136%" height="136%">
+                            <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="${theme.shadow}" flood-opacity="1"/>
+                        </filter>
                     </defs>
-                    <rect width="900" height="900" rx="70" fill="url(#bg)"/>
-                    <rect x="188" y="232" width="524" height="344" rx="54" fill="none" stroke="url(#line)" stroke-width="24" opacity=".34"/>
-                    <circle cx="330" cy="348" r="38" fill="${theme.accent}" opacity=".24"/>
-                    <path d="M228 531 C306 448 364 448 430 518 C478 456 548 421 672 540" fill="none" stroke="url(#line)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" opacity=".52"/>
-                    <text x="450" y="675" text-anchor="middle" fill="${theme.text}" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="46" font-weight="650" letter-spacing="0">${label}</text>
+                    <rect width="900" height="900" rx="78" fill="url(#bg)"/>
+                    <rect x="38" y="38" width="824" height="824" rx="70" fill="${theme.card}" stroke="${theme.border}" stroke-width="2" filter="url(#softShadow)"/>
+                    <g fill="none" stroke="url(#line)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M286 458 L373 371 Q392 354 411 373 L529 492"/>
+                        <path d="M492 454 L540 405 Q559 386 579 405 L658 486"/>
+                        <path d="M274 476 L274 302 Q274 272 304 272 L596 272 Q626 272 626 302 L626 478"/>
+                        <path d="M274 476 L274 540 Q274 570 304 570 L580 570"/>
+                        <circle cx="516" cy="351" r="39"/>
+                        <path d="M577 509 L648 580"/>
+                        <path d="M628 525 L596 557"/>
+                        <path d="M674 557 L642 589"/>
+                    </g>
+                    <text x="450" y="680" text-anchor="middle" fill="${theme.text}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="52" font-weight="500" letter-spacing="0">${label}</text>
                 </svg>`;
             return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
         }
