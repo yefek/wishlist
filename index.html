@@ -6085,7 +6085,6 @@
                     } catch (err) {
                         input.focus();
                     }
-                    stabilizeAuthInputFocus(input);
                 }
             });
         });
@@ -6094,56 +6093,21 @@
             const authScreenEl = document.getElementById('authScreen');
             if (!authScreenEl || authScreenEl.style.display === 'none') return;
             const target = input.closest('.authInputWrap') || input;
-            const keepCaretVisible = () => {
-                if (document.activeElement !== input) return;
-                try {
-                    target.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-                    if (input.type === 'text' || input.type === 'search' || input.type === 'url' || input.type === 'tel' || input.type === 'password') {
-                        const caret = input.value.length;
-                        input.setSelectionRange(caret, caret);
-                    }
-                } catch (err) {
-                    target.scrollIntoView({ block: 'center', inline: 'nearest' });
+            if (document.activeElement !== input) return;
+            try {
+                target.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+                if (input.type === 'text' || input.type === 'search' || input.type === 'url' || input.type === 'tel' || input.type === 'password') {
+                    const caret = input.value.length;
+                    input.setSelectionRange(caret, caret);
                 }
-            };
-            requestAnimationFrame(keepCaretVisible);
-            setTimeout(keepCaretVisible, 120);
-            setTimeout(keepCaretVisible, 360);
+            } catch (err) {
+                target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
         }
 
         document.querySelectorAll('#authScreen input').forEach(input => {
-            input.addEventListener('focus', () => stabilizeAuthInputFocus(input));
-            input.addEventListener('touchend', () => setTimeout(() => stabilizeAuthInputFocus(input), 0), { passive: true });
-            input.addEventListener('input', () => stabilizeAuthInputFocus(input));
+            input.addEventListener('focus', () => setTimeout(() => stabilizeAuthInputFocus(input), 180));
         });
-
-        if (window.visualViewport) {
-            let authViewportTimer = null;
-            const syncAuthViewportFocus = () => {
-                if (!document.body.classList.contains('auth-active')) return;
-                const activeInput = document.activeElement && document.activeElement.matches && document.activeElement.matches('#authScreen input')
-                    ? document.activeElement
-                    : null;
-                if (activeInput) {
-                    stabilizeAuthInputFocus(activeInput);
-                } else {
-                    const authScreenEl = document.getElementById('authScreen');
-                    if (authScreenEl) authScreenEl.scrollTop = Math.min(authScreenEl.scrollTop, 4);
-                    setTimeout(() => {
-                        if (document.activeElement && document.activeElement.matches && document.activeElement.matches('#authScreen input')) return;
-                        const authEl = document.getElementById('authScreen');
-                        if (authEl) authEl.scrollTop = 0;
-                    }, 180);
-                }
-            };
-            const queueAuthViewportFocus = () => {
-                clearTimeout(authViewportTimer);
-                authViewportTimer = setTimeout(syncAuthViewportFocus, 80);
-            };
-            window.visualViewport.addEventListener('resize', queueAuthViewportFocus);
-            window.visualViewport.addEventListener('scroll', queueAuthViewportFocus);
-            window.addEventListener('orientationchange', queueAuthViewportFocus);
-        }
 
         document.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
