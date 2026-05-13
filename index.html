@@ -788,34 +788,6 @@
         }
 
         /* ═══════════ MOOD BOARD MASONRY ═══════════ */
-        .grid.moodboard {
-            display: block;
-            column-count: 2;
-            column-gap: 16px;
-        }
-
-        .grid.moodboard .card {
-            display: inline-block;
-            /* Prevent breaking across columns */
-            width: 100%;
-            margin-bottom: 16px;
-            break-inside: avoid;
-            page-break-inside: avoid;
-            -webkit-column-break-inside: avoid;
-        }
-
-        .grid.moodboard .card img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: auto;
-            /* Allow natural height for masonry effect */
-        }
-
-        .grid.moodboard .chipTR {
-            /* In moodboard mode, hover to see or keep it subtle */
-            opacity: 0.8;
-        }
-
         /* ═══════════ SIGNATURE #1: FLOATING TILE ═══════════ */
         .card {
             position: relative;
@@ -4961,19 +4933,6 @@
     </div>
 
     <!-- ═══ BİRİKİM MODAL ═══ -->
-    <div id="savingsBack" class="modalBack" role="dialog" aria-modal="true">
-        <div class="modal" id="savingsModal">
-            <div class="handle"><span></span></div>
-            <div class="mHead">
-                <strong>Birikim</strong>
-                <button id="closeSavings" class="btn">Kapat</button>
-            </div>
-            <div class="savingsBody">
-                <div id="savingsList"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Link Prompt Modal -->
     <div id="linkPromptBack" class="modalBack" role="dialog" aria-modal="true">
         <div class="modal" id="linkPromptModal">
@@ -5578,7 +5537,6 @@
         </div>
     </div>
 
-    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
@@ -6326,13 +6284,8 @@
            Strateji: imgData (base64) sadece localStorage'da tutulur.
            Firebase'e sadece metadata gider → DB boyutu ~20x küçülür.
            Silme: item silinince hem array'den hem localStorage image store'dan temizlenir.
-        /* ── Storage ── */
-        function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
-
         /* Storage */
-        function getUserKey() {
-            return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3';
-        }
+        function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
 
         function getNoPhotoLabel() {
             const lang = localStorage.getItem('wl_lang') || 'tr';
@@ -7575,327 +7528,15 @@
         let aiCurrentResult = null;
 
         const EXPERTS = [
-            { id: "budget", name: "Bütçe Uzmanı", icon: "💰", color: "#4CAF50", weights: { price: 0.40, need: 0.25, cat: 0.15, save: 0.15, exp: -0.05 } },
-            { id: "need", name: "İhtiyaç Analisti", icon: "🎯", color: "#2196F3", weights: { price: 0.10, need: 0.50, cat: 0.10, save: 0.00, exp: 0.00 } },
-            { id: "quality", name: "Kalite Uzmanı", icon: "⭐", color: "#FFC107", weights: { price: 0.20, need: 0.20, cat: 0.25, save: 0.00, exp: 0.10 } },
-            { id: "lifestyle", name: "Yaşam Tarzı Danışmanı", icon: "🌟", color: "#9C27B0", weights: { price: 0.15, need: 0.25, cat: 0.30, save: 0.00, exp: 0.10 } },
-            { id: "savings", name: "Tasarruf Savunucusu", icon: "🐷", color: "#FF9800", weights: { price: 0.45, need: 0.15, cat: 0.05, save: 0.30, exp: -0.15 } },
-            { id: "experience", name: "Deneyim Tutkunu", icon: "🎉", color: "#E91E63", weights: { price: 0.05, need: 0.35, cat: 0.20, save: -0.15, exp: 0.30 } }
+            { id: "budget", color: "#4CAF50" },
+            { id: "need", color: "#2196F3" },
+            { id: "quality", color: "#FFC107" },
+            { id: "lifestyle", color: "#9C27B0" },
+            { id: "savings", color: "#FF9800" },
+            { id: "experience", color: "#E91E63" }
         ];
-        const REFEREE = { id: "referee", name: "Hakem", icon: "⚖️", color: "#607D8B" };
+        const CATEGORIES_TR = { giyim: "Giyim", kozmetik: "Kozmetik", teknoloji: "Teknoloji", parfum: "Parf\u00fcm", sac: "Sa\u00e7 Bak\u0131m", diger: "Di\u011fer" };
 
-        const CATEGORIES_TR = { giyim: "Giyim", kozmetik: "Kozmetik", teknoloji: "Teknoloji", parfum: "Parfüm", sac: "Saç Bakım", diger: "Diğer" };
-        const TIME_LABELS = { "1m": "bu ay", "3m": "3 ay içinde", "6m": "6 ay içinde", "1y": "1 yıl içinde" };
-
-        /* Expert weight multiplier based on user preference */
-        function expertMult(expertId, pref) {
-            if (expertId === "savings") return 1 + (-pref * 0.25); // pref -2→1.5, 0→1, +2→0.5
-            if (expertId === "experience") return 1 + (pref * 0.25); // pref -2→0.5, 0→1, +2→1.5
-            return 1;
-        }
-
-        /* Score a single product for one expert */
-        function scoreProduct(expert, prod, allProducts, budget, pref) {
-            const w = expert.weights;
-            const prices = allProducts.map(p => p.price || 0).filter(p => p > 0);
-            const maxPrice = Math.max(...prices, 1);
-            const minPrice = Math.min(...prices, 0);
-
-            // Price score (cheaper = higher, relative to range)
-            const priceVal = prod.price || 0;
-            const priceScore = priceVal > 0 ? (1 - (priceVal - minPrice) / (maxPrice - minPrice + 1)) * 100 : 50;
-
-            // Need score (1-5 normalized to 0-100)
-            const needScore = ((prod.needScore || 3) / 5) * 100;
-
-            // Category bonus (lifestyle/quality get bonuses for certain categories)
-            let catBonus = 50;
-            if (expert.id === "lifestyle" && ["parfum", "giyim"].includes(prod.category)) catBonus = 80;
-            if (expert.id === "quality" && ["teknoloji"].includes(prod.category)) catBonus = 85;
-            if (expert.id === "savings") catBonus = 30; // savings expert is always skeptical
-
-            // Savings bias (if budget constrained, favor cheaper items)
-            const saveBias = budget > 0 ? Math.max(0, (1 - priceVal / budget)) * 100 : 50;
-
-            // Experience bias (higher need = more joy)
-            const expBias = needScore * 1.1;
-
-            let baseScore = (priceScore * w.price) + (needScore * w.need) + (catBonus * w.cat)
-                + (saveBias * w.save) + (expBias * w.exp);
-            baseScore = Math.max(5, Math.min(95, baseScore));
-
-            const mult = expertMult(expert.id, pref);
-            const weightedScore = Math.round(baseScore * mult);
-
-            return { baseScore: Math.round(baseScore), weightedScore, mult };
-        }
-
-        /* Template-based reasoning generator */
-        const REASONING_TEMPLATES = {
-            budget: {
-                high: ["{name} fiyat/performans açısından oldukça avantajlı.", "₺{price} bütçe dostu bir seçenek, çok iyi değer."],
-                mid: ["{name} fiyat olarak orta seviyede, makul bir yatırım.", "Fiyatı kabul edilebilir ama daha ekonomik alternatifler olabilir."],
-                low: ["{name} bütçeyi fazla zorlayan bir ürün.", "₺{price} oldukça yüksek, bütçe açısından riskli."]
-            },
-            need: {
-                high: ["{name} gerçek bir ihtiyaca yanıt veriyor, ihtiyaç skoru yüksek.", "Bu ürün günlük hayatta ciddi fark yaratabilir."],
-                mid: ["{name} ihtiyaç olarak orta seviyede, 'olsa iyi olur' kategorisinde.", "İhtiyaç skoru orta — onsuz da idare edilebilir."],
-                low: ["{name} istekten çok lüks kategorisinde.", "İhtiyaç skoru düşük, öncelikli değil."]
-            },
-            quality: {
-                high: ["{name} uzun vadede kaliteli bir yatırım olacaktır.", "Kalite ve dayanıklılık açısından güvenilir bir seçim."],
-                mid: ["{name} kalite açısından standart seviyede.", "Orta segment bir ürün, beklentileri karşılar."],
-                low: ["{name} kalite konusunda soru işaretleri var.", "Uzun vadeli değeri düşük olabilir."]
-            },
-            lifestyle: {
-                high: ["{name} yaşam tarzınla mükemmel uyum sağlıyor.", "Bu ürün seni yansıtıyor, günlük stiline tam oturuyor."],
-                mid: ["{name} yaşam tarzına kısmen uyuyor.", "Stiline uygun ama vazgeçilmez değil."],
-                low: ["{name} yaşam tarzınla tam örtüşmüyor.", "Kullanım sıklığı düşük kalabilir."]
-            },
-            savings: {
-                high: ["Şu anda almaman gereken bir ürün yok, {name} mantıklı.", "Harcama doğru yöne gidiyor, {name} akıllı bir seçim."],
-                mid: ["{name} alınabilir ama acele etme, bir düşün.", "Gerçekten ₺{price} harcamaya değer mi? İyi düşün."],
-                low: ["₺{price} gereksiz harcama riski taşıyor!", "Bu parayı biriktirsen daha faydalı olur."]
-            },
-            experience: {
-                high: ["{name} hayatına renk katacak! Kesinlikle al! 🎉", "YOLO! {name} seni mutlu edecek, tereddüt etme!"],
-                mid: ["{name} iyi bir deneyim sunabilir, hayatın tadını çıkar.", "Biraz düşün ama kendinten de esirgeme."],
-                low: ["{name} çok heyecanlandırmıyor ama olabilir.", "Deneyim açısından çok öne çıkmıyor."]
-            }
-        };
-
-        function generateReasoning(expertId, prod, score) {
-            const templates = REASONING_TEMPLATES[expertId];
-            if (!templates) return prod.name + " için puan: " + score;
-            const tier = score >= 65 ? "high" : score >= 40 ? "mid" : "low";
-            const pool = templates[tier];
-            const tpl = pool[Math.floor(Math.random() * pool.length)];
-            return tpl.replace(/\{name\}/g, prod.name).replace(/\{price\}/g, String(prod.price || 0));
-        }
-
-        function generateKeyPoints(expertId, products, scores) {
-            const points = [];
-            const best = scores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
-            const worst = scores.reduce((a, b) => a.weightedScore < b.weightedScore ? a : b);
-            if (expertId === "budget") {
-                points.push("En iyi fiyat/değer: " + best.prodName);
-                if (worst.prodName !== best.prodName) points.push("En pahalı seçenek: " + worst.prodName);
-            } else if (expertId === "need") {
-                points.push("En yüksek ihtiyaç: " + best.prodName);
-                points.push("Toplam " + products.length + " ürün değerlendirildi");
-            } else if (expertId === "savings") {
-                const total = products.reduce((s, p) => s + (p.price || 0), 0);
-                points.push("Toplam liste değeri: ₺" + total);
-                points.push("Dikkatli harcama önerisi");
-            } else if (expertId === "experience") {
-                points.push("En keyifli seçim: " + best.prodName + " 🎉");
-                points.push("Hayatın tadını çıkar!");
-            } else {
-                points.push("Öne çıkan: " + best.prodName);
-                if (products.length > 2) points.push(products.length + " ürün analiz edildi");
-            }
-            return points;
-        }
-
-        /* Run analysis for all experts */
-        function runExpertAnalysis(products, budget, pref) {
-            return EXPERTS.map(expert => {
-                const scores = products.map(p => {
-                    const s = scoreProduct(expert, p, products, budget, pref);
-                    return { ...s, prodId: p.id, prodName: p.name, reasoning: generateReasoning(expert.id, p, s.baseScore) };
-                });
-                const recommendation = generateReasoning(expert.id,
-                    products[scores.indexOf(scores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b))],
-                    scores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b).weightedScore
-                );
-                return {
-                    ...expert,
-                    productScores: scores,
-                    recommendation,
-                    keyPoints: generateKeyPoints(expert.id, products, scores),
-                    weightApplied: expertMult(expert.id, pref)
-                };
-            });
-        }
-
-        /* Debate generator — with richer counter-arguments */
-        const COUNTER_TEMPLATES = {
-            budget: {
-                savings: "Tasarruf önemli ama sadece en ucuzu almak her zaman doğru değil — fiyat/performans dengesine bakmalıyız.",
-                experience: "Deneyim güzel ama cüzdan ağlamasın! Kontrollü harcama ile de mutlu olunur.",
-                lifestyle: "Stil önemli ama gösteriş için bütçeyi zorlamak mantıksız.",
-                need: "İhtiyaç skoru tek başına yeterli değil, fiyatıyla birlikte değerlendirmeli.",
-                quality: "Kalite bahanesiyle her zaman pahalı ürüne yönelmek doğru stratejik değil."
-            },
-            need: {
-                experience: "Eğlence güzel ama önce gerçek ihtiyaçları karşılamamız lazım.",
-                savings: "Her şeyden kısmak da sağlıklı değil — gerçek ihtiyaçlara yatırım şart.",
-                lifestyle: "Trend takip etmek yerine gerçekten neye ihtiyacın var onu düşün.",
-                budget: "Bütçe önemli ama ihtiyaç olan şeyden kısmak uzun vadede zararlı.",
-                quality: "Kalite güzel ama asıl soru bu ürüne gerçekten ihtiyacın var mı?"
-            },
-            quality: {
-                budget: "Ucuz alıp sık sık değiştirmek mi, kaliteli alıp uzun süre kullanmak mı? Kalite kazanır.",
-                savings: "Tasarruf adına kalitesiz ürün almak para israfıdır!",
-                experience: "Anlık heyecan yerine uzun vadeli memnuniyet sağlayan kaliteyi tercih etmeliyiz.",
-                need: "İhtiyaç olsa bile kalitesiz ürün almak çözüm değil.",
-                lifestyle: "Sadece güzel görünmesi yetmez, kaliteli de olmalı."
-            },
-            lifestyle: {
-                savings: "Hayatı sadece biriktirmek için yaşamıyoruz — kendini ifade etmek de önemli.",
-                budget: "Bütçe sınırı içinde bile stilden vazgeçmemek gerekir.",
-                quality: "En kaliteli ürün sana yakışmıyorsa ne anlamı var?",
-                need: "Bazen 'ihtiyaç' dışında olan şeyler de hayatı güzelleştirir.",
-                experience: "Deneyim güzel ama tarzına uyan seçimler daha kalıcı mutluluk verir."
-            },
-            savings: {
-                experience: "Eğlence için para saçmak kolay — ama yarın ne olacak? Biriktir!",
-                lifestyle: "Moda ve trend peşinde koşmak cüzdanı eritir. Gerçekten gerekli mi?",
-                budget: "Bütçe planı güzel ama en iyi plan hiç harcamamak! Gerçekten lazım mı?",
-                quality: "'Kaliteli' diye pahalı ürüne para vermek her zaman akıllıca değil.",
-                need: "İhtiyaç mı yoksa istekle mi karıştırıyorsun? Çoğu şey onsuz da olur."
-            },
-            experience: {
-                savings: "Hayatı biriktirmek için değil yaşamak için yaşıyoruz! Biraz harca, mutlu ol!",
-                budget: "Her şeyi hesaplamak bazen hayatı kaçırmak demek. YOLO!",
-                need: "Her şey 'ihtiyaç' olacak diye bir kural yok — keyif de önemli!",
-                quality: "En kaliteli ürün değil, en çok mutlu eden ürün doğru seçimdir.",
-                lifestyle: "Tarz güzel ama asıl olan o ürünle yaşayacağın deneyim!"
-            }
-        };
-
-        function generateDebate(expertAnalyses, products) {
-            const debate = [];
-            for (let i = 0; i < expertAnalyses.length; i++) {
-                const exp = expertAnalyses[i];
-                const agreements = [];
-                const disagreements = [];
-                const counterArgs = [];
-
-                const expTop = exp.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
-
-                for (let j = 0; j < expertAnalyses.length; j++) {
-                    if (i === j) continue;
-                    const other = expertAnalyses[j];
-                    const othTop = other.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
-                    if (expTop.prodId === othTop.prodId) {
-                        agreements.push(other.name + " ile " + expTop.prodName + " konusunda hemfikiriz");
-                    } else {
-                        const diff = Math.abs(expTop.weightedScore - othTop.weightedScore);
-                        if (diff > 10) {
-                            disagreements.push(other.name + " " + othTop.prodName + " diyor ama ben " + expTop.prodName + " diyorum");
-                            /* Fetch specific counter-argument */
-                            const ct = COUNTER_TEMPLATES[exp.id];
-                            if (ct && ct[other.id]) {
-                                counterArgs.push(ct[other.id]);
-                            }
-                        }
-                    }
-                }
-
-                /* Pick the most relevant counter-argument */
-                let mainCounter = "";
-                if (counterArgs.length > 0) {
-                    mainCounter = counterArgs[0];
-                } else if (disagreements.length > 0) {
-                    mainCounter = "Farklı bakış açılarını anlıyorum ama kendi analizime güveniyorum.";
-                }
-
-                debate.push({
-                    role: exp.name,
-                    icon: exp.icon,
-                    color: exp.color,
-                    message: exp.recommendation,
-                    agreements: agreements.slice(0, 2),
-                    disagreements: disagreements.slice(0, 3),
-                    counterArguments: mainCounter
-                });
-            }
-            return debate;
-        }
-
-        /* Referee decision */
-        function refereeDecision(expertAnalyses, products, budget, mode, pref, timeFrame) {
-            // Weighted average scores
-            const finalScores = products.map(p => {
-                let totalWeight = 0, totalScore = 0;
-                expertAnalyses.forEach(exp => {
-                    const ps = exp.productScores.find(s => s.prodId === p.id);
-                    if (ps) {
-                        totalScore += ps.weightedScore * exp.weightApplied;
-                        totalWeight += exp.weightApplied;
-                    }
-                });
-                return { ...p, finalScore: Math.round(totalScore / (totalWeight || 1)) };
-            }).sort((a, b) => b.finalScore - a.finalScore);
-
-            let recommended = [];
-            let budgetAlloc = "";
-            let timeline = "";
-            let summary = "";
-            const warnings = [];
-
-            if (mode === "budget" && budget > 0) {
-                // Greedy knapsack
-                let remaining = budget;
-                finalScores.forEach(p => {
-                    if ((p.price || 0) <= remaining) {
-                        recommended.push(p);
-                        remaining -= (p.price || 0);
-                    }
-                });
-                const spent = budget - remaining;
-                budgetAlloc = "₺" + spent + " / ₺" + budget + " kullanıldı (₺" + remaining + " kaldı)";
-                timeline = "Önerilen ürünleri " + (TIME_LABELS[timeFrame] || "bu ay") + " almanız uygun";
-                summary = recommended.length + " ürün bütçe dahilinde önerildi. " + budgetAlloc;
-                if (remaining < budget * 0.1) warnings.push("Bütçenin neredeyse tamamı kullanılıyor!");
-            } else if (mode === "compare") {
-                recommended = finalScores;
-                summary = "En yüksek puanı " + finalScores[0].name + " aldı (" + finalScores[0].finalScore + " puan).";
-                if (finalScores.length > 1 && finalScores[0].finalScore - finalScores[1].finalScore < 5) {
-                    warnings.push("İlk iki ürün çok yakın puanda — ikisi de iyi seçenekler.");
-                }
-            } else {
-                // Prioritization: score/price ratio + need
-                recommended = finalScores.map((p, i) => ({ ...p, priority: i + 1 }));
-                const totalCost = recommended.reduce((s, p) => s + (p.price || 0), 0);
-                timeline = "Toplam maliyet ₺" + totalCost + ". Öncelik sırasıyla alım önerilir.";
-                summary = "Öncelik sırası belirlendi. İlk alınması gereken: " + finalScores[0].name;
-            }
-
-            if (!recommended.length) recommended = finalScores.slice(0, 3);
-
-            // Consensus
-            recommended = recommended.map((p, i) => {
-                const agreements = expertAnalyses.filter(exp => {
-                    const top = exp.productScores.reduce((a, b) => a.weightedScore > b.weightedScore ? a : b);
-                    return top.prodId === p.id;
-                }).length;
-                return {
-                    ...p,
-                    priority: i + 1,
-                    expertConsensus: agreements + "/" + EXPERTS.length + " uzman destekliyor",
-                    reasoning: generateReasoning("quality", p, p.finalScore)
-                };
-            });
-
-            const prefAck = pref > 0
-                ? "Deneyim odaklı tercihin dikkate alındı. Deneyim Tutkunu görüşü ağırlıklı."
-                : pref < 0
-                    ? "Tasarruf odaklı tercihin dikkate alındı. Tasarruf Savunucusu görüşü ağırlıklı."
-                    : "Dengeli bir değerlendirme yapıldı.";
-
-            return {
-                recommendedProducts: recommended,
-                budgetAllocation: budgetAlloc,
-                timeline,
-                summary,
-                warnings,
-                preferenceAcknowledgment: prefAck
-            };
-        }
-
-        /* ═══ AI UI LOGIC ═══ */
         function aiShowScreen(screenId) {
             document.querySelectorAll("#aiBack .aiScreen").forEach(s => s.classList.remove("active"));
             document.getElementById(screenId).classList.add("active");
