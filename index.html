@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#fdf2f8" id="metaThemeColor" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1923" id="metaThemeColorDark" />
     <meta name="apple-mobile-web-app-title" content="Wishlistgül" />
     <meta name="application-name" content="Wishlistgül" />
     <link rel="manifest" href="manifest.json" id="manifestLink" />
@@ -4585,15 +4586,18 @@
 
 
         /* Stabilization patch: auth scroll, responsive layout, crop, moodboard */
-        #authScreen { position: fixed; inset: 0; z-index: 100000; min-height: 100vh; min-height: 100dvh; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; background: var(--authBg); isolation: isolate; transform: translateZ(0); }
+        html { background: var(--authBg); }
+        #authScreen { position: fixed; inset: 0; z-index: 100000; height: 100vh; height: 100dvh; min-height: 100vh; min-height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; background: var(--authBg); isolation: isolate; transform: translateZ(0); }
         body.auth-active { overflow: hidden; background: var(--authBg); }
+        body.auth-active::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: max(env(safe-area-inset-top), 0px); z-index: 100001; pointer-events: none; background: var(--authBg); }
         body.auth-active > header,
         body.auth-active > .catBar,
         body.auth-active > .sortBar,
         body.auth-active > .content { visibility: hidden; pointer-events: none; }
         #authScreen::-webkit-scrollbar, .aiBack::-webkit-scrollbar, #cropOverlay::-webkit-scrollbar { display: none; }
-        .authInputWrap { cursor: text; }
-        .authInputWrap input { caret-color: var(--accent); line-height: 20px; min-height: 48px; position: relative; z-index: 2; pointer-events: auto; user-select: text; -webkit-user-select: text; }
+        .authInputWrap { cursor: text; -webkit-tap-highlight-color: transparent; }
+        .authInputIcon, .authInputDivider { pointer-events: none; }
+        .authInputWrap input { caret-color: var(--accent); line-height: 20px; min-height: 48px; position: relative; z-index: 2; pointer-events: auto; user-select: text; -webkit-user-select: text; transform: translateZ(0); }
         .auth-right { min-height: 100%; }
         .aiBack { scrollbar-width: none; -ms-overflow-style: none; }
         .grid.moodboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 6px; gap: 16px; align-items: start; }
@@ -4623,7 +4627,8 @@
         .cropCancelBtn:hover, .cropResetBtn:hover { background: var(--surfaceHover); }
         @media (min-width: 760px) { .hRow, .catBar, .sortBar, .content, .aiBody { max-width: min(1120px, calc(100vw - 48px)); } .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid.moodboard { grid-template-columns: repeat(3, minmax(0, 1fr)); } .modal { max-width: min(920px, calc(100vw - 48px)); border-radius: var(--r2); margin-bottom: 24px; } .modalBack { align-items: center; } .preview { max-height: 300px; } }
         @media (min-width: 1180px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid.moodboard { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-        @media (max-width: 768px) { #authScreen { -webkit-overflow-scrolling: touch; } .auth-right { min-height: auto; } }
+        @supports (-webkit-touch-callout: none) { #authScreen { min-height: -webkit-fill-available; } }
+        @media (max-width: 768px) { #authScreen { -webkit-overflow-scrolling: touch; scroll-padding-top: calc(env(safe-area-inset-top) + 28px); scroll-padding-bottom: calc(env(safe-area-inset-bottom) + 260px); } .auth-right { min-height: auto; } }
 
     </style>
 </head>
@@ -5961,6 +5966,18 @@
             });
         }
 
+        function syncThemeChrome(id) {
+            const themeColors = { pink: '#fdf2f8', blue: '#f0f7ff', green: '#f0fff8', charcoal: '#f2f5f8', peach: '#fff5f0', dark: '#0f1923' };
+            const active = id || 'pink';
+            const color = themeColors[active] || themeColors.pink;
+            const meta = document.getElementById('metaThemeColor');
+            const darkMeta = document.getElementById('metaThemeColorDark');
+            const statusMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+            if (meta) meta.content = color;
+            if (darkMeta) darkMeta.content = active === 'dark' ? themeColors.dark : color;
+            if (statusMeta) statusMeta.content = active === 'dark' ? 'black-translucent' : 'default';
+        }
+
         function applyTheme(id) {
             if (id === 'pink' || !id) {
                 document.body.removeAttribute('data-theme');
@@ -5968,9 +5985,7 @@
                 document.body.setAttribute('data-theme', id);
             }
             localStorage.setItem(THEME_KEY, id || 'pink');
-            const themeColors = { pink: '#fdf2f8', blue: '#f0f7ff', green: '#f0fff8', charcoal: '#f2f5f8', peach: '#fff5f0', dark: '#0f1220' };
-            const meta = document.getElementById('metaThemeColor');
-            if (meta) meta.content = themeColors[id] || themeColors.pink;
+            syncThemeChrome(id || 'pink');
             updateAppIconTheme(id || 'pink');
             if (typeof renderThemeGrid === 'function') renderThemeGrid();
             if (typeof refreshNoPhotoImages === 'function') refreshNoPhotoImages();
@@ -6015,6 +6030,7 @@
         (function () {
             const saved = localStorage.getItem(THEME_KEY);
             if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
+            syncThemeChrome(saved || 'pink');
             updateAppIconTheme(saved || 'pink');
         })();
 
@@ -6041,9 +6057,60 @@
             wrap.addEventListener('click', e => {
                 if (e.target.closest('button')) return;
                 const input = wrap.querySelector('input');
-                if (input) input.focus();
+                if (input) {
+                    try {
+                        input.focus({ preventScroll: true });
+                    } catch (err) {
+                        input.focus();
+                    }
+                    stabilizeAuthInputFocus(input);
+                }
             });
         });
+
+        function stabilizeAuthInputFocus(input) {
+            const authScreenEl = document.getElementById('authScreen');
+            if (!authScreenEl || authScreenEl.style.display === 'none') return;
+            const target = input.closest('.authInputWrap') || input;
+            const keepCaretVisible = () => {
+                if (document.activeElement !== input) return;
+                try {
+                    target.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+                    if (input.type === 'text' || input.type === 'search' || input.type === 'url' || input.type === 'tel' || input.type === 'password') {
+                        const caret = input.value.length;
+                        input.setSelectionRange(caret, caret);
+                    }
+                } catch (err) {
+                    target.scrollIntoView({ block: 'center', inline: 'nearest' });
+                }
+            };
+            requestAnimationFrame(keepCaretVisible);
+            setTimeout(keepCaretVisible, 120);
+            setTimeout(keepCaretVisible, 360);
+        }
+
+        document.querySelectorAll('#authScreen input').forEach(input => {
+            input.addEventListener('focus', () => stabilizeAuthInputFocus(input));
+            input.addEventListener('touchend', () => setTimeout(() => stabilizeAuthInputFocus(input), 0), { passive: true });
+            input.addEventListener('input', () => stabilizeAuthInputFocus(input));
+        });
+
+        if (window.visualViewport) {
+            let authViewportTimer = null;
+            const syncAuthViewportFocus = () => {
+                if (!document.body.classList.contains('auth-active')) return;
+                const activeInput = document.activeElement && document.activeElement.matches && document.activeElement.matches('#authScreen input')
+                    ? document.activeElement
+                    : null;
+                if (activeInput) stabilizeAuthInputFocus(activeInput);
+            };
+            const queueAuthViewportFocus = () => {
+                clearTimeout(authViewportTimer);
+                authViewportTimer = setTimeout(syncAuthViewportFocus, 80);
+            };
+            window.visualViewport.addEventListener('resize', queueAuthViewportFocus);
+            window.visualViewport.addEventListener('scroll', queueAuthViewportFocus);
+        }
 
         document.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
