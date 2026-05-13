@@ -22,13 +22,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=DM+Sans:wght@400;500;600&family=Outfit:wght@600;700&display=swap"
         rel="stylesheet" />
-    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-storage-compat.js"></script>
     <style>
         /* ═══════════ DESIGN TOKENS ═══════════ */
         :root {
@@ -4602,10 +4595,9 @@
         /* Stabilization patch: auth scroll, responsive layout, crop, moodboard */
         html { background: var(--appChromeBg); background-color: var(--appChromeBg); }
         body { background-color: var(--appChromeBg); }
-        #authScreen { position: fixed; inset: 0; z-index: 100000; height: var(--authViewportHeight, 100vh); height: var(--authViewportHeight, 100dvh); min-height: var(--authViewportHeight, 100vh); min-height: var(--authViewportHeight, 100dvh); padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; background: var(--authBg); background-color: var(--authChromeBg); isolation: isolate; transform: translateZ(0); }
+        #authScreen { position: fixed; inset: 0; z-index: 100000; height: 100vh; height: 100dvh; min-height: 100vh; min-height: 100dvh; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; background: var(--authBg); background-color: var(--authChromeBg); isolation: isolate; transform: translateZ(0); }
         body.auth-active { overflow: hidden; background: var(--authBg); background-color: var(--authChromeBg); }
         body.auth-active::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: max(env(safe-area-inset-top), 0px); z-index: 100001; pointer-events: none; background: var(--authBg); }
-        body.auth-active::after { content: ""; position: fixed; bottom: 0; left: 0; right: 0; height: max(env(safe-area-inset-bottom), 24px); z-index: 100001; pointer-events: none; background: var(--authChromeBg); }
         body.auth-active > header,
         body.auth-active > .catBar,
         body.auth-active > .sortBar,
@@ -5586,6 +5578,14 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.2/src/index.js" onerror="this.remove()"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-storage-compat.js"></script>
+
     <script>
 
         /* ═══ FIREBASE CONFIG ═══ */
@@ -6070,9 +6070,6 @@
                 items = [];
                 document.body.classList.add('auth-active');
                 document.getElementById('authScreen').style.display = 'flex';
-                if (window.visualViewport) {
-                    document.documentElement.style.setProperty('--authViewportHeight', `${Math.max(window.visualViewport.height || 0, 320)}px`);
-                }
             }
         });
 
@@ -6122,14 +6119,8 @@
 
         if (window.visualViewport) {
             let authViewportTimer = null;
-            const updateAuthViewportHeight = () => {
-                if (!document.body.classList.contains('auth-active')) return;
-                const height = Math.max(window.visualViewport.height || 0, 320);
-                document.documentElement.style.setProperty('--authViewportHeight', `${height}px`);
-            };
             const syncAuthViewportFocus = () => {
                 if (!document.body.classList.contains('auth-active')) return;
-                updateAuthViewportHeight();
                 const activeInput = document.activeElement && document.activeElement.matches && document.activeElement.matches('#authScreen input')
                     ? document.activeElement
                     : null;
@@ -6147,10 +6138,8 @@
             };
             const queueAuthViewportFocus = () => {
                 clearTimeout(authViewportTimer);
-                updateAuthViewportHeight();
                 authViewportTimer = setTimeout(syncAuthViewportFocus, 80);
             };
-            updateAuthViewportHeight();
             window.visualViewport.addEventListener('resize', queueAuthViewportFocus);
             window.visualViewport.addEventListener('scroll', queueAuthViewportFocus);
             window.addEventListener('orientationchange', queueAuthViewportFocus);
