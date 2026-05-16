@@ -7403,6 +7403,104 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        @media (min-width: 980px) {
+            .desktopSidebar {
+                position: fixed !important;
+                height: 100vh;
+                height: 100dvh;
+                overflow: hidden;
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: auto;
+            }
+        }
+
+        .savedListsEmpty {
+            min-height: 160px;
+            border: 1px dashed color-mix(in srgb, var(--accent) 28%, var(--stroke));
+            border-radius: var(--r2);
+            background: color-mix(in srgb, var(--surfaceBg) 72%, transparent);
+            color: var(--textSecondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px 24px;
+            font-size: 15px;
+            font-weight: 750;
+            line-height: 1.55;
+        }
+
+        #settingsBack.pageView {
+            padding-top: 18px;
+        }
+
+        #savingsBack.pageView .savCardMedia {
+            overflow: hidden;
+        }
+
+        @media (min-width: 980px) and (max-width: 1280px) {
+            #savingsBack.pageView .savCard {
+                grid-template-columns: 96px minmax(0, 1fr) minmax(250px, 340px);
+                grid-template-areas:
+                    "media main action"
+                    "media pill action";
+                gap: 16px 18px;
+                min-height: 124px;
+                padding: 18px 22px;
+            }
+            #savingsBack.pageView .savCardMedia {
+                grid-area: media;
+                width: 96px;
+                height: 96px;
+            }
+            #savingsBack.pageView .savCardMain {
+                grid-area: main;
+            }
+            #savingsBack.pageView .savPctPill {
+                grid-area: pill;
+                justify-self: start;
+                align-self: start;
+                padding: 6px 12px;
+            }
+            #savingsBack.pageView .savCardDivider {
+                display: none;
+            }
+            #savingsBack.pageView .savCardBottom {
+                grid-area: action;
+                grid-template-columns: minmax(0, 1fr) 92px 46px;
+                gap: 8px;
+            }
+            #savingsBack.pageView .savInput,
+            #savingsBack.pageView .savAddBtn,
+            #savingsBack.pageView .savResetBtn {
+                height: 48px;
+            }
+            #savingsBack.pageView .savCardName {
+                font-size: 17px;
+            }
+            #savingsBack.pageView .savProgressRow {
+                grid-template-columns: auto minmax(120px, 1fr) auto;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 980px) and (max-width: 1080px) {
+            #savingsBack.pageView .savCard {
+                grid-template-columns: 92px minmax(0, 1fr);
+                grid-template-areas:
+                    "media main"
+                    "media pill"
+                    "action action";
+            }
+            #savingsBack.pageView .savCardMedia {
+                width: 92px;
+                height: 92px;
+            }
+            #savingsBack.pageView .savCardBottom {
+                grid-template-columns: minmax(0, 1fr) 96px 46px;
+            }
+        }
+
     </style>
 </head>
 
@@ -8168,6 +8266,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <div id="registerForm" style="display:none;">
                     <div class="authField">
                         <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-user"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="regDisplayName" type="text" placeholder="Kullanıcı adı"
+                                autocomplete="nickname" autocapitalize="words" maxlength="32" />
+                        </div>
+                    </div>
+                    <div class="authField">
+                        <div class="authInputWrap">
                             <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
                             <div class="authInputDivider"></div>
                             <input id="regUser" type="email" placeholder="E-posta"
@@ -8655,9 +8761,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         /* ═══ REGISTER ═══ */
         async function doRegister() {
             const btn = document.querySelector('#registerForm .authSubmit');
+            const displayNameInput = document.getElementById('regDisplayName')?.value || '';
             const emailInput = document.getElementById('regUser').value;
             const pw = document.getElementById('regPass').value;
             const pw2 = document.getElementById('regPass2').value;
+            const displayName = displayNameInput.trim().replace(/\s+/g, ' ');
+            if (!displayName) return showAuthError('Kullanici adi gerekli.');
+            if (displayName.length < 2) return showAuthError('Kullanici adi en az 2 karakter olmalidir.');
+            if (displayName.length > 32) return showAuthError('Kullanici adi en fazla 32 karakter olabilir.');
+            if (/[<>]/.test(displayName)) return showAuthError('Kullanici adinda gecersiz karakter var.');
 
             if (!emailInput || !pw || !pw2) return showAuthError('Tüm alanları doldurun.');
             if (!isValidEmail(emailInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
@@ -8670,9 +8782,21 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             try {
                 const email = normalizeEmailInput(emailInput);
-                await auth.createUserWithEmailAndPassword(email, pw);
+                const cred = await auth.createUserWithEmailAndPassword(email, pw);
+                if (cred.user) {
+                    await cred.user.updateProfile({ displayName });
+                    await db.ref('users/' + cred.user.uid + '/profile').update({
+                        displayName,
+                        email,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    currentUser = displayName;
+                    authUid = cred.user.uid;
+                    updateDesktopUser();
+                }
                 btn.textContent = orig;
                 btn.disabled = false;
+                document.getElementById('regDisplayName').value = '';
                 document.getElementById('regUser').value = '';
                 document.getElementById('regPass').value = '';
                 document.getElementById('regPass2').value = '';
@@ -9004,10 +9128,30 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         })();
 
         /* ═══ STATE OBSERVER ═══ */
-        auth.onAuthStateChanged((user) => {
+        async function resolveUserDisplayName(user) {
+            const fallback = user?.displayName || getUsernameFromEmail(user?.email || '');
+            if (!user) return fallback;
+            try {
+                const snap = await db.ref('users/' + user.uid + '/profile/displayName').once('value');
+                const storedName = snap.exists() ? String(snap.val() || '').trim() : '';
+                if (storedName) {
+                    if (!user.displayName) user.updateProfile({ displayName: storedName }).catch(() => {});
+                    return storedName;
+                }
+                if (user.displayName) {
+                    await db.ref('users/' + user.uid + '/profile').update({ displayName: user.displayName });
+                    return user.displayName;
+                }
+            } catch (err) {
+                console.warn('Kullanici adi okunamadi:', err);
+            }
+            return fallback;
+        }
+
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
                 authUid = user.uid;
-                currentUser = getUsernameFromEmail(user.email);
+                currentUser = await resolveUserDisplayName(user);
                 showAuthSuccess('Giriş başarılı!');
                 document.getElementById('authScreen').style.display = 'none';
                 startApp();
@@ -9587,7 +9731,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function renderSavedLists() {
             if (!savedListsEl) return;
             if (!wishlistLists.length) {
-                savedListsEl.innerHTML = '<div style="padding:18px;color:var(--textSecondary);font-size:13px;">Henüz liste yok. İlk listen için yukarıdan “Liste oluştur”a bas.</div>';
+                savedListsEl.innerHTML = '<div class="savedListsEmpty">Henüz liste yok.<br>İlk listen için yukarıdan “Liste oluştur”a bas.</div>';
                 return;
             }
             savedListsEl.innerHTML = "";
@@ -11771,6 +11915,85 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             reportWindow.document.close();
         }
 
+        downloadWrappedReport = function () {
+            const source = document.querySelector(".wrappedBody.wrDashboard");
+            const title = document.getElementById("wrTitle")?.textContent || "Wrapped Raporu";
+            const lastDay = daysInMonth(wrMonth, wrYear);
+            const firstTs = new Date(wrYear, wrMonth, 1).getTime();
+            const lastTs = new Date(wrYear, wrMonth, lastDay, 23, 59, 59, 999).getTime();
+            const boughtItems = items.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
+            const reportWindow = window.open("", "_blank", "width=900,height=1100");
+            if (!reportWindow) {
+                showToast("Rapor penceresi acilamadi. Tarayici acilir pencere iznini kontrol et.");
+                return;
+            }
+
+            const snapshot = source ? source.cloneNode(true) : document.createElement("div");
+            snapshot.querySelector(".wrReportBtn")?.remove();
+            snapshot.querySelectorAll("button").forEach(btn => btn.remove());
+            snapshot.querySelectorAll(".wrappedNote").forEach(note => note.remove());
+            snapshot.querySelectorAll(".wrPanel").forEach(panel => {
+                const panelTitle = panel.querySelector(".wrPanelTitle")?.textContent || "";
+                if (panelTitle.includes("Ayl") || panelTitle.includes("WishlistAi")) panel.remove();
+            });
+            snapshot.querySelectorAll(".wrTwoCol").forEach(row => {
+                if (!row.querySelector(".wrPanel")) row.remove();
+            });
+
+            const pageStyles = Array.from(document.querySelectorAll("style")).map(style => `<style>${style.textContent}</style>`).join("");
+            const bodyTheme = document.body.getAttribute("data-theme") || "";
+            const noPhoto = getNoPhotoPlaceholderSrc();
+            const mosaicHtml = boughtItems.length
+                ? boughtItems.map((it, index) => {
+                    const imgSrc = !it.secret ? getImageSrc(it) : noPhoto;
+                    const span = index % 7 === 0 ? "wide tall" : index % 5 === 0 ? "tall" : index % 3 === 0 ? "wide" : "";
+                    return `<div class="reportMosaicTile ${span}"><img src="${imgSrc}" alt="" onerror="this.src='${noPhoto}'"></div>`;
+                }).join("")
+                : `<div class="reportMosaicEmpty">Bu ay alinan urun yok.</div>`;
+
+            reportWindow.document.write(`<!doctype html>
+                <html lang="tr"><head><meta charset="utf-8"><title>${wrEscape(title)}</title>
+                ${pageStyles}
+                <style>
+                    html,body{margin:0;background:#fff;color:#111827;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+                    body{font-family:var(--font-text,Arial,sans-serif)}
+                    .reportPage{min-height:100vh;box-sizing:border-box;padding:22px;page-break-after:always;background:#fff}
+                    .reportSnapshot .wrappedBody{padding:0!important;max-width:none!important}
+                    .reportSnapshot .wrTopbar{margin-bottom:18px}
+                    .reportSnapshot .wrTopbar .wrNav button{display:none!important}
+                    .reportSnapshot .wrTopbar .wrNav{display:inline-flex}
+                    .reportSnapshot .wrHero{margin-bottom:18px}
+                    .reportSnapshot .wrStatGrid,.reportSnapshot .wrPanel{break-inside:avoid}
+                    .reportSnapshot .wrTwoCol{grid-template-columns:1fr 1fr}
+                    .reportMosaicPage{display:flex;flex-direction:column;gap:18px}
+                    .reportMosaicTitle{font-family:var(--font-display,serif);font-size:30px;font-weight:850;margin:0;color:#111827}
+                    .reportMosaicSub{color:#5b6475;font-size:14px;margin-top:-8px}
+                    .reportMosaicGrid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:82px;gap:0;border:3px solid #111827;background:#111827;overflow:hidden}
+                    .reportMosaicTile{min-height:82px;border:2px solid #111827;background:#f3f4f6;overflow:hidden}
+                    .reportMosaicTile.wide{grid-column:span 2}
+                    .reportMosaicTile.tall{grid-row:span 2}
+                    .reportMosaicTile img{width:100%;height:100%;display:block;object-fit:cover}
+                    .reportMosaicEmpty{min-height:520px;display:grid;place-items:center;border:2px dashed #c7ceda;color:#6b7280;font-weight:800}
+                    .printBtn{position:fixed;right:18px;top:18px;z-index:9999;padding:10px 14px;border-radius:12px;border:1px solid #d8dce5;background:#fff;color:#111827;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);cursor:pointer}
+                    @media print{
+                        .printBtn{display:none!important}
+                        .reportPage{padding:16mm;page-break-after:always}
+                        .reportSnapshot .wrHeroCard{transform:none!important}
+                        .reportMosaicGrid{grid-auto-rows:34mm}
+                    }
+                </style></head><body data-theme="${bodyTheme}">
+                <button class="printBtn" onclick="window.print()">PDF olarak kaydet</button>
+                <section class="reportPage reportSnapshot">${snapshot.outerHTML}</section>
+                <section class="reportPage reportMosaicPage">
+                    <h1 class="reportMosaicTitle">${wrEscape(title)} - Alinan urunler</h1>
+                    <div class="reportMosaicSub">Secili ayda alindi olarak isaretlenen urunlerin fotograf mozaigi.</div>
+                    <div class="reportMosaicGrid">${mosaicHtml}</div>
+                </section>
+                <script>setTimeout(()=>window.print(),450)<\/script>
+                </body></html>`);
+            reportWindow.document.close();
+        };
+
         function wrMetric(icon, value, label, hint) {
             return `
                 <div class="wrMetricCard">
@@ -12109,8 +12332,9 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
 
             // Placeholders
             const ph = {
-                loginUser: t.username, loginPass: t.password,
-                regUser: t.username,
+                loginUser: lang === 'tr' ? 'E-posta' : 'Email', loginPass: t.password,
+                regDisplayName: t.username,
+                regUser: lang === 'tr' ? 'E-posta' : 'Email',
                 regPass: t.password, regPass2: t.passwordRepeat,
                 pwOld: t.oldPw, pwNew: t.newPw, pwNew2: t.newPwRepeat
             };
