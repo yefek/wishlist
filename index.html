@@ -8234,18 +8234,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         #savingsBack.pageView .savingsHeroArt {
-            background:
-                radial-gradient(circle at 18% 26%, color-mix(in srgb, var(--lilac) 38%, transparent), transparent 20%),
-                radial-gradient(circle at 70% 76%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 24%),
-                linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, var(--accentSoft)), color-mix(in srgb, var(--surface) 78%, var(--lilacSoft)));
-            border: 1px solid var(--stroke);
+            background: transparent;
+            border-color: transparent;
         }
 
         body:not([data-theme="dark"]) #savingsBack.pageView .savingsHeroArt {
-            background:
-                radial-gradient(circle at 18% 26%, color-mix(in srgb, var(--lilac) 28%, transparent), transparent 20%),
-                radial-gradient(circle at 70% 76%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 24%),
-                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 92%, white), color-mix(in srgb, var(--accentSoft) 34%, var(--surfaceBg)));
+            background: transparent;
         }
 
         #savingsBack.pageView .savHeroJar {
@@ -8636,20 +8630,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         #aiScreenMode .aiHeroCard,
         #savingsBack.pageView .savingsHeroArt,
         .wrappedBody.wrDashboard .wrHeroCard {
-            background:
-                radial-gradient(circle at 24% 18%, rgba(128, 176, 255, .34), transparent 30%),
-                linear-gradient(145deg, rgba(246, 250, 255, .96), rgba(205, 224, 255, .72));
-            border-color: rgba(126, 167, 232, .24);
+            background: transparent;
+            border-color: transparent;
         }
 
         body[data-theme="dark"] .listHeroArt,
         body[data-theme="dark"] #aiScreenMode .aiHeroCard,
         body[data-theme="dark"] #savingsBack.pageView .savingsHeroArt,
         body[data-theme="dark"] .wrappedBody.wrDashboard .wrHeroCard {
-            background:
-                radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--lilac) 34%, transparent), transparent 30%),
-                linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, var(--lilacSoft)), color-mix(in srgb, var(--surfaceBg) 74%, var(--accentSoft)));
-            border-color: var(--stroke);
+            background: transparent;
+            border-color: transparent;
         }
 
         .heroRaster {
@@ -8663,9 +8653,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         .heroAssetFrame {
             display: grid;
             place-items: center;
-            background:
-                radial-gradient(circle at 24% 18%, rgba(128, 176, 255, .28), transparent 30%),
-                linear-gradient(145deg, rgba(246, 250, 255, .96), rgba(205, 224, 255, .72));
+            background: transparent;
         }
 
         .heroAssetFrame.assetMissing::after {
@@ -8821,10 +8809,57 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             filter: none;
         }
 
+        .listHeroArt .heroRaster,
+        #aiScreenMode .aiHeroCard .heroRaster,
+        #savingsBack.pageView .savingsHeroArt .heroRaster,
+        .wrappedBody.wrDashboard .wrHeroCard .heroRaster {
+            filter: var(--heroAssetTint, none);
+        }
+
+        body[data-theme="pink"],
+        body:not([data-theme]),
+        body[data-theme=""] {
+            --heroAssetTint: hue-rotate(112deg) saturate(1.22) brightness(1.04);
+        }
+
+        body[data-theme="blue"] {
+            --heroAssetTint: none;
+        }
+
+        body[data-theme="green"] {
+            --heroAssetTint: hue-rotate(54deg) saturate(1.08) brightness(1.03);
+        }
+
+        body[data-theme="peach"] {
+            --heroAssetTint: hue-rotate(160deg) saturate(1.08) brightness(1.05);
+        }
+
+        body[data-theme="charcoal"] {
+            --heroAssetTint: saturate(0.34) brightness(0.98) contrast(0.96);
+        }
+
+        body[data-theme="dark"] {
+            --heroAssetTint: hue-rotate(18deg) saturate(1.12) brightness(0.94);
+        }
+
         .wrappedBody.wrDashboard .wrHeroCard .heroRaster {
             width: 94%;
             height: 94%;
             padding: 0;
+        }
+
+        #aiScreenMode .aiHeroCard .heroRaster {
+            object-position: center;
+            transform: translate(-3px, -3px);
+        }
+
+        .listHeroArt.heroAssetFrame,
+        #aiScreenMode .aiHeroCard.heroAssetFrame,
+        #savingsBack.pageView .savingsHeroArt.heroAssetFrame,
+        .wrappedBody.wrDashboard .wrHeroCard.heroAssetFrame {
+            background: transparent !important;
+            border-color: transparent !important;
+            box-shadow: none;
         }
 
         .wrHeroBadge {
