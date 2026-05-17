@@ -2975,6 +2975,17 @@
             margin-top: 2px;
         }
 
+        .wrAiReportWrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 22px;
+        }
+
+        .wrAiReportWrap .wrReportBtn {
+            width: min(320px, 100%);
+            margin: 0 auto;
+        }
+
         .wrReportBtn {
             width: min(720px, 100%);
             height: 54px;
@@ -4296,6 +4307,39 @@
             line-height: 1;
         }
 
+        .auth-theme-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 7px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .auth-theme-dot {
+            width: 18px;
+            height: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 999px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+            transition: transform .16s ease, box-shadow .16s ease, outline-color .16s ease;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+
+        .auth-theme-dot:hover {
+            transform: translateY(-1px) scale(1.04);
+        }
+
+        .auth-theme-dot.active {
+            outline-color: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.20), 0 8px 18px rgba(0, 0, 0, 0.14);
+        }
+
         #authBgStage {
             position: absolute;
             inset: 0;
@@ -4603,6 +4647,59 @@
         .authForgot {
             text-align: center;
             margin-top: 14px;
+        }
+
+        .authRemember {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            width: fit-content;
+            margin: 4px auto 2px;
+            color: var(--textSecondary);
+            font-size: 12.5px;
+            font-weight: 650;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .authRemember input {
+            position: relative;
+            width: 19px;
+            height: 19px;
+            margin: 0;
+            flex: 0 0 auto;
+            appearance: none;
+            -webkit-appearance: none;
+            border: 1.5px solid color-mix(in srgb, var(--accent) 38%, var(--stroke));
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--authInputBg) 82%, white);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 4px 12px color-mix(in srgb, var(--accent) 12%, transparent);
+            transition: background .16s ease, border-color .16s ease, box-shadow .16s ease;
+        }
+
+        .authRemember input::after {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 3px;
+            width: 5px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            opacity: 0;
+            transform: rotate(45deg) scale(.7);
+            transition: opacity .14s ease, transform .14s ease;
+        }
+
+        .authRemember input:checked {
+            border-color: color-mix(in srgb, var(--accent) 78%, var(--lilac));
+            background: linear-gradient(135deg, var(--accent), var(--lilac));
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent), 0 8px 18px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        .authRemember input:checked::after {
+            opacity: 1;
+            transform: rotate(45deg) scale(1);
         }
 
         .authForgot a {
@@ -6576,6 +6673,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         .listHero.collapsed h2 {
             margin-bottom: 18px;
         }
+
+        .listHero.collapsed p {
+            max-height: 0;
+            opacity: 0;
+            margin: 0;
+            overflow: hidden;
+        }
         .listHero.collapsed p,
         .listHero.collapsed .listHeroArt {
             max-height: 0;
@@ -7501,6 +7605,1421 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        /* WishlistAi council dashboard */
+        .aiScreen#aiScreenMode {
+            --aiCouncilPanel: color-mix(in srgb, var(--surfaceBg) 78%, transparent);
+            --aiCouncilStroke: color-mix(in srgb, var(--stroke) 86%, transparent);
+        }
+
+        .aiCouncilHero {
+            min-height: clamp(260px, 31vw, 390px);
+            display: grid;
+            grid-template-columns: minmax(260px, 460px) minmax(0, 1fr);
+            align-items: center;
+            gap: clamp(34px, 6vw, 96px);
+            text-align: left;
+            margin: 4px 0 34px;
+            padding: clamp(12px, 2vw, 24px) 0;
+            position: relative;
+        }
+
+        .aiCouncilHero::before {
+            content: "";
+            position: absolute;
+            inset: -70px -60px auto -80px;
+            height: 420px;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 18% 30%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 30%),
+                radial-gradient(circle at 74% 12%, color-mix(in srgb, var(--lilac) 16%, transparent), transparent 42%);
+            opacity: .72;
+            z-index: -1;
+        }
+
+        .aiHeroArt {
+            display: grid;
+            place-items: center;
+            min-width: 0;
+        }
+
+        .aiHeroCard {
+            width: min(100%, 390px);
+            aspect-ratio: 1.34 / 1;
+            border-radius: 34px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            color: var(--lilac);
+            transform: rotate(-4deg);
+            overflow: hidden;
+            border: 1px solid color-mix(in srgb, var(--lilac) 26%, transparent);
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255,255,255,.18), transparent 18%),
+                radial-gradient(circle at 80% 78%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 17%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 82%, var(--lilacSoft)), color-mix(in srgb, #090f1e 54%, var(--surfaceBg)));
+            box-shadow:
+                0 34px 80px color-mix(in srgb, var(--accent) 28%, transparent),
+                inset 0 1px 0 rgba(255,255,255,.12);
+        }
+
+        .aiHeroCard i {
+            font-size: clamp(92px, 9vw, 150px);
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 42%, transparent));
+        }
+
+        .aiHeroOrbit {
+            position: absolute;
+            left: 15%;
+            right: 12%;
+            top: 24%;
+            height: 50%;
+            border: 2px solid color-mix(in srgb, var(--lilac) 44%, transparent);
+            border-radius: 50%;
+            transform: rotate(-17deg);
+        }
+
+        .aiHeroOrbitTwo {
+            transform: rotate(16deg);
+            border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+            inset: 25% 16% 22% 16%;
+            height: auto;
+        }
+
+        .aiHeroSphere {
+            position: absolute;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255,255,255,.86), transparent 24%),
+                linear-gradient(145deg, var(--lilac), color-mix(in srgb, var(--accent) 60%, #221d52));
+            box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 34%, transparent);
+        }
+
+        .aiHeroSphereMain {
+            width: 58px;
+            height: 58px;
+            left: 13%;
+            top: 16%;
+        }
+
+        .aiHeroSphereMini {
+            width: 36px;
+            height: 36px;
+            right: 9%;
+            bottom: 16%;
+        }
+
+        .aiHeroSpark {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--lilac) 80%, white);
+            box-shadow: 0 0 18px var(--lilac);
+        }
+
+        .aiHeroSparkOne { left: 23%; bottom: 20%; }
+        .aiHeroSparkTwo { right: 24%; top: 24%; }
+
+        .aiHeroText {
+            min-width: 0;
+        }
+
+        .aiCouncilHero .aiIntroTitle {
+            font-size: clamp(40px, 4.5vw, 72px);
+            line-height: 1.02;
+            letter-spacing: -1px;
+            margin: 0;
+            background: linear-gradient(135deg, var(--textPrimary) 16%, var(--lilac) 64%, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .aiCouncilHero .aiIntroDesc {
+            margin-top: 22px;
+            font-size: clamp(18px, 1.75vw, 28px);
+            line-height: 1.35;
+            font-weight: 700;
+            color: var(--textSecondary);
+        }
+
+        #aiScreenMode .aiModes {
+            gap: 14px;
+        }
+
+        #aiScreenMode .aiModeCard {
+            min-height: 112px;
+            border-radius: 22px;
+            padding: 22px 28px;
+            display: grid;
+            grid-template-columns: 64px minmax(0, 1fr);
+            gap: 22px;
+            align-items: center;
+            background:
+                linear-gradient(135deg, color-mix(in srgb, var(--surfaceBg) 78%, transparent), color-mix(in srgb, var(--surfaceBgLight) 66%, transparent));
+            border-color: var(--aiCouncilStroke);
+            box-shadow: none;
+        }
+
+        #aiScreenMode .aiModeCard .mcIcon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            margin: 0;
+            color: var(--textPrimary);
+            background: var(--gradientBtn);
+            border: 1px solid var(--accentMid);
+            font-size: 29px;
+        }
+
+        #aiScreenMode .aiModeCard .mcTitle {
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 850;
+        }
+
+        #aiScreenMode .aiModeCard .mcDesc {
+            font-size: 15px;
+            line-height: 1.45;
+            color: var(--textSecondary);
+        }
+
+        /* Savings tablet and summary polish */
+        #savingsBack.pageView .savingsSummary {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            padding: 18px;
+        }
+
+        #savingsBack.pageView .savSumItem {
+            min-width: 0;
+            min-height: 106px;
+            padding: 18px 20px;
+            gap: 16px;
+            align-items: center;
+        }
+
+        #savingsBack.pageView .savMetricText {
+            min-width: 0;
+            display: grid;
+            gap: 5px;
+        }
+
+        #savingsBack.pageView .savSumLabel,
+        #savingsBack.pageView .savSumHint {
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        #savingsBack.pageView .savSumVal {
+            font-size: clamp(22px, 2.1vw, 28px);
+            line-height: 1.02;
+            margin: 0;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #savingsBack.pageView .savSumLabel {
+            font-size: 13px;
+            line-height: 1.2;
+        }
+
+        #savingsBack.pageView .savSumHint {
+            margin-top: 0;
+            font-size: 12px;
+            line-height: 1.25;
+        }
+
+        @media (max-width: 1180px) {
+            .aiCouncilHero {
+                grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
+                gap: 40px;
+            }
+            #aiScreenMode .aiModeCard {
+                min-height: 104px;
+                padding: 20px 24px;
+            }
+            #savingsBack.pageView .savingsSummary {
+                gap: 12px;
+                padding: 16px;
+            }
+            #savingsBack.pageView .savSumItem {
+                padding: 16px;
+                gap: 12px;
+            }
+            #savingsBack.pageView .savMetricIcon {
+                width: 48px;
+                height: 48px;
+                flex-basis: 48px;
+            }
+            #savingsBack.pageView .savMetricIcon i {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .aiCouncilHero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 24px;
+                margin-top: 0;
+            }
+            .aiHeroCard {
+                width: min(72vw, 340px);
+                transform: rotate(-2deg);
+            }
+            #aiScreenMode .aiModeCard {
+                grid-template-columns: 56px minmax(0, 1fr);
+                text-align: left;
+                padding: 18px 20px;
+            }
+            #savingsBack.pageView .savingsSummary {
+                grid-template-columns: 1fr;
+            }
+            #savingsBack.pageView .savSumItem {
+                min-height: 92px;
+                justify-content: flex-start;
+            }
+        }
+
+        /* WishlistAi sizing fix and savings dashboard polish */
+        body:not([data-theme="dark"]) .aiHeroCard {
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255,255,255,.72), transparent 19%),
+                radial-gradient(circle at 80% 78%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 18%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 90%, white), color-mix(in srgb, var(--accentSoft) 34%, var(--surfaceBg)));
+            border-color: color-mix(in srgb, var(--accent) 20%, var(--stroke));
+            box-shadow:
+                0 28px 70px color-mix(in srgb, var(--glow) 22%, transparent),
+                inset 0 1px 0 rgba(255,255,255,.54);
+        }
+
+        #aiScreenMode .aiModeCard {
+            min-height: 88px;
+            grid-template-columns: 46px minmax(0, 1fr);
+            grid-template-rows: auto auto;
+            gap: 5px 18px;
+            padding: 16px 20px;
+            align-items: center;
+            border-radius: 18px;
+        }
+
+        #aiScreenMode .aiModeCard .mcIcon {
+            grid-row: 1 / span 2;
+            grid-column: 1;
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            font-size: 23px;
+        }
+
+        #aiScreenMode .aiModeCard .mcTitle {
+            grid-column: 2;
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.18;
+        }
+
+        #aiScreenMode .aiModeCard .mcDesc {
+            grid-column: 2;
+            font-size: 13px;
+            line-height: 1.45;
+            max-width: 860px;
+        }
+
+        .savingsHero {
+            min-height: 230px;
+            border: 1px solid var(--stroke);
+            border-radius: var(--r2);
+            display: grid;
+            grid-template-columns: minmax(260px, 430px) minmax(0, 1fr);
+            gap: clamp(26px, 5vw, 78px);
+            align-items: center;
+            padding: 28px 34px;
+            margin-bottom: 18px;
+            background:
+                radial-gradient(circle at 18% 16%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%),
+                linear-gradient(135deg, color-mix(in srgb, var(--surfaceBg) 82%, transparent), color-mix(in srgb, var(--accentSoft) 18%, var(--surfaceBg)));
+            box-shadow: var(--elev1);
+            overflow: hidden;
+        }
+
+        .savingsHeroArt {
+            height: 170px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid color-mix(in srgb, var(--lilac) 20%, var(--stroke));
+            background:
+                radial-gradient(circle at 18% 24%, color-mix(in srgb, var(--lilac) 30%, transparent), transparent 22%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 84%, var(--lilacSoft)), color-mix(in srgb, var(--surfaceBgLight) 70%, var(--surfaceBg)));
+            box-shadow: 0 24px 58px color-mix(in srgb, var(--glow) 22%, transparent);
+            transform: rotate(-3deg);
+        }
+
+        .savHeroJar {
+            position: absolute;
+            left: 42px;
+            bottom: 28px;
+            width: 86px;
+            height: 92px;
+            border-radius: 18px 18px 24px 24px;
+            border: 2px solid color-mix(in srgb, var(--lilac) 66%, transparent);
+            background: linear-gradient(180deg, color-mix(in srgb, var(--lilacSoft) 46%, transparent), color-mix(in srgb, var(--surfaceBg) 34%, transparent));
+            box-shadow: inset 0 0 18px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        .savHeroJar::before {
+            content: "";
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            top: -18px;
+            height: 20px;
+            border-radius: 9px 9px 4px 4px;
+            background: color-mix(in srgb, var(--lilac) 58%, var(--surfaceBg));
+        }
+
+        .savHeroTarget {
+            position: absolute;
+            left: 150px;
+            top: 38px;
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--lilac);
+            font-size: 86px;
+            filter: drop-shadow(0 12px 24px color-mix(in srgb, var(--accent) 24%, transparent));
+        }
+
+        .savHeroBars {
+            position: absolute;
+            right: 34px;
+            bottom: 38px;
+            display: flex;
+            align-items: end;
+            gap: 12px;
+            height: 86px;
+        }
+
+        .savHeroBars span {
+            width: 34px;
+            border-radius: 10px 10px 4px 4px;
+            background: linear-gradient(180deg, var(--lilac), var(--accent));
+            box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 26%, transparent);
+        }
+
+        .savHeroBars span:nth-child(1) { height: 34px; }
+        .savHeroBars span:nth-child(2) { height: 58px; }
+        .savHeroBars span:nth-child(3) { height: 84px; }
+
+        .savingsHeroText h2 {
+            margin: 0 0 10px;
+            font-family: var(--font-display);
+            font-size: clamp(38px, 4vw, 64px);
+            line-height: 1;
+            letter-spacing: -0.8px;
+            color: var(--textPrimary);
+        }
+
+        .savingsHeroText p {
+            margin: 0;
+            color: var(--textSecondary);
+            font-size: clamp(17px, 1.5vw, 24px);
+            font-weight: 700;
+        }
+
+        #savingsBack.pageView .savingsSummary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0;
+            padding: 0;
+            border-radius: 22px;
+            overflow: hidden;
+            background: color-mix(in srgb, var(--surfaceBg) 84%, transparent);
+            border: 1px solid var(--stroke);
+        }
+
+        #savingsBack.pageView .savSumItem {
+            border: 0;
+            border-radius: 0;
+            min-height: 128px;
+            padding: 22px;
+            background: transparent;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 14px;
+            border-right: 1px solid var(--stroke);
+        }
+
+        #savingsBack.pageView .savSumItem:last-of-type {
+            border-right: 0;
+        }
+
+        #savingsBack.pageView .savMetricIcon {
+            width: 44px;
+            height: 44px;
+            flex-basis: 44px;
+            border-radius: 13px;
+            color: var(--accent);
+            background: color-mix(in srgb, var(--accentSoft) 80%, var(--surfaceBg));
+            border: 0;
+        }
+
+        #savingsBack.pageView .savMetricIcon i {
+            font-size: 22px;
+        }
+
+        #savingsBack.pageView .savSumVal {
+            font-size: clamp(24px, 2.35vw, 34px);
+            margin: 2px 0 0;
+            color: var(--textPrimary);
+        }
+
+        #savingsBack.pageView .savSumLabel {
+            order: 2;
+            color: var(--textPrimary);
+            font-weight: 850;
+        }
+
+        #savingsBack.pageView .savSumHint {
+            order: 3;
+            color: var(--textSecondary);
+        }
+
+        #savingsBack.pageView .savSumDivider {
+            display: none !important;
+        }
+
+        @media (max-width: 1180px) {
+            .savingsHero {
+                grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
+                padding: 24px 28px;
+            }
+            #savingsBack.pageView .savSumItem {
+                padding: 18px;
+                min-height: 112px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .savingsHero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .savingsHeroArt {
+                width: min(100%, 380px);
+                justify-self: center;
+            }
+            #savingsBack.pageView .savingsSummary {
+                grid-template-columns: 1fr;
+            }
+            #savingsBack.pageView .savSumItem {
+                border-right: 0;
+                border-bottom: 1px solid var(--stroke);
+            }
+            #savingsBack.pageView .savSumItem:last-of-type {
+                border-bottom: 0;
+            }
+        }
+
+        /* Shared page visual standard: keep WishlistAi, Wrapped and Birikim in the same scale family */
+        #aiScreenMode .aiCouncilHero,
+        #savingsBack.pageView .savingsHero {
+            min-height: 0;
+            display: grid;
+            grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+            gap: clamp(22px, 4vw, 56px);
+            align-items: center;
+            margin: 0 0 24px;
+            padding: 0;
+            text-align: left;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+        }
+
+        #aiScreenMode .aiCouncilHero::before {
+            inset: -72px -42px auto -52px;
+            height: 330px;
+            opacity: .42;
+        }
+
+        #aiScreenMode .aiHeroArt,
+        #savingsBack.pageView .savingsHeroArt {
+            width: 260px;
+            height: 210px;
+            max-width: 100%;
+            justify-self: stretch;
+        }
+
+        #aiScreenMode .aiHeroCard,
+        #savingsBack.pageView .savingsHeroArt {
+            width: 100%;
+            height: 210px;
+            aspect-ratio: auto;
+            border-radius: 28px;
+            transform: rotate(-4deg);
+            box-shadow: var(--elev2);
+        }
+
+        #aiScreenMode .aiHeroCard i {
+            font-size: 104px;
+        }
+
+        #aiScreenMode .aiHeroSphereMain {
+            width: 50px;
+            height: 50px;
+        }
+
+        #aiScreenMode .aiHeroSphereMini {
+            width: 30px;
+            height: 30px;
+        }
+
+        #aiScreenMode .aiCouncilHero .aiIntroTitle,
+        #savingsBack.pageView .savingsHeroText h2 {
+            font-size: clamp(32px, 4vw, 54px);
+            line-height: 1.02;
+            letter-spacing: -0.6px;
+            margin: 0 0 14px;
+        }
+
+        #aiScreenMode .aiCouncilHero .aiIntroDesc,
+        #savingsBack.pageView .savingsHeroText p {
+            margin: 0;
+            max-width: 720px;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 650;
+            color: var(--textSecondary);
+        }
+
+        #aiScreenMode .aiModeCard {
+            min-height: 112px;
+            grid-template-columns: 58px minmax(0, 1fr);
+            grid-template-rows: auto auto;
+            gap: 8px 20px;
+            padding: 20px 24px;
+            border-radius: 22px;
+            background: color-mix(in srgb, var(--surface) 86%, transparent);
+            border-color: var(--stroke);
+        }
+
+        #aiScreenMode .aiModeCard .mcIcon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            font-size: 28px;
+        }
+
+        #aiScreenMode .aiModeCard .mcTitle {
+            font-size: 18px;
+            line-height: 1.15;
+        }
+
+        #aiScreenMode .aiModeCard .mcDesc {
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: none;
+        }
+
+        #savingsBack.pageView .savingsHeroArt {
+            background:
+                radial-gradient(circle at 18% 26%, color-mix(in srgb, var(--lilac) 38%, transparent), transparent 20%),
+                radial-gradient(circle at 70% 76%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 24%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, var(--accentSoft)), color-mix(in srgb, var(--surface) 78%, var(--lilacSoft)));
+            border: 1px solid var(--stroke);
+        }
+
+        body:not([data-theme="dark"]) #savingsBack.pageView .savingsHeroArt {
+            background:
+                radial-gradient(circle at 18% 26%, color-mix(in srgb, var(--lilac) 28%, transparent), transparent 20%),
+                radial-gradient(circle at 70% 76%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 24%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 92%, white), color-mix(in srgb, var(--accentSoft) 34%, var(--surfaceBg)));
+        }
+
+        #savingsBack.pageView .savHeroJar {
+            left: 38px;
+            bottom: 34px;
+            width: 64px;
+            height: 78px;
+            border-radius: 15px 15px 22px 22px;
+        }
+
+        #savingsBack.pageView .savHeroJar::after {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 18px;
+            height: 28px;
+            border-radius: 999px 999px 10px 10px;
+            background: linear-gradient(180deg, var(--lilac), var(--accent));
+            opacity: .58;
+        }
+
+        #savingsBack.pageView .savHeroTarget {
+            left: 112px;
+            top: 34px;
+            width: 92px;
+            height: 92px;
+            font-size: 84px;
+        }
+
+        #savingsBack.pageView .savHeroTarget::after {
+            content: "";
+            position: absolute;
+            width: 76px;
+            height: 2px;
+            right: -46px;
+            top: 18px;
+            transform: rotate(-28deg);
+            background: linear-gradient(90deg, var(--accent), transparent);
+            box-shadow: 0 8px 0 color-mix(in srgb, var(--lilac) 56%, transparent);
+        }
+
+        #savingsBack.pageView .savHeroBars {
+            right: 28px;
+            bottom: 36px;
+            height: 72px;
+            gap: 9px;
+        }
+
+        #savingsBack.pageView .savHeroBars span {
+            width: 24px;
+        }
+
+        #savingsBack.pageView .savingsSummary {
+            border-radius: 22px;
+            background: color-mix(in srgb, var(--surface) 86%, transparent);
+            box-shadow: var(--elev1);
+        }
+
+        #savingsBack.pageView .savSumItem {
+            min-height: 150px;
+            padding: 24px;
+        }
+
+        #savingsBack.pageView .savMetricIcon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 6px;
+        }
+
+        #savingsBack.pageView .savSumVal {
+            font-size: clamp(25px, 2.1vw, 34px);
+        }
+
+        .wrappedBody.wrDashboard {
+            position: relative;
+        }
+
+        .wrappedBody.wrDashboard .wrTopbar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 3;
+            width: auto;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
+        .wrappedBody.wrDashboard .wrNav {
+            order: 1;
+        }
+
+        .wrappedBody.wrDashboard .wrTopbar .wrReportBtn {
+            order: 2;
+        }
+
+        .wrappedBody.wrDashboard .wrHero {
+            padding-right: min(340px, 28vw);
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        #savingsBack.pageView .savSumItem {
+            display: grid;
+            grid-template-columns: 44px minmax(0, 1fr);
+            grid-template-rows: auto auto auto;
+            column-gap: 14px;
+            row-gap: 2px;
+            align-items: center;
+            align-content: center;
+            justify-items: start;
+        }
+
+        #savingsBack.pageView .savMetricIcon {
+            grid-row: 1 / span 3;
+            grid-column: 1;
+            margin: 0;
+            align-self: center;
+            justify-self: center;
+        }
+
+        #savingsBack.pageView .savMetricText {
+            display: contents;
+        }
+
+        #savingsBack.pageView .savSumVal {
+            grid-column: 2;
+            grid-row: 1;
+            margin: 0 0 3px;
+            align-self: end;
+        }
+
+        #savingsBack.pageView .savSumLabel {
+            grid-column: 2;
+            grid-row: 2;
+            order: initial;
+            align-self: center;
+        }
+
+        #savingsBack.pageView .savSumHint {
+            grid-column: 2;
+            grid-row: 3;
+            order: initial;
+            align-self: start;
+        }
+
+        @media (max-width: 1180px) {
+            #aiScreenMode .aiCouncilHero,
+            #savingsBack.pageView .savingsHero {
+                grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+                gap: 32px;
+            }
+            #aiScreenMode .aiHeroArt,
+            #savingsBack.pageView .savingsHeroArt {
+                width: 240px;
+                height: 194px;
+            }
+            #aiScreenMode .aiHeroCard,
+            #savingsBack.pageView .savingsHeroArt {
+                height: 194px;
+            }
+            #aiScreenMode .aiModeCard {
+                min-height: 104px;
+            }
+            #savingsBack.pageView .savSumItem {
+                min-height: 132px;
+            }
+            .wrappedBody.wrDashboard .wrHero {
+                padding-right: min(300px, 30vw);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .wrappedBody.wrDashboard .wrTopbar {
+                position: static;
+                align-items: stretch;
+                margin-bottom: 18px;
+            }
+            .wrappedBody.wrDashboard .wrHero {
+                padding-right: 0;
+            }
+            #aiScreenMode .aiCouncilHero,
+            #savingsBack.pageView .savingsHero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 20px;
+            }
+            #aiScreenMode .aiHeroArt,
+            #savingsBack.pageView .savingsHeroArt {
+                width: min(100%, 260px);
+                justify-self: center;
+            }
+            #aiScreenMode .aiModeCard {
+                grid-template-columns: 52px minmax(0, 1fr);
+                min-height: 104px;
+            }
+            #aiScreenMode .aiModeCard .mcIcon {
+                width: 52px;
+                height: 52px;
+            }
+        }
+
+        /* Lists page uses the same hero scale as Wrapped, WishlistAi and Birikim */
+        .listHero {
+            min-height: 210px;
+            display: grid;
+            grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+            gap: clamp(22px, 4vw, 56px);
+            align-items: center;
+            padding: 0;
+            margin: 0 0 24px;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+        }
+
+        .listHero::after {
+            content: none;
+            display: none;
+        }
+
+        .listHeroArt {
+            order: 1;
+            width: 260px;
+            height: 210px;
+            min-height: 0;
+            max-height: none;
+            max-width: 100%;
+            justify-self: stretch;
+            border-radius: 28px;
+            border: 1px solid var(--stroke);
+            transform: rotate(-4deg);
+            background:
+                radial-gradient(circle at 70% 20%, color-mix(in srgb, var(--lilac) 22%, transparent), transparent 34%),
+                radial-gradient(circle at 32% 78%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, var(--accentSoft)), color-mix(in srgb, var(--surface) 78%, var(--lilacSoft)));
+            box-shadow: var(--elev2);
+        }
+
+        body:not([data-theme="dark"]) .listHeroArt {
+            background:
+                radial-gradient(circle at 70% 20%, color-mix(in srgb, var(--lilac) 18%, transparent), transparent 34%),
+                radial-gradient(circle at 32% 78%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 42%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 92%, white), color-mix(in srgb, var(--accentSoft) 34%, var(--surfaceBg)));
+        }
+
+        .listHeroArt svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .listHeroCopy {
+            order: 2;
+            min-width: 0;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(170px, 300px);
+            column-gap: clamp(24px, 5vw, 72px);
+            align-self: center;
+            align-items: center;
+        }
+
+        .listHeroText {
+            min-width: 0;
+            grid-column: 1;
+        }
+
+        .listHeroSparkle {
+            display: none;
+        }
+
+        .listHero h2 {
+            max-height: none;
+            font-family: var(--font-display);
+            font-size: clamp(32px, 4vw, 54px);
+            font-weight: 800;
+            line-height: 1.02;
+            letter-spacing: -0.6px;
+            margin: 0 0 14px;
+        }
+
+        .listHero p {
+            max-width: 720px;
+            max-height: none;
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 650;
+            color: var(--textSecondary);
+        }
+
+        .listHero .btn {
+            grid-column: 2;
+            grid-row: 1;
+            margin-top: 0;
+            justify-self: center;
+            align-self: center;
+            min-height: 44px;
+            padding: 0 20px;
+            border-radius: 14px;
+        }
+
+        .listHeroToggle {
+            top: 0;
+            right: 0;
+        }
+
+        .listHero.collapsed {
+            min-height: 92px;
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0;
+        }
+
+        .listHero.collapsed h2 {
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 1180px) {
+            .listHero {
+                grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+                gap: 32px;
+            }
+            .listHeroArt {
+                width: 240px;
+                height: 194px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .listHero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 20px;
+                padding-right: 0;
+            }
+            .listHeroCopy {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                transform: none;
+                text-align: center;
+            }
+            .listHeroText {
+                grid-column: 1;
+            }
+            .listHero h2,
+            .listHero p,
+            .listHero .btn {
+                grid-column: 1;
+                grid-row: auto;
+            }
+            .listHeroArt {
+                width: min(100%, 260px);
+                justify-self: center;
+            }
+            .listHeroToggle {
+                right: 0;
+            }
+        }
+
+        .softHeroSvg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .softHeroSvg .tile {
+            filter: drop-shadow(0 22px 34px rgba(82, 135, 218, .20));
+        }
+
+        .listHeroCopy {
+            align-self: center;
+            transform: none;
+        }
+
+        .listHero h2 {
+            background: linear-gradient(135deg, var(--textPrimary) 16%, var(--lilac) 64%, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .listHeroArt,
+        #aiScreenMode .aiHeroCard,
+        #savingsBack.pageView .savingsHeroArt,
+        .wrappedBody.wrDashboard .wrHeroCard {
+            background:
+                radial-gradient(circle at 24% 18%, rgba(128, 176, 255, .34), transparent 30%),
+                linear-gradient(145deg, rgba(246, 250, 255, .96), rgba(205, 224, 255, .72));
+            border-color: rgba(126, 167, 232, .24);
+        }
+
+        body[data-theme="dark"] .listHeroArt,
+        body[data-theme="dark"] #aiScreenMode .aiHeroCard,
+        body[data-theme="dark"] #savingsBack.pageView .savingsHeroArt,
+        body[data-theme="dark"] .wrappedBody.wrDashboard .wrHeroCard {
+            background:
+                radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--lilac) 34%, transparent), transparent 30%),
+                linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, var(--lilacSoft)), color-mix(in srgb, var(--surfaceBg) 74%, var(--accentSoft)));
+            border-color: var(--stroke);
+        }
+
+        .heroRaster {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+
+        .heroAssetFrame {
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 24% 18%, rgba(128, 176, 255, .28), transparent 30%),
+                linear-gradient(145deg, rgba(246, 250, 255, .96), rgba(205, 224, 255, .72));
+        }
+
+        .heroAssetFrame.assetMissing::after {
+            content: "";
+            width: 42%;
+            aspect-ratio: 1;
+            border-radius: 28%;
+            border: 1px solid rgba(126, 167, 232, .28);
+            background: rgba(255,255,255,.24);
+        }
+
+        .wrHeroCard::before,
+        .wrHeroBars {
+            display: none;
+        }
+
+        .wrHeroBadge {
+            z-index: 2;
+        }
+
+        /* Final shared hero standard for Listeler, WishlistAi, Wrapped and Birikim */
+        :root {
+            --pageHeroArtW: 230px;
+            --pageHeroArtH: 186px;
+            --pageHeroGap: clamp(22px, 4vw, 56px);
+        }
+
+        .listHero,
+        #aiScreenMode .aiCouncilHero,
+        #savingsBack.pageView .savingsHero,
+        .wrappedBody.wrDashboard .wrHero {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(180px, var(--pageHeroArtW)) minmax(0, 1fr);
+            gap: var(--pageHeroGap);
+            align-items: center;
+            min-height: var(--pageHeroArtH);
+            margin: 0 0 24px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+            text-align: left;
+        }
+
+        body[data-theme="dark"] .listHero,
+        body[data-theme="dark"] #aiScreenMode .aiCouncilHero,
+        body[data-theme="dark"] #savingsBack.pageView .savingsHero,
+        body[data-theme="dark"] .wrappedBody.wrDashboard .wrHero {
+            background: transparent;
+        }
+
+        .listHeroCopy,
+        .aiHeroText,
+        .savingsHeroText,
+        .wrappedBody.wrDashboard .wrHero > div:last-child {
+            min-width: 0;
+            align-self: center;
+            transform: none;
+        }
+
+        .listHeroCopy {
+            display: block;
+        }
+
+        .listHero h2,
+        #aiScreenMode .aiCouncilHero .aiIntroTitle,
+        #savingsBack.pageView .savingsHeroText h2,
+        .wrappedBody.wrDashboard h2 {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: clamp(32px, 4vw, 54px);
+            font-weight: 850;
+            line-height: 1.02;
+            letter-spacing: -0.6px;
+            margin: 0 0 14px;
+            color: var(--textPrimary);
+            background: linear-gradient(135deg, var(--textPrimary) 14%, var(--lilac) 60%, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .listHero p,
+        #aiScreenMode .aiCouncilHero .aiIntroDesc,
+        #savingsBack.pageView .savingsHeroText p,
+        .wrappedBody.wrDashboard .sub {
+            max-width: 720px;
+            margin: 0;
+            color: var(--textSecondary);
+            font-size: 15px;
+            font-weight: 650;
+            line-height: 1.7;
+        }
+
+        .listHero .btn {
+            margin-top: 22px;
+            margin-left: 0;
+            justify-self: start;
+            min-height: 44px;
+            width: max-content;
+            padding: 0 20px;
+            border-radius: 14px;
+        }
+
+        .listHeroArt,
+        #aiScreenMode .aiHeroArt,
+        #savingsBack.pageView .savingsHeroArt,
+        .wrappedBody.wrDashboard .wrHeroCard {
+            width: var(--pageHeroArtW);
+            height: var(--pageHeroArtH);
+            max-width: 100%;
+            min-height: 0;
+            justify-self: stretch;
+        }
+
+        .listHeroArt,
+        #aiScreenMode .aiHeroCard,
+        #savingsBack.pageView .savingsHeroArt,
+        .wrappedBody.wrDashboard .wrHeroCard {
+            position: relative;
+            width: 100%;
+            height: var(--pageHeroArtH);
+            aspect-ratio: auto;
+            border-radius: 28px;
+            border: 0;
+            overflow: visible;
+            transform: none;
+            box-shadow: none;
+            background: transparent;
+        }
+
+        body[data-theme="dark"] .listHeroArt,
+        body[data-theme="dark"] #aiScreenMode .aiHeroCard,
+        body[data-theme="dark"] #savingsBack.pageView .savingsHeroArt,
+        body[data-theme="dark"] .wrappedBody.wrDashboard .wrHeroCard {
+            background: transparent;
+        }
+
+        .heroRaster {
+            position: relative;
+            z-index: 1;
+            width: 94%;
+            height: 94%;
+            padding: 0;
+            display: block;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 0;
+            transform: none;
+            filter: none;
+        }
+
+        .wrappedBody.wrDashboard .wrHeroCard .heroRaster {
+            width: 94%;
+            height: 94%;
+            padding: 0;
+        }
+
+        .wrHeroBadge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            z-index: 3;
+            min-width: 62px;
+            padding: 8px 12px;
+            border-radius: 14px;
+            border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--stroke));
+            background: color-mix(in srgb, var(--surfaceBg) 86%, white);
+            color: var(--textPrimary);
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 850;
+            line-height: 1;
+            text-align: center;
+            box-shadow: 0 12px 26px color-mix(in srgb, var(--glow) 18%, transparent);
+            transform: rotate(4deg);
+        }
+
+        body[data-theme="dark"] .wrHeroBadge {
+            background: color-mix(in srgb, var(--surface) 88%, var(--lilacSoft));
+        }
+
+        .heroAssetFrame.assetMissing::after {
+            width: 48%;
+            border-radius: 30%;
+            background: color-mix(in srgb, var(--surfaceBg) 52%, transparent);
+        }
+
+        @media (max-width: 1400px) {
+            .wrappedBody.wrDashboard .wrTopbar {
+                position: static;
+                width: 100%;
+                margin: 0 0 16px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 12px;
+            }
+
+            .wrappedBody.wrDashboard .wrHero {
+                padding-right: 28px;
+            }
+        }
+
+        @media (max-width: 1180px) {
+            :root {
+                --pageHeroArtW: 220px;
+                --pageHeroArtH: 178px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .listHero,
+            #aiScreenMode .aiCouncilHero,
+            #savingsBack.pageView .savingsHero,
+            .wrappedBody.wrDashboard .wrHero {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .listHeroCopy,
+            .aiHeroText,
+            .savingsHeroText,
+            .wrappedBody.wrDashboard .wrHero > div:last-child {
+                text-align: center;
+            }
+
+            .listHero .btn {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .listHeroArt,
+            #aiScreenMode .aiHeroArt,
+            #savingsBack.pageView .savingsHeroArt,
+            .wrappedBody.wrDashboard .wrHeroCard {
+                width: min(100%, 260px);
+            }
+        }
+
+        /* Wrapped date/report controls: keep them out of the hero title on tablet */
+        .wrappedBody.wrDashboard .wrTopbar {
+            position: static;
+            width: min(100%, 310px);
+            margin: 0 0 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .wrappedBody.wrDashboard .wrNav {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) 42px;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            padding: 6px;
+            border-radius: 18px;
+        }
+
+        .wrappedBody.wrDashboard .wrNav button {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+        }
+
+        .wrappedBody.wrDashboard .wrNav .wrLabel {
+            min-width: 0;
+            width: 100%;
+            padding: 0 8px;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .wrappedBody.wrDashboard .wrTopbar .wrReportBtn {
+            width: 100%;
+            min-width: 0;
+            height: 46px;
+            margin: 0;
+            order: 2;
+            border-radius: 16px;
+        }
+
+        .wrappedBody.wrDashboard .wrHero {
+            padding-right: 0;
+        }
+
+        .wrappedBody .wrHeroText {
+            min-width: 0;
+        }
+
+        .wrappedBody .wrTitleRow {
+            display: grid;
+            grid-template-columns: 44px max-content 44px;
+            align-items: center;
+            justify-content: start;
+            gap: 14px;
+            max-width: 100%;
+        }
+
+        .wrappedBody .wrTitleRow h2 {
+            margin: 0;
+            min-width: 0;
+        }
+
+        .wrappedBody .wrTitleNav {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            border: 1px solid var(--stroke);
+            background: color-mix(in srgb, var(--surface) 84%, var(--accentSoft));
+            color: var(--accent);
+            font-size: 24px;
+            line-height: 1;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+        }
+
+        .wrappedBody .wrHeroText .sub {
+            margin-top: 16px;
+        }
+
+        .wrappedBody .wrHeroText .wrReportBtn {
+            width: min(230px, 100%);
+            min-width: 0;
+            height: 46px;
+            margin: 18px 0 0;
+            border-radius: 16px;
+        }
+
+        @media (max-width: 1180px) {
+            .wrappedBody .wrTitleRow {
+                grid-template-columns: 40px minmax(0, max-content) 40px;
+                gap: 10px;
+            }
+
+            .wrappedBody .wrTitleNav {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
     </style>
 </head>
 
@@ -7571,66 +9090,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         <section id="listScreen" class="listScreen" aria-label="Listeler">
             <div class="listHero">
-                <button class="listHeroToggle" id="listHeroToggle" type="button" aria-label="Liste oluştur alanını küçült" title="Küçült">
-                    <i class="ph ph-caret-up"></i>
-                </button>
                 <div class="listHeroCopy">
-                    <div class="listHeroSparkle"><i class="ph ph-sparkle"></i></div>
-                    <h2>Yeni bir liste oluştur</h2>
-                    <p>Alınmamış ürünlerini amacına göre gruplandır; listeye bir ad, simge ve başlangıç ürünleri ekle. İlerleme oranı ve alınan/alınmayan ürün sayıları liste kartında düzenli şekilde takip edilir.</p>
+                    <div class="listHeroText">
+                        <div class="listHeroSparkle"><i class="ph ph-sparkle"></i></div>
+                        <h2>Listeler</h2>
+                        <p>Alınmamış ürünlerini amacına göre gruplandır ve liste kartında düzenli şekilde takip et.</p>
+                    </div>
                     <button class="btn primary" id="showListBuilder"><i class="ph ph-plus"></i> Liste oluştur</button>
                 </div>
-                <div class="listHeroArt" aria-hidden="true">
-                    <svg viewBox="0 0 520 210" role="img">
-                        <defs>
-                            <linearGradient id="heroStroke" x1="150" y1="38" x2="365" y2="176" gradientUnits="userSpaceOnUse">
-                                <stop offset="0" stop-color="var(--lilac)" stop-opacity=".72"/>
-                                <stop offset=".55" stop-color="var(--accent)" stop-opacity=".56"/>
-                                <stop offset="1" stop-color="var(--lilac)" stop-opacity=".18"/>
-                            </linearGradient>
-                            <linearGradient id="heroCardFill" x1="210" y1="35" x2="310" y2="140" gradientUnits="userSpaceOnUse">
-                                <stop offset="0" stop-color="var(--lilac)" stop-opacity=".26"/>
-                                <stop offset="1" stop-color="var(--accent)" stop-opacity=".06"/>
-                            </linearGradient>
-                        </defs>
-                        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M74 145C82 74 154 22 251 28c88 5 151 48 184 113" class="heroLineSoft" stroke-width="1"/>
-                            <path d="M40 174h430" class="heroLineMuted" stroke-width="1"/>
-                            <path d="M346 154c26-21 41-53 39-92" class="heroLineSoft" stroke-width="1"/>
-                            <path d="M386 133c23-20 37-47 42-82" class="heroLineSoft" stroke-width="1"/>
-                        </g>
-                        <g opacity=".82">
-                            <path d="M372 142c16-18 23-40 28-67" class="heroLineAccent" stroke-width="2" fill="none"/>
-                            <path d="M390 112c18-10 24-22 27-40c-17 7-25 19-27 40Z" fill="var(--lilac)" opacity=".62"/>
-                            <path d="M379 136c19-6 29-16 38-33c-19 2-30 12-38 33Z" fill="var(--lilac)" opacity=".46"/>
-                            <path d="M363 157c17-2 27-10 37-24c-17-1-29 6-37 24Z" fill="var(--lilac)" opacity=".36"/>
-                        </g>
-                        <g transform="translate(208 42) rotate(-7)">
-                            <rect width="86" height="112" rx="10" fill="url(#heroCardFill)" stroke="url(#heroStroke)" stroke-width="1.4"/>
-                            <path d="M43 58c-14-13-31-1-22 14c5 9 22 18 22 18s17-9 22-18c9-15-8-27-22-14Z" class="heroLineAccent" stroke-width="2" fill="none"/>
-                        </g>
-                        <g transform="translate(305 52) rotate(16)">
-                            <path d="M12 0h42l10 18v76c0 7-5 12-12 12H14c-7 0-12-5-12-12V12C2 5 5 0 12 0Z" class="heroFillSoft" stroke="url(#heroStroke)" stroke-width="1.4"/>
-                            <circle cx="43" cy="18" r="5" class="heroLineAccent" stroke-width="1.8" fill="none"/>
-                        </g>
-                        <g transform="translate(180 105)">
-                            <rect x="0" y="0" width="190" height="88" rx="10" fill="rgba(20,16,42,.20)" stroke="url(#heroStroke)" stroke-width="1.3"/>
-                            <path d="M2 6l93 60L188 6" stroke="url(#heroStroke)" stroke-width="1.2" fill="none"/>
-                            <path d="M0 88l72-51" class="heroLineMuted" stroke-width="1.1"/>
-                            <path d="M190 88l-72-51" class="heroLineMuted" stroke-width="1.1"/>
-                            <path d="M95 45c-16-15-35-1-25 16c6 10 25 20 25 20s19-10 25-20c10-17-9-31-25-16Z" class="heroLineAccent" stroke-width="2.2" fill="none"/>
-                        </g>
-                        <g class="heroLineMuted" stroke-width="1.1" fill="none" opacity=".8">
-                            <path d="M270 193l70 31"/>
-                            <path d="M370 192l-76 34"/>
-                        </g>
-                        <g fill="var(--lilac)" opacity=".78">
-                            <circle cx="92" cy="54" r="2"/>
-                            <circle cx="424" cy="37" r="2"/>
-                            <path d="M132 32l2 6l6 2l-6 2l-2 6l-2-6l-6-2l6-2z"/>
-                            <path d="M446 83l1.5 4.5L452 89l-4.5 1.5L446 95l-1.5-4.5L440 89l4.5-1.5z"/>
-                        </g>
-                    </svg>
+                <div class="listHeroArt heroAssetFrame" aria-hidden="true">
+                    <img class="heroRaster" src="assets/hero-listeler.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                 </div>
             </div>
 
@@ -7987,13 +9456,21 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <button id="closeWrapped" class="btn">Kapat</button>
             </div>
             <div class="wrappedBody wrDashboard">
-                <div class="wrNav">
-                    <button id="wrPrev">‹</button>
-                    <div class="wrLabel" id="wrLabel">Şubat 2026</div>
-                    <button id="wrNext">›</button>
-                </div>
-                <h2 id="wrTitle">Şubat 2026 Wrapped'i</h2>
-                <div class="sub" id="wrRange">1 Şubat – 28 Şubat 2026</div>
+                <section class="wrHero">
+                    <div class="wrHeroCard heroAssetFrame" aria-hidden="true">
+                        <img class="heroRaster" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                        <div class="wrHeroBadge" id="wrHeroYear">2026</div>
+                    </div>
+                    <div class="wrHeroText">
+                        <div class="wrTitleRow">
+                            <button class="wrTitleNav" id="wrPrev" aria-label="Önceki ay">‹</button>
+                            <h2 id="wrTitle">Mayıs 2026 Wrapped'i</h2>
+                            <button class="wrTitleNav" id="wrNext" aria-label="Sonraki ay">›</button>
+                        </div>
+                        <div class="wrLabel" id="wrLabel" hidden>Mayıs 2026</div>
+                        <div class="sub" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
+                    </div>
+                </section>
                 <div class="statGrid">
                     <div class="statCard">
                         <div class="num" id="wrAdded">0</div>
@@ -8023,6 +9500,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <button id="closeSavings" class="btn">Kapat</button>
             </div>
             <div class="savingsBody">
+                <section class="savingsHero">
+                    <div class="savingsHeroArt heroAssetFrame" aria-hidden="true">
+                        <img class="heroRaster" src="assets/hero-birikim.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                    </div>
+                    <div class="savingsHeroText">
+                        <h2>Birikim</h2>
+                        <p>Hedeflerine bir adım daha yaklaş.</p>
+                    </div>
+                </section>
                 <div class="savingsSummary">
                     <div class="savSumItem">
                         <div class="savMetricIcon"><i class="ph ph-chart-line-up"></i></div>
@@ -8075,10 +9561,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         <div class="aiBody">
             <!-- Screen 1: Mode Select -->
             <div class="aiScreen active" id="aiScreenMode">
-                <div class="aiIntro">
-                    <div class="aiIntroIcon"><i class="ph ph-brain"></i></div>
-                    <div class="aiIntroTitle">WishlistAi - Uzman AI Konseyi</div>
-                    <div class="aiIntroDesc">6 uzman ve 1 hakem senin için analiz eder.</div>
+                <div class="aiIntro aiCouncilHero">
+                    <div class="aiHeroArt" aria-hidden="true">
+                        <div class="aiHeroCard heroAssetFrame">
+                            <img class="heroRaster" src="assets/hero-wishlistai.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                        </div>
+                    </div>
+                    <div class="aiHeroText">
+                        <div class="aiIntroTitle">WishlistAi - Uzman AI Konseyi</div>
+                        <div class="aiIntroDesc">6 uzman ve 1 hakem senin için analiz eder.</div>
+                    </div>
                 </div>
                 <div class="aiModes">
                     <div class="aiModeCard" data-mode="budget">
@@ -8211,6 +9703,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <button class="auth-ctrl-btn" id="authDarkBtn" onclick="authToggleDark()" title="Koyu mod">
                     <span class="auth-ctrl-icon" id="authDarkIcon">🌙</span>
                 </button>
+                <div class="auth-theme-dots" aria-label="Tema rengi">
+                    <button class="auth-theme-dot" data-auth-theme="pink" onclick="authPickTheme('pink')" style="background:linear-gradient(135deg,#E8458B,#A87CFF)" title="Pembe" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="blue" onclick="authPickTheme('blue')" style="background:linear-gradient(135deg,#3D7FE8,#7CB4FF)" title="Mavi" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="green" onclick="authPickTheme('green')" style="background:linear-gradient(135deg,#2EB87A,#7CDFB4)" title="Yeşil" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="peach" onclick="authPickTheme('peach')" style="background:linear-gradient(135deg,#E8763D,#FFAA7C)" title="Şeftali" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="charcoal" onclick="authPickTheme('charcoal')" style="background:linear-gradient(135deg,#7B8FA8,#A8B8CC)" title="Antrasit" type="button"></button>
+                </div>
             </div>
             <div class="auth-left-content">
                 <div class="authLogo">Wishlistgül</div>
@@ -8260,6 +9759,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                                     class="ph ph-eye-slash"></i></button>
                         </div>
                     </div>
+                    <label class="authRemember">
+                        <input type="checkbox" id="rememberLogin" />
+                        <span>Beni hatırla</span>
+                    </label>
                     <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
                     <div class="authForgot"><a href="#" onclick="sendPasswordReset(event)">Şifremi unuttum</a></div>
                 </div>
@@ -8371,7 +9874,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         <div class="sDivider"></div>
                         <div class="sGroupLabel">Görünüm &amp; Dil</div>
 
-                        <div class="sRow" onclick="openSettingsPage('sPageLayout')">
+                        <div class="sRow" onclick="showToast('Arayüz düzeni seçenekleri yakında eklenecek.')">
                             <div class="sRowIcon green"><i class="ph ph-layout"></i></div>
                             <div class="sRowText">
                                 <div class="sRowTitle" data-i18n="tileLayout">Arayüz Düzeni</div>
@@ -8654,7 +10157,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         window.auth = firebase.auth();
         window.db = firebase.database();
         window.storage = firebase.storage();
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(e => console.warn("Auth persistence error", e));
+        const REMEMBER_LOGIN_KEY = 'wl_remember_login_v1';
+        const SESSION_LOGIN_KEY = 'wl_session_login_v1';
+        auth.setPersistence(
+            localStorage.getItem(REMEMBER_LOGIN_KEY) === '1'
+                ? firebase.auth.Auth.Persistence.LOCAL
+                : firebase.auth.Auth.Persistence.SESSION
+        ).catch(e => console.warn("Auth persistence error", e));
 
         let currentUser = null;
         let authUid = null;
@@ -8725,6 +10234,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const btn = document.querySelector('#loginForm .authSubmit');
             const loginInput = document.getElementById('loginUser').value;
             const password = document.getElementById('loginPass').value;
+            const remember = !!document.getElementById('rememberLogin')?.checked;
             const email = normalizeEmailInput(loginInput);
 
             if (!loginInput || !password) return showAuthError('E-posta ve şifre gerekli.');
@@ -8735,6 +10245,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             btn.disabled = true;
 
             try {
+                await auth.setPersistence(remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
+                localStorage.setItem(REMEMBER_LOGIN_KEY, remember ? '1' : '0');
+                if (remember) sessionStorage.removeItem(SESSION_LOGIN_KEY);
+                else sessionStorage.setItem(SESSION_LOGIN_KEY, '1');
                 await auth.signInWithEmailAndPassword(email, password);
                 btn.textContent = orig;
                 btn.disabled = false;
@@ -8783,6 +10297,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             try {
                 const email = normalizeEmailInput(emailInput);
                 const cred = await auth.createUserWithEmailAndPassword(email, pw);
+                sessionStorage.setItem(SESSION_LOGIN_KEY, '1');
                 if (cred.user) {
                     await cred.user.updateProfile({ displayName });
                     await db.ref('users/' + cred.user.uid + '/profile').update({
@@ -8902,6 +10417,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function doLogout() {
             const confirmLogout = () => {
+                localStorage.setItem(REMEMBER_LOGIN_KEY, '0');
+                sessionStorage.removeItem(SESSION_LOGIN_KEY);
+                const rememberBox = document.getElementById('rememberLogin');
+                if (rememberBox) rememberBox.checked = false;
                 auth.signOut().then(() => {
                     items = [];
                     localStorage.removeItem(getUserKey());
@@ -9017,6 +10536,17 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         ];
         const THEME_KEY = 'wl_theme_v1';
 
+        function syncAuthThemeControls(themeId) {
+            const active = themeId || localStorage.getItem(THEME_KEY) || 'pink';
+            document.querySelectorAll('.auth-theme-dot').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.authTheme === active);
+            });
+            const icon = document.getElementById('authDarkIcon');
+            const darkBtn = document.getElementById('authDarkBtn');
+            if (icon) icon.textContent = active === 'dark' ? '☀️' : '🌙';
+            if (darkBtn) darkBtn.classList.toggle('active', active === 'dark');
+        }
+
         function updateAppIconTheme(themeId) {
             const darkIcon = themeId === 'dark';
             const assets = darkIcon
@@ -9073,9 +10603,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 document.body.setAttribute('data-theme', id);
             }
             localStorage.setItem(THEME_KEY, id || 'pink');
+            if ((id || 'pink') !== 'dark') localStorage.setItem('wl_last_light_theme_v1', id || 'pink');
             syncThemeChrome(id || 'pink');
             updateAppIconTheme(id || 'pink');
             if (typeof renderThemeGrid === 'function') renderThemeGrid();
+            syncAuthThemeControls(id || 'pink');
             if (typeof refreshNoPhotoImages === 'function') refreshNoPhotoImages();
             if (typeof render === 'function' && typeof items !== 'undefined' && Array.isArray(items)) render();
         }
@@ -9125,6 +10657,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (saved && saved !== 'pink') document.body.setAttribute('data-theme', saved);
             syncThemeChrome(saved || 'pink');
             updateAppIconTheme(saved || 'pink');
+            syncAuthThemeControls(saved || 'pink');
         })();
 
         /* ═══ STATE OBSERVER ═══ */
@@ -9150,6 +10683,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         auth.onAuthStateChanged(async (user) => {
             if (user) {
+                if (localStorage.getItem(REMEMBER_LOGIN_KEY) !== '1' && sessionStorage.getItem(SESSION_LOGIN_KEY) !== '1') {
+                    await auth.signOut();
+                    return;
+                }
                 authUid = user.uid;
                 currentUser = await resolveUserDisplayName(user);
                 showAuthSuccess('Giriş başarılı!');
@@ -11084,8 +12621,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const now = new Date();
             wrMonth = now.getMonth();
             wrYear = now.getFullYear();
-            updateWrappedUI();
             openPageView(wrappedBack, "Wrapped");
+            try {
+                ensureWrappedDashboardShell?.();
+                updateWrappedUI();
+            } catch (err) {
+                console.error("Wrapped render error:", err);
+                showToast("Wrapped ekranı hazırlanırken bir hata oluştu.");
+            }
         }
         function closeWrapped() {
             wrappedBack.classList.remove("show");
@@ -11802,28 +13345,57 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             return labels[cat] || CATEGORIES_TR?.[cat] || cat || "Diğer";
         }
 
+        function buildSoftHeroSvg(kind) {
+            const defs = `
+                <defs>
+                    <linearGradient id="${kind}Tile" x1="70" y1="38" x2="415" y2="358" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".62" stop-color="#eef6ff"/><stop offset="1" stop-color="#cfe2ff"/></linearGradient>
+                    <linearGradient id="${kind}Blue" x1="142" y1="96" x2="360" y2="326" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#bdd9ff"/><stop offset=".48" stop-color="#7fb4ff"/><stop offset="1" stop-color="#4f86e8"/></linearGradient>
+                    <linearGradient id="${kind}Soft" x1="130" y1="80" x2="392" y2="350" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".58" stop-color="#e8f3ff"/><stop offset="1" stop-color="#9bc2ff"/></linearGradient>
+                    <filter id="${kind}Blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16"/></filter>
+                    <filter id="${kind}Shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#6c9ee8" flood-opacity=".24"/><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#fff" flood-opacity=".72"/></filter>
+                </defs>
+                <rect width="520" height="420" rx="34" fill="rgba(218,232,255,.62)"/>
+                <circle cx="104" cy="70" r="96" fill="#89baff" opacity=".24" filter="url(#${kind}Blur)"/>
+                <circle cx="420" cy="354" r="110" fill="#6fa7ff" opacity=".18" filter="url(#${kind}Blur)"/>
+                <rect class="tile" x="92" y="48" width="336" height="326" rx="54" fill="url(#${kind}Tile)" filter="url(#${kind}Shadow)" transform="rotate(-4 260 210)"/>`;
+            const art = {
+                ai: `<g fill="none" stroke="url(#aiBlue)" stroke-width="5" opacity=".72"><ellipse cx="260" cy="208" rx="150" ry="66" transform="rotate(-16 260 208)"/><ellipse cx="260" cy="208" rx="150" ry="66" transform="rotate(18 260 208)"/><ellipse cx="260" cy="208" rx="150" ry="66" transform="rotate(74 260 208)"/></g><circle cx="152" cy="116" r="31" fill="url(#aiBlue)"/><circle cx="392" cy="298" r="27" fill="url(#aiBlue)" opacity=".78"/><circle cx="396" cy="112" r="7" fill="#73a8f5"/><g filter="url(#aiShadow)" fill="url(#aiSoft)" stroke="#83b3ff" stroke-width="4" stroke-linejoin="round"><path d="M235 137c-32 0-56 26-54 57c-22 10-35 31-31 55c5 31 32 50 62 44c10 19 30 32 53 31c25-1 45-17 53-39c30 2 55-20 58-50c2-26-12-49-35-59c-1-34-29-61-64-59c-15 1-29 8-39 19c-1 1-2 1-3 1Z"/><path d="M238 146c-18 18-17 44 1 61c-20 10-30 31-25 53M290 145c20 18 19 44 1 61c20 11 31 33 24 55M213 226c16-11 36-9 49 5M308 226c-16-11-36-9-49 5" fill="none"/></g>`,
+                savings: `<g fill="none" stroke="url(#savingsBlue)" stroke-linecap="round" stroke-width="18" opacity=".78"><path d="M318 151c47 18 82 64 84 119"/><path d="M400 264l23-2l-2-23"/><path d="M314 279h18M350 260v19M386 232v47"/></g><g filter="url(#savingsShadow)"><path d="M167 206c-22 2-42 19-47 43c-7 38 24 73 68 75h106c41 0 76-28 79-65c4-45-36-80-83-70c-24-30-72-39-111-16c-5 10-9 21-12 33Z" fill="url(#savingsSoft)"/><circle cx="180" cy="252" r="8" fill="#72a8f4"/><circle cx="266" cy="252" r="8" fill="#72a8f4"/><ellipse cx="222" cy="292" rx="32" ry="23" fill="#d9eaff" stroke="#8ebaff" stroke-width="4"/><circle cx="212" cy="292" r="5" fill="#75a8f4"/><circle cx="232" cy="292" r="5" fill="#75a8f4"/><path d="M170 210c14-30 40-48 75-51c37-3 68 12 88 42" fill="none" stroke="#d5e8ff" stroke-width="16" stroke-linecap="round"/><circle cx="229" cy="159" r="27" fill="url(#savingsSoft)" stroke="#9ec7ff" stroke-width="4"/><g transform="translate(308 284)"><ellipse cx="33" cy="16" rx="36" ry="14" fill="#eaf4ff" stroke="#95bfff" stroke-width="4"/><path d="M-2 16v45c0 8 16 15 35 15s35-7 35-15V16" fill="#dcecff" stroke="#95bfff" stroke-width="4"/><path d="M-2 39c0 8 16 15 35 15s35-7 35-15" fill="none" stroke="#95bfff" stroke-width="4"/></g></g>`,
+                wrapped: `<g filter="url(#wrappedShadow)"><rect x="166" y="115" width="198" height="226" rx="30" fill="url(#wrappedSoft)" transform="rotate(-3 265 228)"/><circle cx="218" cy="176" r="31" fill="#d9ebff" stroke="#83b3ff" stroke-width="4"/><path d="M218 145v31h31" fill="#83b3ff"/><rect x="274" y="164" width="92" height="11" rx="6" fill="#9dc6ff"/><rect x="274" y="192" width="74" height="10" rx="5" fill="#afd0ff"/><g fill="url(#wrappedBlue)"><rect x="205" y="250" width="34" height="66" rx="10"/><rect x="254" y="218" width="38" height="98" rx="10"/><rect x="310" y="186" width="40" height="130" rx="11"/></g><rect x="360" y="78" width="104" height="58" rx="18" fill="#f6fbff" stroke="#d3e6ff" stroke-width="3"/><text id="wrHeroYear" x="412" y="117" text-anchor="middle" font-size="34" font-family="Arial,sans-serif" font-weight="800" fill="#273146">2026</text><circle cx="367" cy="295" r="58" fill="#eef7ff" stroke="#d2e7ff" stroke-width="4"/><path d="M367 258l15 31l34 5l-25 24l6 34l-30-16l-30 16l6-34l-25-24l34-5z" fill="url(#wrappedBlue)" opacity=".78"/></g>`,
+                lists: `<g filter="url(#listsShadow)"><path d="M144 182c0-24 20-44 44-44h46l25 26h78c24 0 44 20 44 44v100c0 24-20 44-44 44H188c-24 0-44-20-44-44z" fill="url(#listsSoft)" stroke="#a8ccff" stroke-width="4"/><rect x="176" y="114" width="178" height="196" rx="24" fill="#f5fbff" stroke="#c9e1ff" stroke-width="4" transform="rotate(-2 265 212)"/><rect x="205" y="150" width="42" height="42" rx="12" fill="url(#listsBlue)"/><path d="M216 170l9 10l24-28" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><rect x="267" y="154" width="94" height="12" rx="6" fill="#a8cdff"/><rect x="267" y="182" width="74" height="10" rx="5" fill="#c1dbff"/><rect x="205" y="214" width="42" height="42" rx="12" fill="#d8eaff" stroke="#a6c9ff" stroke-width="3"/><circle cx="226" cy="235" r="10" fill="#fff"/><rect x="267" y="218" width="112" height="12" rx="6" fill="#a8cdff"/><rect x="267" y="246" width="82" height="10" rx="5" fill="#c1dbff"/><rect x="334" y="270" width="92" height="82" rx="22" fill="#f6fbff" stroke="#cde3ff" stroke-width="4"/><path d="M380 319c-18-17-40-1-28 18c7 12 28 23 28 23s21-11 28-23c12-19-10-35-28-18Z" fill="url(#listsBlue)" opacity=".78"/></g>`
+            };
+            return `<svg class="softHeroSvg" viewBox="0 0 520 420" aria-hidden="true">${defs}${art[kind] || art.lists}</svg>`;
+        }
+
+        function renderHeroAssets(scope) {
+            document.querySelectorAll(".heroAssetFrame img.heroRaster").forEach(img => {
+                if (img.complete && img.naturalWidth > 0) {
+                    img.style.display = "";
+                    img.parentElement?.classList.remove("assetMissing");
+                }
+            });
+        }
+
+        renderHeroAssets();
+
         function ensureWrappedDashboardShell() {
             const body = document.querySelector(".wrappedBody");
             if (!body || body.dataset.dashboardReady === "1") return;
             body.classList.add("wrDashboard");
             body.dataset.dashboardReady = "1";
             body.innerHTML = `
-                <div class="wrTopbar">
-                    <div class="wrNav">
-                        <button id="wrPrev" aria-label="Önceki ay" onclick="shiftWrappedMonth(-1)">‹</button>
-                        <div class="wrLabel" id="wrLabel">Mayıs 2026</div>
-                        <button id="wrNext" aria-label="Sonraki ay" onclick="shiftWrappedMonth(1)">›</button>
-                    </div>
-                    <button class="wrReportBtn" id="wrReportBtn" onclick="downloadWrappedReport()"><i class="ph ph-file-arrow-down"></i> Raporu indir</button>
-                </div>
-
                 <section class="wrHero">
-                    <div class="wrHeroCard" aria-hidden="true">
+                    <div class="wrHeroCard heroAssetFrame" aria-hidden="true">
+                        <img class="heroRaster" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         <div class="wrHeroBadge" id="wrHeroYear">2026</div>
-                        <div class="wrHeroBars"><span></span><span></span><span></span><span></span></div>
                     </div>
-                    <div>
-                        <h2 id="wrTitle">Mayıs 2026 Wrapped'i</h2>
+                    <div class="wrHeroText">
+                        <div class="wrTitleRow">
+                            <button class="wrTitleNav" id="wrPrev" aria-label="Önceki ay" onclick="shiftWrappedMonth(-1)">‹</button>
+                            <h2 id="wrTitle">Mayıs 2026 Wrapped'i</h2>
+                            <button class="wrTitleNav" id="wrNext" aria-label="Sonraki ay" onclick="shiftWrappedMonth(1)">›</button>
+                        </div>
+                        <div class="wrLabel" id="wrLabel" hidden>Mayıs 2026</div>
                         <div class="sub" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
                     </div>
                 </section>
@@ -11854,11 +13426,15 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                     <section class="wrPanel">
                         <h3 class="wrPanelTitle"><i class="ph ph-brain"></i> WishlistAi Yorumu</h3>
                         <div id="wrAiComment"></div>
+                        <div class="wrAiReportWrap">
+                            <button class="wrReportBtn" id="wrReportBtn" onclick="downloadWrappedReport()"><i class="ph ph-file-arrow-down"></i> Raporu indir</button>
+                        </div>
                     </section>
                 </div>
 
                 <div class="wrappedNote">Wrapped, seçili ayın ürün ve alışveriş verilerine göre güncellenir.</div>
             `;
+            renderHeroAssets("wrapped");
         }
 
         function shiftWrappedMonth(delta) {
@@ -12848,24 +14424,26 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             };
             window.authToggleDark = function () {
                 var cur = localStorage.getItem('wl_theme_v1') || 'pink';
-                var next = cur === 'dark' ? 'pink' : 'dark';
+                var lastLight = localStorage.getItem('wl_last_light_theme_v1') || 'pink';
+                var next = cur === 'dark' ? lastLight : 'dark';
                 if (typeof applyTheme === 'function') applyTheme(next);
-                var icon = document.getElementById('authDarkIcon');
-                var btn = document.getElementById('authDarkBtn');
-                if (icon) icon.textContent = next === 'dark' ? '☀️' : '🌙';
-                if (btn) btn.classList.toggle('active', next === 'dark');
+                if (typeof syncAuthThemeControls === 'function') syncAuthThemeControls(next);
+            };
+            window.authPickTheme = function (theme) {
+                localStorage.setItem('wl_last_light_theme_v1', theme || 'pink');
+                if (typeof applyTheme === 'function') applyTheme(theme || 'pink');
+                if (typeof syncAuthThemeControls === 'function') syncAuthThemeControls(theme || 'pink');
             };
             /* Init buton durumları */
             var lang0 = localStorage.getItem('wl_lang') || 'tr';
             var theme0 = localStorage.getItem('wl_theme_v1') || 'pink';
             var lTr = document.getElementById('authLangTr');
             var lEn = document.getElementById('authLangEn');
-            var dBtn = document.getElementById('authDarkBtn');
-            var dIcon = document.getElementById('authDarkIcon');
+            var rememberBox = document.getElementById('rememberLogin');
             if (lTr) lTr.classList.toggle('active', lang0 === 'tr');
             if (lEn) lEn.classList.toggle('active', lang0 === 'en');
-            if (dBtn) dBtn.classList.toggle('active', theme0 === 'dark');
-            if (dIcon) dIcon.textContent = theme0 === 'dark' ? '☀️' : '🌙';
+            if (rememberBox) rememberBox.checked = localStorage.getItem('wl_remember_login_v1') === '1';
+            if (typeof syncAuthThemeControls === 'function') syncAuthThemeControls(theme0);
         })();
     </script>
 

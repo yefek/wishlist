@@ -1,0 +1,2028 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <title>Wishlistgül UI Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=DM+Sans:wght@400;500;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.2"></script>
+  <style>
+    :root {
+      --bg: #0f1923;
+      --appChromeBg: #0f1923;
+      --accent: #6C5CE7;
+      --accentSoft: rgba(108, 92, 231, 0.18);
+      --accentMid: rgba(108, 92, 231, 0.28);
+      --stroke: rgba(255, 255, 255, 0.08);
+      --glow: rgba(108, 92, 231, 0.35);
+      --lilac: #a29bfe;
+      --surface: rgba(20, 30, 44, 0.85);
+      --surfaceHover: rgba(28, 40, 58, 0.92);
+      --textPrimary: #e8ecf2;
+      --textSecondary: #8a95a8;
+      --gradientHL: linear-gradient(135deg, #6C5CE7, #a29bfe);
+      --gradientBtn: linear-gradient(135deg, rgba(108, 92, 231, 0.35), rgba(162, 155, 254, 0.18));
+      --gradientPill: linear-gradient(135deg, rgba(108, 92, 231, 0.30), rgba(162, 155, 254, 0.16));
+      --headerBg: linear-gradient(180deg, rgba(15, 25, 35, 0.95), rgba(18, 28, 42, 0.85));
+      --surfaceBg: rgba(18, 28, 42, 0.96);
+      --surfaceBgLight: rgba(18, 28, 42, 0.50);
+      --chipBg: rgba(22, 34, 50, 0.88);
+      --chipBorder: rgba(108, 92, 231, 0.12);
+      --inputBg: rgba(18, 28, 42, 0.80);
+      --btnText: #e8ecf2;
+      --cardTint: rgba(22, 34, 50, 0.70);
+      --elev1: 0 8px 32px rgba(0, 0, 0, 0.20);
+      --elev2: 0 16px 48px rgba(0, 0, 0, 0.30);
+      --r1: 16px;
+      --r2: 28px;
+      --font-display: 'Outfit', 'DM Sans', sans-serif;
+      --font-text: 'DM Sans', -apple-system, system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background-color: var(--appChromeBg);
+    }
+
+    body {
+      font-family: var(--font-text);
+      color: var(--textPrimary);
+      background:
+        radial-gradient(1100px 650px at 10% 0%, rgba(108, 92, 231, 0.18), transparent 55%),
+        radial-gradient(900px 500px at 90% 8%, rgba(162, 155, 254, 0.08), transparent 55%),
+        radial-gradient(800px 500px at 50% 100%, rgba(108, 92, 231, 0.12), transparent 50%),
+        linear-gradient(180deg, #0f1923, #141e2c);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    .prototype {
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .appShell {
+      width: min(1280px, 100%);
+      min-height: calc(100vh - 44px);
+      display: grid;
+      grid-template-columns: 244px minmax(0, 1fr);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(15, 25, 35, 0.94), rgba(16, 25, 38, 0.96)),
+        var(--surfaceBg);
+      box-shadow: var(--elev2);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      padding: 34px 18px 22px;
+      border-right: 1px solid var(--stroke);
+      background: rgba(10, 18, 30, 0.28);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .appName {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px;
+      font-weight: 400;
+      font-style: italic;
+      background: var(--gradientHL);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.3px;
+      padding: 2px 12px 0;
+      overflow: visible;
+    }
+
+    .navGroup {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .navGroup.mainNav {
+      margin-top: 46px;
+    }
+
+    .navGroup.featureNav {
+      margin-top: 26px;
+    }
+
+    .navGroup.accountNav {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--stroke);
+    }
+
+    .navItem {
+      appearance: none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--textPrimary);
+      min-height: 46px;
+      width: 100%;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      cursor: pointer;
+      transition: transform 0.18s ease-out, background 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out;
+      text-align: left;
+    }
+
+    .navItem:hover {
+      background: var(--surfaceHover);
+      border-color: var(--stroke);
+    }
+
+    .navItem.active {
+      border-color: var(--accentMid);
+      background: var(--gradientBtn);
+      box-shadow: 0 4px 16px var(--glow);
+    }
+
+    .navItem:active {
+      transform: scale(0.98);
+    }
+
+    .navItem i {
+      width: 22px;
+      font-size: 22px;
+      color: var(--textPrimary);
+      text-align: center;
+    }
+
+    .navItem span {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.1px;
+      white-space: nowrap;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-height: 58px;
+      padding: 4px 12px;
+      color: var(--textPrimary);
+    }
+
+    .profile i {
+      font-size: 32px;
+    }
+
+    .profile span {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .workspace {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background:
+        linear-gradient(180deg, rgba(15, 25, 35, 0.30), rgba(20, 30, 44, 0.16)),
+        transparent;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid var(--stroke);
+      background: var(--headerBg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .viewTitle {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .viewTitle strong {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .viewTitle span {
+      color: var(--textSecondary);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .hBtns {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--textPrimary);
+      font-family: var(--font-text);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.18s ease-out, background 0.18s ease-out, box-shadow 0.18s ease-out;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--surfaceHover);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn.primary {
+      border-color: var(--accentMid);
+      background: var(--gradientBtn);
+      color: var(--btnText);
+    }
+
+    .btn.iconBtn {
+      width: 36px;
+      padding: 0;
+    }
+
+    .btn i {
+      font-size: 17px;
+    }
+
+    .topbar .btn {
+      min-height: 44px;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      border-radius: 10px;
+    }
+
+    .topbar .btn.primary {
+      min-width: 92px;
+    }
+
+    .topbar .btn.iconBtn {
+      width: 44px;
+      padding: 0;
+    }
+
+    .topbar .btn i {
+      font-size: 20px;
+    }
+
+    .content {
+      width: 100%;
+      max-width: 1030px;
+      margin: 0 auto;
+      padding: 18px 24px 104px;
+    }
+
+    .filterStack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filterLabel {
+      color: var(--textSecondary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.35px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .pillRow {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 1px;
+    }
+
+    .pillRow::-webkit-scrollbar {
+      display: none;
+    }
+
+    .catPill,
+    .sortPill {
+      flex: 0 0 auto;
+      font-family: var(--font-text);
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.18s ease-out;
+    }
+
+    .catPill {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      color: var(--textSecondary);
+    }
+
+    .catPill.active {
+      background: var(--gradientPill);
+      color: var(--btnText);
+      border-color: var(--accentMid);
+      box-shadow: 0 4px 16px var(--glow);
+    }
+
+    .sortPill {
+      padding: 8px 15px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      color: var(--textSecondary);
+    }
+
+    .sortPill.active {
+      background: var(--accentSoft);
+      color: var(--accent);
+      border-color: var(--accentMid);
+    }
+
+    .sortPill i,
+    .catPill i {
+      font-size: 16px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--r1);
+      overflow: hidden;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, var(--surface), var(--cardTint));
+      box-shadow: var(--elev1);
+      cursor: pointer;
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+      min-width: 0;
+    }
+
+    .card:nth-child(odd) {
+      transform: rotate(-0.25deg);
+    }
+
+    .card:nth-child(even) {
+      transform: rotate(0.25deg);
+    }
+
+    .card:hover {
+      box-shadow: var(--elev2);
+      z-index: 2;
+    }
+
+    .card:active {
+      transform: scale(0.97) rotate(0deg) !important;
+    }
+
+    .photo {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: block;
+      position: relative;
+      background: var(--surfaceBgLight);
+      overflow: hidden;
+    }
+
+    .photo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 44%, var(--photoA), transparent 30%),
+        radial-gradient(circle at 58% 58%, var(--photoB), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.015));
+      filter: saturate(1.05);
+    }
+
+    .photo::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .photo.coat {
+      --photoA: rgba(168, 124, 255, 0.60);
+      --photoB: rgba(232, 69, 139, 0.18);
+    }
+
+    .photo.fragrance {
+      --photoA: rgba(238, 187, 112, 0.52);
+      --photoB: rgba(162, 155, 254, 0.18);
+    }
+
+    .photo.makeup {
+      --photoA: rgba(232, 69, 139, 0.52);
+      --photoB: rgba(240, 155, 165, 0.24);
+    }
+
+    .photo.shoe {
+      --photoA: rgba(210, 215, 225, 0.44);
+      --photoB: rgba(108, 92, 231, 0.14);
+    }
+
+    .photo.necklace {
+      --photoA: rgba(225, 170, 92, 0.45);
+      --photoB: rgba(255, 255, 255, 0.12);
+    }
+
+    .desireMeter {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .desireMeter i {
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .desireMeter i.empty {
+      color: rgba(138, 149, 168, 0.70);
+    }
+
+    .cardMeta {
+      min-height: 58px;
+      padding: 10px 12px 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .cardMeta strong {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .cardText {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .cardText span {
+      color: var(--textSecondary);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .listHero {
+      border: 1px dashed var(--accentMid);
+      border-radius: var(--r2);
+      background: var(--surfaceBgLight);
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .listHero h2,
+    .builderHead h2 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: -0.2px;
+      margin-bottom: 6px;
+    }
+
+    .listHero p,
+    .builderHead p {
+      color: var(--textSecondary);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .listBuilder,
+    .createdListCard {
+      border: 1px solid var(--stroke);
+      border-radius: var(--r2);
+      background: var(--surfaceBg);
+      box-shadow: var(--elev1);
+      overflow: hidden;
+    }
+
+    .listBuilder {
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .listBuilder.show {
+      display: block;
+    }
+
+    .builderHead,
+    .builderBody {
+      padding: 18px;
+    }
+
+    .builderHead {
+      border-bottom: 1px solid var(--stroke);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .builderBody {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .fieldStack {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .field label,
+    .builderLabel {
+      display: block;
+      color: var(--textSecondary);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .inputLike {
+      min-height: 42px;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      background: var(--inputBg);
+      padding: 11px 12px;
+      color: var(--textPrimary);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .iconChoices {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .iconChoice {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .iconChoice.active {
+      border-color: var(--accentMid);
+      background: var(--gradientBtn);
+      box-shadow: 0 4px 16px var(--glow);
+    }
+
+    .statsCard {
+      border: 1px solid var(--accentMid);
+      border-radius: 16px;
+      background: var(--gradientPill);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .progressRing {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) 0 62%, rgba(255,255,255,0.10) 62% 100%);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .progressRing::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: rgba(18, 28, 42, 0.96);
+    }
+
+    .progressRing span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .statsText strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .statsMini {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .statsMini span {
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(18, 28, 42, 0.46);
+      color: var(--textSecondary);
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .selectGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .selectItem {
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      background: var(--surface);
+      overflow: hidden;
+      min-width: 0;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .selectItem.selected {
+      border-color: var(--accentMid);
+      box-shadow: 0 4px 16px var(--glow);
+    }
+
+    .selectItem.selected::after {
+      content: "\2713";
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .selectItem .photo,
+    .selectItem .emptyPhoto {
+      aspect-ratio: 1 / 0.72;
+    }
+
+    .selectItem span {
+      display: block;
+      padding: 8px 9px 9px;
+      color: var(--textPrimary);
+      font-size: 12px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .createdListCard {
+      display: none;
+      padding: 16px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .createdListCard.show {
+      display: flex;
+    }
+
+    .listIdentity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .listIcon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--gradientBtn);
+      border: 1px solid var(--accentMid);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .listIdentity strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .listIdentity span {
+      color: var(--textSecondary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .emptyPhoto {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: rgba(18, 28, 42, 0.40);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(138, 149, 168, 0.74);
+    }
+
+    .emptyPhoto i {
+      font-size: 56px;
+    }
+
+    .filterFloat {
+      position: fixed;
+      left: calc(50% + 122px);
+      bottom: 34px;
+      transform: translateX(-50%);
+      z-index: 12;
+      border-color: var(--accentMid);
+      background: var(--gradientBtn);
+      color: var(--btnText);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24), 0 4px 16px var(--glow);
+      min-height: 40px;
+      padding: 9px 18px;
+    }
+
+    .modalBack {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      background: rgba(5, 8, 14, 0.42);
+      transition: background 0.22s ease-out;
+    }
+
+    .modalBack.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 92%;
+      max-width: 600px;
+      max-height: 85vh;
+      border-radius: var(--r2) var(--r2) 0 0;
+      background: var(--surfaceBg);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      box-shadow: 0 -4px 50px rgba(0, 0, 0, 0.28);
+      overflow-y: auto;
+      scrollbar-width: none;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.45, 1), opacity 0.22s ease-out;
+      margin-bottom: 0;
+    }
+
+    .modal::-webkit-scrollbar {
+      display: none;
+    }
+
+    .modalBack.show .modal {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .handle {
+      display: flex;
+      justify-content: center;
+      padding: 10px 0 4px;
+    }
+
+    .handle span {
+      width: 36px;
+      height: 4px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .mHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 16px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mHead strong {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .mPreviewRow {
+      display: flex;
+      gap: 12px;
+      padding: 0 16px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mThumb {
+      width: 80px;
+      height: 80px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      background: var(--inputBg);
+      border: 1px solid var(--stroke);
+    }
+
+    .mThumb .photo,
+    .mThumb .emptyPhoto {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+    }
+
+    .cropBtn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: #fff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .mMeta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 2px;
+    }
+
+    .mNameInput {
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+      background: transparent;
+      padding: 0 2px 5px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--textPrimary);
+      letter-spacing: -0.2px;
+      outline: none;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .mMetaChips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .mMetaChip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 99px;
+      background: var(--accentSoft);
+      border: 1px solid var(--accentMid);
+      color: var(--accent);
+    }
+
+    .mMetaChipGhost {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--textSecondary);
+    }
+
+    .mMetaHearts {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+
+    .mMetaHeart {
+      display: inline-flex;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .mMetaHeart.off {
+      color: rgba(138, 149, 168, 0.70);
+    }
+
+    .mMetaHint {
+      font-size: 10.5px;
+      color: var(--textSecondary);
+    }
+
+    .mTabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0 16px;
+    }
+
+    .mTab {
+      flex: 1;
+      padding: 9px 0;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--textSecondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .mTab i {
+      font-size: 12px;
+    }
+
+    .mTab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .mTab[data-tab="niyet"].active {
+      color: var(--lilac);
+      border-bottom-color: var(--lilac);
+    }
+
+    .mTabBody {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 360px;
+      transition: opacity 0.15s ease;
+    }
+
+    .mField {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mLabel {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--textSecondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mLabel i {
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .mLinkAddBtn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px dashed var(--accentMid);
+      color: var(--accent);
+      border-radius: 10px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-text);
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    .cDropWrap {
+      position: relative;
+    }
+
+    .cDropBtn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 13px;
+      border-radius: 12px;
+      background: var(--inputBg);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: var(--font-text);
+      color: var(--textPrimary);
+      cursor: pointer;
+      text-align: left;
+      gap: 8px;
+    }
+
+    .cDropBtn.compact {
+      padding: 4px 8px 4px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      background: transparent;
+      border: none;
+    }
+
+    .cDropIcon,
+    .cDropOptIcon {
+      color: var(--accent);
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+
+    .cDropChevron {
+      color: var(--textSecondary);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .mDateRow,
+    .mPriceRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mDateCard,
+    .mPriceCard,
+    .mSecretRow,
+    .mReflectCard {
+      background: var(--inputBg);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+    }
+
+    .mDateCard,
+    .mPriceCard {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .mDateLabel,
+    .mPriceCardLabel {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--textSecondary);
+    }
+
+    .mPriceTarget {
+      border-color: var(--accentMid);
+      background: var(--accentSoft);
+    }
+
+    .mPriceInputRow {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+    }
+
+    .mPriceCur {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--textSecondary);
+      flex-shrink: 0;
+    }
+
+    .mPriceCard input,
+    .mDateCard input {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      color: var(--textPrimary) !important;
+    }
+
+    .mSizeChips,
+    .mChipSel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .mSizeChip,
+    .mChipBtn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 13px;
+      border-radius: 99px;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      color: var(--textSecondary);
+      cursor: pointer;
+      font-family: var(--font-text);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mSizeChip.on,
+    .mChipBtn.active {
+      background: var(--accentSoft);
+      border-color: var(--accentMid);
+      color: var(--accent);
+    }
+
+    .mReflectCard {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .mReflectPurple {
+      background: rgba(168, 124, 255, 0.08);
+      border-color: rgba(168, 124, 255, 0.18);
+    }
+
+    .mReflectTitle {
+      font-size: 11.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mReflectTitle i {
+      font-size: 13px;
+      color: var(--lilac);
+    }
+
+    .mSecretRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 13px;
+    }
+
+    .mSecretLeft {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .mSecretLeft i {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.18);
+      transition: .2s;
+      border-radius: 999px;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: rgba(255, 255, 255, 0.86);
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    .switch input:checked + .slider {
+      background: var(--accent);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(18px);
+    }
+
+    .desireSelector {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .desireSelector .dBtn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r1);
+      border: 1px solid var(--stroke);
+      background: var(--surface);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .desireSelector .dBtn.active {
+      background: var(--accentSoft);
+      border-color: var(--accentMid);
+      transform: scale(1.08);
+    }
+
+    .mFoot {
+      display: flex;
+      gap: 8px;
+      padding-top: 6px;
+      margin-top: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mFoot .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 11px 0;
+      border-radius: 99px;
+    }
+
+    .btn.danger {
+      border-color: rgba(220, 38, 38, 0.28);
+      background: rgba(220, 38, 38, 0.12);
+      color: var(--textPrimary);
+    }
+
+    input[type="url"],
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: var(--inputBg);
+      color: var(--textPrimary);
+      font-family: var(--font-text);
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: var(--r1);
+      outline: none;
+      appearance: none;
+    }
+
+    textarea {
+      min-height: 68px;
+      resize: vertical;
+      font-size: 14px;
+    }
+
+    @media (min-width: 760px) {
+      .modal {
+        max-width: min(920px, calc(100vw - 48px));
+        border-radius: var(--r2);
+        margin-bottom: 24px;
+      }
+
+      .modalBack {
+        align-items: center;
+      }
+    }
+
+    .mobileBar {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .prototype {
+        padding: 0;
+      }
+
+      .appShell {
+        width: 100%;
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .topbar {
+        padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+      }
+
+      .topbar::before {
+        content: "Wishlistgül";
+        font-family: 'DM Serif Display', serif;
+        font-size: 24px;
+        font-weight: 400;
+        font-style: italic;
+        background: var(--gradientHL);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.3px;
+      }
+
+      .viewTitle {
+        display: none;
+      }
+
+      .content {
+        padding: 12px 16px 116px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .builderBody {
+        grid-template-columns: 1fr;
+      }
+
+      .selectGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cardMeta {
+        min-height: 54px;
+      }
+
+      .filterFloat {
+        left: 50%;
+        bottom: 84px;
+      }
+
+      .mobileBar {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        z-index: 20;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        padding: 8px;
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        background: rgba(18, 28, 42, 0.94);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        box-shadow: var(--elev2);
+      }
+
+      .mobileBar button {
+        appearance: none;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        height: 48px;
+        background: transparent;
+        color: var(--textSecondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .mobileBar button.active {
+        background: var(--gradientBtn);
+        border-color: var(--accentMid);
+        color: var(--textPrimary);
+      }
+
+      .mobileBar i {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hBtns {
+        gap: 6px;
+      }
+
+      .btn {
+        min-height: 34px;
+        padding: 8px 12px;
+      }
+
+      .btn.iconBtn {
+        width: 34px;
+      }
+
+      .grid {
+        gap: 12px;
+      }
+
+      .listHero,
+      .builderHead,
+      .createdListCard {
+        align-items: stretch;
+      }
+
+      .listHero,
+      .builderHead {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .createdListCard {
+        flex-direction: column;
+      }
+
+      .cardMeta strong {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <div class="appShell">
+      <aside class="sidebar" aria-label="Yan menü">
+        <h1 class="appName">Wishlistgül</h1>
+
+        <nav class="navGroup mainNav" aria-label="Ana gezinme">
+          <button class="navItem active" data-screen="homeScreen"><i class="ph ph-house"></i><span>Ana Sayfa</span></button>
+          <button class="navItem" data-screen="listsScreen"><i class="ph ph-list-heart"></i><span>Listeler</span></button>
+        </nav>
+
+        <nav class="navGroup featureNav" aria-label="Özellikler">
+          <button class="navItem"><i class="ph ph-brain"></i><span>WishlistAI</span></button>
+          <button class="navItem"><i class="ph ph-chart-bar"></i><span>Wrapped</span></button>
+          <button class="navItem"><i class="ph ph-piggy-bank"></i><span>Birikim</span></button>
+        </nav>
+
+        <nav class="navGroup accountNav" aria-label="Hesap">
+          <button class="navItem"><i class="ph ph-gear"></i><span>Ayarlar</span></button>
+          <div class="profile"><i class="ph ph-user-circle"></i><span>Yiğit Efe</span></div>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="hBtns">
+            <button class="btn primary" id="openDetail">+ Ekle</button>
+            <button class="btn iconBtn" aria-label="Kamera"><i class="ph ph-camera"></i></button>
+            <button class="btn iconBtn" aria-label="Linkten ekle"><i class="ph ph-link"></i></button>
+            <button class="btn iconBtn" aria-label="Menü"><i class="ph ph-dots-three-outline"></i></button>
+          </div>
+        </header>
+
+        <section class="content">
+          <section class="screen active" id="homeScreen">
+            <div class="filterStack">
+              <div>
+                <div class="filterLabel">Durum</div>
+                <div class="pillRow">
+                  <button class="sortPill active"><i class="ph ph-circle"></i> Hepsi</button>
+                  <button class="sortPill"><i class="ph ph-x"></i> Alınmadı</button>
+                  <button class="sortPill"><i class="ph ph-check"></i> Alındı</button>
+                  <button class="sortPill"><i class="ph ph-lock"></i> Gizli</button>
+                </div>
+              </div>
+
+              <div class="pillRow" aria-label="Kategoriler">
+                <button class="catPill active">Tümü</button>
+                <button class="catPill"><i class="ph ph-t-shirt"></i> Giyim</button>
+                <button class="catPill"><i class="ph ph-sneaker"></i> Ayakkabı</button>
+                <button class="catPill"><i class="ph ph-paint-brush"></i> Makyaj &amp; Cilt</button>
+                <button class="catPill"><i class="ph ph-vinyl-record"></i> Albüm</button>
+                <button class="catPill"><i class="ph ph-flower-lotus"></i> Parfüm</button>
+                <button class="catPill"><i class="ph ph-sparkle"></i> Saç Bakım</button>
+                <button class="catPill">Diğer</button>
+              </div>
+            </div>
+
+            <section class="grid" aria-label="Ürünler">
+              <article class="card">
+                <div class="photo coat"></div>
+                <div class="cardMeta">
+                  <div class="cardText"><strong>Lila blazer</strong><span>Giyim</span></div>
+                  <span class="desireMeter"><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph ph-heart empty"></i><i class="ph ph-heart empty"></i></span>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="photo fragrance"></div>
+                <div class="cardMeta">
+                  <div class="cardText"><strong>YSL Libre</strong><span>Parfüm</span></div>
+                  <span class="desireMeter"><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph ph-heart empty"></i><i class="ph ph-heart empty"></i></span>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="photo makeup"></div>
+                <div class="cardMeta">
+                  <div class="cardText"><strong>Rose ruj</strong><span>Makyaj &amp; Cilt</span></div>
+                  <span class="desireMeter"><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph ph-heart empty"></i><i class="ph ph-heart empty"></i></span>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="photo shoe"></div>
+                <div class="cardMeta">
+                  <div class="cardText"><strong>Gri sneaker</strong><span>Ayakkabı</span></div>
+                  <span class="desireMeter"><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph ph-heart empty"></i><i class="ph ph-heart empty"></i></span>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="photo necklace"></div>
+                <div class="cardMeta">
+                  <div class="cardText"><strong>Altın kolye</strong><span>Aksesuar</span></div>
+                  <span class="desireMeter"><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph ph-heart empty"></i><i class="ph ph-heart empty"></i></span>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="emptyPhoto"><i class="ph ph-image-broken"></i></div>
+                <div class="cardMeta">
+                  <div class="cardText"><strong>Fotoğraf yok</strong><span>Diğer</span></div>
+                  <span class="desireMeter"><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph-fill ph-heart"></i><i class="ph ph-heart empty"></i><i class="ph ph-heart empty"></i></span>
+                </div>
+              </article>
+            </section>
+          </section>
+
+          <section class="screen" id="listsScreen">
+            <div class="listHero">
+              <div>
+                <h2>Liste oluştur</h2>
+                <p>Alınmamış ürünlerinden bir grup seç, listeye isim ve simge ver. Liste kartında tamamlanma yüzdesi ve alınan/alınmayan ürün sayıları gözükecek.</p>
+              </div>
+              <button class="btn primary" id="showBuilder"><i class="ph ph-plus"></i> Liste oluştur</button>
+            </div>
+
+            <section class="listBuilder" id="listBuilder" aria-label="Liste oluşturma">
+              <div class="builderHead">
+                <div>
+                  <h2>Yaz alışverişi</h2>
+                  <p>Liste adını değiştirebilir, simge seçebilir, ürün ekleyip çıkarabilirsin.</p>
+                </div>
+                <div class="hBtns">
+                  <button class="btn" id="hideBuilder">Vazgeç</button>
+                  <button class="btn primary" id="saveList">Listeyi kaydet</button>
+                </div>
+              </div>
+
+              <div class="builderBody">
+                <aside class="fieldStack">
+                  <div class="field">
+                    <label>Liste adı</label>
+                    <div class="inputLike">Yaz alışverişi</div>
+                  </div>
+                  <div>
+                    <div class="builderLabel">Simge seç</div>
+                    <div class="iconChoices">
+                      <button class="iconChoice active"><i class="ph ph-sun"></i></button>
+                      <button class="iconChoice"><i class="ph ph-sparkle"></i></button>
+                      <button class="iconChoice"><i class="ph ph-gift"></i></button>
+                      <button class="iconChoice"><i class="ph ph-heart"></i></button>
+                      <button class="iconChoice"><i class="ph ph-shopping-bag"></i></button>
+                    </div>
+                  </div>
+                  <div class="statsCard">
+                    <div class="progressRing"><span>62%</span></div>
+                    <div class="statsText">
+                      <strong>5 üründen 3'ü alındı</strong>
+                      <div class="statsMini"><span>3 alındı</span><span>2 alınmadı</span></div>
+                    </div>
+                  </div>
+                </aside>
+
+                <div>
+                  <div class="builderLabel">Listeye eklenecek ürünler</div>
+                  <div class="selectGrid">
+                    <button class="selectItem selected"><div class="photo coat"></div><span>Lila blazer</span></button>
+                    <button class="selectItem selected"><div class="photo fragrance"></div><span>YSL Libre</span></button>
+                    <button class="selectItem"><div class="photo makeup"></div><span>Rose ruj</span></button>
+                    <button class="selectItem selected"><div class="photo shoe"></div><span>Gri sneaker</span></button>
+                    <button class="selectItem"><div class="photo necklace"></div><span>Altın kolye</span></button>
+                    <button class="selectItem"><div class="emptyPhoto"><i class="ph ph-image-broken"></i></div><span>Fotoğraf yok</span></button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <article class="createdListCard" id="createdListCard">
+              <div class="listIdentity">
+                <div class="listIcon"><i class="ph ph-sun"></i></div>
+                <div>
+                  <strong>Yaz alışverişi</strong>
+                  <span>62% tamamlandı · 3 alındı · 2 alınmadı</span>
+                </div>
+              </div>
+              <div class="hBtns">
+                <button class="btn"><i class="ph ph-pencil-simple"></i> Düzenle</button>
+                <button class="btn primary"><i class="ph ph-plus"></i> Ürün ekle</button>
+              </div>
+            </article>
+          </section>
+        </section>
+
+        <button class="btn filterFloat"><i class="ph ph-funnel-simple"></i> Filtrele <i class="ph ph-caret-down"></i></button>
+      </main>
+    </div>
+  </div>
+
+  <div id="detailOverlay" class="modalBack" role="dialog" aria-modal="true">
+    <div class="modal" id="modal">
+      <div class="handle"><span></span></div>
+
+      <div class="mHead">
+        <strong>Ürün Detayları</strong>
+        <button id="closeDetail" class="btn">Kapat</button>
+      </div>
+
+      <div class="mPreviewRow">
+        <div class="mThumb">
+          <div class="photo fragrance"></div>
+          <button class="cropBtn" title="Kırp / Düzenle"><i class="ph ph-crop"></i></button>
+        </div>
+        <div class="mMeta">
+          <input type="text" class="mNameInput" value="YSL Libre" placeholder="İsim ver..." />
+          <div class="mMetaChips">
+            <span class="mMetaChip">Parfüm</span>
+            <span class="mMetaChip mMetaChipGhost">Mayıs 2026</span>
+            <div class="mMetaHearts">
+              <span class="mMetaHeart"><i class="ph-fill ph-heart"></i></span>
+              <span class="mMetaHeart"><i class="ph-fill ph-heart"></i></span>
+              <span class="mMetaHeart"><i class="ph-fill ph-heart"></i></span>
+              <span class="mMetaHeart off"><i class="ph ph-heart"></i></span>
+              <span class="mMetaHeart off"><i class="ph ph-heart"></i></span>
+            </div>
+          </div>
+          <div class="mMetaHint">Ana sayfadan eklenen ürün detayı</div>
+        </div>
+      </div>
+
+      <div class="mTabs">
+        <div class="mTab active" data-tab="bilgi"><i class="ph ph-info"></i> Bilgi</div>
+        <div class="mTab" data-tab="not"><i class="ph ph-note-pencil"></i> Not</div>
+        <div class="mTab" data-tab="fiyat"><i class="ph ph-tag"></i> Fiyat</div>
+        <div class="mTab" data-tab="niyet"><i class="ph ph-sparkle"></i> Niyet</div>
+      </div>
+
+      <div class="mTabBody" id="tabBilgi">
+        <div class="mField">
+          <div class="mLabel">Linkler</div>
+          <div>
+            <input type="url" value="https://example.com/ysl-libre" />
+          </div>
+          <button class="mLinkAddBtn"><i class="ph ph-plus"></i> Link ekle</button>
+        </div>
+
+        <div class="mField">
+          <div class="mLabel">Kategori</div>
+          <div class="cDropWrap">
+            <button type="button" class="cDropBtn">
+              <span class="cDropIcon"><i class="ph ph-drop"></i></span>
+              <span class="cDropLabel">Parfüm</span>
+              <i class="ph ph-caret-down cDropChevron"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mField">
+          <div class="mLabel"><i class="ph ph-calendar-blank"></i> Hedef Alım</div>
+          <div class="mDateRow">
+            <div class="mDateCard">
+              <div class="mDateLabel">Ay</div>
+              <button type="button" class="cDropBtn compact">
+                <span class="cDropLabel">Mayıs</span>
+                <i class="ph ph-caret-down cDropChevron"></i>
+              </button>
+            </div>
+            <div class="mDateCard">
+              <div class="mDateLabel">Yıl</div>
+              <button type="button" class="cDropBtn compact">
+                <span class="cDropLabel">2026</span>
+                <i class="ph ph-caret-down cDropChevron"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mField">
+          <div class="mLabel">İstek Yoğunluğu</div>
+          <div class="desireSelector">
+            <button class="dBtn active"><i class="ph-fill ph-heart"></i></button>
+            <button class="dBtn active"><i class="ph-fill ph-heart"></i></button>
+            <button class="dBtn active"><i class="ph-fill ph-heart"></i></button>
+            <button class="dBtn"><i class="ph ph-heart"></i></button>
+            <button class="dBtn"><i class="ph ph-heart"></i></button>
+          </div>
+        </div>
+
+        <div class="mSecretRow">
+          <div class="mSecretLeft"><i class="ph ph-lock"></i> Gizli olarak sakla</div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="mFoot">
+          <button class="btn danger">Sil</button>
+          <button class="btn primary">Kaydet</button>
+        </div>
+      </div>
+
+      <div class="mTabBody" id="tabNot" style="display:none">
+        <div class="mField">
+          <div class="mLabel">Renk / Desen Tercihi</div>
+          <input type="text" placeholder="Renk, desen, baskı tercihin..." />
+        </div>
+        <div class="mField">
+          <div class="mLabel">Notlar</div>
+          <textarea placeholder="Beden detayı, niye istiyorum, alternatif..."></textarea>
+        </div>
+        <div class="mFoot">
+          <button class="btn danger">Sil</button>
+          <button class="btn primary">Kaydet</button>
+        </div>
+      </div>
+
+      <div class="mTabBody" id="tabFiyat" style="display:none">
+        <div class="mField">
+          <div class="mLabel">Fiyat Takibi</div>
+          <div class="mPriceRow">
+            <div class="mPriceCard">
+              <div class="mPriceCardLabel">Mevcut Fiyat</div>
+              <div class="mPriceInputRow"><span class="mPriceCur">₺</span><input type="text" value="4350" /></div>
+            </div>
+            <div class="mPriceCard mPriceTarget">
+              <div class="mPriceCardLabel">Hedef Fiyat</div>
+              <div class="mPriceInputRow"><span class="mPriceCur">₺</span><input type="text" value="3900" /></div>
+            </div>
+          </div>
+        </div>
+        <div class="mField">
+          <div class="mLabel">Fiyat Notu</div>
+          <textarea placeholder="İndirim sezonu, platform notu..."></textarea>
+        </div>
+        <div class="mFoot">
+          <button class="btn danger">Sil</button>
+          <button class="btn primary">Kaydet</button>
+        </div>
+      </div>
+
+      <div class="mTabBody" id="tabNiyet" style="display:none">
+        <div class="mReflectCard">
+          <div class="mReflectTitle"><i class="ph ph-user-circle"></i> Kimin için?</div>
+          <div class="mChipSel">
+            <button class="mChipBtn active"><i class="ph ph-smiley"></i> Kendim</button>
+            <button class="mChipBtn"><i class="ph ph-gift"></i> Hediye</button>
+          </div>
+        </div>
+        <div class="mReflectCard mReflectPurple">
+          <div class="mReflectTitle"><i class="ph ph-brain"></i> Neden istiyorum?</div>
+          <div class="mChipSel">
+            <button class="mChipBtn"><i class="ph ph-check-circle"></i> İhtiyaç</button>
+            <button class="mChipBtn"><i class="ph ph-fire"></i> Tüketim Çılgınlığı</button>
+            <button class="mChipBtn"><i class="ph ph-shooting-star"></i> Ani İstek</button>
+          </div>
+        </div>
+        <div class="mField">
+          <div class="mLabel">Niyet Notu <span style="font-weight:400;opacity:.55;">(opsiyonel)</span></div>
+          <textarea placeholder="Neden istediğin hakkında bir şeyler yaz..."></textarea>
+        </div>
+        <div class="mFoot">
+          <button class="btn danger">Sil</button>
+          <button class="btn primary">Kaydet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mobileBar" aria-label="Mobil gezinme">
+    <button class="active" aria-label="Ana Sayfa" data-screen="homeScreen"><i class="ph ph-house"></i></button>
+    <button aria-label="Listeler" data-screen="listsScreen"><i class="ph ph-list-heart"></i></button>
+    <button aria-label="WishlistAI"><i class="ph ph-brain"></i></button>
+    <button aria-label="Birikim"><i class="ph ph-piggy-bank"></i></button>
+    <button aria-label="Ayarlar"><i class="ph ph-gear"></i></button>
+  </nav>
+
+  <script>
+    const filterFloat = document.querySelector('.filterFloat');
+
+    document.querySelectorAll('.navItem').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.navItem.active').forEach((active) => active.classList.remove('active'));
+        button.classList.add('active');
+
+        const target = button.dataset.screen;
+        if (target) {
+          document.querySelectorAll('.screen.active').forEach((screen) => screen.classList.remove('active'));
+          document.getElementById(target).classList.add('active');
+          filterFloat.style.display = target === 'homeScreen' ? 'inline-flex' : 'none';
+        }
+      });
+    });
+
+    document.querySelectorAll('.catPill, .sortPill, .mobileBar button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const group = button.parentElement;
+        group.querySelectorAll('.active').forEach((active) => active.classList.remove('active'));
+        button.classList.add('active');
+
+        const target = button.dataset.screen;
+        if (target) {
+          document.querySelectorAll('.screen.active').forEach((screen) => screen.classList.remove('active'));
+          document.getElementById(target).classList.add('active');
+          filterFloat.style.display = target === 'homeScreen' ? 'inline-flex' : 'none';
+        }
+      });
+    });
+
+    document.querySelectorAll('.iconChoice').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.iconChoice.active').forEach((active) => active.classList.remove('active'));
+        button.classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.selectItem').forEach((button) => {
+      button.addEventListener('click', () => button.classList.toggle('selected'));
+    });
+
+    document.getElementById('showBuilder').addEventListener('click', () => {
+      document.getElementById('listBuilder').classList.add('show');
+    });
+
+    document.getElementById('hideBuilder').addEventListener('click', () => {
+      document.getElementById('listBuilder').classList.remove('show');
+    });
+
+    document.getElementById('saveList').addEventListener('click', () => {
+      document.getElementById('listBuilder').classList.remove('show');
+      document.getElementById('createdListCard').classList.add('show');
+    });
+
+    document.getElementById('openDetail').addEventListener('click', () => {
+      const overlay = document.getElementById('detailOverlay');
+      overlay.style.display = 'flex';
+      requestAnimationFrame(() => overlay.classList.add('show'));
+    });
+
+    document.getElementById('closeDetail').addEventListener('click', () => {
+      const overlay = document.getElementById('detailOverlay');
+      overlay.classList.remove('show');
+      setTimeout(() => { overlay.style.display = 'none'; }, 280);
+    });
+
+    document.getElementById('detailOverlay').addEventListener('click', (event) => {
+      if (event.target.id === 'detailOverlay') {
+        event.currentTarget.classList.remove('show');
+        setTimeout(() => { event.currentTarget.style.display = 'none'; }, 280);
+      }
+    });
+
+    document.querySelectorAll('.mTab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.mTab').forEach((item) => item.classList.remove('active'));
+        document.querySelectorAll('.mTabBody').forEach((body) => { body.style.display = 'none'; });
+        tab.classList.add('active');
+        const body = document.getElementById(`tab${tab.dataset.tab[0].toUpperCase()}${tab.dataset.tab.slice(1)}`);
+        if (body) body.style.display = 'flex';
+      });
+    });
+  </script>
+</body>
+</html>
