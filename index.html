@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="theme-color" content="#fdf2f8" id="metaThemeColor" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1923" id="metaThemeColorDark" />
     <meta name="apple-mobile-web-app-title" content="Wishlistgül" />
@@ -3075,6 +3075,8 @@
             .wrMetricCard {
                 border-right: 0;
                 border-top: 1px solid var(--stroke);
+                align-items: center;
+                text-align: center;
             }
             .wrMetricCard:nth-child(1),
             .wrMetricCard:nth-child(2) {
@@ -3082,6 +3084,10 @@
             }
             .wrMetricCard:nth-child(odd) {
                 border-right: 1px solid var(--stroke);
+            }
+            .wrMetricIcon {
+                margin-left: auto;
+                margin-right: auto;
             }
             .wrHighlightCard {
                 grid-template-columns: 74px minmax(0, 1fr);
@@ -3435,7 +3441,7 @@
             padding: 16px 20px;
             position: sticky;
             top: 0;
-            background: var(--aiHeaderBg);
+            background: var(--headerBg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             z-index: 10;
@@ -6858,6 +6864,35 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         .listBuilder { display: none; }
         .listBuilder.show { display: block; }
+        body.list-editor-open::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 54;
+            background: rgba(9, 12, 22, .24);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+        .listBuilder.editingOverlay {
+            display: block;
+            position: fixed;
+            z-index: 55;
+            top: 50%;
+            left: calc(50% + 122px);
+            width: min(980px, calc(100vw - 292px));
+            max-height: min(82vh, 760px);
+            overflow: auto;
+            margin: 0;
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, calc(-50% + 14px)) scale(.985);
+            transition: opacity .22s ease, transform .22s ease;
+        }
+        .listBuilder.editingOverlay.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
         .listBuilderHead,
         .listBuilderBody { padding: 18px; }
         .listBuilderHead {
@@ -6994,9 +7029,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         .listSelectGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+            display: flex;
+            align-items: stretch;
             gap: 10px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2px 2px 10px;
+            scroll-snap-type: x proximity;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accentMid) transparent;
         }
 
         .listSelectItem {
@@ -7009,6 +7050,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             position: relative;
             text-align: left;
             color: var(--textPrimary);
+            flex: 0 0 128px;
+            scroll-snap-align: start;
         }
 
         .listSelectItem.selected {
@@ -7259,6 +7302,27 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             background: rgba(220, 38, 38, 0.10) !important;
             color: #ff8b9a !important;
         }
+        .addListItemBtn,
+        .addListDetailBtn {
+            border-color: var(--accentMid) !important;
+            background: var(--gradientBtn) !important;
+            color: var(--textPrimary) !important;
+        }
+        .mScopeNotice {
+            display: none;
+            margin: 0 18px 14px;
+            padding: 11px 13px;
+            border-radius: 12px;
+            border: 1px solid var(--accentMid);
+            background: var(--accentGradSubtle);
+            color: var(--textSecondary);
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .mScopeNotice.show {
+            display: block;
+        }
 
         .savedListIdentity strong {
             display: block;
@@ -7460,6 +7524,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        @media (min-width: 980px) and (pointer: coarse) {
+            header {
+                padding-top: calc(26px + env(safe-area-inset-top, 0px));
+            }
+        }
+
         @media (max-width: 760px) {
             .modalBack.pageView {
                 margin-left: 0;
@@ -7483,7 +7553,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
 
             .listSelectGrid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                display: flex;
+            }
+            .listBuilder.editingOverlay {
+                left: 50%;
+                width: calc(100vw - 24px);
+                max-height: calc(100dvh - 32px);
             }
 
             .savedListCard {
@@ -8739,6 +8814,23 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             background-clip: text;
         }
 
+        body[data-theme="pink"] .listHero h2,
+        body[data-theme="pink"] #aiScreenMode .aiCouncilHero .aiIntroTitle,
+        body[data-theme="pink"] #savingsBack.pageView .savingsHeroText h2,
+        body[data-theme="pink"] .wrappedBody.wrDashboard h2,
+        body:not([data-theme]) .listHero h2,
+        body:not([data-theme]) #aiScreenMode .aiCouncilHero .aiIntroTitle,
+        body:not([data-theme]) #savingsBack.pageView .savingsHeroText h2,
+        body:not([data-theme]) .wrappedBody.wrDashboard h2,
+        body[data-theme=""] .listHero h2,
+        body[data-theme=""] #aiScreenMode .aiCouncilHero .aiIntroTitle,
+        body[data-theme=""] #savingsBack.pageView .savingsHeroText h2,
+        body[data-theme=""] .wrappedBody.wrDashboard h2 {
+            background: linear-gradient(135deg, var(--textPrimary) 12%, var(--accent) 62%, #F28DB9 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
         .listHero p,
         #aiScreenMode .aiCouncilHero .aiIntroDesc,
         #savingsBack.pageView .savingsHeroText p,
@@ -8819,7 +8911,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         body[data-theme="pink"],
         body:not([data-theme]),
         body[data-theme=""] {
-            --heroAssetTint: hue-rotate(112deg) saturate(1.22) brightness(1.04);
+            --heroAssetTint: hue-rotate(108deg) saturate(.82) brightness(1.02);
         }
 
         body[data-theme="blue"] {
@@ -8827,7 +8919,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         body[data-theme="green"] {
-            --heroAssetTint: hue-rotate(54deg) saturate(1.08) brightness(1.03);
+            --heroAssetTint: hue-rotate(-72deg) saturate(.9) brightness(1.02);
         }
 
         body[data-theme="peach"] {
@@ -9055,6 +9147,350 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        /* Phone navigation and compact layouts: tablet/desktop remain unchanged. */
+        .mobileNav {
+            display: none;
+        }
+
+        @media (max-width: 760px) {
+            :root {
+                --mobileNavHeight: 68px;
+            }
+
+            .mobileNav {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 19;
+                height: calc(var(--mobileNavHeight) + env(safe-area-inset-bottom, 0px));
+                display: grid;
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+                align-items: stretch;
+                gap: 2px;
+                padding: 6px 4px max(6px, env(safe-area-inset-bottom, 0px));
+                border-top: 1px solid var(--stroke);
+                background: color-mix(in srgb, var(--surfaceBg) 90%, transparent);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+            }
+
+            body.auth-active > .mobileNav {
+                display: none;
+            }
+
+            .mobileNavItem {
+                appearance: none;
+                min-width: 0;
+                border: 1px solid transparent;
+                border-radius: 13px;
+                background: transparent;
+                color: var(--textSecondary);
+                font-family: var(--font-text);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 5px 1px 4px;
+                cursor: pointer;
+            }
+
+            .mobileNavItem i {
+                color: currentColor;
+                font-size: 21px;
+                line-height: 1;
+            }
+
+            .mobileNavItem span {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-size: 9.5px;
+                line-height: 1.12;
+                font-weight: 700;
+            }
+
+            .mobileNavItem.active {
+                color: var(--accent);
+                border-color: var(--accentMid);
+                background: var(--gradientBtn);
+                box-shadow: 0 4px 14px color-mix(in srgb, var(--glow) 46%, transparent);
+            }
+
+            header {
+                padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+            }
+
+            .hRow {
+                max-width: none;
+                flex-wrap: wrap;
+                gap: 10px 8px;
+            }
+
+            header .appName {
+                font-size: 22px;
+            }
+
+            .hBtns {
+                flex: 1 1 auto;
+                justify-content: flex-end;
+                min-width: 0;
+                gap: 6px;
+            }
+
+            .hBtns .btn {
+                min-height: 40px;
+                padding: 8px 12px;
+            }
+
+            .hBtns .cameraBtn {
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                font-size: 19px;
+            }
+
+            .hBtns .topLogoutBtn {
+                width: 40px;
+                padding: 0;
+                font-size: 0;
+            }
+
+            .hBtns .topLogoutBtn i {
+                margin: 0;
+                font-size: 19px;
+            }
+
+            .sortBar,
+            .catBar,
+            .content {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .content,
+            .modalBack.pageView,
+            #settingsBack.pageView {
+                padding-bottom: calc(var(--mobileNavHeight) + env(safe-area-inset-bottom, 0px) + 18px);
+            }
+
+            .grid {
+                gap: 10px;
+            }
+
+            .card .cardMeta {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .aiBack {
+                bottom: calc(var(--mobileNavHeight) + env(safe-area-inset-bottom, 0px));
+            }
+
+            .aiHeader {
+                flex-wrap: nowrap;
+                gap: 8px;
+                min-height: 61px;
+                padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+            }
+
+            .aiHeader .aiTitle {
+                flex: 0 0 auto;
+                margin-right: auto;
+                white-space: nowrap;
+                font-family: 'DM Serif Display', serif;
+                font-size: 22px;
+                font-style: italic;
+                font-weight: 400;
+                letter-spacing: -0.3px;
+                padding-right: 4px;
+                background: var(--gradientHL);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .aiHeader .aiTitle .wl,
+            .aiHeader .aiTitle .ai {
+                display: none;
+            }
+
+            .aiHeader .aiTitle::after {
+                content: "Wishlistgül";
+            }
+
+            .aiHeader .aiActions {
+                flex: 0 0 auto;
+                width: auto;
+                margin-left: 0;
+                justify-content: flex-end;
+                gap: 6px;
+            }
+
+            .aiHeader .aiActions .btn {
+                min-height: 40px;
+                padding: 8px 12px;
+                border-radius: 10px;
+            }
+
+            .aiHeader .aiActions #aiAddBtn {
+                min-width: 0;
+                padding-top: 8px;
+            }
+
+            .aiHeader .aiActions .cameraBtn {
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                font-size: 19px;
+            }
+
+            .aiHeader .aiActions .topLogoutBtn {
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                font-size: 0;
+            }
+
+            .aiHeader .aiActions .topLogoutBtn i {
+                margin: 0;
+                font-size: 19px;
+            }
+
+            .aiBody {
+                padding: 16px 12px 22px;
+            }
+
+            .wrStatGrid .wrMetricCard {
+                justify-content: flex-start;
+                align-items: center;
+                text-align: center;
+                gap: 10px;
+                padding: 20px 10px;
+            }
+
+            .wrStatGrid .wrMetricIcon {
+                margin: 0 auto;
+            }
+
+            .savedListCard {
+                min-height: 0;
+                padding: 16px;
+            }
+
+            .savedListIcon {
+                width: 60px;
+                height: 60px;
+                font-size: 27px;
+            }
+
+            #savingsBack.pageView .savingsSummary {
+                gap: 0;
+                margin-bottom: 12px;
+            }
+
+            #savingsBack.pageView .savSumItem {
+                grid-template-columns: 42px minmax(0, 1fr);
+                min-height: 96px;
+                padding: 14px 12px;
+                column-gap: 10px;
+            }
+
+            #savingsBack.pageView .savMetricIcon {
+                width: 42px;
+                height: 42px;
+            }
+
+            #savingsBack.pageView .savMetricIcon i {
+                font-size: 21px;
+            }
+
+            #savingsBack.pageView .savSumVal {
+                font-size: 24px;
+            }
+
+            #savingsBack.pageView .savCard {
+                grid-template-columns: 74px minmax(0, 1fr);
+                grid-template-areas:
+                    "media main"
+                    "pill pill"
+                    "action action";
+                min-height: 0;
+                gap: 12px;
+                padding: 14px;
+            }
+
+            #savingsBack.pageView .savCardMedia {
+                grid-area: media;
+                width: 74px;
+                height: 74px;
+            }
+
+            #savingsBack.pageView .savCardMain {
+                grid-area: main;
+            }
+
+            #savingsBack.pageView .savCardName {
+                font-size: 15px;
+                margin-bottom: 5px;
+            }
+
+            #savingsBack.pageView .savCardAmounts,
+            #savingsBack.pageView .savProgressRow {
+                font-size: 12px;
+            }
+
+            #savingsBack.pageView .savProgressRow {
+                grid-template-columns: auto minmax(48px, 1fr) auto;
+                gap: 7px;
+                margin-top: 8px;
+            }
+
+            #savingsBack.pageView .savPctPill {
+                grid-area: pill;
+                justify-self: start;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            #savingsBack.pageView .savCardDivider {
+                display: none;
+            }
+
+            #savingsBack.pageView .savCardBottom {
+                grid-area: action;
+                grid-template-columns: minmax(0, 1fr) 76px 42px;
+                gap: 7px;
+            }
+
+            #savingsBack.pageView .savInput,
+            #savingsBack.pageView .savAddBtn,
+            #savingsBack.pageView .savResetBtn {
+                height: 42px;
+            }
+
+            #savingsBack.pageView .savAddBtn {
+                font-size: 13px;
+            }
+
+            #savingsBack.pageView .savResetBtn {
+                width: 42px;
+            }
+
+            .wrappedBody .wrTitleRow {
+                grid-template-columns: 36px minmax(0, 1fr) 36px;
+                gap: 6px;
+                justify-content: stretch;
+            }
+
+            .wrappedBody .wrTitleNav {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
     </style>
 </head>
 
@@ -9081,15 +9517,24 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             <div class="appName">Wishlistgül</div>
             <div class="mainViewTitle" id="mainViewTitle">Ana Sayfa</div>
             <div class="hBtns">
-                <label class="btn primary" for="filePick">+ Ekle</label>
+                <label class="btn primary" id="topFilePickBtn" for="filePick">+ Ekle</label>
                 <input id="filePick" class="hidden" type="file" accept="image/*,.webp,.gif,.avif,.svg,.png" multiple />
-                <label class="btn cameraBtn" for="cameraPick" title="Kamera"><i class="ph ph-camera"></i></label>
+                <label class="btn cameraBtn" id="topCameraPickBtn" for="cameraPick" title="Kamera"><i class="ph ph-camera"></i></label>
                 <input id="cameraPick" class="hidden" type="file" accept="image/*" capture="environment" />
                 <button id="linkPickBtn" class="btn cameraBtn" title="Linkten Ekle"><i class="ph ph-link"></i></button>
                 <button id="topLogoutBtn" class="btn topLogoutBtn" title="Çıkış Yap"><i class="ph ph-sign-out"></i> Çıkış</button>
             </div>
         </div>
     </header>
+
+    <nav class="mobileNav" id="mobileNav" aria-label="Mobil gezinme">
+        <button class="mobileNavItem active" data-mobile-view="home" aria-current="page"><i class="ph ph-house"></i><span>Ana Sayfa</span></button>
+        <button class="mobileNavItem" data-mobile-view="lists"><i class="ph ph-list-heart"></i><span>Listeler</span></button>
+        <button class="mobileNavItem" data-mobile-view="ai"><i class="ph ph-brain"></i><span>WishlistAI</span></button>
+        <button class="mobileNavItem" data-mobile-view="wrapped"><i class="ph ph-chart-bar"></i><span>Wrapped</span></button>
+        <button class="mobileNavItem" data-mobile-view="savings"><i class="ph ph-piggy-bank"></i><span>Birikim</span></button>
+        <button class="mobileNavItem" data-mobile-view="settings"><i class="ph ph-gear"></i><span>Ayarlar</span></button>
+    </nav>
 
     <!-- Status bar -->
     <div class="sortBar" id="sortBar" style="display: flex; justify-content: space-between; align-items: center;">
@@ -9179,7 +9624,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     </aside>
 
                     <div>
-                        <div class="listBuilderLabel">Listeye eklenecek ürünler</div>
+                        <div class="listBuilderLabel">Listeye eklenebilir ürünler</div>
                         <div class="listSelectGrid" id="listProductPicker"></div>
                     </div>
                 </div>
@@ -9208,6 +9653,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <strong>Ürün Detayları</strong>
                 <button id="closeModal" class="btn">Kapat</button>
             </div>
+            <div class="mScopeNotice" id="mListScopeNotice"></div>
             <!-- Shared preview row -->
             <div class="mPreviewRow">
                 <div class="mThumb">
@@ -9799,7 +10245,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         <span>Beni hatırla</span>
                     </label>
                     <button class="authSubmit" onclick="doLogin()">Giriş Yap →</button>
-                    <div class="authForgot"><a href="#" onclick="sendPasswordReset(event)">Şifremi unuttum</a></div>
+                    <div class="authForgot"><a href="#" onclick="openPasswordReset(event)">Şifremi unuttum</a></div>
+                </div>
+                <div id="resetPasswordForm" style="display:none;">
+                    <div class="authField">
+                        <div class="authInputWrap">
+                            <span class="authInputIcon"><i class="ph ph-envelope-simple"></i></span>
+                            <div class="authInputDivider"></div>
+                            <input id="resetEmail" type="email" placeholder="E-posta" autocomplete="email"
+                                autocapitalize="none" inputmode="email" />
+                        </div>
+                    </div>
+                    <button class="authSubmit" id="resetPasswordSubmit" onclick="sendPasswordReset(event)">Sıfırlama bağlantısı gönder →</button>
+                    <div class="authForgot"><a href="#" id="backToLoginLink" onclick="closePasswordReset(event)">Giriş ekranına dön</a></div>
                 </div>
                 <div id="registerForm" style="display:none;">
                     <div class="authField">
@@ -10226,6 +10684,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function switchAuthTab(tab) {
             document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
             document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
+            document.getElementById('resetPasswordForm').style.display = 'none';
+            document.querySelector('.authTabs').style.display = '';
             document.getElementById('authTabLogin').classList.toggle('active', tab === 'login');
             document.getElementById('authTabRegister').classList.toggle('active', tab === 'register');
             document.getElementById('authError').style.display = 'none';
@@ -10315,10 +10775,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const pw = document.getElementById('regPass').value;
             const pw2 = document.getElementById('regPass2').value;
             const displayName = displayNameInput.trim().replace(/\s+/g, ' ');
-            if (!displayName) return showAuthError('Kullanici adi gerekli.');
-            if (displayName.length < 2) return showAuthError('Kullanici adi en az 2 karakter olmalidir.');
-            if (displayName.length > 32) return showAuthError('Kullanici adi en fazla 32 karakter olabilir.');
-            if (/[<>]/.test(displayName)) return showAuthError('Kullanici adinda gecersiz karakter var.');
+            if (!displayName) return showAuthError('Kullanıcı adı gerekli.');
+            if (displayName.length < 2) return showAuthError('Kullanıcı adı en az 2 karakter olmalıdır.');
+            if (displayName.length > 32) return showAuthError('Kullanıcı adı en fazla 32 karakter olabilir.');
+            if (/[<>]/.test(displayName)) return showAuthError('Kullanıcı adında geçersiz karakter var.');
 
             if (!emailInput || !pw || !pw2) return showAuthError('Tüm alanları doldurun.');
             if (!isValidEmail(emailInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
@@ -10362,19 +10822,40 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         /* ═══ START APP ═══ */
         async function sendPasswordReset(event) {
             event?.preventDefault();
-            const loginInput = document.getElementById('loginUser')?.value || '';
-            if (!loginInput) return showAuthError('Sifre sifirlama icin e-posta adresinizi girin.');
-            if (!isValidEmail(loginInput)) return showAuthError('Lutfen gecerli bir e-posta adresi girin.');
+            const resetInput = document.getElementById('resetEmail')?.value || '';
+            if (!resetInput) return showAuthError('Şifre sıfırlama için e-posta adresinizi girin.');
+            if (!isValidEmail(resetInput)) return showAuthError('Lütfen geçerli bir e-posta adresi girin.');
             try {
-                await auth.sendPasswordResetEmail(normalizeEmailInput(loginInput));
-                showAuthSuccess('E-posta adresiniz kayitliysa sifre sifirlama baglantisi gonderildi.');
+                await auth.sendPasswordResetEmail(normalizeEmailInput(resetInput));
+                showAuthSuccess('E-posta adresiniz kayıtlıysa şifre sıfırlama bağlantısı gönderildi.');
             } catch (err) {
                 console.error('Password reset error:', err);
                 if (err.code === 'auth/too-many-requests') {
-                    return showAuthError('Cok fazla deneme yapildi. Lutfen bir sure sonra tekrar deneyin.');
+                    return showAuthError('Çok fazla deneme yapıldı. Lütfen bir süre sonra tekrar deneyin.');
                 }
-                showAuthSuccess('E-posta adresiniz kayitliysa sifre sifirlama baglantisi gonderildi.');
+                showAuthSuccess('E-posta adresiniz kayıtlıysa şifre sıfırlama bağlantısı gönderildi.');
             }
+        }
+
+        function openPasswordReset(event) {
+            event?.preventDefault();
+            const t = (typeof I18N !== 'undefined' && typeof currentLang !== 'undefined') ? I18N[currentLang] : null;
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('resetPasswordForm').style.display = '';
+            document.querySelector('.authTabs').style.display = 'none';
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccessMsg').style.display = 'none';
+            document.querySelector('.auth-form-title').textContent = t ? t.resetPasswordTitle : 'Şifreni sıfırla';
+            document.querySelector('.auth-form-sub').textContent = t ? t.resetPasswordSub : 'Hesabına ait e-posta adresini gir; sıfırlama bağlantısını göndereceğiz.';
+            const input = document.getElementById('resetEmail');
+            input.value = '';
+            input.focus();
+        }
+
+        function closePasswordReset(event) {
+            event?.preventDefault();
+            switchAuthTab('login');
         }
 
         function startApp() {
@@ -10385,6 +10866,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 updateDesktopUser();
                 switchMainView("home");
                 render();
+                retryPendingImageUploads();
             });
         }
 
@@ -10711,7 +11193,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     return user.displayName;
                 }
             } catch (err) {
-                console.warn('Kullanici adi okunamadi:', err);
+                console.warn('Kullanıcı adı okunamadı:', err);
             }
             return fallback;
         }
@@ -10778,6 +11260,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (e.isComposing || e.keyCode === 229) return;
             const authScreenEl = document.getElementById('authScreen');
             if (!authScreenEl || authScreenEl.style.display === 'none') return;
+            if (document.getElementById('resetPasswordForm')?.style.display !== 'none') {
+                sendPasswordReset(e);
+                return;
+            }
             // Check which tab is active by the active class, not display style
             const loginTabActive = document.getElementById('authTabLogin').classList.contains('active');
             if (loginTabActive) doLogin(); else doRegister();
@@ -10795,6 +11281,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         let editingListId = null;
         let activeListId = null;
         let activeListStatus = "all";
+        let pendingListOnlyAddId = null;
         const initialEditItemIds = new Set();
 
         /* ── DOM refs ── */
@@ -11051,6 +11538,18 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (el) el.textContent = currentUser || "—";
         }
 
+        function setMobileNavActive(view) {
+            document.querySelectorAll(".mobileNavItem").forEach(btn => {
+                const active = btn.dataset.mobileView === view;
+                btn.classList.toggle("active", active);
+                if (active) {
+                    btn.setAttribute("aria-current", "page");
+                } else {
+                    btn.removeAttribute("aria-current");
+                }
+            });
+        }
+
         function closeAIIfOpen() {
             const ai = document.getElementById("aiBack");
             if (ai?.classList.contains("show")) closeAI();
@@ -11080,6 +11579,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 title.classList.remove("savingsTitle");
                 title.textContent = titleText;
             }
+            const mobileViews = { Wrapped: "wrapped", Birikim: "savings", Ayarlar: "settings" };
+            setMobileNavActive(mobileViews[titleText] || "home");
         }
 
         function switchMainView(view) {
@@ -11098,6 +11599,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             document.querySelectorAll(".desktopNavItem[data-view]").forEach(btn => {
                 btn.classList.toggle("active", btn.dataset.view === activeMainView);
             });
+            setMobileNavActive(activeMainView);
             if (activeMainView === "lists") {
                 renderListsScreen();
             } else {
@@ -11105,8 +11607,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        function getGeneralItems() {
+            return items.filter(x => !x.listOnlyId);
+        }
+
         function getWantedItemsForLists() {
-            return items.filter(x => x.status !== "bought" && !x.secret);
+            return getGeneralItems().filter(x => x.status !== "bought" && !x.secret);
         }
 
         function getListStats(list) {
@@ -11153,7 +11659,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function renderProductPicker(selectedIds = []) {
             if (!listProductPickerEl) return;
             const selectedSet = new Set(selectedIds);
-            const available = items.filter(x => !x.secret && (x.status !== "bought" || selectedSet.has(x.id)));
+            const available = items.filter(x =>
+                !x.secret &&
+                (!x.listOnlyId || selectedSet.has(x.id)) &&
+                (x.status !== "bought" || selectedSet.has(x.id))
+            );
             if (!available.length) {
                 listProductPickerEl.innerHTML = '<div style="grid-column:1/-1;color:var(--textSecondary);font-size:13px;padding:14px;">Listeye eklenebilecek alınmamış ürün yok.</div>';
                 updateBuilderStats();
@@ -11199,14 +11709,49 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 btn.classList.toggle("active", btn.dataset.icon === (existing?.icon || "ph-sun"));
             });
             renderProductPicker(existing?.itemIds || []);
-            listBuilderEl?.classList.add("show");
-            listBuilderEl?.scrollIntoView({ block: "start", behavior: "smooth" });
+            listBuilderEl?.classList.remove("show", "editingOverlay");
+            document.body.classList.toggle("list-editor-open", !!existing);
+            if (existing) {
+                listBuilderEl?.classList.add("editingOverlay");
+                requestAnimationFrame(() => listBuilderEl?.classList.add("show"));
+            } else {
+                listBuilderEl?.classList.add("show");
+                listBuilderEl?.scrollIntoView({ block: "start", behavior: "smooth" });
+            }
         }
 
         function closeListBuilder() {
             editingListId = null;
             if (listBuilderEl) listBuilderEl.dataset.editingId = "";
             listBuilderEl?.classList.remove("show");
+            document.body.classList.remove("list-editor-open");
+            if (listBuilderEl?.classList.contains("editingOverlay")) {
+                setTimeout(() => listBuilderEl?.classList.remove("editingOverlay"), 230);
+            }
+        }
+
+        function beginListOnlyAdd(listId) {
+            const list = wishlistLists.find(x => x.id === listId);
+            if (!list) return;
+            pendingListOnlyAddId = list.id;
+            showToast(`Yeni ürün yalnızca "${list.name || "Yeni Liste"}" listesinde görünecek; ana sayfaya eklenmeyecek.`);
+            filePick?.click();
+        }
+
+        function attachItemsToPendingList(createdItems) {
+            if (!pendingListOnlyAddId || !createdItems.length) return null;
+            const list = wishlistLists.find(x => x.id === pendingListOnlyAddId);
+            const targetId = pendingListOnlyAddId;
+            pendingListOnlyAddId = null;
+            if (!list) return null;
+            list.itemIds = Array.isArray(list.itemIds) ? list.itemIds : [];
+            createdItems.forEach(item => {
+                item.listOnlyId = targetId;
+                if (!list.itemIds.includes(item.id)) list.itemIds.push(item.id);
+            });
+            list.updatedAt = Date.now();
+            persistLists();
+            return list;
         }
 
         function saveListFromBuilder() {
@@ -11218,9 +11763,18 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 return;
             }
             const editingId = editingListId || listBuilderEl?.dataset.editingId || null;
+            let removedScopedItems = false;
             if (editingId) {
                 const existing = wishlistLists.find(x => x.id === editingId);
                 if (existing) {
+                    const removedIds = (existing.itemIds || []).filter(id => !itemIds.includes(id));
+                    removedIds.forEach(id => {
+                        const removedItem = items.find(item => item.id === id && item.listOnlyId === existing.id);
+                        if (!removedItem) return;
+                        deleteStoredImage(removedItem);
+                        items = items.filter(item => item.id !== id);
+                        removedScopedItems = true;
+                    });
                     existing.name = name;
                     existing.icon = icon;
                     existing.itemIds = itemIds;
@@ -11241,6 +11795,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 });
             }
             persistLists();
+            if (removedScopedItems) persist();
             closeListBuilder();
             activeListId = null;
             renderListsScreen();
@@ -11330,6 +11885,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     <div class="savedListPreview">${previews}${extraCount ? `<span class="savedListMore">+${extraCount}</span>` : ""}</div>
                     <div class="savedListActions">
                         <button class="btn editListBtn" data-id="${list.id}"><i class="ph ph-pencil-simple"></i> Düzenle</button>
+                        <button class="btn addListItemBtn" data-id="${list.id}"><i class="ph ph-plus"></i> Ekle</button>
                         <button class="btn deleteListBtn" data-id="${list.id}"><i class="ph ph-trash"></i> Sil</button>
                     </div>
                 `;
@@ -11348,16 +11904,25 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     deleteList(btn.dataset.id);
                 });
             });
+            savedListsEl.querySelectorAll(".addListItemBtn").forEach(btn => {
+                btn.addEventListener("click", ev => {
+                    ev.stopPropagation();
+                    beginListOnlyAdd(btn.dataset.id);
+                });
+            });
         }
 
         function deleteList(id) {
             const list = wishlistLists.find(x => x.id === id);
             if (!list) return;
             if (!confirm(`"${list.name || "Yeni Liste"}" listesini silmek istiyor musun?`)) return;
+            items.filter(item => item.listOnlyId === id).forEach(item => deleteStoredImage(item));
+            items = items.filter(item => item.listOnlyId !== id);
             wishlistLists = wishlistLists.filter(x => x.id !== id);
             if (activeListId === id) activeListId = null;
             if (editingListId === id) closeListBuilder();
             persistLists();
+            persist();
             renderListsScreen();
         }
 
@@ -11382,6 +11947,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         <span>${stats.bought} alındı</span>
                         <span>${stats.wanted} alınmadı</span>
                         <button class="btn editListDetailBtn" id="editActiveList"><i class="ph ph-pencil-simple"></i> Düzenle</button>
+                        <button class="btn addListDetailBtn" id="addToActiveList"><i class="ph ph-plus"></i> Ekle</button>
                         <button class="btn deleteListDetailBtn" id="deleteActiveList"><i class="ph ph-trash"></i> Sil</button>
                     </div>
                 `;
@@ -11401,6 +11967,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 }
                 document.getElementById("backToLists")?.addEventListener("click", hideListDetail);
                 document.getElementById("editActiveList")?.addEventListener("click", () => openListBuilder(activeList.id));
+                document.getElementById("addToActiveList")?.addEventListener("click", () => beginListOnlyAdd(activeList.id));
                 document.getElementById("deleteActiveList")?.addEventListener("click", () => deleteList(activeList.id));
                 listDetailEl.classList.add("show");
             } else {
@@ -11514,6 +12081,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return clean;
         }
 
+        function serializeRemoteItem(item) {
+            const clean = stripHeavyFields(item);
+            // Keep a temporary account-synced fallback until Firebase Storage returns a durable URL.
+            if (!item.imageUrl && item.imageSyncPending && item.imgData && item.imgData.startsWith('data:')) {
+                clean.imgData = item.imgData;
+            }
+            return clean;
+        }
+
         function stripLocalFallback(item) {
             const clean = { ...item };
             if (clean.imageUrl && clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
@@ -11580,6 +12156,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             item.imageUrl = payload.imageUrl || '';
             item.imagePath = payload.imagePath || '';
             item.imgData = payload.imgData || '';
+            item.imageSyncPending = !!(!item.imageUrl && item.imgData && item.imgData.startsWith('data:'));
             return item;
         }
 
@@ -11617,7 +12194,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function persist() {
             safeLocalPersist();
             if (authUid) {
-                db.ref('users/' + authUid + '/items').set(items.map(stripHeavyFields)).catch(e => console.error(e));
+                db.ref('users/' + authUid + '/items').set(items.map(serializeRemoteItem)).catch(e => console.error(e));
             }
             refreshWrappedIfOpen();
         }
@@ -11733,14 +12310,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             } else {
                 gridEl.classList.remove("moodboard");
             }
+            const generalItems = getGeneralItems();
             if (activeStatus === "bought") {
-                filtered = items.filter(x => x.status === "bought" && !x.secret);
+                filtered = generalItems.filter(x => x.status === "bought" && !x.secret);
             } else if (activeStatus === "secret") {
-                filtered = items.filter(x => x.secret);
+                filtered = generalItems.filter(x => x.secret);
             } else if (activeStatus === "want") {
-                filtered = items.filter(x => x.status !== "bought" && !x.secret);
+                filtered = generalItems.filter(x => x.status !== "bought" && !x.secret);
             } else {
-                filtered = items.filter(x => !x.secret);
+                filtered = generalItems.filter(x => !x.secret);
             }
 
             if (activeCat !== "all" && activeStatus !== "secret") {
@@ -11991,6 +12569,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (!it) return;
             activeId = id;
             window._cropActiveItem = it;
+            const scopeNotice = document.getElementById("mListScopeNotice");
+            const scopeList = it.listOnlyId ? wishlistLists.find(list => list.id === it.listOnlyId) : null;
+            if (scopeNotice) {
+                scopeNotice.classList.toggle("show", !!scopeList);
+                scopeNotice.textContent = scopeList
+                    ? `Bu ürün yalnızca "${scopeList.name || "bu liste"}" listesinde görünür. Ana Sayfa, Birikim, WishlistAi ve Wrapped içinde yer almaz.`
+                    : "";
+            }
 
             /* Name */
             document.getElementById("mItemName").value = it.itemName || "";
@@ -12157,9 +12743,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             ]);
         }
 
+        const activeImageUploads = new Set();
+
         function startImageUploadForItem(item, imgData) {
             if (!item || !imgData || !imgData.startsWith('data:')) return;
-            withTimeout(uploadImageData(imgData, item.id), 10000, 'Storage upload')
+            if (activeImageUploads.has(item.id)) return;
+            activeImageUploads.add(item.id);
+            item.imageSyncPending = true;
+            persist();
+            uploadImageData(imgData, item.id)
                 .then(payload => {
                     const live = items.find(x => x.id === item.id);
                     if (!live) return;
@@ -12172,8 +12764,23 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     }
                 })
                 .catch(err => {
-                    console.warn('Storage upload skipped, local image kept:', err);
+                    const live = items.find(x => x.id === item.id);
+                    if (live) {
+                        live.imageSyncPending = true;
+                        persist();
+                    }
+                    console.warn('Storage upload skipped, synced fallback kept:', err);
+                    showToast("Fotoğraf geçici olarak eşitlendi; bulut yüklemesi tamamlanamadı. Bağlantını kontrol edip yeniden dene.");
+                })
+                .finally(() => {
+                    activeImageUploads.delete(item.id);
                 });
+        }
+
+        function retryPendingImageUploads() {
+            items
+                .filter(item => !item.imageUrl && item.imgData && item.imgData.startsWith('data:'))
+                .forEach(item => startImageUploadForItem(item, item.imgData));
         }
 
         async function createPhotoItemFromFile(file) {
@@ -12188,7 +12795,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 price: "", currentPrice: "", priceNote: "",
                 forWho: "self", reason: "", intentNote: "",
                 status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0,
-                imageUrl: "", imagePath: "", imgData
+                imageUrl: "", imagePath: "", imgData, imageSyncPending: true
             };
         }
 
@@ -12202,10 +12809,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     created.push(await createPhotoItemFromFile(file));
                 }
                 items.push(...created);
+                const scopedList = attachItemsToPendingList(created);
                 created.forEach(item => initialEditItemIds.add(item.id));
                 persist(); render();
                 requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
                 if (created.length) openModal(created[created.length - 1].id);
+                if (scopedList) showToast(`Ürün yalnızca "${scopedList.name || "bu liste"}" listesine eklendi.`);
                 created.forEach(item => startImageUploadForItem(item, item.imgData));
             } catch (err) {
                 console.error("Foto?raf y?klenemedi:", err);
@@ -12238,6 +12847,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         });
 
         /* Linkten Ekle */
+
+        ["topFilePickBtn", "topCameraPickBtn", "linkPickBtn"].forEach(id => {
+            document.getElementById(id)?.addEventListener("click", () => {
+                pendingListOnlyAddId = null;
+            });
+        });
 
         document.getElementById("linkPickBtn").addEventListener("click", () => {
             const modal = document.getElementById("linkPromptBack");
@@ -12406,6 +13021,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const itemToDelete = items.find(x => x.id === activeId);
             if (itemToDelete) deleteStoredImage(itemToDelete);
             items = items.filter(x => x.id !== activeId);
+            wishlistLists.forEach(list => {
+                list.itemIds = (list.itemIds || []).filter(id => id !== activeId);
+            });
+            persistLists();
             persist(); render(); closeDetailModal();
         }
 
@@ -12476,6 +13095,31 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         document.querySelectorAll(".desktopNavItem[data-view]").forEach(btn => {
             btn.addEventListener("click", () => switchMainView(btn.dataset.view));
+        });
+
+        document.querySelectorAll(".mobileNavItem").forEach(btn => {
+            btn.addEventListener("click", () => {
+                switch (btn.dataset.mobileView) {
+                    case "lists":
+                        switchMainView("lists");
+                        break;
+                    case "ai":
+                        openAI();
+                        break;
+                    case "wrapped":
+                        openWrapped();
+                        break;
+                    case "savings":
+                        openSavings();
+                        break;
+                    case "settings":
+                        openSettings();
+                        break;
+                    default:
+                        switchMainView("home");
+                        break;
+                }
+            });
         });
 
         function setDesktopActionActive(btn) {
@@ -12568,8 +13212,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             document.getElementById("wrTitle").textContent = mName + " " + wrYear + " Wrapped'i";
             document.getElementById("wrRange").textContent = "1 " + mName + " – " + lastDay + " " + mName + " " + wrYear;
 
-            const addedThisMonth = items.filter(x => x.createdAt >= firstTs && x.createdAt <= lastTs).length;
-            const boughtThisMonth = items.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
+            const generalItems = getGeneralItems();
+            const addedThisMonth = generalItems.filter(x => x.createdAt >= firstTs && x.createdAt <= lastTs).length;
+            const boughtThisMonth = generalItems.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
             const boughtCount = boughtThisMonth.length;
             const totalSpent = boughtThisMonth.reduce((s, x) => s + (x.boughtPrice || 0), 0);
 
@@ -12709,7 +13354,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function renderSavings() {
             const list = document.getElementById("savingsList");
             const empty = document.getElementById("savingsEmpty");
-            const wantItems = items.filter(x => x.status !== "bought");
+            const wantItems = getGeneralItems().filter(x => x.status !== "bought");
 
             if (!wantItems.length) {
                 list.innerHTML = "";
@@ -12839,6 +13484,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             aiCurrentResult = null;
             document.getElementById("aiBack").classList.add("show");
             document.body.style.overflow = "hidden";
+            setMobileNavActive("ai");
             aiShowScreen("aiScreenMode");
         }
 
@@ -12881,7 +13527,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function buildProductGrid() {
             const grid = document.getElementById("aiProdGrid");
             grid.innerHTML = "";
-            const available = items.filter(x => x.status !== "bought" && !x.secret);
+            const available = getGeneralItems().filter(x => x.status !== "bought" && !x.secret);
             if (!available.length) {
                 grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--textSecondary);font-size:12px;padding:20px;">Henüz ürün yok. Önce ürün ekleyin.</div>';
                 return;
@@ -13532,7 +14178,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             const lastDay = daysInMonth(wrMonth, wrYear);
             const firstTs = new Date(wrYear, wrMonth, 1).getTime();
             const lastTs = new Date(wrYear, wrMonth, lastDay, 23, 59, 59, 999).getTime();
-            const boughtItems = items.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
+            const boughtItems = getGeneralItems().filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
             const reportWindow = window.open("", "_blank", "width=900,height=1100");
             if (!reportWindow) {
                 showToast("Rapor penceresi acilamadi. Tarayici acilir pencere iznini kontrol et.");
@@ -13652,15 +14298,16 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             const firstTs = new Date(wrYear, wrMonth, 1).getTime();
             const lastTs = new Date(wrYear, wrMonth, lastDay, 23, 59, 59, 999).getTime();
 
-            const addedItems = items.filter(x => (x.createdAt || 0) >= firstTs && (x.createdAt || 0) <= lastTs);
-            const boughtItems = items.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
-            const monthItems = items.filter(x => ((x.createdAt || 0) >= firstTs && (x.createdAt || 0) <= lastTs) || (x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs));
+            const generalItems = getGeneralItems();
+            const addedItems = generalItems.filter(x => (x.createdAt || 0) >= firstTs && (x.createdAt || 0) <= lastTs);
+            const boughtItems = generalItems.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
+            const monthItems = generalItems.filter(x => ((x.createdAt || 0) >= firstTs && (x.createdAt || 0) <= lastTs) || (x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs));
             const visibleMonthItems = monthItems.filter(x => !x.secret);
             const boughtVisible = boughtItems.filter(x => !x.secret);
             const totalSpent = boughtItems.reduce((sum, x) => sum + wrNumber(x.boughtPrice), 0);
             const targetValue = monthItems.reduce((sum, x) => sum + wrNumber(x.price || x.currentPrice), 0);
             const remaining = Math.max(0, targetValue - totalSpent);
-            const completionBase = monthItems.length || addedItems.length || items.length;
+            const completionBase = monthItems.length || addedItems.length || generalItems.length;
             const completion = completionBase ? Math.round((boughtItems.length / completionBase) * 100) : 0;
 
             const catCounts = {};
@@ -13809,6 +14456,11 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 loginBtn: 'Giriş Yap →',
                 registerBtn: 'Hesap Oluştur →',
                 forgotPw: 'Şifremi unuttum',
+                resetPasswordTitle: 'Şifreni sıfırla',
+                resetPasswordSub: 'Hesabına ait e-posta adresini gir; sıfırlama bağlantısını göndereceğiz.',
+                resetPasswordEmail: 'E-posta',
+                resetPasswordSend: 'Sıfırlama bağlantısı gönder →',
+                resetPasswordBack: 'Giriş ekranına dön',
                 authSub: 'Hayalindeki ürünleri listele, planla ve en doğru anda al.',
                 authFormTitleLogin: 'Tekrar hoş geldin',
                 authFormSubLogin: 'Listene devam etmeye hazır mısın?',
@@ -13866,6 +14518,11 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 loginBtn: 'Sign In →',
                 registerBtn: 'Create Account →',
                 forgotPw: 'Forgot password',
+                resetPasswordTitle: 'Reset your password',
+                resetPasswordSub: 'Enter the email address for your account and we will send a reset link.',
+                resetPasswordEmail: 'Email',
+                resetPasswordSend: 'Send reset link →',
+                resetPasswordBack: 'Back to sign in',
                 authSub: 'List your dream items, plan, and buy at the right moment.',
                 authFormTitleLogin: 'Welcome back',
                 authFormSubLogin: 'Ready to continue your list?',
@@ -13933,17 +14590,23 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             if (regBtn) regBtn.textContent = t.registerBtn;
             const forgotLink = document.querySelector('.authForgot a');
             if (forgotLink) forgotLink.textContent = t.forgotPw;
+            const resetSubmitBtn = document.getElementById('resetPasswordSubmit');
+            if (resetSubmitBtn) resetSubmitBtn.textContent = t.resetPasswordSend;
+            const resetBackLink = document.getElementById('backToLoginLink');
+            if (resetBackLink) resetBackLink.textContent = t.resetPasswordBack;
             // Form başlıkları — aktif sekmeye göre güncelle
             const activeTab = document.querySelector('.authTab.active');
             const isLogin = activeTab && activeTab.id === 'authTabLogin';
+            const resetVisible = document.getElementById('resetPasswordForm')?.style.display !== 'none';
             const formTitle = document.querySelector('.auth-form-title');
             const formSubEl = document.querySelector('.auth-form-sub');
-            if (formTitle) formTitle.textContent = isLogin ? t.authFormTitleLogin : t.authFormTitleRegister;
-            if (formSubEl) formSubEl.textContent = isLogin ? t.authFormSubLogin : t.authFormSubRegister;
+            if (formTitle) formTitle.textContent = resetVisible ? t.resetPasswordTitle : (isLogin ? t.authFormTitleLogin : t.authFormTitleRegister);
+            if (formSubEl) formSubEl.textContent = resetVisible ? t.resetPasswordSub : (isLogin ? t.authFormSubLogin : t.authFormSubRegister);
 
             // Placeholders
             const ph = {
                 loginUser: lang === 'tr' ? 'E-posta' : 'Email', loginPass: t.password,
+                resetEmail: t.resetPasswordEmail,
                 regDisplayName: t.username,
                 regUser: lang === 'tr' ? 'E-posta' : 'Email',
                 regPass: t.password, regPass2: t.passwordRepeat,
@@ -14268,6 +14931,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 document.getElementById('mImg').src = sessionSavedData;
                 if (typeof persist === 'function') persist();
                 if (typeof render === 'function') render();
+                if (sessionSavedData.startsWith('data:') && typeof startImageUploadForItem === 'function') startImageUploadForItem(it, sessionSavedData);
                 /* Sahneyi o versiyonla yenile */
                 cropImg.setAttribute('data-src', '');
                 loadIntoStage(sessionSavedData, () => { updateBtns(); });
@@ -14281,6 +14945,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 document.getElementById('mImg').src = it.origImgData;
                 if (typeof persist === 'function') persist();
                 if (typeof render === 'function') render();
+                if (it.origImgData.startsWith('data:') && typeof startImageUploadForItem === 'function') startImageUploadForItem(it, it.origImgData);
                 cropImg.setAttribute('data-src', '');
                 loadIntoStage(it.origImgData, () => { updateBtns(); });
             });
