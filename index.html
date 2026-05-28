@@ -684,23 +684,24 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             background: var(--headerBg);
             border-bottom: 1px solid var(--stroke);
-            padding: 12px 16px;
+            padding: 16px 20px;
         }
 
         @supports(padding-top:env(safe-area-inset-top)) {
             header {
-                padding-top: calc(12px + env(safe-area-inset-top));
+                padding-top: calc(16px + env(safe-area-inset-top));
             }
         }
 
         .hRow {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 12px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -720,9 +721,36 @@
         }
 
         .hBtns {
+            margin-left: auto;
             display: flex;
             gap: 8px;
             align-items: center;
+        }
+
+        .hBtns #topFilePickBtn {
+            min-width: 74px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .hBtns .btn {
+            min-height: 44px;
+            padding: 10px 18px;
+            font-size: 13.5px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .hBtns .cameraBtn {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            font-size: 20px;
         }
 
         /* ═══════════ BUTTONS ═══════════ */
@@ -3302,10 +3330,14 @@
             z-index: 100;
             opacity: 0;
             animation: toastIn 0.35s ease-out forwards, toastOut 0.35s ease-in 2.8s forwards;
-            white-space: nowrap;
-            max-width: 90vw;
+            width: max-content;
+            max-width: min(560px, calc(100vw - 28px));
+            white-space: normal;
+            overflow-wrap: anywhere;
+            line-height: 1.35;
             text-align: center;
             cursor: pointer;
+            box-sizing: border-box;
         }
 
         @keyframes toastIn {
@@ -3323,6 +3355,20 @@
         }
 
         /* ═══════════ WRAPPED GALLERY ═══════════ */
+        @media (max-width: 760px) {
+            .toast {
+                width: calc(100vw - 24px);
+                max-width: calc(100vw - 24px);
+                min-width: 0;
+                bottom: calc(var(--mobileNavHeight, 68px) + env(safe-area-inset-bottom, 0px) + 24px);
+                padding: 12px 14px;
+                border-radius: 18px;
+                white-space: normal;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+        }
+
         .wrGallery {
             display: none;
             flex-wrap: wrap;
@@ -7302,6 +7348,87 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             background: rgba(220, 38, 38, 0.10) !important;
             color: #ff8b9a !important;
         }
+        .listDeleteConfirmBack {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            background:
+                radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
+                rgba(8, 12, 24, 0.46);
+            backdrop-filter: blur(18px) saturate(130%);
+            -webkit-backdrop-filter: blur(18px) saturate(130%);
+        }
+        .listDeleteConfirmBack.show {
+            display: flex;
+        }
+        .listDeleteConfirm {
+            width: min(430px, calc(100vw - 32px));
+            border: 1px solid color-mix(in srgb, var(--stroke) 78%, var(--accent) 22%);
+            border-radius: 26px;
+            background:
+                linear-gradient(145deg, color-mix(in srgb, var(--surfaceBg) 94%, var(--accent) 6%), var(--surfaceBg)),
+                var(--surfaceBg);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28), 0 0 32px color-mix(in srgb, var(--accent) 16%, transparent);
+            padding: 24px;
+            transform: translateY(12px) scale(0.96);
+            opacity: 0;
+            transition: transform 0.22s ease, opacity 0.18s ease;
+        }
+        .listDeleteConfirmBack.show .listDeleteConfirm {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        .listDeleteIcon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 18px;
+            color: #ff6f82;
+            background: rgba(220, 38, 38, 0.12);
+            border: 1px solid rgba(220, 38, 38, 0.22);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+        .listDeleteIcon i {
+            font-size: 25px;
+        }
+        .listDeleteConfirm h3 {
+            margin: 0 0 9px;
+            color: var(--textPrimary);
+            font-family: var(--font-display);
+            font-size: 24px;
+            line-height: 1.15;
+        }
+        .listDeleteConfirm p {
+            margin: 0;
+            color: var(--textSecondary);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.55;
+        }
+        .listDeleteActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 24px;
+        }
+        .listDeleteActions .btn {
+            min-height: 44px;
+            justify-content: center;
+            border-radius: 14px;
+            font-weight: 800;
+        }
+        .listDeleteActions .danger {
+            border-color: rgba(220, 38, 38, 0.36) !important;
+            color: #fff !important;
+            background: linear-gradient(135deg, #ff6f82, #dc2626) !important;
+            box-shadow: 0 12px 26px rgba(220, 38, 38, 0.24);
+        }
         .addListItemBtn,
         .addListDetailBtn {
             border-color: var(--accentMid) !important;
@@ -7392,8 +7519,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 border: 0;
                 border-bottom: 1px solid var(--stroke);
                 border-radius: 0;
-                padding: 18px 32px 14px;
+                padding: 16px 20px;
                 position: sticky;
+            }
+
+            @supports(padding-top:env(safe-area-inset-top)) {
+                header {
+                    padding-top: calc(16px + env(safe-area-inset-top));
+                }
             }
 
             .hRow,
@@ -7405,7 +7538,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
 
             .hRow {
-                justify-content: space-between;
+                justify-content: flex-start;
+                gap: 12px;
             }
 
             header .appName {
@@ -7414,6 +7548,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             .mainViewTitle { display: block; }
 
             .hBtns {
+                margin-left: auto;
                 gap: 8px;
             }
 
@@ -7607,6 +7742,107 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             font-size: 15px;
             font-weight: 750;
             line-height: 1.55;
+        }
+
+        .confirmOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 12000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(14, 18, 28, 0.24);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .confirmOverlay.show {
+            display: flex;
+        }
+
+        .confirmDialog {
+            width: min(420px, calc(100vw - 32px));
+            border: 1px solid var(--stroke);
+            border-radius: 24px;
+            background:
+                radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accentSoft) 62%, transparent), transparent 44%),
+                color-mix(in srgb, var(--surfaceBg) 92%, transparent);
+            box-shadow:
+                0 24px 70px color-mix(in srgb, var(--glow) 24%, transparent),
+                0 18px 38px rgba(15, 23, 42, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
+            padding: 22px;
+            color: var(--textPrimary);
+            transform: translateY(12px) scale(.97);
+            opacity: 0;
+            animation: confirmIn .18s ease-out forwards;
+        }
+
+        @keyframes confirmIn {
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confirmIcon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            color: var(--accent);
+            background: var(--accentGradSubtle);
+            border: 1px solid var(--accentMid);
+            font-size: 25px;
+            margin-bottom: 16px;
+        }
+
+        .confirmDialog h3 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            line-height: 1.12;
+            letter-spacing: -0.3px;
+            margin: 0 0 8px;
+        }
+
+        .confirmDialog p {
+            color: var(--textSecondary);
+            font-size: 14px;
+            line-height: 1.55;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .confirmActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .confirmActions .btn {
+            min-height: 46px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .confirmActions .danger {
+            color: #ff5f7f;
+            border-color: rgba(255, 95, 127, .34);
+            background: linear-gradient(135deg, rgba(255, 95, 127, .14), rgba(255, 95, 127, .06));
+        }
+
+        body[data-theme="dark"] .confirmOverlay {
+            background: rgba(0, 0, 0, 0.38);
+        }
+
+        body[data-theme="dark"] .confirmDialog {
+            background:
+                radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accentSoft) 52%, transparent), transparent 44%),
+                color-mix(in srgb, var(--surfaceBg) 88%, #080b12);
         }
 
         #settingsBack.pageView {
@@ -9009,12 +9245,27 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         @media (max-width: 760px) {
+            #aiScreenMode {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            #aiScreenMode .aiCouncilHero::before {
+                inset: -40px 0 auto 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
             .listHero,
             #aiScreenMode .aiCouncilHero,
             #savingsBack.pageView .savingsHero,
             .wrappedBody.wrDashboard .wrHero {
-                grid-template-columns: 1fr;
-                justify-items: center;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
                 gap: 20px;
                 text-align: center;
             }
@@ -9023,7 +9274,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             .aiHeroText,
             .savingsHeroText,
             .wrappedBody.wrDashboard .wrHero > div:last-child {
+                width: 100%;
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             .listHero .btn {
@@ -9036,6 +9291,32 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             #savingsBack.pageView .savingsHeroArt,
             .wrappedBody.wrDashboard .wrHeroCard {
                 width: min(100%, 260px);
+                max-width: 260px;
+                margin-left: auto;
+                margin-right: auto;
+                align-self: center;
+                justify-self: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .listHeroArt,
+            #aiScreenMode .aiHeroCard,
+            #savingsBack.pageView .savingsHeroArt,
+            .wrappedBody.wrDashboard .wrHeroCard {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .listHeroArt .heroRaster,
+            #aiScreenMode .aiHeroCard .heroRaster,
+            #savingsBack.pageView .savingsHeroArt .heroRaster,
+            .wrappedBody.wrDashboard .wrHeroCard .heroRaster {
+                display: block;
+                margin: 0 auto;
+                transform: none;
+                object-position: center;
             }
         }
 
@@ -9159,20 +9440,26 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             .mobileNav {
                 position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
+                left: 12px;
+                right: 12px;
+                bottom: max(8px, env(safe-area-inset-bottom, 0px));
                 z-index: 19;
-                height: calc(var(--mobileNavHeight) + env(safe-area-inset-bottom, 0px));
+                height: var(--mobileNavHeight);
                 display: grid;
                 grid-template-columns: repeat(6, minmax(0, 1fr));
                 align-items: stretch;
                 gap: 2px;
-                padding: 6px 4px max(6px, env(safe-area-inset-bottom, 0px));
-                border-top: 1px solid var(--stroke);
-                background: color-mix(in srgb, var(--surfaceBg) 90%, transparent);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
+                padding: 6px 4px;
+                border: 1px solid color-mix(in srgb, var(--stroke) 78%, rgba(255,255,255,.22));
+                border-radius: 24px;
+                background: color-mix(in srgb, var(--surfaceBg) 58%, transparent);
+                backdrop-filter: blur(24px) saturate(1.18);
+                -webkit-backdrop-filter: blur(24px) saturate(1.18);
+                box-shadow:
+                    0 18px 42px color-mix(in srgb, var(--glow) 18%, transparent),
+                    0 8px 22px rgba(15, 23, 42, 0.10),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+                overflow: hidden;
             }
 
             body.auth-active > .mobileNav {
@@ -9225,8 +9512,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             .hRow {
                 max-width: none;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 gap: 10px 8px;
+                justify-content: flex-start;
             }
 
             header .appName {
@@ -9238,6 +9526,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 justify-content: flex-end;
                 min-width: 0;
                 gap: 6px;
+                margin-left: 0;
             }
 
             .hBtns .btn {
@@ -9287,6 +9576,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             .aiBack {
                 bottom: calc(var(--mobileNavHeight) + env(safe-area-inset-bottom, 0px));
+                left: 0;
+                right: 0;
+                width: 100%;
+                max-width: 100vw;
+                overflow-x: hidden;
+                overscroll-behavior-x: none;
             }
 
             .aiHeader {
@@ -9294,6 +9589,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 gap: 8px;
                 min-height: 61px;
                 padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+            }
+
+            .aiHeader .aiBackBtn {
+                display: none !important;
+                pointer-events: none;
             }
 
             .aiHeader .aiTitle {
@@ -9361,6 +9661,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             .aiBody {
                 padding: 16px 12px 22px;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
             }
 
             .wrStatGrid .wrMetricCard {
@@ -9488,6 +9791,73 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             .wrappedBody .wrTitleNav {
                 width: 36px;
                 height: 36px;
+            }
+        }
+
+        /* Mobile-only hero alignment: keep every large page illustration on the same center axis. */
+        @media (max-width: 760px) {
+            .listHero,
+            #aiScreenMode .aiCouncilHero,
+            #savingsBack.pageView .savingsHero,
+            .wrappedBody.wrDashboard .wrHero {
+                width: 100%;
+                max-width: 100%;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                gap: 20px;
+            }
+
+            .listHeroCopy,
+            .aiHeroText,
+            .savingsHeroText,
+            .wrappedBody.wrDashboard .wrHeroText {
+                width: 100%;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            .listHeroArt,
+            #aiScreenMode .aiHeroArt,
+            #savingsBack.pageView .savingsHeroArt,
+            .wrappedBody.wrDashboard .wrHeroCard {
+                width: min(100%, 260px) !important;
+                max-width: 260px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                align-self: center !important;
+                justify-self: center !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            #aiScreenMode .aiHeroCard,
+            .listHeroArt.heroAssetFrame,
+            #savingsBack.pageView .savingsHeroArt.heroAssetFrame,
+            .wrappedBody.wrDashboard .wrHeroCard.heroAssetFrame {
+                margin-left: auto !important;
+                margin-right: auto !important;
+                align-self: center !important;
+                justify-self: center !important;
+            }
+
+            .listHeroArt .heroRaster,
+            #aiScreenMode .aiHeroCard .heroRaster,
+            #savingsBack.pageView .savingsHeroArt .heroRaster,
+            .wrappedBody.wrDashboard .wrHeroCard .heroRaster {
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                transform: none !important;
+                object-position: center center !important;
             }
         }
 
@@ -9643,6 +10013,18 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             </section>
         </section>
     </main>
+
+    <div class="listDeleteConfirmBack" id="listDeleteConfirmBack" aria-hidden="true">
+        <div class="listDeleteConfirm" role="dialog" aria-modal="true" aria-labelledby="listDeleteTitle" aria-describedby="listDeleteMessage">
+            <div class="listDeleteIcon"><i class="ph ph-trash"></i></div>
+            <h3 id="listDeleteTitle">Liste silinsin mi?</h3>
+            <p id="listDeleteMessage">Bu listeyi silmek istediğinden emin misin?</p>
+            <div class="listDeleteActions">
+                <button type="button" class="btn" id="cancelListDelete">Vazgeç</button>
+                <button type="button" class="btn danger" id="confirmListDelete"><i class="ph ph-trash"></i> Listeyi Sil</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Detail Modal -->
     <div id="modalBack" class="modalBack" role="dialog" aria-modal="true">
@@ -10866,7 +11248,6 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 updateDesktopUser();
                 switchMainView("home");
                 render();
-                retryPendingImageUploads();
             });
         }
 
@@ -11319,7 +11700,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         const listDetailHeadEl = document.getElementById("listDetailHead");
         const listDetailGridEl = document.getElementById("listDetailGrid");
         const listStatusBarEl = document.getElementById("listStatusBar");
+        const listDeleteConfirmBackEl = document.getElementById("listDeleteConfirmBack");
+        const listDeleteMessageEl = document.getElementById("listDeleteMessage");
+        const cancelListDeleteBtn = document.getElementById("cancelListDelete");
+        const confirmListDeleteBtn = document.getElementById("confirmListDelete");
         const LIST_HERO_COLLAPSED_KEY = "wishlistgul_listHeroCollapsed";
+        let pendingDeleteListId = null;
 
         function setListHeroCollapsed(collapsed, persist = true) {
             if (!listHeroEl || !listHeroToggleEl) return;
@@ -11915,7 +12301,30 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function deleteList(id) {
             const list = wishlistLists.find(x => x.id === id);
             if (!list) return;
-            if (!confirm(`"${list.name || "Yeni Liste"}" listesini silmek istiyor musun?`)) return;
+            pendingDeleteListId = id;
+            if (listDeleteMessageEl) {
+                listDeleteMessageEl.textContent = `"${list.name || "Yeni Liste"}" listesini ve yalnızca bu listeye eklenen ürünleri kalıcı olarak silmek üzeresin. Bu işlem geri alınamaz.`;
+            }
+            listDeleteConfirmBackEl?.classList.add("show");
+            listDeleteConfirmBackEl?.setAttribute("aria-hidden", "false");
+            requestAnimationFrame(() => cancelListDeleteBtn?.focus());
+        }
+
+        function closeListDeleteConfirm() {
+            pendingDeleteListId = null;
+            listDeleteConfirmBackEl?.classList.remove("show");
+            listDeleteConfirmBackEl?.setAttribute("aria-hidden", "true");
+        }
+
+        function confirmDeleteList() {
+            const id = pendingDeleteListId;
+            if (!id) return;
+            const list = wishlistLists.find(x => x.id === id);
+            if (!list) {
+                closeListDeleteConfirm();
+                return;
+            }
+            closeListDeleteConfirm();
             items.filter(item => item.listOnlyId === id).forEach(item => deleteStoredImage(item));
             items = items.filter(item => item.listOnlyId !== id);
             wishlistLists = wishlistLists.filter(x => x.id !== id);
@@ -11925,6 +12334,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             persist();
             renderListsScreen();
         }
+
+        cancelListDeleteBtn?.addEventListener("click", closeListDeleteConfirm);
+        confirmListDeleteBtn?.addEventListener("click", confirmDeleteList);
+        listDeleteConfirmBackEl?.addEventListener("click", e => {
+            if (e.target === listDeleteConfirmBackEl) closeListDeleteConfirm();
+        });
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" && listDeleteConfirmBackEl?.classList.contains("show")) closeListDeleteConfirm();
+        });
 
         function renderListsScreen() {
             const activeList = wishlistLists.find(x => x.id === activeListId);
@@ -12083,9 +12501,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function serializeRemoteItem(item) {
             const clean = stripHeavyFields(item);
-            // Keep a temporary account-synced fallback until Firebase Storage returns a durable URL.
-            if (!item.imageUrl && item.imageSyncPending && item.imgData && item.imgData.startsWith('data:')) {
+            // Keep an account-synced photo copy so images are visible on every device even if Storage upload fails.
+            if (item.imgData && item.imgData.startsWith('data:')) {
                 clean.imgData = item.imgData;
+                clean.imageSyncPending = false;
             }
             return clean;
         }
@@ -12156,7 +12575,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             item.imageUrl = payload.imageUrl || '';
             item.imagePath = payload.imagePath || '';
             item.imgData = payload.imgData || '';
-            item.imageSyncPending = !!(!item.imageUrl && item.imgData && item.imgData.startsWith('data:'));
+            item.imageSyncPending = false;
             return item;
         }
 
@@ -12168,6 +12587,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     if (fbItems && Array.isArray(fbItems)) {
                         items = mergeLocalImageFallbacks(fbItems);
                         safeLocalPersist();
+                        await persistRemoteItems();
                         return;
                     }
                 } catch (e) { console.error("Firebase load error", e); }
@@ -12193,10 +12613,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function persist() {
             safeLocalPersist();
-            if (authUid) {
-                db.ref('users/' + authUid + '/items').set(items.map(serializeRemoteItem)).catch(e => console.error(e));
-            }
+            persistRemoteItems();
             refreshWrappedIfOpen();
+        }
+
+        function persistRemoteItems() {
+            if (authUid) {
+                return db.ref('users/' + authUid + '/items').set(items.map(serializeRemoteItem)).catch(e => console.error(e));
+            }
+            return Promise.resolve();
         }
         function refreshWrappedIfOpen() {
             const back = document.getElementById("wrappedBack");
@@ -12749,12 +13174,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (!item || !imgData || !imgData.startsWith('data:')) return;
             if (activeImageUploads.has(item.id)) return;
             activeImageUploads.add(item.id);
-            item.imageSyncPending = true;
-            persist();
             uploadImageData(imgData, item.id)
                 .then(payload => {
                     const live = items.find(x => x.id === item.id);
-                    if (!live) return;
+                    if (!live || !payload || !payload.imageUrl) return;
                     applyImagePayload(live, payload);
                     persist();
                     render();
@@ -12764,13 +13187,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     }
                 })
                 .catch(err => {
-                    const live = items.find(x => x.id === item.id);
-                    if (live) {
-                        live.imageSyncPending = true;
-                        persist();
-                    }
-                    console.warn('Storage upload skipped, synced fallback kept:', err);
-                    showToast("Fotoğraf geçici olarak eşitlendi; bulut yüklemesi tamamlanamadı. Bağlantını kontrol edip yeniden dene.");
+                    console.warn('Storage upload skipped; account-synced image copy remains active:', err);
                 })
                 .finally(() => {
                     activeImageUploads.delete(item.id);
@@ -12779,7 +13196,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function retryPendingImageUploads() {
             items
-                .filter(item => !item.imageUrl && item.imgData && item.imgData.startsWith('data:'))
+                .filter(item => item.imageSyncPending === true && !item.imageUrl && item.imgData && item.imgData.startsWith('data:'))
                 .forEach(item => startImageUploadForItem(item, item.imgData));
         }
 
@@ -12795,7 +13212,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 price: "", currentPrice: "", priceNote: "",
                 forWho: "self", reason: "", intentNote: "",
                 status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0,
-                imageUrl: "", imagePath: "", imgData, imageSyncPending: true
+                imageUrl: "", imagePath: "", imgData, imageSyncPending: false
             };
         }
 
@@ -12817,8 +13234,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 if (scopedList) showToast(`Ürün yalnızca "${scopedList.name || "bu liste"}" listesine eklendi.`);
                 created.forEach(item => startImageUploadForItem(item, item.imgData));
             } catch (err) {
-                console.error("Foto?raf y?klenemedi:", err);
-                showToast("Foto?raf y?klenemedi, tekrar dene");
+                console.error("Fotoğraf yüklenemedi:", err);
+                showToast("Fotoğraf yüklenemedi, tekrar dene");
             } finally {
                 setPhotoBusy(false);
                 filePick.value = "";
@@ -12838,8 +13255,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 openModal(item.id);
                 startImageUploadForItem(item, item.imgData);
             } catch (err) {
-                console.error("Kamera foto?raf? y?klenemedi:", err);
-                showToast("Foto?raf y?klenemedi, tekrar dene");
+                console.error("Kamera fotoğrafı yüklenemedi:", err);
+                showToast("Fotoğraf yüklenemedi, tekrar dene");
             } finally {
                 setPhotoBusy(false);
                 e.target.value = "";

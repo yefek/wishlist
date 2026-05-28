@@ -1,11 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Wishlistgul icon">
   <defs>
-    <linearGradient id="bg" x1="180" y1="120" x2="850" y2="930" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#FFF8FC"/>
-      <stop offset="1" stop-color="#F3E7FF"/>
+    <linearGradient id="bg" x1="160" y1="96" x2="856" y2="928" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset=".52" stop-color="#F7F8FA"/>
+      <stop offset="1" stop-color="#E9ECF1"/>
     </linearGradient>
+    <linearGradient id="bevel" x1="170" y1="110" x2="850" y2="930" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".82"/>
+      <stop offset=".48" stop-color="#FFFFFF" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#AEB5C1" stop-opacity=".24"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="35%" cy="18%" r="78%">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".88"/>
+      <stop offset=".46" stop-color="#FFFFFF" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="innerSoft" x="-8%" y="-8%" width="116%" height="116%">
+      <feOffset dx="0" dy="18"/>
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feComposite in="blur" in2="SourceAlpha" operator="out" result="shadow"/>
+      <feColorMatrix in="shadow" type="matrix" values="0 0 0 0 0.30 0 0 0 0 0.34 0 0 0 0 0.40 0 0 0 .16 0"/>
+      <feComposite in2="SourceGraphic" operator="over"/>
+    </filter>
   </defs>
-  <rect width="1024" height="1024" fill="url(#bg)"/>
-  <rect x="30" y="30" width="964" height="964" rx="208" fill="none" stroke="#E8458B" stroke-opacity=".08" stroke-width="8"/>
+  <rect width="1024" height="1024" fill="url(#bg)" filter="url(#innerSoft)"/>
+  <rect width="1024" height="1024" fill="url(#shine)"/>
+  <rect x="28" y="28" width="968" height="968" rx="218" fill="none" stroke="url(#bevel)" stroke-width="18"/>
+  <rect x="38" y="38" width="948" height="948" rx="208" fill="none" stroke="#7D8490" stroke-opacity=".18" stroke-width="5"/>
   <path d="M206 493 C260 708 368 728 433 522 C458 443 491 443 518 522 C580 721 696 716 785 468" fill="none" stroke="#E8458B" stroke-width="82" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
