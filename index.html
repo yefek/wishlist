@@ -14624,20 +14624,8 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             updateWrappedUI();
         }
 
-        function downloadWrappedReport() {
-            const title = document.getElementById("wrTitle")?.textContent || "Wrapped Raporu";
-            const summary = document.getElementById("wrRange")?.innerText || "";
-            const metrics = Array.from(document.querySelectorAll(".wrMetricCard")).map(card => ({
-                value: card.querySelector(".wrMetricValue")?.innerText || "",
-                label: card.querySelector(".wrMetricLabel")?.innerText || "",
-                hint: card.querySelector(".wrMetricHint")?.innerText || ""
-            }));
-            const activities = Array.from(document.querySelectorAll(".wrActivity")).map(row => ({
-                date: row.querySelector(".wrActivityDate")?.innerText || "",
-                text: row.querySelector(".wrActivityText strong")?.innerText || "",
-                meta: row.querySelector(".wrActivityText span")?.innerText || ""
-            }));
-            const reportWindow = window.open("", "_blank", "width=900,height=1100");
+        function downloadWrappedReportLegacyDisabled() {
+            const reportWindow = null;
             if (!reportWindow) {
                 showToast("Rapor penceresi açılamadı. Tarayıcı açılır pencere iznini kontrol et.");
                 return;
@@ -14665,83 +14653,370 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             reportWindow.document.close();
         }
 
-        downloadWrappedReport = function () {
-            const source = document.querySelector(".wrappedBody.wrDashboard");
-            const title = document.getElementById("wrTitle")?.textContent || "Wrapped Raporu";
+        async function wrImageDataUrl(src, fallback) {
+            if (!src) return fallback;
+            if (/^data:/i.test(src)) return src;
+            try {
+                const response = await fetch(src, { mode: "cors", cache: "force-cache" });
+                if (!response.ok) throw new Error("image fetch failed");
+                const blob = await response.blob();
+                return await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function wrXml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, ch => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[ch]));
+        }
+
+        function wrWrapText(value, maxChars, maxLines = 3) {
+            const words = String(value || "").split(/\s+/).filter(Boolean);
+            const lines = [];
+            let current = "";
+            words.forEach(word => {
+                const next = current ? current + " " + word : word;
+                if (next.length > maxChars && current) {
+                    lines.push(current);
+                    current = word;
+                } else {
+                    current = next;
+                }
+            });
+            if (current) lines.push(current);
+            if (lines.length > maxLines) {
+                const kept = lines.slice(0, maxLines);
+                kept[maxLines - 1] = kept[maxLines - 1].replace(/\s+$/, "") + "...";
+                return kept;
+            }
+            return lines;
+        }
+
+        function wrSvgText(value, x, y, size, weight, fill, options = {}) {
+            const lines = wrWrapText(value, options.maxChars || 42, options.maxLines || 2);
+            const anchor = options.anchor || "start";
+            const family = options.family || "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif";
+            const lineHeight = options.lineHeight || Math.round(size * 1.35);
+            return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="${family}" font-size="${size}" font-weight="${weight}" fill="${wrXml(fill)}">${lines.map((line, index) => `<tspan x="${x}" dy="${index ? lineHeight : 0}">${wrXml(line)}</tspan>`).join("")}</text>`;
+        }
+
+        function wrThemeReportColors() {
+            const styles = getComputedStyle(document.body);
+            const read = (name, fallback) => (styles.getPropertyValue(name).trim() || fallback);
+            const theme = document.body.getAttribute("data-theme") || "";
+            return {
+                isDark: theme === "dark",
+                bg: read("--appChromeBg", "#fdf2f8"),
+                surface: read("--surfaceBg", "#fff5fc"),
+                surface2: read("--surface", "rgba(255,255,255,.82)"),
+                text: read("--textPrimary", "#1A1A2E"),
+                muted: read("--textSecondary", "#8A8A9A"),
+                accent: read("--accent", "#E8458B"),
+                lilac: read("--lilac", "#A87CFF"),
+                stroke: read("--stroke", "rgba(232,69,139,.14)")
+            };
+        }
+
+        function wrRoundedRect(x, y, w, h, rx, fill, stroke = "none", opacity = 1) {
+            return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${wrXml(fill)}" stroke="${wrXml(stroke)}" opacity="${opacity}"/>`;
+        }
+
+        function wrReportData() {
+            const mName = MONTHS_TR[wrMonth];
             const lastDay = daysInMonth(wrMonth, wrYear);
             const firstTs = new Date(wrYear, wrMonth, 1).getTime();
             const lastTs = new Date(wrYear, wrMonth, lastDay, 23, 59, 59, 999).getTime();
-            const boughtItems = getGeneralItems().filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
-            const reportWindow = window.open("", "_blank", "width=900,height=1100");
-            if (!reportWindow) {
-                showToast("Rapor penceresi acilamadi. Tarayici acilir pencere iznini kontrol et.");
-                return;
+            const generalItems = getGeneralItems();
+            const addedItems = generalItems.filter(x => (x.createdAt || 0) >= firstTs && (x.createdAt || 0) <= lastTs);
+            const boughtItems = generalItems.filter(x => x.status === "bought" && x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs);
+            const monthItems = generalItems.filter(x => ((x.createdAt || 0) >= firstTs && (x.createdAt || 0) <= lastTs) || (x.boughtAt && x.boughtAt >= firstTs && x.boughtAt <= lastTs));
+            const visibleMonthItems = monthItems.filter(x => !x.secret);
+            const boughtVisible = boughtItems.filter(x => !x.secret);
+            const totalSpent = boughtItems.reduce((sum, x) => sum + wrNumber(x.boughtPrice), 0);
+            const targetValue = monthItems.reduce((sum, x) => sum + wrNumber(x.price || x.currentPrice), 0);
+            const remaining = Math.max(0, targetValue - totalSpent);
+            const completionBase = monthItems.length || addedItems.length || generalItems.length;
+            const completion = completionBase ? Math.round((boughtItems.length / completionBase) * 100) : 0;
+            const catCounts = {};
+            monthItems.forEach(item => {
+                const key = item.category || "diger";
+                catCounts[key] = (catCounts[key] || 0) + 1;
+            });
+            const sortedCats = Object.entries(catCounts).sort((a, b) => b[1] - a[1]);
+            const topCat = sortedCats[0] ? wrCategoryLabel(sortedCats[0][0]) : "Henüz yok";
+            const mostExpensive = visibleMonthItems.slice().sort((a, b) => wrNumber(b.price || b.currentPrice || b.boughtPrice) - wrNumber(a.price || a.currentPrice || a.boughtPrice))[0];
+            const mostWanted = visibleMonthItems.slice().sort((a, b) => (b.priority || 0) - (a.priority || 0))[0];
+            const smartest = (boughtVisible.length ? boughtVisible : visibleMonthItems).slice().sort((a, b) => {
+                const aScore = (a.priority || 1) / Math.max(1, wrNumber(a.boughtPrice || a.price || a.currentPrice));
+                const bScore = (b.priority || 1) / Math.max(1, wrNumber(b.boughtPrice || b.price || b.currentPrice));
+                return bScore - aScore;
+            })[0];
+            return {
+                mName, lastDay, firstTs, lastTs, generalItems, addedItems, boughtItems, monthItems,
+                visibleMonthItems, boughtVisible, totalSpent, targetValue, remaining, completion,
+                sortedCats, topCat, mostExpensive, mostWanted, smartest,
+                title: `${mName} ${wrYear} Wrapped'i`,
+                summary: `Bu ay ${addedItems.length} ürün ekledin, ${boughtItems.length} tanesini aldın ve toplam ${wrCurrency(totalSpent)} harcadın. ${completion ? "Hedeflerine bir adım daha yaklaştın." : "Bu ay için henüz tamamlanan hedef görünmüyor."}`
+            };
+        }
+
+        function wrReportMetrics(data) {
+            return [
+                { value: data.addedItems.length, label: "Ürün eklendi", hint: "Seçili ayda" },
+                { value: data.boughtItems.length, label: "Ürün alındı", hint: "Satın alınan istek" },
+                { value: wrCurrency(data.totalSpent), label: "Harcandı", hint: "Bu ayki toplam" },
+                { value: "%" + data.completion, label: "Tamamlanma oranı", hint: "Aylık ilerleme" },
+                { value: wrCurrency(data.targetValue), label: "Toplam hedef değeri", hint: "Ay içindeki istekler" },
+                { value: data.topCat, label: "Öne çıkan kategori", hint: data.sortedCats[0] ? data.sortedCats[0][1] + " ürün" : "Veri yok" }
+            ];
+        }
+
+        async function wrReportItemImage(item, fallback) {
+            if (!item || item.secret || !hasRealImage(item)) return fallback;
+            return wrImageDataUrl(getImageSrc(item), fallback);
+        }
+
+        async function buildWrappedReportSvg() {
+            const data = wrReportData();
+            const colors = wrThemeReportColors();
+            const width = 1200;
+            const pad = 52;
+            const fallback = getNoPhotoPlaceholderSrc();
+            const heroImg = await wrImageDataUrl("assets/hero-wrapped.png", fallback);
+            const highlightItems = [
+                { title: "En pahalı istek", item: data.mostExpensive, empty: "Bu ay fiyatı girilmiş ürün yok." },
+                { title: "En çok istediğin ürün", item: data.mostWanted, empty: "İstek seviyesi belirlenmiş ürün yok." },
+                { title: "En mantıklı alışveriş", item: data.smartest, empty: "Karşılaştırılabilecek ürün yok." }
+            ];
+            const highlights = await Promise.all(highlightItems.map(async entry => ({
+                ...entry,
+                img: await wrReportItemImage(entry.item, fallback)
+            })));
+            const boughtPhotos = await Promise.all(data.boughtItems.filter(item => !item.secret).map(async item => ({
+                src: await wrReportItemImage(item, fallback)
+            })));
+
+            const cardFill = colors.isDark ? "rgba(20,30,44,.92)" : "rgba(255,255,255,.72)";
+            const softFill = colors.isDark ? "rgba(15,25,37,.70)" : "rgba(255,255,255,.46)";
+            const stroke = colors.isDark ? "rgba(255,255,255,.12)" : "rgba(26,26,46,.10)";
+            const metrics = wrReportMetrics(data);
+            const metricW = (width - pad * 2) / 6;
+            let svg = `
+                <defs>
+                    <linearGradient id="wrReportBg" x1="0" y1="0" x2="1200" y2="1800" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="${wrXml(colors.bg)}"/>
+                        <stop offset=".58" stop-color="${wrXml(colors.isDark ? "#101b2a" : colors.bg)}"/>
+                        <stop offset="1" stop-color="${wrXml(colors.isDark ? "#0b1320" : colors.surface)}"/>
+                    </linearGradient>
+                    <linearGradient id="wrReportAccent" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="${wrXml(colors.accent)}"/>
+                        <stop offset="1" stop-color="${wrXml(colors.lilac)}"/>
+                    </linearGradient>
+                    <filter id="wrReportShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="20" stdDeviation="26" flood-color="${colors.isDark ? "#000000" : "#8b5cf6"}" flood-opacity="${colors.isDark ? ".28" : ".13"}"/>
+                    </filter>
+                </defs>
+                <rect width="${width}" height="100%" fill="url(#wrReportBg)"/>
+                <rect x="${pad}" y="42" width="${width - pad * 2}" height="270" rx="36" fill="${wrXml(softFill)}" stroke="${wrXml(stroke)}"/>
+                <image href="${heroImg}" x="74" y="52" width="260" height="260" preserveAspectRatio="xMidYMid meet"/>
+                <rect x="250" y="94" width="94" height="48" rx="18" fill="${wrXml(colors.isDark ? "rgba(15,25,37,.84)" : "rgba(255,255,255,.78)")}" stroke="${wrXml(stroke)}"/>
+                ${wrSvgText(wrYear, 297, 126, 28, 900, colors.text, { anchor: "middle", maxChars: 8, maxLines: 1 })}
+                <text x="380" y="132" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="58" font-weight="900" fill="url(#wrReportAccent)">${wrXml(data.title)}</text>
+                ${wrSvgText(data.summary, 384, 184, 22, 700, colors.muted, { maxChars: 76, maxLines: 2, lineHeight: 32 })}
+            `;
+
+            const metricY = 350;
+            svg += `<g filter="url(#wrReportShadow)">${wrRoundedRect(pad, metricY, width - pad * 2, 190, 24, cardFill, stroke)}</g>`;
+            metrics.forEach((metric, index) => {
+                const x = pad + index * metricW;
+                if (index) svg += `<line x1="${x}" y1="${metricY + 28}" x2="${x}" y2="${metricY + 162}" stroke="${wrXml(stroke)}"/>`;
+                svg += `<circle cx="${x + 48}" cy="${metricY + 55}" r="20" fill="url(#wrReportAccent)" opacity=".22"/>`;
+                svg += wrSvgText(metric.value, x + 28, metricY + 110, 34, 900, colors.text, { maxChars: 10, maxLines: 1 });
+                svg += wrSvgText(metric.label, x + 28, metricY + 142, 17, 850, colors.text, { maxChars: 17, maxLines: 1 });
+                svg += wrSvgText(metric.hint, x + 28, metricY + 166, 14, 650, colors.muted, { maxChars: 18, maxLines: 1 });
+            });
+
+            const hiY = 590;
+            svg += wrSvgText("Ayın Öne Çıkanları", pad, hiY, 26, 900, colors.text, { maxChars: 32, maxLines: 1 });
+            const hiW = (width - pad * 2 - 24 * 2) / 3;
+            highlights.forEach((entry, index) => {
+                const x = pad + index * (hiW + 24);
+                const y = hiY + 28;
+                const item = entry.item;
+                svg += wrRoundedRect(x, y, hiW, 205, 24, cardFill, stroke);
+                svg += `<image href="${entry.img}" x="${x + 22}" y="${y + 34}" width="112" height="112" preserveAspectRatio="xMidYMid slice" clip-path="inset(0 round 22px)"/>`;
+                svg += wrSvgText(entry.title, x + 156, y + 55, 16, 900, colors.accent, { maxChars: 28, maxLines: 1 });
+                svg += wrSvgText(item ? (item.itemName || "İsimsiz Ürün") : entry.empty, x + 156, y + 88, 24, 900, colors.text, { maxChars: 25, maxLines: 2, lineHeight: 30 });
+                const meta = item ? `${wrCurrency(item.boughtPrice || item.price || item.currentPrice || 0)} · ${wrCategoryLabel(item.category)}` : "";
+                svg += wrSvgText(meta, x + 156, y + 150, 16, 700, colors.muted, { maxChars: 30, maxLines: 1 });
+            });
+
+            const panelY = 875;
+            const panelW = (width - pad * 2 - 24) / 2;
+            svg += wrRoundedRect(pad, panelY, panelW, 285, 24, cardFill, stroke);
+            svg += wrRoundedRect(pad + panelW + 24, panelY, panelW, 285, 24, cardFill, stroke);
+            svg += wrSvgText("İsteklerin Nereye Dağıldı?", pad + 28, panelY + 44, 24, 900, colors.text, { maxChars: 34, maxLines: 1 });
+            const catTotal = data.monthItems.length || 1;
+            if (data.sortedCats.length) {
+                data.sortedCats.slice(0, 5).forEach(([cat, count], index) => {
+                    const pct = Math.round((count / catTotal) * 100);
+                    const y = panelY + 86 + index * 36;
+                    svg += wrSvgText(wrCategoryLabel(cat), pad + 28, y, 15, 800, colors.text, { maxChars: 18, maxLines: 1 });
+                    svg += wrRoundedRect(pad + 170, y - 12, 230, 10, 5, colors.isDark ? "rgba(255,255,255,.10)" : "rgba(26,26,46,.08)");
+                    svg += wrRoundedRect(pad + 170, y - 12, Math.max(10, Math.round(230 * pct / 100)), 10, 5, "url(#wrReportAccent)");
+                    svg += wrSvgText(`${count} ürün`, pad + 420, y, 14, 700, colors.muted, { maxChars: 10, maxLines: 1 });
+                    svg += wrSvgText(`%${pct}`, pad + 492, y, 14, 700, colors.muted, { maxChars: 8, maxLines: 1 });
+                });
+            } else {
+                svg += wrSvgText("Bu ay kategori dağılımı oluşturacak ürün yok.", pad + 28, panelY + 104, 17, 700, colors.muted, { maxChars: 42, maxLines: 2 });
             }
+            const budgetX = pad + panelW + 24;
+            const budgetPct = data.targetValue ? Math.min(100, Math.round((data.totalSpent / data.targetValue) * 100)) : 0;
+            svg += wrSvgText("Bütçe Durumu", budgetX + 28, panelY + 44, 24, 900, colors.text, { maxChars: 28, maxLines: 1 });
+            svg += wrSvgText("Harcanan", budgetX + 62, panelY + 126, 15, 700, colors.muted, { maxChars: 16, maxLines: 1 });
+            svg += wrSvgText(wrCurrency(data.totalSpent), budgetX + 62, panelY + 160, 32, 900, colors.accent, { maxChars: 16, maxLines: 1 });
+            svg += `<circle cx="${budgetX + panelW / 2}" cy="${panelY + 145}" r="62" fill="none" stroke="${wrXml(colors.isDark ? "rgba(255,255,255,.10)" : "rgba(26,26,46,.08)")}" stroke-width="14"/>`;
+            svg += `<circle cx="${budgetX + panelW / 2}" cy="${panelY + 145}" r="62" fill="none" stroke="url(#wrReportAccent)" stroke-width="14" stroke-linecap="round" stroke-dasharray="${Math.max(1, Math.round(389 * budgetPct / 100))} 389" transform="rotate(-90 ${budgetX + panelW / 2} ${panelY + 145})"/>`;
+            svg += wrSvgText(`%${budgetPct}`, budgetX + panelW / 2, panelY + 138, 30, 900, colors.text, { anchor: "middle", maxChars: 8, maxLines: 1 });
+            svg += wrSvgText("Tamamlandı", budgetX + panelW / 2, panelY + 165, 13, 800, colors.muted, { anchor: "middle", maxChars: 16, maxLines: 1 });
+            svg += wrSvgText("Hedefe kalan", budgetX + panelW - 166, panelY + 126, 15, 700, colors.muted, { maxChars: 16, maxLines: 1 });
+            svg += wrSvgText(wrCurrency(data.remaining), budgetX + panelW - 166, panelY + 160, 32, 900, colors.lilac, { maxChars: 16, maxLines: 1 });
+            svg += wrRoundedRect(budgetX + 28, panelY + 226, panelW - 56, 10, 5, colors.isDark ? "rgba(255,255,255,.10)" : "rgba(26,26,46,.08)");
+            svg += wrRoundedRect(budgetX + 28, panelY + 226, Math.max(8, Math.round((panelW - 56) * budgetPct / 100)), 10, 5, "url(#wrReportAccent)");
 
-            const snapshot = source ? source.cloneNode(true) : document.createElement("div");
-            snapshot.querySelector(".wrReportBtn")?.remove();
-            snapshot.querySelectorAll("button").forEach(btn => btn.remove());
-            snapshot.querySelectorAll(".wrappedNote").forEach(note => note.remove());
-            snapshot.querySelectorAll(".wrPanel").forEach(panel => {
-                const panelTitle = panel.querySelector(".wrPanelTitle")?.textContent || "";
-                if (panelTitle.includes("Ayl") || panelTitle.includes("WishlistAi")) panel.remove();
-            });
-            snapshot.querySelectorAll(".wrTwoCol").forEach(row => {
-                if (!row.querySelector(".wrPanel")) row.remove();
-            });
-
-            const pageStyles = Array.from(document.querySelectorAll("style")).map(style => `<style>${style.textContent}</style>`).join("");
-            const bodyTheme = document.body.getAttribute("data-theme") || "";
-            const noPhoto = getNoPhotoPlaceholderSrc();
-            const mosaicHtml = boughtItems.length
-                ? boughtItems.map((it, index) => {
-                    const imgSrc = !it.secret ? getImageSrc(it) : noPhoto;
-                    const span = index % 7 === 0 ? "wide tall" : index % 5 === 0 ? "tall" : index % 3 === 0 ? "wide" : "";
-                    return `<div class="reportMosaicTile ${span}"><img src="${imgSrc}" alt="" onerror="this.src='${noPhoto}'"></div>`;
-                }).join("")
-                : `<div class="reportMosaicEmpty">Bu ay alinan urun yok.</div>`;
-
-            reportWindow.document.write(`<!doctype html>
-                <html lang="tr"><head><meta charset="utf-8"><title>${wrEscape(title)}</title>
-                ${pageStyles}
-                <style>
-                    html,body{margin:0;background:#fff;color:#111827;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-                    body{font-family:var(--font-text,Arial,sans-serif)}
-                    .reportPage{min-height:100vh;box-sizing:border-box;padding:22px;page-break-after:always;background:#fff}
-                    .reportSnapshot .wrappedBody{padding:0!important;max-width:none!important}
-                    .reportSnapshot .wrTopbar{margin-bottom:18px}
-                    .reportSnapshot .wrTopbar .wrNav button{display:none!important}
-                    .reportSnapshot .wrTopbar .wrNav{display:inline-flex}
-                    .reportSnapshot .wrHero{margin-bottom:18px}
-                    .reportSnapshot .wrStatGrid,.reportSnapshot .wrPanel{break-inside:avoid}
-                    .reportSnapshot .wrTwoCol{grid-template-columns:1fr 1fr}
-                    .reportMosaicPage{display:flex;flex-direction:column;gap:18px}
-                    .reportMosaicTitle{font-family:var(--font-display,serif);font-size:30px;font-weight:850;margin:0;color:#111827}
-                    .reportMosaicSub{color:#5b6475;font-size:14px;margin-top:-8px}
-                    .reportMosaicGrid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:82px;gap:0;border:3px solid #111827;background:#111827;overflow:hidden}
-                    .reportMosaicTile{min-height:82px;border:2px solid #111827;background:#f3f4f6;overflow:hidden}
-                    .reportMosaicTile.wide{grid-column:span 2}
-                    .reportMosaicTile.tall{grid-row:span 2}
-                    .reportMosaicTile img{width:100%;height:100%;display:block;object-fit:cover}
-                    .reportMosaicEmpty{min-height:520px;display:grid;place-items:center;border:2px dashed #c7ceda;color:#6b7280;font-weight:800}
-                    .printBtn{position:fixed;right:18px;top:18px;z-index:9999;padding:10px 14px;border-radius:12px;border:1px solid #d8dce5;background:#fff;color:#111827;font-weight:800;box-shadow:0 8px 24px rgba(15,23,42,.14);cursor:pointer}
-                    @media print{
-                        .printBtn{display:none!important}
-                        .reportPage{padding:16mm;page-break-after:always}
-                        .reportSnapshot .wrHeroCard{transform:none!important}
-                        .reportMosaicGrid{grid-auto-rows:34mm}
+            const mosaicY = 1228;
+            svg += wrSvgText("Alınan ürünler", pad, mosaicY, 32, 900, colors.text, { maxChars: 30, maxLines: 1 });
+            svg += wrSvgText("Bu ay alınan ürünler yalnızca fotoğraf mozaği olarak gösterilir.", pad, mosaicY + 34, 17, 700, colors.muted, { maxChars: 72, maxLines: 1 });
+            const gridX = pad;
+            const gridY = mosaicY + 70;
+            const gridW = width - pad * 2;
+            const cols = 4;
+            const cell = Math.floor(gridW / cols);
+            const occupancy = [];
+            const placements = [];
+            const pattern = [{ w: 2, h: 2 }, { w: 1, h: 1 }, { w: 1, h: 1 }, { w: 1, h: 2 }, { w: 2, h: 1 }, { w: 1, h: 1 }, { w: 1, h: 1 }];
+            function canPlace(row, col, w, h) {
+                if (col + w > cols) return false;
+                for (let yy = row; yy < row + h; yy++) {
+                    for (let xx = col; xx < col + w; xx++) {
+                        if (occupancy[yy]?.[xx]) return false;
                     }
-                </style></head><body data-theme="${bodyTheme}">
-                <button class="printBtn" onclick="window.print()">PDF olarak kaydet</button>
-                <section class="reportPage reportSnapshot">${snapshot.outerHTML}</section>
-                <section class="reportPage reportMosaicPage">
-                    <h1 class="reportMosaicTitle">${wrEscape(title)} - Alinan urunler</h1>
-                    <div class="reportMosaicSub">Secili ayda alindi olarak isaretlenen urunlerin fotograf mozaigi.</div>
-                    <div class="reportMosaicGrid">${mosaicHtml}</div>
-                </section>
-                <script>setTimeout(()=>window.print(),450)<\/script>
-                </body></html>`);
-            reportWindow.document.close();
+                }
+                return true;
+            }
+            function fill(row, col, w, h) {
+                for (let yy = row; yy < row + h; yy++) {
+                    occupancy[yy] = occupancy[yy] || [];
+                    for (let xx = col; xx < col + w; xx++) occupancy[yy][xx] = true;
+                }
+            }
+            boughtPhotos.forEach((photo, index) => {
+                let span = pattern[index % pattern.length];
+                if (boughtPhotos.length < 4) span = { w: 1, h: 1 };
+                let placed = false;
+                for (let row = 0; !placed && row < 80; row++) {
+                    for (let col = 0; !placed && col < cols; col++) {
+                        if (canPlace(row, col, span.w, span.h)) {
+                            fill(row, col, span.w, span.h);
+                            placements.push({ ...photo, x: gridX + col * cell, y: gridY + row * cell, w: span.w * cell, h: span.h * cell });
+                            placed = true;
+                        }
+                    }
+                }
+            });
+            const usedRows = Math.max(2, occupancy.length);
+            const mosaicH = boughtPhotos.length ? usedRows * cell : 330;
+            if (boughtPhotos.length) {
+                svg += wrRoundedRect(gridX, gridY, gridW, mosaicH, 28, colors.isDark ? "rgba(255,255,255,.05)" : "rgba(255,255,255,.42)", "none");
+                placements.forEach((tile, index) => {
+                    const clip = `wrTileClip${index}`;
+                    svg += `<clipPath id="${clip}"><rect x="${tile.x}" y="${tile.y}" width="${tile.w}" height="${tile.h}" rx="0"/></clipPath><image href="${tile.src}" x="${tile.x}" y="${tile.y}" width="${tile.w}" height="${tile.h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clip})"/>`;
+                });
+            } else {
+                svg += wrRoundedRect(gridX, gridY, gridW, mosaicH, 28, cardFill, stroke);
+                svg += wrSvgText("Bu ay alınan ürün yok.", width / 2, gridY + 178, 24, 850, colors.muted, { anchor: "middle", maxChars: 30, maxLines: 1 });
+            }
+            const height = gridY + mosaicH + 58;
+            return {
+                width,
+                height,
+                filename: `wishlistgul-${data.mName.toLowerCase()}-${wrYear}-wrapped.png`,
+                svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${svg}</svg>`
+            };
+        }
+
+        function wrSvgToPngBlob(svg, width, height) {
+            return new Promise((resolve, reject) => {
+                const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
+                const image = new Image();
+                image.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(image, 0, 0);
+                    URL.revokeObjectURL(url);
+                    canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("png export failed")), "image/png", 0.96);
+                };
+                image.onerror = error => {
+                    URL.revokeObjectURL(url);
+                    reject(error);
+                };
+                image.src = url;
+            });
+        }
+
+        async function downloadWrappedBlob(blob, filename) {
+            const file = typeof File !== "undefined" ? new File([blob], filename, { type: blob.type || "image/png" }) : null;
+            if (file && navigator.canShare?.({ files: [file] })) {
+                try {
+                    await navigator.share({ files: [file], title: "Wishlistgül Wrapped Raporu" });
+                    return;
+                } catch (error) {
+                    if (error?.name === "AbortError") return;
+                }
+            }
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            link.rel = "noopener";
+            document.body.appendChild(link);
+            link.click();
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+                link.remove();
+            }, 1200);
+        }
+
+        downloadWrappedReport = async function () {
+            try {
+                showToast("Rapor hazırlanıyor...");
+                const report = await buildWrappedReportSvg();
+                try {
+                    const pngBlob = await wrSvgToPngBlob(report.svg, report.width, report.height);
+                    await downloadWrappedBlob(pngBlob, report.filename);
+                    showToast("Rapor indiriliyor.");
+                } catch (pngError) {
+                    const svgBlob = new Blob([report.svg], { type: "image/svg+xml;charset=utf-8" });
+                    await downloadWrappedBlob(svgBlob, report.filename.replace(/\.png$/i, ".svg"));
+                    showToast("PNG oluşturulamadı; rapor SVG olarak indirildi.");
+                }
+            } catch (error) {
+                console.error("Wrapped report failed", error);
+                showToast("Rapor oluşturulamadı. Lütfen tekrar dene.");
+            }
         };
 
         function wrMetric(icon, value, label, hint) {
