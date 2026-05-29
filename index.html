@@ -7262,17 +7262,23 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         .listDetail.show {
             display: block;
         }
+        .listScreen.detail-open > .listHero {
+            display: none !important;
+        }
         .listDetailHead {
             border: 1px solid var(--stroke);
             border-radius: var(--r2);
             background: var(--surfaceBg);
             box-shadow: var(--elev1);
             padding: 18px;
-            margin-bottom: 16px;
+            margin-bottom: 0;
             display: grid;
             grid-template-columns: auto minmax(0, 1fr) auto;
             gap: 16px;
             align-items: center;
+        }
+        .listDetail.show .listDetailHead {
+            border-radius: var(--r2) var(--r2) 0 0;
         }
         .listDetailTitle {
             display: flex;
@@ -7309,6 +7315,39 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             min-height: 32px;
             padding: 0 10px;
             font-size: 12px;
+        }
+        .listDetailActionsBar {
+            display: none;
+        }
+        .listDetail.show .listDetailActionsBar {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0;
+            width: 100%;
+            margin: 0 0 16px;
+            overflow: hidden;
+            border: 1px solid var(--stroke);
+            border-top: 0;
+            border-radius: 0 0 var(--r2) var(--r2);
+            background: color-mix(in srgb, var(--surfaceBg) 88%, transparent);
+            box-shadow: var(--elev1);
+        }
+        .listDetailActionsBar .btn {
+            min-height: 48px;
+            border: 0 !important;
+            border-radius: 0;
+            background: transparent !important;
+            box-shadow: none !important;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .listDetailActionsBar .btn + .btn {
+            border-left: 1px solid var(--stroke) !important;
+        }
+        .listDetailActionsBar .deleteListDetailBtn {
+            color: #ff6f82 !important;
+            background: rgba(220, 38, 38, 0.07) !important;
         }
         .listStatusBar {
             display: none;
@@ -7709,9 +7748,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
             .listDetailHead {
                 grid-template-columns: 1fr;
+                margin-bottom: 0;
             }
             .listDetailStats {
                 justify-content: flex-start;
+            }
+            .listDetailStats .btn {
+                display: none;
+            }
+            .listDetailActionsBar .btn {
+                min-height: 46px;
             }
         }
 
@@ -10023,6 +10069,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             <section class="listDetail" id="listDetail">
                 <div class="listDetailHead" id="listDetailHead"></div>
+                <div class="listDetailActionsBar" id="listDetailActionsBar"></div>
                 <div class="listStatusBar" id="listStatusBar" aria-label="Liste durum filtresi">
                     <button type="button" class="listStatusPill active" data-status="all"><i class="ph ph-circle"></i> Hepsi</button>
                     <button type="button" class="listStatusPill" data-status="want"><i class="ph ph-x"></i> Alınmadı</button>
@@ -11717,6 +11764,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         const listNameInputEl = document.getElementById("listNameInput");
         const listDetailEl = document.getElementById("listDetail");
         const listDetailHeadEl = document.getElementById("listDetailHead");
+        const listDetailActionsBarEl = document.getElementById("listDetailActionsBar");
         const listDetailGridEl = document.getElementById("listDetailGrid");
         const listStatusBarEl = document.getElementById("listStatusBar");
         const listDeleteConfirmBackEl = document.getElementById("listDeleteConfirmBack");
@@ -12209,6 +12257,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function hideListDetail() {
             activeListId = null;
             listDetailEl?.classList.remove("show");
+            listScreenEl?.classList.remove("detail-open");
+            if (listDetailActionsBarEl) listDetailActionsBarEl.innerHTML = "";
             if (savedListsEl) savedListsEl.style.display = "";
             const hero = document.querySelector("#listScreen .listHero");
             if (hero) hero.style.display = "";
@@ -12367,6 +12417,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const activeList = wishlistLists.find(x => x.id === activeListId);
             const hero = document.querySelector("#listScreen .listHero");
             if (activeList && listDetailEl && listDetailHeadEl && listDetailGridEl) {
+                listScreenEl?.classList.add("detail-open");
                 if (hero) hero.style.display = "none";
                 if (savedListsEl) savedListsEl.style.display = "none";
                 const stats = getListStats(activeList);
@@ -12383,11 +12434,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         <span>%${stats.pct} tamamlandı</span>
                         <span>${stats.bought} alındı</span>
                         <span>${stats.wanted} alınmadı</span>
+                    </div>
+                `;
+                if (listDetailActionsBarEl) {
+                    listDetailActionsBarEl.innerHTML = `
                         <button class="btn editListDetailBtn" id="editActiveList"><i class="ph ph-pencil-simple"></i> Düzenle</button>
                         <button class="btn addListDetailBtn" id="addToActiveList"><i class="ph ph-plus"></i> Ekle</button>
                         <button class="btn deleteListDetailBtn" id="deleteActiveList"><i class="ph ph-trash"></i> Sil</button>
-                    </div>
-                `;
+                    `;
+                }
                 listStatusBarEl?.querySelectorAll(".listStatusPill").forEach(pill => {
                     pill.classList.toggle("active", pill.dataset.status === activeListStatus);
                 });
@@ -12410,6 +12465,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             } else {
                 activeListId = null;
                 listDetailEl?.classList.remove("show");
+                listScreenEl?.classList.remove("detail-open");
+                if (listDetailActionsBarEl) listDetailActionsBarEl.innerHTML = "";
                 if (hero) hero.style.display = "";
                 if (savedListsEl) savedListsEl.style.display = "";
                 renderSavedLists();
