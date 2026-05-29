@@ -9794,70 +9794,90 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
-        /* Mobile-only hero alignment: keep every large page illustration on the same center axis. */
+        /* Mobile-only shared hero slot: same visual X/Y position on Listeler, WishlistAi, Wrapped and Birikim. */
         @media (max-width: 760px) {
+            :root {
+                --pageHeroMobileSlotW: min(260px, 72vw);
+                --pageHeroMobileSlotH: 190px;
+                --pageHeroMobileGap: 18px;
+            }
+
             .listHero,
             #aiScreenMode .aiCouncilHero,
             #savingsBack.pageView .savingsHero,
             .wrappedBody.wrDashboard .wrHero {
-                width: 100%;
-                max-width: 100%;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: center !important;
-                justify-content: center !important;
+                justify-content: flex-start !important;
+                gap: var(--pageHeroMobileGap) !important;
+                margin: 0 0 24px !important;
+                padding: 0 !important;
                 text-align: center !important;
-                gap: 20px;
+            }
+
+            .page-hero-visual-slot {
+                order: 0 !important;
+                flex: 0 0 var(--pageHeroMobileSlotH) !important;
+                width: var(--pageHeroMobileSlotW) !important;
+                height: var(--pageHeroMobileSlotH) !important;
+                max-width: var(--pageHeroMobileSlotW) !important;
+                min-height: var(--pageHeroMobileSlotH) !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                align-self: center !important;
+                justify-self: center !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                position: relative !important;
+                inset: auto !important;
+                transform: none !important;
+            }
+
+            .page-hero-visual-slot.heroAssetFrame,
+            .page-hero-visual-slot .heroAssetFrame,
+            #aiScreenMode .page-hero-visual-slot .aiHeroCard {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                transform: none !important;
+                position: relative !important;
+                inset: auto !important;
+            }
+
+            .page-hero-visual-slot .heroRaster {
+                width: 94% !important;
+                height: 94% !important;
+                margin: 0 auto !important;
+                display: block !important;
+                object-fit: contain !important;
+                object-position: center center !important;
+                transform: none !important;
             }
 
             .listHeroCopy,
             .aiHeroText,
             .savingsHeroText,
             .wrappedBody.wrDashboard .wrHeroText {
-                width: 100%;
+                order: 1 !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+                transform: none !important;
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: center !important;
-                justify-content: center !important;
+                justify-content: flex-start !important;
                 text-align: center !important;
-                margin-left: auto !important;
-                margin-right: auto !important;
-            }
-
-            .listHeroArt,
-            #aiScreenMode .aiHeroArt,
-            #savingsBack.pageView .savingsHeroArt,
-            .wrappedBody.wrDashboard .wrHeroCard {
-                width: min(100%, 260px) !important;
-                max-width: 260px !important;
-                margin-left: auto !important;
-                margin-right: auto !important;
-                align-self: center !important;
-                justify-self: center !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            }
-
-            #aiScreenMode .aiHeroCard,
-            .listHeroArt.heroAssetFrame,
-            #savingsBack.pageView .savingsHeroArt.heroAssetFrame,
-            .wrappedBody.wrDashboard .wrHeroCard.heroAssetFrame {
-                margin-left: auto !important;
-                margin-right: auto !important;
-                align-self: center !important;
-                justify-self: center !important;
-            }
-
-            .listHeroArt .heroRaster,
-            #aiScreenMode .aiHeroCard .heroRaster,
-            #savingsBack.pageView .savingsHeroArt .heroRaster,
-            .wrappedBody.wrDashboard .wrHeroCard .heroRaster {
-                display: block !important;
-                margin-left: auto !important;
-                margin-right: auto !important;
-                transform: none !important;
-                object-position: center center !important;
             }
         }
 
@@ -9948,7 +9968,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     </div>
                     <button class="btn primary" id="showListBuilder"><i class="ph ph-plus"></i> Liste oluştur</button>
                 </div>
-                <div class="listHeroArt heroAssetFrame" aria-hidden="true">
+                <div class="listHeroArt heroAssetFrame page-hero-visual-slot" aria-hidden="true">
                     <img class="heroRaster" src="assets/hero-listeler.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                 </div>
             </div>
@@ -10320,7 +10340,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             </div>
             <div class="wrappedBody wrDashboard">
                 <section class="wrHero">
-                    <div class="wrHeroCard heroAssetFrame" aria-hidden="true">
+                    <div class="wrHeroCard heroAssetFrame page-hero-visual-slot" aria-hidden="true">
                         <img class="heroRaster" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         <div class="wrHeroBadge" id="wrHeroYear">2026</div>
                     </div>
@@ -10364,7 +10384,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             </div>
             <div class="savingsBody">
                 <section class="savingsHero">
-                    <div class="savingsHeroArt heroAssetFrame" aria-hidden="true">
+                    <div class="savingsHeroArt heroAssetFrame page-hero-visual-slot" aria-hidden="true">
                         <img class="heroRaster" src="assets/hero-birikim.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                     </div>
                     <div class="savingsHeroText">
@@ -10425,7 +10445,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             <!-- Screen 1: Mode Select -->
             <div class="aiScreen active" id="aiScreenMode">
                 <div class="aiIntro aiCouncilHero">
-                    <div class="aiHeroArt" aria-hidden="true">
+                    <div class="aiHeroArt page-hero-visual-slot" aria-hidden="true">
                         <div class="aiHeroCard heroAssetFrame">
                             <img class="heroRaster" src="assets/hero-wishlistai.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         </div>
@@ -14483,7 +14503,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             body.dataset.dashboardReady = "1";
             body.innerHTML = `
                 <section class="wrHero">
-                    <div class="wrHeroCard heroAssetFrame" aria-hidden="true">
+                    <div class="wrHeroCard heroAssetFrame page-hero-visual-slot" aria-hidden="true">
                         <img class="heroRaster" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         <div class="wrHeroBadge" id="wrHeroYear">2026</div>
                     </div>
