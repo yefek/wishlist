@@ -1,5 +1,5 @@
 // Service Worker - offline support without trapping users on stale HTML
-const CACHE_NAME = 'wishlist-v13';
+const CACHE_NAME = 'wishlist-v14';
 const ASSETS = [
     './',
     './index.html',
