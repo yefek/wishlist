@@ -9225,6 +9225,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             transform: translate(-3px, -3px);
         }
 
+        .listHeroArt .heroRaster {
+            clip-path: inset(0 0 10px 0);
+        }
+
         .listHeroArt.heroAssetFrame,
         #aiScreenMode .aiHeroCard.heroAssetFrame,
         #savingsBack.pageView .savingsHeroArt.heroAssetFrame,
@@ -9984,17 +9988,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
 
             .aiHeader {
-                border-bottom: 0;
-                background:
-                    linear-gradient(
-                        180deg,
-                        color-mix(in srgb, var(--appChromeBg) 98%, transparent) 0%,
-                        color-mix(in srgb, var(--appChromeBg) 88%, transparent) 74%,
-                        color-mix(in srgb, var(--appChromeBg) 0%, transparent) 100%
-                    );
-                backdrop-filter: blur(18px) saturate(1.12);
-                -webkit-backdrop-filter: blur(18px) saturate(1.12);
-                box-shadow: 0 18px 34px -32px color-mix(in srgb, var(--glow) 40%, transparent);
+                background: var(--headerBg);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid var(--stroke);
+                box-shadow: none;
             }
 
             .aiBody {
