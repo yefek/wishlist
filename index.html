@@ -9928,9 +9928,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         @media (max-width: 760px) {
             :root {
-                --mobileNavFloatGap: 12px;
+                --mobileNavFloatGap: 8px;
                 --mobileNavOuterPad: 12px;
-                --mobileBottomClearance: calc(var(--mobileNavHeight, 68px) + var(--mobileNavFloatGap) + env(safe-area-inset-bottom, 0px) + 30px);
+                --mobileBottomClearance: calc(var(--mobileNavHeight, 68px) + var(--mobileNavFloatGap) + env(safe-area-inset-bottom, 0px) + 28px);
             }
 
             .mobileNav {
@@ -10004,6 +10004,31 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             #aiScreenMode .aiModes {
                 margin-bottom: 0;
+            }
+
+            #aiScreenMode .aiCouncilHero {
+                --pageHeroMobileSlotH: 168px;
+                --pageHeroMobileGap: 10px;
+                margin-bottom: 18px !important;
+            }
+
+            #aiScreenMode .aiHeroArt {
+                flex-basis: var(--pageHeroMobileSlotH) !important;
+                height: var(--pageHeroMobileSlotH) !important;
+                min-height: var(--pageHeroMobileSlotH) !important;
+            }
+
+            #aiScreenMode .aiHeroCard .heroRaster {
+                width: 90% !important;
+                height: 90% !important;
+            }
+
+            #aiScreenMode .aiHeroText {
+                gap: 4px !important;
+            }
+
+            #aiScreenMode .aiCouncilHero .aiIntroTitle {
+                margin-bottom: 8px !important;
             }
         }
 
