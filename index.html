@@ -12093,6 +12093,29 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             });
         }
 
+        function isMobileViewport() {
+            return window.matchMedia?.("(max-width: 760px)")?.matches || window.innerWidth <= 760;
+        }
+
+        function resetMobileScroll(target) {
+            if (!isMobileViewport()) return;
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+                const nodes = [
+                    target,
+                    document.querySelector(".content"),
+                    document.getElementById("aiBack"),
+                    document.getElementById("wrappedBack"),
+                    document.getElementById("savingsBack"),
+                    document.getElementById("settingsBack"),
+                    document.getElementById("listScreen")
+                ].filter(Boolean);
+                nodes.forEach(node => { node.scrollTop = 0; node.scrollLeft = 0; });
+            });
+        }
+
         function closeAIIfOpen() {
             const ai = document.getElementById("aiBack");
             if (ai?.classList.contains("show")) closeAI();
@@ -12124,6 +12147,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
             const mobileViews = { Wrapped: "wrapped", Birikim: "savings", Ayarlar: "settings" };
             setMobileNavActive(mobileViews[titleText] || "home");
+            resetMobileScroll(backEl);
         }
 
         function switchMainView(view) {
@@ -12148,6 +12172,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             } else {
                 render();
             }
+            resetMobileScroll(document.querySelector(".content"));
         }
 
         function getGeneralItems() {
@@ -13283,6 +13308,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             document.body.style.overflow = "";
             purchaseTargetId = null;
         }
+        function returnToHomeAfterPurchase() {
+            closeDetailModal();
+            activeStatus = "all";
+            activeCat = "all";
+            document.querySelectorAll(".sortPill").forEach(p => p.classList.toggle("active", p.dataset.status === "all"));
+            document.querySelectorAll(".catPill").forEach(p => p.classList.toggle("active", p.dataset.cat === "all"));
+            switchMainView("home");
+            resetMobileScroll(document.querySelector(".content"));
+        }
         closePurchaseBtn.addEventListener("click", closePurchaseModal);
         purchaseBack.addEventListener("click", e => { if (e.target === purchaseBack) closePurchaseModal(); });
 
@@ -13294,13 +13328,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             it.status = "bought";
             it.boughtPrice = price > 0 ? price : 0;
             it.boughtAt = Date.now();
-            persist(); render(); closePurchaseModal();
+            persist();
+            closePurchaseModal();
+            returnToHomeAfterPurchase();
             showToast("Alınan ürünleri görmek için dokun → 'Alındı'", () => {
                 document.querySelectorAll(".sortPill").forEach(p => p.classList.remove("active"));
                 const boughtPill = document.querySelector('.sortPill[data-status="bought"]');
                 if (boughtPill) { boughtPill.classList.add("active"); }
                 activeStatus = "bought";
                 render();
+                resetMobileScroll(document.querySelector(".content"));
             });
         });
 
@@ -14069,6 +14106,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             document.body.style.overflow = "hidden";
             setMobileNavActive("ai");
             aiShowScreen("aiScreenMode");
+            resetMobileScroll(document.getElementById("aiBack"));
         }
 
         function closeAI() {
