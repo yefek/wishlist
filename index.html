@@ -9928,15 +9928,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         @media (max-width: 760px) {
             :root {
-                --mobileNavFloatGap: 8px;
+                --mobileNavFloatGap: 14px;
                 --mobileNavOuterPad: 12px;
-                --mobileBottomClearance: calc(var(--mobileNavHeight, 68px) + var(--mobileNavFloatGap) + env(safe-area-inset-bottom, 0px) + 28px);
+                --mobileNavBottomOffset: max(var(--mobileNavFloatGap), env(safe-area-inset-bottom, 0px));
+                --mobileBottomClearance: calc(var(--mobileNavHeight, 68px) + var(--mobileNavBottomOffset) + 26px);
             }
 
             .mobileNav {
                 left: var(--mobileNavOuterPad);
                 right: var(--mobileNavOuterPad);
-                bottom: calc(var(--mobileNavFloatGap) + env(safe-area-inset-bottom, 0px));
+                bottom: var(--mobileNavBottomOffset);
                 height: var(--mobileNavHeight);
                 border-radius: 30px;
                 border-color: color-mix(in srgb, var(--stroke) 62%, rgba(255,255,255,.28));
