@@ -9031,8 +9031,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         /* Final shared hero standard for Listeler, WishlistAi, Wrapped and Birikim */
         :root {
-            --pageHeroArtW: 230px;
-            --pageHeroArtH: 186px;
+            --pageHeroArtW: clamp(250px, 18vw, 280px);
+            --pageHeroArtH: clamp(202px, 14.4vw, 226px);
             --pageHeroGap: clamp(22px, 4vw, 56px);
         }
 
@@ -9283,8 +9283,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         @media (max-width: 1180px) {
             :root {
-                --pageHeroArtW: 220px;
-                --pageHeroArtH: 178px;
+                --pageHeroArtW: clamp(245px, 24vw, 270px);
+                --pageHeroArtH: clamp(198px, 19vw, 218px);
             }
         }
 
@@ -9842,8 +9842,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         /* Mobile-only shared hero slot: same visual X/Y position on Listeler, WishlistAi, Wrapped and Birikim. */
         @media (max-width: 760px) {
             :root {
-                --pageHeroMobileSlotW: min(260px, 72vw);
-                --pageHeroMobileSlotH: 190px;
+                --pageHeroMobileSlotW: clamp(234px, 66vw, 266px);
+                --pageHeroMobileSlotH: 200px;
                 --pageHeroMobileGap: 18px;
             }
 
@@ -9924,6 +9924,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 justify-content: flex-start !important;
                 text-align: center !important;
             }
+        }
+
+        .listHeroArt {
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .listHeroArt .heroRaster {
+            clip-path: inset(0 0 4px 0);
         }
 
         @media (max-width: 760px) {
