@@ -11411,15 +11411,17 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             switchAuthTab('login');
         }
 
-        function startApp() {
+        async function startApp() {
             document.body.classList.remove('auth-active');
             document.getElementById('authScreen').style.display = 'none';
-            load().then(() => {
-                loadLists();
-                updateDesktopUser();
-                switchMainView("home");
-                render();
-            });
+            stopRealtimeSync();
+            await load();
+            await loadLists();
+            updateDesktopUser();
+            switchMainView("home");
+            render();
+            startRealtimeSync();
+            retryPendingImageUploads();
         }
 
         /* ═══ LOGOUT ═══ */
@@ -11486,14 +11488,20 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function doLogout() {
             const confirmLogout = () => {
+                const itemKey = getUserKey();
+                const listKey = getListKey();
+                const legacyItemKey = getLegacyUserKey();
+                const legacyListKey = getLegacyListKey();
                 localStorage.setItem(REMEMBER_LOGIN_KEY, '0');
                 sessionStorage.removeItem(SESSION_LOGIN_KEY);
                 const rememberBox = document.getElementById('rememberLogin');
                 if (rememberBox) rememberBox.checked = false;
                 auth.signOut().then(() => {
                     items = [];
-                    localStorage.removeItem(getUserKey());
-                    localStorage.removeItem(getListKey());
+                    localStorage.removeItem(itemKey);
+                    localStorage.removeItem(listKey);
+                    localStorage.removeItem(legacyItemKey);
+                    localStorage.removeItem(legacyListKey);
                     window.location.reload(); // Refresh to completely clear memory
                 });
             };
@@ -11509,13 +11517,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         async function confirmReset() {
             if (!authUid) return;
             try {
+                await deleteAllStoredImages();
                 await db.ref('users/' + authUid + '/items').remove();
+                await db.ref('users/' + authUid + '/lists').remove();
             } catch (e) { }
 
             items = [];
             localStorage.removeItem(getUserKey());
+            localStorage.removeItem(getLegacyUserKey());
             wishlistLists = [];
             localStorage.removeItem(getListKey());
+            localStorage.removeItem(getLegacyListKey());
+            remoteItemIds = new Set();
+            remoteListIds = new Set();
             render();
             closeSettings();
             showToast("Liste başarıyla sıfırlandı.", "ph-trash");
@@ -11523,7 +11537,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         async function deleteAccount() {
             if (!authUid) return;
+            const itemKey = getUserKey();
+            const listKey = getListKey();
+            const legacyItemKey = getLegacyUserKey();
+            const legacyListKey = getLegacyListKey();
             try {
+                await deleteAllStoredImages();
                 await db.ref('users/' + authUid).remove();
             } catch (e) { }
 
@@ -11536,8 +11555,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 }
             }
 
-            localStorage.removeItem(getUserKey());
-            localStorage.removeItem(getListKey());
+            localStorage.removeItem(itemKey);
+            localStorage.removeItem(listKey);
+            localStorage.removeItem(legacyItemKey);
+            localStorage.removeItem(legacyListKey);
             items = [];
             window.location.reload(); // Force refresh to drop session state entirely
         }
@@ -11762,6 +11783,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 document.getElementById('authScreen').style.display = 'none';
                 startApp();
             } else {
+                stopRealtimeSync();
                 authUid = null;
                 currentUser = null;
                 items = [];
@@ -11830,6 +11852,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         let purchaseTargetId = null;
         let activeMainView = "home";
         let wishlistLists = [];
+        let remoteItemIds = new Set();
+        let remoteListIds = new Set();
+        let itemsRef = null;
+        let listsRef = null;
+        let suppressRemoteSync = false;
+        let realtimeSyncStarted = false;
         let editingListId = null;
         let activeListId = null;
         let activeListStatus = "all";
@@ -12070,25 +12098,105 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
            Firebase'e sadece metadata gider → DB boyutu ~20x küçülür.
            Silme: item silinince hem array'den hem localStorage image store'dan temizlenir.
         /* Storage */
-        function getUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
-        function getListKey() { return currentUser ? 'wishlist_lists_v1_' + currentUser : 'wishlist_lists_v1'; }
-
-        function loadLists() {
+        function getUserKey(uid = authUid) { return uid ? 'wishlist_v4_items_' + uid : 'wishlist_v4_items_guest'; }
+        function getListKey(uid = authUid) { return uid ? 'wishlist_v4_lists_' + uid : 'wishlist_v4_lists_guest'; }
+        function getLegacyUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
+        function getLegacyListKey() { return currentUser ? 'wishlist_lists_v1_' + currentUser : 'wishlist_lists_v1'; }
+        function userRootRef() { return authUid && window.db ? db.ref('users/' + authUid) : null; }
+        function safeId(value) {
+            const id = String(value || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 80);
+            return id || (Math.random().toString(16).slice(2) + Date.now().toString(16));
+        }
+        function safeText(value, max = 500) {
+            return String(value || '').slice(0, max);
+        }
+        function sanitizeIconClass(value) {
+            const icon = String(value || 'ph-list-heart');
+            return /^ph-[a-z0-9-]{2,40}$/i.test(icon) ? icon : 'ph-list-heart';
+        }
+        function arrayFromFirebaseNode(value) {
+            if (!value) return [];
+            if (Array.isArray(value)) return value.filter(Boolean);
+            if (typeof value === 'object') return Object.keys(value).map(key => ({ id: key, ...value[key] })).filter(Boolean);
+            return [];
+        }
+        function readLocalArray(primaryKey, legacyKey) {
+            for (const key of [primaryKey, legacyKey]) {
+                if (!key) continue;
+                try {
+                    const raw = localStorage.getItem(key);
+                    const parsed = raw ? JSON.parse(raw) : [];
+                    if (Array.isArray(parsed)) return parsed;
+                } catch { }
+            }
+            return [];
+        }
+        function normalizeList(list) {
+            const id = safeId(list?.id);
+            const itemIds = Array.isArray(list?.itemIds) ? list.itemIds.map(safeId).filter(Boolean).slice(0, 200) : [];
+            return {
+                id,
+                name: safeText(list?.name || 'Yeni Liste', 80),
+                icon: sanitizeIconClass(list?.icon || 'ph-sun'),
+                itemIds,
+                createdAt: Number(list?.createdAt) || Date.now(),
+                updatedAt: Number(list?.updatedAt) || Number(list?.createdAt) || Date.now()
+            };
+        }
+        function serializeRemoteList(list) {
+            return normalizeList(list);
+        }
+        function safeLocalPersistLists() {
             try {
-                const raw = localStorage.getItem(getListKey());
-                wishlistLists = raw ? JSON.parse(raw) : [];
-                if (!Array.isArray(wishlistLists)) wishlistLists = [];
-            } catch {
-                wishlistLists = [];
+                localStorage.setItem(getListKey(), JSON.stringify(wishlistLists.map(normalizeList)));
+            } catch (err) {
+                console.warn('Liste cache kaydedilemedi:', err);
             }
         }
-
-        function persistLists() {
-            try {
-                localStorage.setItem(getListKey(), JSON.stringify(wishlistLists));
-            } catch (err) {
-                console.warn('Liste kaydedilemedi:', err);
+        async function loadLists() {
+            const localLists = readLocalArray(getListKey(), getLegacyListKey()).map(normalizeList);
+            wishlistLists = localLists;
+            if (authUid && window.db) {
+                try {
+                    const snapshot = await db.ref('users/' + authUid + '/lists').once('value');
+                    const rawLists = snapshot.val();
+                    const remoteLists = arrayFromFirebaseNode(rawLists).map(normalizeList);
+                    if (remoteLists.length) {
+                        wishlistLists = remoteLists;
+                        remoteListIds = Array.isArray(rawLists)
+                            ? new Set(Object.keys(rawLists).filter(key => rawLists[key]))
+                            : new Set(remoteLists.map(list => list.id));
+                        if (Array.isArray(rawLists)) await persistRemoteLists(remoteLists);
+                    } else if (localLists.length) {
+                        remoteListIds = new Set();
+                        await persistRemoteLists(localLists);
+                    }
+                } catch (err) {
+                    console.warn('Firebase liste okuma hatasi:', err);
+                }
             }
+            safeLocalPersistLists();
+        }
+        function persistLists() {
+            wishlistLists = wishlistLists.map(normalizeList);
+            safeLocalPersistLists();
+            persistRemoteLists();
+        }
+        function persistRemoteLists(sourceLists = wishlistLists) {
+            const root = userRootRef();
+            if (!root) return Promise.resolve();
+            const normalized = sourceLists.map(normalizeList);
+            const currentIds = new Set(normalized.map(list => list.id));
+            const updates = {};
+            normalized.forEach(list => {
+                updates['lists/' + list.id] = serializeRemoteList(list);
+            });
+            remoteListIds.forEach(id => {
+                if (!currentIds.has(id)) updates['lists/' + id] = null;
+            });
+            remoteListIds = currentIds;
+            if (!Object.keys(updates).length) return Promise.resolve();
+            return root.update(updates).catch(err => console.error('Firebase liste yazma hatasi:', err));
         }
 
         function updateDesktopUser() {
@@ -12338,8 +12446,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         function saveListFromBuilder() {
-            const name = (listNameInputEl?.value || "").trim() || "Yeni Liste";
-            const icon = document.querySelector(".listIconChoice.active")?.dataset.icon || "ph-sun";
+            const name = safeText((listNameInputEl?.value || "").trim() || "Yeni Liste", 80);
+            const icon = sanitizeIconClass(document.querySelector(".listIconChoice.active")?.dataset.icon || "ph-sun");
             const itemIds = Array.from(listProductPickerEl?.querySelectorAll(".listSelectItem.selected") || []).map(el => el.dataset.id);
             if (!itemIds.length) {
                 showToast("Liste için en az bir ürün seç.");
@@ -12367,7 +12475,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     return;
                 }
             } else {
-                const savedId = Math.random().toString(16).slice(2) + Date.now().toString(16);
+                const savedId = safeId(Math.random().toString(16).slice(2) + Date.now().toString(16));
                 wishlistLists.push({
                     id: savedId,
                     name,
@@ -12454,13 +12562,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 const previews = previewItems.map(it => {
                     const src = getImageSrc(it);
                     const noPhoto = hasRealImage(it) ? "0" : "1";
-                    return `<img src="${src}" alt="" data-no-photo="${noPhoto}" onerror="this.onerror=null;this.dataset.noPhoto='1';this.src=getNoPhotoPlaceholderSrc();">`;
+                    return `<img src="${escapeHTML(src)}" alt="" data-no-photo="${noPhoto}" onerror="this.onerror=null;this.dataset.noPhoto='1';this.src=getNoPhotoPlaceholderSrc();">`;
                 }).join('');
                 const card = document.createElement("article");
                 card.className = "savedListCard";
                 card.innerHTML = `
                     <div class="savedListIdentity">
-                        <div class="savedListIcon"><i class="ph ${list.icon || 'ph-list-heart'}"></i></div>
+                        <div class="savedListIcon"><i class="ph ${sanitizeIconClass(list.icon)}"></i></div>
                         <div>
                             <strong>${escapeHTML(list.name || "Yeni Liste")}</strong>
                             <span class="savedListPercent">%${stats.pct} tamamlandı</span>
@@ -12554,7 +12662,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 listDetailHeadEl.innerHTML = `
                     <button class="btn" id="backToLists"><i class="ph ph-arrow-left"></i> Listeler</button>
                     <div class="listDetailTitle">
-                        <div class="savedListIcon"><i class="ph ${activeList.icon || 'ph-list-heart'}"></i></div>
+                        <div class="savedListIcon"><i class="ph ${sanitizeIconClass(activeList.icon)}"></i></div>
                         <div>
                             <h2>${escapeHTML(activeList.name || "Yeni Liste")}</h2>
                             <span>${stats.total} ürün</span>
@@ -12700,50 +12808,87 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function stripHeavyFields(item) {
             const clean = { ...item };
-            if (clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
-            if (clean.origImgData && clean.origImgData.startsWith('data:')) delete clean.origImgData;
+            if ('imgData' in clean) delete clean.imgData;
+            if ('origImgData' in clean) delete clean.origImgData;
             return clean;
         }
 
+        function normalizeItem(item) {
+            const id = safeId(item?.id);
+            const status = item?.status === 'bought' ? 'bought' : 'want';
+            const imageUrl = safeText(item?.imageUrl || '', 2048);
+            const imagePath = safeText(item?.imagePath || '', 240);
+            const localImg = item?.imgData && String(item.imgData).startsWith('data:') ? item.imgData : '';
+            return {
+                id,
+                itemName: safeText(item?.itemName || '', 160),
+                links: Array.isArray(item?.links) ? item.links.map(x => safeText(x, 2048)).filter(Boolean).slice(0, 10) : [],
+                link: safeText(item?.link || '', 2048),
+                category: safeText(item?.category || 'diger', 40),
+                customCategoryName: safeText(item?.customCategoryName || '', 80),
+                timeline: safeText(item?.timeline || '', 20),
+                timelineYear: Number(item?.timelineYear) || new Date().getFullYear(),
+                priority: clamp(Number(item?.priority) || 3, 1, 5),
+                size: safeText(item?.size || '', 40),
+                note: safeText(item?.note || '', 1200),
+                colorNote: safeText(item?.colorNote || '', 120),
+                price: safeText(item?.price || '', 40),
+                currentPrice: safeText(item?.currentPrice || '', 40),
+                priceNote: safeText(item?.priceNote || '', 300),
+                forWho: safeText(item?.forWho || 'self', 40),
+                reason: safeText(item?.reason || '', 80),
+                intentNote: safeText(item?.intentNote || '', 500),
+                status,
+                boughtPrice: Number(item?.boughtPrice) || 0,
+                boughtAt: Number(item?.boughtAt) || 0,
+                createdAt: Number(item?.createdAt) || Date.now(),
+                updatedAt: Number(item?.updatedAt) || Number(item?.createdAt) || Date.now(),
+                secret: !!item?.secret,
+                savedAmount: Number(item?.savedAmount) || 0,
+                imageUrl,
+                imagePath,
+                imageStatus: imageUrl ? 'uploaded' : (item?.imageStatus === 'pending' || item?.imageSyncPending ? 'pending' : 'none'),
+                imageSyncPending: !!item?.imageSyncPending || item?.imageStatus === 'pending',
+                imgData: localImg,
+                listOnlyId: item?.listOnlyId ? safeId(item.listOnlyId) : ''
+            };
+        }
+
         function serializeRemoteItem(item) {
-            const clean = stripHeavyFields(item);
-            // Keep an account-synced photo copy so images are visible on every device even if Storage upload fails.
-            if (item.imgData && item.imgData.startsWith('data:')) {
-                clean.imgData = item.imgData;
-                clean.imageSyncPending = false;
-            }
+            const clean = stripHeavyFields(normalizeItem(item));
+            clean.imageStatus = clean.imageUrl ? 'uploaded' : (item?.imageSyncPending ? 'pending' : clean.imageStatus || 'none');
+            clean.imageSyncPending = clean.imageStatus === 'pending';
             return clean;
         }
 
         function stripLocalFallback(item) {
-            const clean = { ...item };
+            const clean = normalizeItem(item);
             if (clean.imageUrl && clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
             if (clean.imageUrl && clean.origImgData && clean.origImgData.startsWith('data:')) delete clean.origImgData;
             return clean;
         }
 
         function readLocalItemsBackup() {
-            try {
-                const raw = localStorage.getItem(getUserKey());
-                const parsed = raw ? JSON.parse(raw) : [];
-                return Array.isArray(parsed) ? parsed : [];
-            } catch {
-                return [];
-            }
+            return readLocalArray(getUserKey(), getLegacyUserKey()).map(normalizeItem);
         }
 
         function mergeLocalImageFallbacks(remoteItems) {
             const localById = new Map(readLocalItemsBackup().map(item => [item.id, item]));
             return remoteItems.map(item => {
-                const local = localById.get(item.id);
-                if (!local) return item;
-                const merged = { ...item };
+                const normalized = normalizeItem(item);
+                const local = localById.get(normalized.id);
+                if (!local) return normalized;
+                const merged = { ...normalized };
                 if (!merged.imageUrl && local.imageUrl) {
                     merged.imageUrl = local.imageUrl;
                     merged.imagePath = local.imagePath || merged.imagePath || "";
+                    merged.imageStatus = "uploaded";
+                    merged.imageSyncPending = false;
                 }
                 if (!merged.imageUrl && !merged.imgData && local.imgData) {
                     merged.imgData = local.imgData;
+                    merged.imageStatus = "pending";
+                    merged.imageSyncPending = true;
                 }
                 if (!merged.imagePath && local.imagePath) merged.imagePath = local.imagePath;
                 return merged;
@@ -12751,11 +12896,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         async function uploadImageData(dataUrl, itemId) {
-            if (!authUid || !window.storage || !dataUrl || !dataUrl.startsWith('data:')) return { imgData: dataUrl || '' };
-            const path = 'users/' + authUid + '/images/' + itemId + '.jpg';
+            if (!authUid || !window.storage || !dataUrl || !dataUrl.startsWith('data:')) return { imgData: dataUrl || '', imageStatus: 'pending' };
+            const path = 'users/' + authUid + '/images/' + safeId(itemId) + '.jpg';
             const ref = storage.ref(path);
             await ref.put(dataURLToBlob(dataUrl), { contentType: 'image/jpeg' });
-            return { imageUrl: await ref.getDownloadURL(), imagePath: path, imgData: '' };
+            return { imageUrl: await ref.getDownloadURL(), imagePath: path, imgData: '', imageStatus: 'uploaded' };
         }
 
         async function deleteStoredImage(item) {
@@ -12764,6 +12909,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 await storage.ref(item.imagePath).delete();
             } catch (e) {
                 console.warn('Storage image delete skipped:', e);
+            }
+        }
+
+        async function deleteAllStoredImages() {
+            if (!window.storage) return;
+            const knownPaths = Array.from(new Set(items.map(item => item.imagePath).filter(Boolean)));
+            await Promise.all(knownPaths.map(path => storage.ref(path).delete().catch(e => console.warn('Storage image delete skipped:', e))));
+            if (!authUid || !window.storage) return;
+            try {
+                const folder = await storage.ref('users/' + authUid + '/images').listAll();
+                await Promise.all(folder.items.map(ref => ref.delete().catch(e => console.warn('Storage image delete skipped:', e))));
+            } catch (e) {
+                console.warn('Storage image folder cleanup skipped:', e);
             }
         }
 
@@ -12781,30 +12939,39 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             item.imageUrl = payload.imageUrl || '';
             item.imagePath = payload.imagePath || '';
             item.imgData = payload.imgData || '';
-            item.imageSyncPending = false;
+            item.imageStatus = payload.imageStatus || (item.imageUrl ? 'uploaded' : 'pending');
+            item.imageSyncPending = item.imageStatus === 'pending';
+            item.updatedAt = Date.now();
             return item;
         }
 
         async function load() {
+            const localItems = readLocalItemsBackup();
+            items = localItems;
             if (authUid) {
                 try {
                     const snapshot = await db.ref('users/' + authUid + '/items').once('value');
-                    const fbItems = snapshot.val();
-                    if (fbItems && Array.isArray(fbItems)) {
+                    const rawItems = snapshot.val();
+                    const fbItems = arrayFromFirebaseNode(rawItems).map(normalizeItem);
+                    if (fbItems.length) {
                         items = mergeLocalImageFallbacks(fbItems);
+                        remoteItemIds = Array.isArray(rawItems)
+                            ? new Set(Object.keys(rawItems).filter(key => rawItems[key]))
+                            : new Set(items.map(item => item.id));
                         safeLocalPersist();
-                        await persistRemoteItems();
+                        if (Array.isArray(rawItems)) await persistRemoteItems(items);
                         return;
+                    } else if (localItems.length) {
+                        remoteItemIds = new Set();
+                        await persistRemoteItems(localItems);
                     }
                 } catch (e) { console.error("Firebase load error", e); }
             }
-            try {
-                const raw = localStorage.getItem(getUserKey());
-                items = raw ? JSON.parse(raw) : [];
-            } catch { items = []; }
+            items = localItems;
         }
 
         function safeLocalPersist() {
+            items = items.map(normalizeItem);
             try {
                 localStorage.setItem(getUserKey(), JSON.stringify(items.map(stripLocalFallback)));
             } catch (e) {
@@ -12823,11 +12990,60 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             refreshWrappedIfOpen();
         }
 
-        function persistRemoteItems() {
-            if (authUid) {
-                return db.ref('users/' + authUid + '/items').set(items.map(serializeRemoteItem)).catch(e => console.error(e));
-            }
-            return Promise.resolve();
+        function persistRemoteItems(sourceItems = items) {
+            const root = userRootRef();
+            if (!root) return Promise.resolve();
+            const normalized = sourceItems.map(normalizeItem);
+            const currentIds = new Set(normalized.map(item => item.id));
+            const updates = {};
+            normalized.forEach(item => {
+                updates['items/' + item.id] = serializeRemoteItem(item);
+            });
+            remoteItemIds.forEach(id => {
+                if (!currentIds.has(id)) updates['items/' + id] = null;
+            });
+            remoteItemIds = currentIds;
+            if (!Object.keys(updates).length) return Promise.resolve();
+            return root.update(updates).catch(e => console.error('Firebase urun yazma hatasi:', e));
+        }
+
+        function stopRealtimeSync() {
+            if (itemsRef) itemsRef.off();
+            if (listsRef) listsRef.off();
+            itemsRef = null;
+            listsRef = null;
+            realtimeSyncStarted = false;
+        }
+
+        function renderAfterRemoteSync() {
+            if (activeMainView === "lists") renderListsScreen();
+            else render();
+            refreshWrappedIfOpen();
+        }
+
+        function startRealtimeSync() {
+            if (!authUid || !window.db || realtimeSyncStarted) return;
+            realtimeSyncStarted = true;
+            itemsRef = db.ref('users/' + authUid + '/items');
+            listsRef = db.ref('users/' + authUid + '/lists');
+            itemsRef.on('value', snapshot => {
+                if (suppressRemoteSync) return;
+                const remoteItems = arrayFromFirebaseNode(snapshot.val()).map(normalizeItem);
+                remoteItemIds = new Set(remoteItems.map(item => item.id));
+                items = mergeLocalImageFallbacks(remoteItems);
+                safeLocalPersist();
+                retryPendingImageUploads();
+                renderAfterRemoteSync();
+            }, err => console.warn('Firebase urun dinleme hatasi:', err));
+            listsRef.on('value', snapshot => {
+                if (suppressRemoteSync) return;
+                const remoteLists = arrayFromFirebaseNode(snapshot.val()).map(normalizeList);
+                remoteListIds = new Set(remoteLists.map(list => list.id));
+                wishlistLists = remoteLists;
+                safeLocalPersistLists();
+                if (activeListId && !wishlistLists.some(list => list.id === activeListId)) activeListId = null;
+                if (activeMainView === "lists") renderListsScreen();
+            }, err => console.warn('Firebase liste dinleme hatasi:', err));
         }
         function refreshWrappedIfOpen() {
             const back = document.getElementById("wrappedBack");
@@ -13343,6 +13559,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             it.status = "bought";
             it.boughtPrice = price > 0 ? price : 0;
             it.boughtAt = Date.now();
+            it.updatedAt = Date.now();
             persist();
             closePurchaseModal();
             returnToHomeAfterPurchase();
@@ -13405,7 +13622,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     }
                 })
                 .catch(err => {
-                    console.warn('Storage upload skipped; account-synced image copy remains active:', err);
+                    const live = items.find(x => x.id === item.id);
+                    if (live) {
+                        live.imageStatus = "pending";
+                        live.imageSyncPending = true;
+                        safeLocalPersist();
+                        persistRemoteItems();
+                    }
+                    console.warn('Storage upload pending; local retry queue remains active:', err);
                 })
                 .finally(() => {
                     activeImageUploads.delete(item.id);
@@ -13417,6 +13641,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 .filter(item => item.imageSyncPending === true && !item.imageUrl && item.imgData && item.imgData.startsWith('data:'))
                 .forEach(item => startImageUploadForItem(item, item.imgData));
         }
+
+        window.addEventListener("online", () => {
+            persistRemoteItems();
+            persistRemoteLists();
+            retryPendingImageUploads();
+        });
 
         async function createPhotoItemFromFile(file) {
             const id = Math.random().toString(16).slice(2) + Date.now().toString(16);
@@ -13430,7 +13660,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 price: "", currentPrice: "", priceNote: "",
                 forWho: "self", reason: "", intentNote: "",
                 status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0,
-                imageUrl: "", imagePath: "", imgData, imageSyncPending: false
+                imageUrl: "", imagePath: "", imgData, imageStatus: "pending", imageSyncPending: true
             };
         }
 
@@ -13646,6 +13876,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             it.forWho = document.getElementById("mForWho").value || "self";
             it.reason = document.getElementById("mReason").value || "";
             it.intentNote = document.getElementById("mIntentNote").value.trim();
+            it.updatedAt = Date.now();
             persist(); render(); closeDetailModal();
             if (it.secret) {
                 showToast("🔒 Ürün gizli listene taşındı. Görüntülemek için kategoriler arasında \"Gizli\" sekmesine geçebilirsiniz.");

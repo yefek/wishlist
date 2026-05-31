@@ -3,7 +3,76 @@
     "users": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid"
+        ".write": "auth != null && auth.uid === $uid",
+        "profile": {
+          "displayName": {
+            ".validate": "!newData.exists() || (newData.isString() && newData.val().length >= 1 && newData.val().length <= 32)"
+          },
+          "email": {
+            ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 254)"
+          },
+          "createdAt": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "items": {
+          "$itemId": {
+            ".validate": "!newData.exists() || (newData.hasChildren(['id', 'createdAt']) && newData.child('id').val() === $itemId && !newData.hasChildren(['imgData', 'origImgData']))",
+            "id": { ".validate": "newData.isString() && newData.val() === $itemId && newData.val().length <= 80" },
+            "itemName": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 160)" },
+            "links": {
+              "$idx": { ".validate": "newData.isString() && newData.val().length <= 2048" }
+            },
+            "link": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048)" },
+            "category": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 40)" },
+            "customCategoryName": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
+            "timeline": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 20)" },
+            "timelineYear": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "priority": { ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 1 && newData.val() <= 5)" },
+            "size": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 40)" },
+            "note": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 1200)" },
+            "colorNote": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 120)" },
+            "price": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 40)" },
+            "currentPrice": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 40)" },
+            "priceNote": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 300)" },
+            "forWho": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 40)" },
+            "reason": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
+            "intentNote": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 500)" },
+            "status": { ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'want' || newData.val() === 'bought'))" },
+            "boughtPrice": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "boughtAt": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "createdAt": { ".validate": "newData.isNumber()" },
+            "updatedAt": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "secret": { ".validate": "!newData.exists() || newData.isBoolean()" },
+            "savedAmount": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048)" },
+            "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 240)" },
+            "imageStatus": { ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'none' || newData.val() === 'pending' || newData.val() === 'uploaded'))" },
+            "imageSyncPending": { ".validate": "!newData.exists() || newData.isBoolean()" },
+            "listOnlyId": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
+            "$other": { ".validate": false }
+          }
+        },
+        "lists": {
+          "$listId": {
+            ".validate": "!newData.exists() || (newData.hasChildren(['id', 'name']) && newData.child('id').val() === $listId)",
+            "id": { ".validate": "newData.isString() && newData.val() === $listId && newData.val().length <= 80" },
+            "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80" },
+            "icon": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 48)" },
+            "itemIds": {
+              "$idx": { ".validate": "newData.isString() && newData.val().length <= 80" }
+            },
+            "createdAt": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "updatedAt": { ".validate": "!newData.exists() || newData.isNumber()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
       }
     },
     ".read": false,
