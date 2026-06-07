@@ -4479,10 +4479,31 @@
         }
 
         .aiEmptyHist {
+            display: grid;
+            gap: 7px;
             text-align: center;
-            padding: 40px 0;
+            padding: 22px 18px;
             color: var(--textSecondary);
             font-size: 13px;
+            font-weight: 650;
+            line-height: 1.45;
+            border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--stroke));
+            border-radius: 18px;
+            background:
+                linear-gradient(145deg,
+                    color-mix(in srgb, var(--surface) 86%, transparent),
+                    color-mix(in srgb, var(--surfaceBgLight) 62%, transparent));
+            box-shadow: 0 12px 34px color-mix(in srgb, var(--glow) 10%, transparent);
+        }
+        .aiEmptyHist strong {
+            color: var(--textPrimary);
+            font-size: 15px;
+            font-weight: 850;
+        }
+        .aiEmptyHist span {
+            color: var(--textSecondary);
+            font-size: 12px;
+            font-weight: 650;
         }
 
         /* AI Wrapped Card */
@@ -11417,9 +11438,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
 
             #savingsBack.show .page-hero--standard {
-                --stdHeroMobileH: 292px;
+                --stdHeroMobileH: 350px;
                 --stdHeroTitleH: 58px;
-                --stdHeroAfter: 8px;
+                --stdHeroAfter: 16px;
             }
 
             #listScreen.show .page-hero--standard > .page-hero__media,
@@ -11489,29 +11510,6 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 right: 12px !important;
             }
 
-            #savingsBack.show .savingsMonthSummary {
-                width: fit-content;
-                max-width: calc(100% - 48px);
-                margin: 16px auto 14px;
-                padding: 10px 16px;
-                border-radius: 999px;
-                border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--stroke));
-                background: color-mix(in srgb, var(--surfaceBg) 62%, transparent);
-                color: var(--textPrimary);
-                box-shadow: 0 8px 24px color-mix(in srgb, var(--glow) 14%, transparent);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                font-size: 14px;
-                font-weight: 700;
-                line-height: 1.25;
-                text-align: center;
-            }
-
-            #savingsBack.show .savingsMonthSummary strong {
-                color: var(--accent);
-                font-weight: 850;
-            }
-
             #wrappedBack.show .page-hero--standard #wrRange {
                 display: block !important;
                 height: auto !important;
@@ -11579,6 +11577,60 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 min-width: 40px !important;
                 min-height: 40px !important;
                 padding: 0 !important;
+            }
+        }
+
+        #savingsBack.pageView .savingsBody {
+            gap: 0 !important;
+        }
+
+        #savingsBack.pageView .savingsMonthSummary {
+            width: fit-content;
+            max-width: calc(100% - 48px);
+            margin: 0;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--stroke));
+            background:
+                linear-gradient(145deg,
+                    color-mix(in srgb, var(--surface) 86%, transparent),
+                    color-mix(in srgb, var(--surfaceBgLight) 62%, transparent));
+            color: var(--textPrimary);
+            box-shadow: 0 8px 24px color-mix(in srgb, var(--glow) 12%, transparent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.25;
+            text-align: center;
+        }
+
+        #savingsBack.pageView .savingsMonthSummary strong {
+            color: var(--accent);
+            font-weight: 850;
+        }
+
+        #savingsBack.pageView .savingsSummary {
+            margin-top: 0 !important;
+        }
+
+        @media (max-width: 760px) {
+            #aiBack.show #aiScreenMode .page-hero--standard {
+                --stdHeroMobileH: 342px;
+                --stdHeroMediaW: min(210px, 56vw);
+                --stdHeroMediaH: 150px;
+                --stdHeroTitleH: 92px;
+                --stdHeroSubtitleH: 50px;
+                --stdHeroAfter: 14px;
+            }
+
+            #aiBack.show #aiScreenMode .page-hero--standard > .page-hero__media {
+                margin-bottom: 6px !important;
+            }
+
+            #aiBack.show #aiScreenMode .aiCouncilHero .aiIntroDesc {
+                min-height: 0 !important;
+                margin-top: 0 !important;
             }
         }
 
@@ -12115,9 +12167,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     <div class="savingsHeroText appHeroContent page-hero__text">
                         <h2 class="page-hero-title appHeroTitle page-hero__title">Birikim</h2>
                         <p class="page-hero-description appHeroDescription page-hero__subtitle">İsteklerin için hedef belirle, birikimini takip et ve kalan tutarı düzenli gör.</p>
+                        <div class="appHeroAction savingsMonthSummary page-hero__action" id="savingsMonthSummary">Bu ay <strong id="savingsMonthAmount">₺0</strong> biriktirdiniz</div>
                     </div>
                 </section>
-                <div class="savingsMonthSummary" id="savingsMonthSummary">Bu ay <strong id="savingsMonthAmount">₺0</strong> biriktirdiniz</div>
                 <div class="savingsSummary">
                     <div class="savSumItem">
                         <div class="savMetricIcon"><i class="ph ph-chart-line-up"></i></div>
@@ -15165,19 +15217,25 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             });
         });
 
-        function syncDetailPhotoGallery(item) {
+        function syncDetailPhotoGallery(item, options = {}) {
             if (!detailGalleryImage || !item) return;
+            const loadImage = options.loadImage !== false;
             const photos = getItemPhotos(item);
             const activePhoto = getActiveDetailPhoto(item);
             const hasPhoto = !!activePhoto && photoHasRealImage(activePhoto);
             const cover = getCoverPhoto(item);
             detailGalleryImage.dataset.noPhoto = hasPhoto ? "0" : "1";
-            detailGalleryImage.src = activePhoto ? getPhotoSrc(activePhoto) : getNoPhotoPlaceholderSrc();
-            detailGalleryImage.onerror = () => {
+            if (loadImage) {
+                detailGalleryImage.src = activePhoto ? getPhotoSrc(activePhoto) : getNoPhotoPlaceholderSrc();
+                detailGalleryImage.onerror = () => {
+                    detailGalleryImage.onerror = null;
+                    detailGalleryImage.dataset.noPhoto = "1";
+                    detailGalleryImage.src = getNoPhotoPlaceholderSrc();
+                };
+            } else {
                 detailGalleryImage.onerror = null;
-                detailGalleryImage.dataset.noPhoto = "1";
-                detailGalleryImage.src = getNoPhotoPlaceholderSrc();
-            };
+                detailGalleryImage.removeAttribute("src");
+            }
             if (detailGalleryCount) {
                 detailGalleryCount.innerHTML = `<i class="ph ph-images"></i> ${photos.length ? detailGalleryIndex + 1 : 0} / ${photos.length}`;
             }
@@ -15328,7 +15386,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 mImg.dataset.noPhoto = "1";
                 mImg.src = getNoPhotoPlaceholderSrc();
             };
-            syncDetailPhotoGallery(it);
+            syncDetailPhotoGallery(it, { loadImage: false });
             clearTimeout(detailGalleryModeTimer);
             detailModalEl?.classList.remove("galleryMode");
             setDetailGalleryOpen(false);
@@ -15874,8 +15932,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         modalBack.addEventListener("click", e => { if (e.target === modalBack) closeDetailModal(); });
         detailGalleryToggle?.addEventListener("click", () => {
             const it = items.find(x => x.id === activeId);
-            if (it) syncDetailPhotoGallery(it);
-            setDetailGalleryOpen(!mPreviewRowEl?.classList.contains("galleryOpen"));
+            const willOpen = !mPreviewRowEl?.classList.contains("galleryOpen");
+            if (it) syncDetailPhotoGallery(it, { loadImage: willOpen });
+            setDetailGalleryOpen(willOpen);
         });
         detailGalleryClose?.addEventListener("click", () => setDetailGalleryOpen(false));
         detailGalleryPrev?.addEventListener("click", () => {
@@ -16852,7 +16911,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             let history = [];
             try { history = JSON.parse(localStorage.getItem(AI_HIST_KEY)) || []; } catch (e) { }
             if (!history.length) {
-                list.innerHTML = '<div class="aiEmptyHist">🤖 Henüz AI analizi yapılmamış<br><span style="font-size:11px;">Bir analiz yapıp "Geçmişe Kaydet" butonuna basın</span></div>';
+                list.innerHTML = '<div class="aiEmptyHist"><strong>Henüz kayıtlı analiz yok</strong><span>Bir analiz tamamladıktan sonra "Geçmişe Kaydet" seçeneğiyle burada saklayabilirsin.</span></div>';
                 return;
             }
             const typeLabels = { budget: "💰 Bütçe Optimizasyonu", compare: "⚔️ Karşılaştırma", priority: "📋 Önceliklendirme" };
