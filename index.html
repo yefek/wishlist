@@ -1260,6 +1260,278 @@
             transform: scale(0.9);
         }
 
+        .galleryToggleBtn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 245, 252, 0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(232, 69, 139, 0.28);
+            color: var(--accent);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background .15s, transform .12s, box-shadow .15s;
+            box-shadow: 0 8px 20px rgba(232, 69, 139, .16);
+        }
+
+        .galleryToggleBtn:hover {
+            background: rgba(255, 250, 253, 0.96);
+            box-shadow: 0 10px 24px rgba(232, 69, 139, .20);
+        }
+
+        .galleryToggleBtn:active {
+            transform: scale(0.9);
+        }
+
+        .detailPhotoGallery {
+            flex: 0 0 100%;
+            width: 100%;
+            display: grid;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-6px) scale(.992);
+            transform-origin: top center;
+            transition:
+                grid-template-rows .42s cubic-bezier(.22, 1, .36, 1),
+                opacity .28s ease,
+                transform .38s cubic-bezier(.22, 1, .36, 1),
+                margin-top .36s ease;
+            margin-top: 0;
+            pointer-events: none;
+            will-change: grid-template-rows, opacity, transform;
+        }
+
+        .mPreviewRow.galleryOpen .detailPhotoGallery {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            margin-top: 2px;
+            pointer-events: auto;
+        }
+
+        #modal .mTabs,
+        #modal .mTabBody {
+            overflow: hidden;
+            transition: max-height .34s ease, opacity .22s ease, padding .34s ease, margin .34s ease, visibility .22s ease;
+        }
+
+        #modal .mTabs {
+            max-height: 72px;
+        }
+
+        #modal .mTabBody {
+            max-height: 1600px;
+        }
+
+        #modal.galleryMode .mTabs {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            visibility: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+            border-bottom-color: transparent;
+        }
+
+        #modal.galleryMode .mTabBody {
+            max-height: 0 !important;
+            opacity: 0;
+            overflow: hidden;
+            visibility: hidden;
+            pointer-events: none;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+        }
+
+        .detailGalleryCard {
+            border: 1px solid var(--stroke);
+            border-radius: 18px;
+            background: rgba(255, 248, 253, .92);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 14px 34px rgba(232, 69, 139, .13);
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .detailGalleryHead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(232, 69, 139, .09);
+        }
+
+        .detailGalleryLabel {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--textSecondary);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .detailGalleryClose {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 1px solid var(--stroke);
+            color: var(--accent);
+            background: var(--inputBg);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+        }
+
+        .detailGalleryStage {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-height: 380px;
+            padding: 14px 48px;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(232, 69, 139, .14), transparent 45%),
+                linear-gradient(135deg, rgba(255,255,255,.74), rgba(255,232,246,.76));
+        }
+
+        .detailGalleryNav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            border: 1px solid var(--stroke);
+            background: rgba(255, 248, 253, .82);
+            color: var(--accent);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 8px 20px rgba(232, 69, 139, .11);
+        }
+
+        .detailGalleryNav.prev {
+            left: 9px;
+        }
+
+        .detailGalleryNav.next {
+            right: 9px;
+        }
+
+        .detailGalleryNav:disabled {
+            opacity: .36;
+            cursor: default;
+        }
+
+        .detailGalleryFrame {
+            position: relative;
+            width: min(100%, 340px);
+            padding: 10px;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--surfaceBg);
+            border: 1px solid var(--stroke);
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.06);
+        }
+
+        .detailGalleryImage {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 1px solid var(--stroke);
+            background: var(--surfaceBgLight);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
+            animation: detailStageIn .22s ease;
+        }
+
+        @keyframes detailStageIn {
+            from { opacity: .55; transform: scale(.985); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .detailGalleryBadge {
+            position: absolute;
+            right: 18px;
+            bottom: 18px;
+            min-height: 32px;
+            padding: 0 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.62);
+            color: var(--textPrimary);
+            background: rgba(255, 248, 253, .78);
+            box-shadow: 0 8px 20px rgba(232, 69, 139, .12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: var(--font-text);
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .detailGalleryBadge:disabled {
+            cursor: default;
+            opacity: .86;
+        }
+
+        .detailGalleryActions {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 7px;
+            padding: 10px 12px 12px;
+        }
+
+        .detailGalleryAction {
+            width: 100%;
+            min-height: 36px;
+            padding: 0 11px;
+            border-radius: 11px;
+            border: 1px solid var(--stroke);
+            color: var(--textPrimary);
+            background: var(--inputBg);
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .detailGalleryAction.primary {
+            color: var(--accent);
+            border-color: var(--accentMid);
+            background: var(--accentSoft);
+        }
+
+        .detailGalleryAction.danger {
+            color: #e84545;
+            border-color: rgba(232, 69, 69, 0.20);
+            background: rgba(232, 69, 69, 0.06);
+        }
+
+        .detailGalleryAction:disabled {
+            opacity: .48;
+            cursor: not-allowed;
+        }
+
         /* Kırpma overlay */
         /* ══════════════════════════════════════════
            DETAIL MODAL — Tab layout
@@ -1307,6 +1579,7 @@
 
         .mPreviewRow {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
             padding: 0 16px 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -9493,13 +9766,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 bottom: max(8px, env(safe-area-inset-bottom, 0px));
                 z-index: 19;
                 height: var(--mobileNavHeight);
-                display: grid;
-                grid-template-columns: repeat(6, minmax(0, 1fr));
-                align-items: stretch;
-                gap: 2px;
-                padding: 6px 4px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 6px 8px;
                 border: 1px solid color-mix(in srgb, var(--stroke) 78%, rgba(255,255,255,.22));
-                border-radius: 24px;
+                border-radius: 28px;
                 background: color-mix(in srgb, var(--surfaceBg) 58%, transparent);
                 backdrop-filter: blur(24px) saturate(1.18);
                 -webkit-backdrop-filter: blur(24px) saturate(1.18);
@@ -9516,9 +9788,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             .mobileNavItem {
                 appearance: none;
+                flex: 1 1 0;
                 min-width: 0;
+                height: 56px;
                 border: 1px solid transparent;
-                border-radius: 13px;
+                border-radius: 18px;
                 background: transparent;
                 color: var(--textSecondary);
                 font-family: var(--font-text);
@@ -9550,6 +9824,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             .mobileNavItem.active {
                 color: var(--accent);
                 border-color: var(--accentMid);
+                border-radius: 18px;
+                margin: 0;
                 background: var(--gradientBtn);
                 box-shadow: 0 4px 14px color-mix(in srgb, var(--glow) 46%, transparent);
             }
@@ -9943,7 +10219,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 right: var(--mobileNavOuterPad);
                 bottom: var(--mobileNavBottomOffset);
                 height: var(--mobileNavHeight);
-                border-radius: 30px;
+                padding: 6px 8px;
+                border-radius: 28px;
                 border-color: color-mix(in srgb, var(--stroke) 62%, rgba(255,255,255,.28));
                 background:
                     linear-gradient(180deg, color-mix(in srgb, var(--surfaceBg) 58%, rgba(255,255,255,.18)), color-mix(in srgb, var(--surfaceBg) 36%, transparent));
@@ -10005,29 +10282,1303 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 margin-bottom: 0;
             }
 
-            #aiScreenMode .aiCouncilHero {
-                --pageHeroMobileSlotH: 168px;
-                --pageHeroMobileGap: 10px;
-                margin-bottom: 18px !important;
+        }
+
+        /* Shared page header + hero contract for Listeler, WishlistAi, Wrapped and Birikim. */
+        :root {
+            --pageHeroImageW: 230px;
+            --pageHeroImageH: 186px;
+            --pageHeroColumnGap: clamp(22px, 4vw, 56px);
+            --pageHeroAfterGap: 24px;
+            --pageHeroTitleGap: 14px;
+            --pageHeroButtonGap: 22px;
+        }
+
+        .aiBack .aiHeader {
+            min-height: 0 !important;
+            padding: 16px 20px !important;
+            align-items: center !important;
+            gap: 12px !important;
+            background: var(--headerBg) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border-bottom: 1px solid var(--stroke) !important;
+            box-shadow: none !important;
+        }
+
+        .aiHeader .aiTitle {
+            font-family: var(--font-display) !important;
+            font-size: 22px !important;
+            font-weight: 700 !important;
+            line-height: 1.15 !important;
+            letter-spacing: -0.2px !important;
+            color: var(--textPrimary) !important;
+        }
+
+        .aiHeader .aiActions {
+            margin-left: auto !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        .aiHeader .aiActions .btn {
+            min-height: 44px !important;
+            padding: 10px 18px !important;
+            font-size: 13.5px !important;
+            border-radius: 10px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 1 !important;
+        }
+
+        .aiHeader .aiActions #aiAddBtn {
+            min-width: 74px !important;
+            padding-top: 10px !important;
+        }
+
+        .aiHeader .aiActions .cameraBtn {
+            width: 44px !important;
+            height: 44px !important;
+            padding: 0 !important;
+            font-size: 20px !important;
+        }
+
+        .page-hero {
+            position: relative !important;
+            display: grid !important;
+            grid-template-columns: minmax(180px, var(--pageHeroImageW)) minmax(0, 1fr) !important;
+            align-items: center !important;
+            gap: var(--pageHeroColumnGap) !important;
+            min-height: var(--pageHeroImageH) !important;
+            margin: 0 0 var(--pageHeroAfterGap) !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            overflow: visible !important;
+            text-align: left !important;
+        }
+
+        .page-hero-image-wrap {
+            width: var(--pageHeroImageW) !important;
+            height: var(--pageHeroImageH) !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            justify-self: stretch !important;
+            align-self: center !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            transform: none !important;
+            overflow: visible !important;
+        }
+
+        .page-hero-image-wrap.heroAssetFrame,
+        .page-hero-image-wrap > .heroAssetFrame {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            transform: none !important;
+            overflow: visible !important;
+        }
+
+        #aiScreenMode .page-hero-image-wrap > .heroAssetFrame {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+        }
+
+        .page-hero-image {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            display: block !important;
+            object-fit: contain !important;
+            object-position: center center !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            transform: none !important;
+        }
+
+        #aiScreenMode .page-hero-image-wrap .page-hero-image {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+        }
+
+        .listHeroCopy,
+        .aiHeroText,
+        .savingsHeroText,
+        .wrappedBody.wrDashboard .wrHeroText {
+            min-width: 0 !important;
+            align-self: center !important;
+            transform: none !important;
+        }
+
+        .page-hero-title {
+            display: inline-block !important;
+            font-family: var(--font-display) !important;
+            font-size: clamp(32px, 4vw, 54px) !important;
+            font-weight: 850 !important;
+            line-height: 1.02 !important;
+            letter-spacing: -0.6px !important;
+            margin: 0 0 var(--pageHeroTitleGap) !important;
+            color: var(--textPrimary) !important;
+            text-align: inherit !important;
+            background: linear-gradient(135deg, var(--textPrimary) 14%, var(--lilac) 60%, var(--accent)) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+
+        body[data-theme="pink"] .page-hero-title,
+        body:not([data-theme]) .page-hero-title,
+        body[data-theme=""] .page-hero-title {
+            background: linear-gradient(135deg, var(--textPrimary) 12%, var(--accent) 62%, #F28DB9 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+        }
+
+        .page-hero-description {
+            max-width: 720px !important;
+            margin: 0 !important;
+            color: var(--textSecondary) !important;
+            font-size: 15px !important;
+            font-weight: 650 !important;
+            line-height: 1.7 !important;
+            text-align: inherit !important;
+        }
+
+        .wrappedBody .wrTitleRow {
+            margin: 0 0 var(--pageHeroTitleGap) !important;
+            align-items: center !important;
+        }
+
+        .wrappedBody .wrTitleRow .page-hero-title {
+            margin: 0 !important;
+        }
+
+        .listHero .btn {
+            margin-top: 0 !important;
+        }
+
+        @media (min-width: 980px) {
+            .aiBack .aiHeader {
+                padding: 16px 20px !important;
+            }
+        }
+
+        @media (max-width: 1180px) {
+            :root {
+                --pageHeroImageW: 220px;
+                --pageHeroImageH: 178px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            :root {
+                --pageHeroImageW: min(250px, 72vw);
+                --pageHeroImageH: 190px;
+                --pageHeroColumnGap: 0px;
+                --pageHeroAfterGap: 24px;
+                --pageHeroImageTitleGap: 14px;
+                --pageHeroTitleGap: 12px;
+                --pageHeroButtonGap: 20px;
             }
 
-            #aiScreenMode .aiHeroArt {
-                flex-basis: var(--pageHeroMobileSlotH) !important;
-                height: var(--pageHeroMobileSlotH) !important;
-                min-height: var(--pageHeroMobileSlotH) !important;
+            .aiBack .aiHeader {
+                padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px !important;
+                gap: 8px !important;
             }
 
-            #aiScreenMode .aiHeroCard .heroRaster {
-                width: 90% !important;
-                height: 90% !important;
+            .aiHeader .aiActions {
+                gap: 6px !important;
             }
 
-            #aiScreenMode .aiHeroText {
-                gap: 4px !important;
+            .aiHeader .aiTitle {
+                flex: 0 0 auto !important;
+                margin-right: auto !important;
+                white-space: nowrap !important;
+                font-family: 'DM Serif Display', serif !important;
+                font-size: 22px !important;
+                font-style: italic !important;
+                font-weight: 400 !important;
+                letter-spacing: -0.3px !important;
+                line-height: 1.15 !important;
+                padding-right: 4px !important;
+                background: var(--gradientHL) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
             }
 
-            #aiScreenMode .aiCouncilHero .aiIntroTitle {
-                margin-bottom: 8px !important;
+            .aiHeader .aiActions .btn {
+                min-height: 40px !important;
+                padding: 8px 12px !important;
+                border-radius: 10px !important;
+            }
+
+            .aiHeader .aiActions #aiAddBtn {
+                min-width: 74px !important;
+                padding-top: 8px !important;
+            }
+
+            .aiHeader .aiActions .cameraBtn,
+            .aiHeader .aiActions .topLogoutBtn {
+                width: 40px !important;
+                height: 40px !important;
+                padding: 0 !important;
+                font-size: 19px !important;
+            }
+
+            .aiHeader .aiActions .topLogoutBtn {
+                font-size: 0 !important;
+            }
+
+            .page-hero {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                gap: 0 !important;
+                margin: 0 0 var(--pageHeroAfterGap) !important;
+                padding: 0 !important;
+                text-align: center !important;
+            }
+
+            .page-hero-image-wrap {
+                order: 0 !important;
+                flex: 0 0 var(--pageHeroImageH) !important;
+                width: var(--pageHeroImageW) !important;
+                height: var(--pageHeroImageH) !important;
+                max-width: var(--pageHeroImageW) !important;
+                min-height: var(--pageHeroImageH) !important;
+                margin: 0 auto var(--pageHeroImageTitleGap) !important;
+                align-self: center !important;
+                justify-self: center !important;
+            }
+
+            #aiScreenMode .page-hero-image-wrap {
+                flex: 0 0 var(--pageHeroImageH) !important;
+                width: var(--pageHeroImageW) !important;
+                height: var(--pageHeroImageH) !important;
+                max-width: var(--pageHeroImageW) !important;
+                min-height: var(--pageHeroImageH) !important;
+            }
+
+            .listHeroCopy,
+            .aiHeroText,
+            .savingsHeroText,
+            .wrappedBody.wrDashboard .wrHeroText {
+                order: 1 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                text-align: center !important;
+            }
+
+            .page-hero-title {
+                max-width: min(100%, 720px) !important;
+                font-size: clamp(36px, 10vw, 50px) !important;
+                line-height: 1.06 !important;
+                margin: 0 0 var(--pageHeroTitleGap) !important;
+                text-align: center !important;
+            }
+
+            .page-hero-description {
+                max-width: min(100%, 390px) !important;
+                font-size: 15px !important;
+                line-height: 1.62 !important;
+                text-align: center !important;
+            }
+
+            .wrappedBody .wrTitleRow {
+                width: 100% !important;
+                margin: 0 0 var(--pageHeroTitleGap) !important;
+            }
+
+            .wrappedBody .wrTitleRow .page-hero-title {
+                margin: 0 !important;
+            }
+
+            .listHero .btn {
+                margin: var(--pageHeroButtonGap) auto 0 !important;
+            }
+        }
+
+        /* Structural standard: one real hero/header system for Listeler, WishlistAi, Wrapped and Birikim. */
+        :root {
+            --appHeroImageW: 230px;
+            --appHeroImageH: 186px;
+            --appHeroGapX: clamp(22px, 4vw, 56px);
+            --appHeroTitleGap: 14px;
+            --appHeroActionGap: 22px;
+            --appHeroContentGap: 28px;
+        }
+
+        .appHero {
+            display: grid !important;
+            grid-template-columns: minmax(180px, var(--appHeroImageW)) minmax(0, 1fr) !important;
+            align-items: center !important;
+            gap: var(--appHeroGapX) !important;
+            min-height: var(--appHeroImageH) !important;
+            margin: 0 0 var(--appHeroContentGap) !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            overflow: visible !important;
+            text-align: left !important;
+        }
+
+        .appHero .appHeroImageWrap {
+            grid-column: 1 !important;
+            grid-row: 1 !important;
+            width: var(--appHeroImageW) !important;
+            height: var(--appHeroImageH) !important;
+            min-width: 0 !important;
+            min-height: 0 !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            justify-self: stretch !important;
+            align-self: center !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            transform: none !important;
+            overflow: visible !important;
+        }
+
+        .appHero .appHeroImageWrap > .heroAssetFrame,
+        .appHero .appHeroImageWrap.heroAssetFrame {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            transform: none !important;
+            overflow: visible !important;
+        }
+
+        .appHero .appHeroImage {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
+            object-position: center center !important;
+            display: block !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            transform: none !important;
+        }
+
+        .appHero .appHeroContent {
+            grid-column: 2 !important;
+            grid-row: 1 !important;
+            min-width: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            transform: none !important;
+            align-self: center !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            text-align: left !important;
+        }
+
+        .appHero .listHeroText {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .appHero .appHeroTitle {
+            display: inline-block !important;
+            max-width: min(100%, 760px) !important;
+            margin: 0 0 var(--appHeroTitleGap) !important;
+            font-family: var(--font-display) !important;
+            font-size: clamp(32px, 4vw, 54px) !important;
+            font-weight: 850 !important;
+            line-height: 1.02 !important;
+            letter-spacing: -0.6px !important;
+            text-align: inherit !important;
+            color: var(--textPrimary) !important;
+        }
+
+        .appHero .appHeroDescription {
+            max-width: 720px !important;
+            margin: 0 !important;
+            font-size: 15px !important;
+            font-weight: 650 !important;
+            line-height: 1.7 !important;
+            text-align: inherit !important;
+            color: var(--textSecondary) !important;
+        }
+
+        .appHero .appHeroAction,
+        .appHero .listHeroCopy > .btn {
+            margin-top: var(--appHeroActionGap) !important;
+            align-self: flex-start !important;
+        }
+
+        .appHero + .aiModes,
+        .appHero + .statGrid,
+        .appHero + .wrStatGrid,
+        .appHero + .savingsSummary,
+        .appHero ~ .savedLists,
+        .appHero ~ .listBuilder {
+            margin-top: 0 !important;
+        }
+
+        .appHero .wrHeroBadge {
+            position: absolute !important;
+            top: 18px !important;
+            right: 18px !important;
+        }
+
+        .appHero .wrTitleRow {
+            width: 100% !important;
+            margin: 0 0 var(--appHeroTitleGap) !important;
+            display: grid !important;
+            grid-template-columns: 44px minmax(0, max-content) 44px !important;
+            align-items: center !important;
+            justify-content: start !important;
+            gap: 10px !important;
+        }
+
+        .appHero .wrTitleRow .appHeroTitle {
+            margin: 0 !important;
+        }
+
+        @media (max-width: 1180px) {
+            :root {
+                --appHeroImageW: 220px;
+                --appHeroImageH: 178px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            :root {
+                --appHeroMobileH: 392px;
+                --appHeroImageW: min(190px, 54vw);
+                --appHeroImageH: 154px;
+                --appHeroTitleBlockH: 108px;
+                --appHeroDescBlockH: 54px;
+                --appHeroTitleGap: 12px;
+                --appHeroActionGap: 20px;
+                --appHeroContentGap: 28px;
+                --appHeroHeaderGap: 18px;
+            }
+
+            body.list-view-active .content,
+            .aiBack .aiBody,
+            #wrappedBack.pageView,
+            #savingsBack.pageView {
+                padding-top: var(--appHeroHeaderGap) !important;
+            }
+
+            .appHero {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: var(--appHeroMobileH) !important;
+                min-height: var(--appHeroMobileH) !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                gap: 0 !important;
+                margin: 0 0 var(--appHeroContentGap) !important;
+                padding: 0 !important;
+                text-align: center !important;
+            }
+
+            .appHero .appHeroImageWrap {
+                order: 0 !important;
+                flex: 0 0 var(--appHeroImageH) !important;
+                width: var(--appHeroImageW) !important;
+                height: var(--appHeroImageH) !important;
+                max-width: var(--appHeroImageW) !important;
+                min-height: var(--appHeroImageH) !important;
+                margin: 0 auto 18px !important;
+                align-self: center !important;
+                justify-self: center !important;
+            }
+
+            .appHero .appHeroImage {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+            }
+
+            .appHero .appHeroContent {
+                order: 1 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                min-height: calc(var(--appHeroTitleBlockH) + var(--appHeroDescBlockH) + var(--appHeroActionGap) + 44px) !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                text-align: center !important;
+            }
+
+            .appHero .appHeroTitle {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                max-width: min(100%, 430px) !important;
+                min-height: var(--appHeroTitleBlockH) !important;
+                font-size: clamp(35px, 9vw, 46px) !important;
+                line-height: 1.08 !important;
+                margin: 0 !important;
+                text-align: center !important;
+            }
+
+            .appHero .appHeroDescription {
+                max-width: min(100%, 390px) !important;
+                min-height: var(--appHeroDescBlockH) !important;
+                font-size: 15px !important;
+                line-height: 1.62 !important;
+                text-align: center !important;
+            }
+
+            .appHero .appHeroAction,
+            .appHero .listHeroCopy > .btn {
+                margin: var(--appHeroActionGap) auto 0 !important;
+                align-self: center !important;
+            }
+
+            .appHero .wrTitleRow {
+                display: grid !important;
+                grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+                justify-content: stretch !important;
+                gap: 8px !important;
+                margin: 0 0 var(--appHeroTitleGap) !important;
+            }
+
+            .appHero .wrTitleRow .appHeroTitle {
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+        }
+
+        /* Mobile hero contract: these four pages share one measured visual rhythm. */
+        @media (max-width: 760px) {
+            :root {
+                --appHeroMobileH: 392px;
+                --appHeroVisualTop: 0px;
+                --appHeroVisualW: min(190px, 54vw);
+                --appHeroVisualH: 154px;
+                --appHeroTextTop: 172px;
+                --appHeroTitleH: 126px;
+                --appHeroDescH: 54px;
+                --appHeroBottomGap: 24px;
+            }
+
+            #listScreen.show .appHero,
+            #aiBack.show .appHero,
+            #wrappedBack.show .appHero,
+            #savingsBack.show .appHero {
+                position: relative !important;
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: var(--appHeroMobileH) !important;
+                min-height: var(--appHeroMobileH) !important;
+                margin: 0 0 var(--appHeroBottomGap) !important;
+                padding: 0 !important;
+                overflow: visible !important;
+                text-align: center !important;
+            }
+
+            #listScreen.show .appHero > .appHeroImageWrap,
+            #aiBack.show .appHero > .appHeroImageWrap,
+            #wrappedBack.show .appHero > .appHeroImageWrap,
+            #savingsBack.show .appHero > .appHeroImageWrap {
+                position: absolute !important;
+                top: var(--appHeroVisualTop) !important;
+                left: 50% !important;
+                width: var(--appHeroVisualW) !important;
+                height: var(--appHeroVisualH) !important;
+                min-width: var(--appHeroVisualW) !important;
+                min-height: var(--appHeroVisualH) !important;
+                max-width: var(--appHeroVisualW) !important;
+                max-height: var(--appHeroVisualH) !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                transform: translateX(-50%) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: transparent !important;
+                border: 0 !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+            }
+
+            #listScreen.show .appHero > .appHeroContent,
+            #aiBack.show .appHero > .appHeroContent,
+            #wrappedBack.show .appHero > .appHeroContent,
+            #savingsBack.show .appHero > .appHeroContent {
+                position: absolute !important;
+                top: var(--appHeroTextTop) !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                height: calc(var(--appHeroMobileH) - var(--appHeroTextTop)) !important;
+                min-height: 0 !important;
+                margin: 0 auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                text-align: center !important;
+            }
+
+            #listScreen.show .appHero .appHeroTitle,
+            #aiBack.show .appHero .appHeroTitle,
+            #wrappedBack.show .appHero .appHeroTitle,
+            #savingsBack.show .appHero .appHeroTitle,
+            #wrappedBack.show .appHero .wrTitleRow {
+                width: 100% !important;
+                max-width: min(100%, 430px) !important;
+                height: var(--appHeroTitleH) !important;
+                min-height: var(--appHeroTitleH) !important;
+                margin: 0 auto !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                font-size: clamp(36px, 8.6vw, 44px) !important;
+                line-height: 1.08 !important;
+            }
+
+            #wrappedBack.show .appHero .wrTitleRow {
+                display: grid !important;
+                grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+                gap: 8px !important;
+            }
+
+            #wrappedBack.show .appHero .wrTitleRow .appHeroTitle {
+                height: auto !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+            }
+
+            #listScreen.show .appHero .appHeroDescription,
+            #aiBack.show .appHero .appHeroDescription,
+            #wrappedBack.show .appHero .appHeroDescription,
+            #savingsBack.show .appHero .appHeroDescription {
+                width: 100% !important;
+                max-width: min(100%, 390px) !important;
+                height: var(--appHeroDescH) !important;
+                min-height: var(--appHeroDescH) !important;
+                margin: 0 auto !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                font-size: 15px !important;
+                line-height: 1.62 !important;
+            }
+
+            #listScreen.show .appHero .appHeroAction {
+                margin: 20px auto 0 !important;
+                align-self: center !important;
+            }
+
+            #aiScreenMode .appHero .aiHeroCard,
+            #aiScreenMode .appHero .aiHeroArt,
+            #savingsBack.pageView .appHero .savingsHeroArt,
+            #wrappedBack.pageView .appHero .wrHeroCard,
+            #listScreen.show .appHero .listHeroArt {
+                width: var(--appHeroVisualW) !important;
+                height: var(--appHeroVisualH) !important;
+                max-width: var(--appHeroVisualW) !important;
+                max-height: var(--appHeroVisualH) !important;
+            }
+
+            #listScreen.show .appHero .heroRaster,
+            #aiBack.show .appHero .heroRaster,
+            #wrappedBack.show .appHero .heroRaster,
+            #savingsBack.show .appHero .heroRaster {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+                object-position: center !important;
+            }
+        }
+
+        /* Authoritative shared hero layout. Scope: Listeler, WishlistAi, Wrapped, Birikim hero only. */
+        .page-hero--standard {
+            --stdHeroMediaW: 230px;
+            --stdHeroMediaH: 186px;
+            --stdHeroGapX: clamp(22px, 4vw, 56px);
+            --stdHeroAfter: 28px;
+            display: grid !important;
+            grid-template-columns: minmax(180px, var(--stdHeroMediaW)) minmax(0, 1fr) !important;
+            align-items: center !important;
+            gap: var(--stdHeroGapX) !important;
+            width: 100% !important;
+            min-height: var(--stdHeroMediaH) !important;
+            margin: 0 0 var(--stdHeroAfter) !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            overflow: visible !important;
+            text-align: left !important;
+        }
+
+        .page-hero--standard::before,
+        .page-hero--standard::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        .page-hero--standard .page-hero__media {
+            grid-column: 1 !important;
+            grid-row: 1 !important;
+            width: var(--stdHeroMediaW) !important;
+            height: var(--stdHeroMediaH) !important;
+            min-width: 0 !important;
+            min-height: 0 !important;
+            max-width: var(--stdHeroMediaW) !important;
+            max-height: var(--stdHeroMediaH) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            justify-self: center !important;
+            align-self: center !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            transform: none !important;
+            overflow: visible !important;
+        }
+
+        .page-hero--standard .page-hero__image,
+        .page-hero--standard .page-hero__media .heroRaster {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            display: block !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            transform: none !important;
+        }
+
+        .page-hero--standard .page-hero__text {
+            grid-column: 2 !important;
+            grid-row: 1 !important;
+            width: 100% !important;
+            max-width: 760px !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            justify-content: center !important;
+            text-align: left !important;
+            transform: none !important;
+        }
+
+        .page-hero--standard .listHeroText {
+            width: 100% !important;
+        }
+
+        .page-hero--standard .page-hero__title,
+        .page-hero--standard .wrTitleRow h2 {
+            width: 100% !important;
+            max-width: 760px !important;
+            margin: 0 !important;
+            display: block !important;
+            font-family: var(--font-display) !important;
+            font-size: clamp(32px, 4vw, 54px) !important;
+            font-weight: 850 !important;
+            line-height: 1.05 !important;
+            letter-spacing: -0.6px !important;
+            text-align: inherit !important;
+            color: var(--textPrimary) !important;
+        }
+
+        .page-hero--standard .page-hero__subtitle,
+        .page-hero--standard #wrRange {
+            width: 100% !important;
+            max-width: 720px !important;
+            margin: 14px 0 0 !important;
+            padding: 0 !important;
+            display: block !important;
+            font-size: 15px !important;
+            font-weight: 650 !important;
+            line-height: 1.7 !important;
+            text-align: inherit !important;
+            color: var(--textSecondary) !important;
+        }
+
+        .page-hero--standard .page-hero__action {
+            margin: 22px 0 0 !important;
+            align-self: flex-start !important;
+        }
+
+        .page-hero--standard .wrTitleRow {
+            width: 100% !important;
+            max-width: 760px !important;
+            margin: 0 !important;
+            display: grid !important;
+            grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+            align-items: center !important;
+            justify-content: start !important;
+            gap: 10px !important;
+        }
+
+        .page-hero--standard .wrHeroBadge {
+            position: absolute !important;
+            top: 16px !important;
+            right: 16px !important;
+        }
+
+        #aiScreenMode .page-hero--standard.aiCouncilHero::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        #aiScreenMode .page-hero--standard .aiHeroCard {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+
+        @media (max-width: 1180px) {
+            .page-hero--standard {
+                --stdHeroMediaW: 220px;
+                --stdHeroMediaH: 178px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            body.list-view-active .content,
+            .aiBack .aiBody,
+            #wrappedBack.pageView,
+            #savingsBack.pageView {
+                padding-top: 14px !important;
+            }
+
+            .page-hero--standard {
+                --stdHeroMobileH: 382px;
+                --stdHeroMediaW: min(232px, 58vw);
+                --stdHeroMediaH: 176px;
+                --stdHeroTitleH: 82px;
+                --stdHeroSubtitleH: 42px;
+                --stdHeroAfter: 18px;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: var(--stdHeroMobileH) !important;
+                min-height: var(--stdHeroMobileH) !important;
+                margin: 0 0 var(--stdHeroAfter) !important;
+                padding: 0 12px !important;
+                gap: 0 !important;
+                text-align: center !important;
+                overflow: visible !important;
+            }
+
+            .page-hero--standard .page-hero__media {
+                order: 0 !important;
+                flex: 0 0 var(--stdHeroMediaH) !important;
+                width: var(--stdHeroMediaW) !important;
+                height: var(--stdHeroMediaH) !important;
+                min-width: var(--stdHeroMediaW) !important;
+                min-height: var(--stdHeroMediaH) !important;
+                max-width: var(--stdHeroMediaW) !important;
+                max-height: var(--stdHeroMediaH) !important;
+                margin: 0 auto 8px !important;
+                position: static !important;
+                left: auto !important;
+                top: auto !important;
+                transform: none !important;
+            }
+
+            .page-hero--standard .page-hero__text {
+                order: 1 !important;
+                width: 100% !important;
+                max-width: 440px !important;
+                min-height: 0 !important;
+                height: auto !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                text-align: center !important;
+                position: static !important;
+            }
+
+            .page-hero--standard .listHeroText {
+                display: contents !important;
+            }
+
+            .page-hero--standard .listHeroSparkle {
+                display: none !important;
+            }
+
+            .page-hero--standard .page-hero__title,
+            .page-hero--standard .wrTitleRow {
+                width: 100% !important;
+                max-width: 430px !important;
+                height: var(--stdHeroTitleH) !important;
+                min-height: var(--stdHeroTitleH) !important;
+                margin: 0 auto !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                font-size: clamp(36px, 8.6vw, 44px) !important;
+                line-height: 1.08 !important;
+            }
+
+            .page-hero--standard .wrTitleRow {
+                display: grid !important;
+                grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+                gap: 8px !important;
+            }
+
+            .page-hero--standard .wrTitleRow h2 {
+                height: auto !important;
+                min-height: 0 !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                font-size: inherit !important;
+                line-height: inherit !important;
+            }
+
+            .page-hero--standard .page-hero__subtitle,
+            .page-hero--standard #wrRange {
+                width: 100% !important;
+                max-width: min(100%, 390px) !important;
+                height: var(--stdHeroSubtitleH) !important;
+                min-height: var(--stdHeroSubtitleH) !important;
+                margin: 0 auto !important;
+                padding: 0 8px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                font-size: 15px !important;
+                line-height: 1.45 !important;
+            }
+
+            .page-hero--standard .page-hero__action {
+                margin: 12px auto 0 !important;
+                align-self: center !important;
+            }
+
+            .page-hero--standard .page-hero__action .btn {
+                min-height: 42px !important;
+                padding: 9px 18px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                line-height: 1 !important;
+            }
+
+            .page-hero--standard + .aiModes,
+            .page-hero--standard + .statGrid,
+            .page-hero--standard + .wrStatGrid,
+            .page-hero--standard + .savingsSummary,
+            .page-hero--standard ~ .savedLists,
+            .page-hero--standard ~ .listBuilder {
+                margin-top: 0 !important;
+            }
+
+            #listScreen.show .page-hero--standard,
+            #aiBack.show .page-hero--standard,
+            #wrappedBack.show .page-hero--standard,
+            #savingsBack.show .page-hero--standard {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: var(--stdHeroMobileH) !important;
+                min-height: var(--stdHeroMobileH) !important;
+                margin: 0 0 var(--stdHeroAfter) !important;
+                padding: 0 12px !important;
+                gap: 0 !important;
+                text-align: center !important;
+                overflow: visible !important;
+            }
+
+            #listScreen.show .page-hero--standard > .page-hero__media,
+            #aiBack.show .page-hero--standard > .page-hero__media,
+            #wrappedBack.show .page-hero--standard > .page-hero__media,
+            #savingsBack.show .page-hero--standard > .page-hero__media {
+                position: static !important;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
+                order: 0 !important;
+                flex: 0 0 var(--stdHeroMediaH) !important;
+                width: var(--stdHeroMediaW) !important;
+                height: var(--stdHeroMediaH) !important;
+                min-width: var(--stdHeroMediaW) !important;
+                min-height: var(--stdHeroMediaH) !important;
+                max-width: var(--stdHeroMediaW) !important;
+                max-height: var(--stdHeroMediaH) !important;
+                margin: 0 auto 8px !important;
+            }
+
+            #listScreen.show .page-hero--standard > .page-hero__text,
+            #aiBack.show .page-hero--standard > .page-hero__text,
+            #wrappedBack.show .page-hero--standard > .page-hero__text,
+            #savingsBack.show .page-hero--standard > .page-hero__text {
+                position: static !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                order: 1 !important;
+                width: 100% !important;
+                max-width: 440px !important;
+                height: auto !important;
+                min-height: 0 !important;
+                margin: 0 auto !important;
+            }
+
+            #savingsBack.show .page-hero--standard + .savingsSummary,
+            #wrappedBack.show .page-hero--standard + .statGrid,
+            #wrappedBack.show .page-hero--standard + .wrStatGrid,
+            #aiBack.show .page-hero--standard + .aiModes,
+            #listScreen.show .page-hero--standard ~ .savedLists {
+                margin-top: 0 !important;
+            }
+
+            #listScreen.show .page-hero--standard {
+                --stdHeroMobileH: 350px;
+                --stdHeroTitleH: 58px;
+                --stdHeroAfter: 16px;
+            }
+
+            #savingsBack.show .page-hero--standard {
+                --stdHeroMobileH: 292px;
+                --stdHeroTitleH: 58px;
+                --stdHeroAfter: 8px;
+            }
+
+            #listScreen.show .page-hero--standard > .page-hero__media,
+            #savingsBack.show .page-hero--standard > .page-hero__media {
+                margin-bottom: 4px !important;
+            }
+
+            #listScreen.show .page-hero--standard .page-hero__title,
+            #savingsBack.show .page-hero--standard .page-hero__title {
+                height: var(--stdHeroTitleH) !important;
+                min-height: var(--stdHeroTitleH) !important;
+                margin-top: 0 !important;
+            }
+
+            #listScreen.show .page-hero--standard .lists-actions {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                margin: 20px auto 0 !important;
+                position: static !important;
+                transform: none !important;
+            }
+
+            #listScreen.show .page-hero--standard ~ .savedLists {
+                margin-top: 40px !important;
+            }
+
+            #listScreen.show .lists-empty-state {
+                margin-top: 0 !important;
+            }
+
+            #listScreen.show .savedLists,
+            #listScreen.show .listBuilder,
+            #savingsBack.show .savingsBody {
+                padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)) !important;
+            }
+
+            #savingsBack.show .page-hero--standard {
+                margin-bottom: 0 !important;
+            }
+
+            #savingsBack.show .savingsSummary {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+            }
+
+            #aiBack.show .aiHeader .aiTitle {
+                display: inline-block !important;
+                line-height: 1.16 !important;
+                padding-bottom: 3px !important;
+                overflow: visible !important;
+                background-color: transparent !important;
+                box-shadow: none !important;
+            }
+
+            #aiBack.show #aiScreenMode .aiCouncilHero .aiIntroDesc {
+                max-width: min(100%, 390px) !important;
+                height: auto !important;
+                min-height: 58px !important;
+                margin-top: 0 !important;
+                line-height: 1.45 !important;
+                text-wrap: pretty;
+            }
+
+            #wrappedBack.show .page-hero--standard .wrHeroBadge {
+                top: 12px !important;
+                right: 12px !important;
+            }
+
+            #savingsBack.show .savingsMonthSummary {
+                width: fit-content;
+                max-width: calc(100% - 48px);
+                margin: 16px auto 14px;
+                padding: 10px 16px;
+                border-radius: 999px;
+                border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--stroke));
+                background: color-mix(in srgb, var(--surfaceBg) 62%, transparent);
+                color: var(--textPrimary);
+                box-shadow: 0 8px 24px color-mix(in srgb, var(--glow) 14%, transparent);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 1.25;
+                text-align: center;
+            }
+
+            #savingsBack.show .savingsMonthSummary strong {
+                color: var(--accent);
+                font-weight: 850;
+            }
+
+            #wrappedBack.show .page-hero--standard #wrRange {
+                display: block !important;
+                height: auto !important;
+                min-height: 0 !important;
+                max-width: min(100%, 420px) !important;
+                white-space: normal !important;
+                text-wrap: pretty;
+            }
+
+            #wrappedBack.show .page-hero--standard #wrRange b {
+                display: inline !important;
+                white-space: nowrap !important;
+            }
+
+            #aiBack.show #aiScreenMode .page-hero--standard,
+            #aiBack.show #aiScreenMode .page-hero--standard .page-hero__media,
+            #aiBack.show #aiScreenMode .page-hero--standard .aiHeroCard {
+                background: transparent !important;
+                border: 0 !important;
+                box-shadow: none !important;
+            }
+
+            #aiBack.show .aiHeader {
+                min-height: 61px !important;
+                padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+
+            #aiBack.show .aiHeader .aiTitle {
+                font-family: 'DM Serif Display', serif !important;
+                font-size: 22px !important;
+                font-weight: 400 !important;
+                font-style: italic !important;
+                line-height: 1 !important;
+                letter-spacing: -0.3px !important;
+                margin: 0 auto 0 0 !important;
+                padding: 0 4px 0 0 !important;
+                transform: translateY(0) !important;
+            }
+
+            #aiBack.show .aiHeader .aiActions {
+                flex: 1 1 auto !important;
+                min-width: 0 !important;
+                margin-left: auto !important;
+                gap: 6px !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+            }
+
+            #aiBack.show .aiHeader .aiActions #aiAddBtn {
+                min-width: 0 !important;
+                height: 40px !important;
+                min-height: 40px !important;
+                padding: 8px 12px !important;
+                line-height: 1 !important;
+                border-radius: 10px !important;
+            }
+
+            #aiBack.show .aiHeader .aiActions .cameraBtn,
+            #aiBack.show .aiHeader .aiActions .topLogoutBtn {
+                width: 40px !important;
+                height: 40px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                padding: 0 !important;
             }
         }
 
@@ -10109,17 +11660,17 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         </div>
 
         <section id="listScreen" class="listScreen" aria-label="Listeler">
-            <div class="listHero">
-                <div class="listHeroCopy">
+            <div class="listHero page-hero appHero page-hero--standard">
+                <div class="listHeroCopy appHeroContent page-hero__text">
                     <div class="listHeroText">
                         <div class="listHeroSparkle"><i class="ph ph-sparkle"></i></div>
-                        <h2>Listeler</h2>
-                        <p>Alınmamış ürünlerini amacına göre gruplandır ve liste kartında düzenli şekilde takip et.</p>
+                        <h2 class="page-hero-title appHeroTitle page-hero__title">Listeler</h2>
+                        <p class="page-hero-description appHeroDescription page-hero__subtitle">Alınmamış ürünlerini amacına göre gruplandır ve liste kartında düzenli şekilde takip et.</p>
                     </div>
-                    <button class="btn primary" id="showListBuilder"><i class="ph ph-plus"></i> Liste oluştur</button>
+                    <div class="appHeroAction lists-actions page-hero__action"><button class="btn primary" id="showListBuilder"><i class="ph ph-plus"></i> Liste oluştur</button></div>
                 </div>
-                <div class="listHeroArt heroAssetFrame page-hero-visual-slot" aria-hidden="true">
-                    <img class="heroRaster" src="assets/hero-listeler.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                <div class="listHeroArt heroAssetFrame page-hero-visual-slot page-hero-image-wrap appHeroImageWrap page-hero__media" aria-hidden="true">
+                    <img class="heroRaster page-hero-image appHeroImage page-hero__image" src="assets/hero-listeler.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                 </div>
             </div>
 
@@ -10211,7 +11762,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             <div class="mPreviewRow">
                 <div class="mThumb">
                     <img id="mImg" alt="preview" />
-                    <button class="cropBtn" id="cropBtn" title="Kırp / Düzenle"><i class="ph ph-crop"></i></button>
+                    <button class="galleryToggleBtn" id="detailGalleryToggle" title="Fotoğraflara göz at" aria-label="Fotoğraflara göz at"><i class="ph ph-eye"></i></button>
+                    <button class="cropBtn" id="cropBtn" title="Kırp / Düzenle" style="display:none"><i class="ph ph-crop"></i></button>
                 </div>
                 <div class="mMeta">
                     <input type="text" id="mItemName" class="mNameInput" placeholder="İsim ver..." />
@@ -10221,6 +11773,28 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         <div class="mMetaHearts" id="mMetaHearts"></div>
                     </div>
                     <div class="mMetaHint" id="mMetaHint" style="display:none"></div>
+                </div>
+                <div class="detailPhotoGallery" id="detailPhotoGallery">
+                    <div class="detailGalleryCard">
+                        <div class="detailGalleryHead">
+                            <div class="detailGalleryLabel" id="detailGalleryCount"><i class="ph ph-images"></i> 1 / 1</div>
+                            <button class="detailGalleryClose" id="detailGalleryClose" type="button" title="Galeriyi kapat" aria-label="Galeriyi kapat"><i class="ph ph-caret-up"></i></button>
+                        </div>
+                        <div class="detailGalleryStage">
+                            <button class="detailGalleryNav prev" id="detailGalleryPrev" type="button" aria-label="Önceki fotoğraf"><i class="ph ph-caret-left"></i></button>
+                            <div class="detailGalleryFrame">
+                                <img class="detailGalleryImage" id="detailGalleryImage" alt="Ürün fotoğrafı" />
+                                <button class="detailGalleryBadge" id="detailGalleryCover" type="button">Kapak görseli</button>
+                            </div>
+                            <button class="detailGalleryNav next" id="detailGalleryNext" type="button" aria-label="Sonraki fotoğraf"><i class="ph ph-caret-right"></i></button>
+                        </div>
+                        <div class="detailGalleryActions">
+                            <button class="detailGalleryAction primary" id="detailGalleryAdd" type="button"><i class="ph ph-plus"></i> Fotoğraf ekle</button>
+                            <button class="detailGalleryAction" id="detailGalleryEdit" type="button"><i class="ph ph-pencil-simple"></i> Düzenle</button>
+                            <button class="detailGalleryAction danger" id="detailGalleryDelete" type="button"><i class="ph ph-trash"></i> Sil</button>
+                            <input id="detailPhotoInput" class="hidden" type="file" accept="image/*,.webp,.gif,.avif,.svg,.png" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Tab bar -->
@@ -10490,19 +12064,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <button id="closeWrapped" class="btn">Kapat</button>
             </div>
             <div class="wrappedBody wrDashboard">
-                <section class="wrHero">
-                    <div class="wrHeroCard heroAssetFrame page-hero-visual-slot" aria-hidden="true">
-                        <img class="heroRaster" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                <section class="wrHero page-hero appHero page-hero--standard">
+                    <div class="wrHeroCard heroAssetFrame page-hero-visual-slot page-hero-image-wrap appHeroImageWrap page-hero__media" aria-hidden="true">
+                        <img class="heroRaster page-hero-image appHeroImage page-hero__image" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         <div class="wrHeroBadge" id="wrHeroYear">2026</div>
                     </div>
-                    <div class="wrHeroText">
+                    <div class="wrHeroText appHeroContent page-hero__text">
                         <div class="wrTitleRow">
                             <button class="wrTitleNav" id="wrPrev" aria-label="Önceki ay">‹</button>
-                            <h2 id="wrTitle">Mayıs 2026 Wrapped'i</h2>
+                            <h2 class="page-hero-title appHeroTitle page-hero__title" id="wrTitle">Mayıs 2026 Wrapped'i</h2>
                             <button class="wrTitleNav" id="wrNext" aria-label="Sonraki ay">›</button>
                         </div>
                         <div class="wrLabel" id="wrLabel" hidden>Mayıs 2026</div>
-                        <div class="sub" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
+                        <div class="sub page-hero-description appHeroDescription page-hero__subtitle" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
                     </div>
                 </section>
                 <div class="statGrid">
@@ -10534,15 +12108,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 <button id="closeSavings" class="btn">Kapat</button>
             </div>
             <div class="savingsBody">
-                <section class="savingsHero">
-                    <div class="savingsHeroArt heroAssetFrame page-hero-visual-slot" aria-hidden="true">
-                        <img class="heroRaster" src="assets/hero-birikim.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                <section class="savingsHero page-hero appHero page-hero--standard">
+                    <div class="savingsHeroArt heroAssetFrame page-hero-visual-slot page-hero-image-wrap appHeroImageWrap page-hero__media" aria-hidden="true">
+                        <img class="heroRaster page-hero-image appHeroImage page-hero__image" src="assets/hero-birikim.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                     </div>
-                    <div class="savingsHeroText">
-                        <h2>Birikim</h2>
-                        <p>Hedeflerine bir adım daha yaklaş.</p>
+                    <div class="savingsHeroText appHeroContent page-hero__text">
+                        <h2 class="page-hero-title appHeroTitle page-hero__title">Birikim</h2>
+                        <p class="page-hero-description appHeroDescription page-hero__subtitle">İsteklerin için hedef belirle, birikimini takip et ve kalan tutarı düzenli gör.</p>
                     </div>
                 </section>
+                <div class="savingsMonthSummary" id="savingsMonthSummary">Bu ay <strong id="savingsMonthAmount">₺0</strong> biriktirdiniz</div>
                 <div class="savingsSummary">
                     <div class="savSumItem">
                         <div class="savMetricIcon"><i class="ph ph-chart-line-up"></i></div>
@@ -10595,15 +12170,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         <div class="aiBody">
             <!-- Screen 1: Mode Select -->
             <div class="aiScreen active" id="aiScreenMode">
-                <div class="aiIntro aiCouncilHero">
-                    <div class="aiHeroArt page-hero-visual-slot" aria-hidden="true">
+                <div class="aiIntro aiCouncilHero page-hero appHero page-hero--standard">
+                    <div class="aiHeroArt page-hero-visual-slot page-hero-image-wrap appHeroImageWrap page-hero__media" aria-hidden="true">
                         <div class="aiHeroCard heroAssetFrame">
-                            <img class="heroRaster" src="assets/hero-wishlistai.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                            <img class="heroRaster page-hero-image appHeroImage page-hero__image" src="assets/hero-wishlistai.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         </div>
                     </div>
-                    <div class="aiHeroText">
-                        <div class="aiIntroTitle">WishlistAi - Uzman AI Konseyi</div>
-                        <div class="aiIntroDesc">6 uzman ve 1 hakem senin için analiz eder.</div>
+                    <div class="aiHeroText appHeroContent page-hero__text">
+                        <div class="aiIntroTitle page-hero-title appHeroTitle page-hero__title">WishlistAi - Uzman AI Konseyi</div>
+                    <div class="aiIntroDesc page-hero-description appHeroDescription page-hero__subtitle">6 farklı uzman ve 1 hakem, ürünlerini farklı açılardan değerlendirir. Hangisini almanın daha mantıklı olduğuna karar vermene yardımcı olur.</div>
                     </div>
                 </div>
                 <div class="aiModes">
@@ -11199,17 +12774,32 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             projectId: "wishlist-5bdfa",
             storageBucket: "wishlist-5bdfa.appspot.com"
         };
-        firebase.initializeApp(firebaseConfig);
-        window.auth = firebase.auth();
-        window.db = firebase.database();
-        window.storage = firebase.storage();
+        const firebaseReady = typeof window.firebase !== 'undefined'
+            && typeof firebase.initializeApp === 'function'
+            && typeof firebase.auth === 'function'
+            && typeof firebase.database === 'function'
+            && typeof firebase.storage === 'function';
+
+        if (firebaseReady) {
+            firebase.initializeApp(firebaseConfig);
+            window.auth = firebase.auth();
+            window.db = firebase.database();
+            window.storage = firebase.storage();
+        } else {
+            window.auth = null;
+            window.db = null;
+            window.storage = null;
+            console.warn('Firebase SDK yüklenemedi; giriş ve bulut senkronizasyonu geçici olarak devre dışı.');
+        }
         const REMEMBER_LOGIN_KEY = 'wl_remember_login_v1';
         const SESSION_LOGIN_KEY = 'wl_session_login_v1';
-        auth.setPersistence(
-            localStorage.getItem(REMEMBER_LOGIN_KEY) === '1'
-                ? firebase.auth.Auth.Persistence.LOCAL
-                : firebase.auth.Auth.Persistence.SESSION
-        ).catch(e => console.warn("Auth persistence error", e));
+        if (window.auth) {
+            auth.setPersistence(
+                localStorage.getItem(REMEMBER_LOGIN_KEY) === '1'
+                    ? firebase.auth.Auth.Persistence.LOCAL
+                    : firebase.auth.Auth.Persistence.SESSION
+            ).catch(e => console.warn("Auth persistence error", e));
+        }
 
         let currentUser = null;
         let authUid = null;
@@ -11771,7 +13361,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return fallback;
         }
 
-        auth.onAuthStateChanged(async (user) => {
+        if (window.auth) auth.onAuthStateChanged(async (user) => {
             if (user) {
                 if (localStorage.getItem(REMEMBER_LOGIN_KEY) !== '1' && sessionStorage.getItem(SESSION_LOGIN_KEY) !== '1') {
                     await auth.signOut();
@@ -11792,6 +13382,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 document.getElementById('authScreen').style.display = 'flex';
             }
         });
+        else {
+            document.body.classList.add('auth-active');
+            document.getElementById('authScreen').style.display = 'flex';
+        }
 
         // ENTER tuşu
         document.querySelectorAll('.authInputWrap').forEach(wrap => {
@@ -11843,6 +13437,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (loginTabActive) doLogin(); else doRegister();
         });
         let activeId = null;
+        let detailGalleryIndex = 0;
+        let detailGalleryModeTimer = 0;
         let activeCat = "all";
         let activeStatus = "all";
         let activeSort = "date-desc";
@@ -11869,8 +13465,22 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         const emptyEl = document.getElementById("empty");
         const filePick = document.getElementById("filePick");
         const modalBack = document.getElementById("modalBack");
+        const detailModalEl = document.getElementById("modal");
         const closeModalBtn = document.getElementById("closeModal");
         const mImg = document.getElementById("mImg");
+        const mPreviewRowEl = document.querySelector("#modal .mPreviewRow");
+        const detailGalleryToggle = document.getElementById("detailGalleryToggle");
+        const detailGalleryClose = document.getElementById("detailGalleryClose");
+        const detailGalleryCount = document.getElementById("detailGalleryCount");
+        const detailGalleryImage = document.getElementById("detailGalleryImage");
+        const detailGalleryPrev = document.getElementById("detailGalleryPrev");
+        const detailGalleryNext = document.getElementById("detailGalleryNext");
+        const detailGalleryCover = document.getElementById("detailGalleryCover");
+        const detailGalleryAdd = document.getElementById("detailGalleryAdd");
+        const detailGalleryEdit = document.getElementById("detailGalleryEdit");
+        const detailGalleryDelete = document.getElementById("detailGalleryDelete");
+        const detailPhotoInput = document.getElementById("detailPhotoInput");
+        const detailCropTrigger = document.getElementById("cropBtn");
         const mCategory = document.getElementById("mCategory");
         const mTimeline = document.getElementById("mTimeline");
         const mYear = document.getElementById("mYear");
@@ -12100,6 +13710,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         /* Storage */
         function getUserKey(uid = authUid) { return uid ? 'wishlist_v4_items_' + uid : 'wishlist_v4_items_guest'; }
         function getListKey(uid = authUid) { return uid ? 'wishlist_v4_lists_' + uid : 'wishlist_v4_lists_guest'; }
+        function getSavingsLogKey(uid = authUid) { return uid ? 'wishlist_v1_savings_log_' + uid : 'wishlist_v1_savings_log_guest'; }
         function getLegacyUserKey() { return currentUser ? 'wishlist_v3_' + currentUser : 'wishlist_v3'; }
         function getLegacyListKey() { return currentUser ? 'wishlist_lists_v1_' + currentUser : 'wishlist_lists_v1'; }
         function userRootRef() { return authUid && window.db ? db.ref('users/' + authUid) : null; }
@@ -12462,7 +14073,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     removedIds.forEach(id => {
                         const removedItem = items.find(item => item.id === id && item.listOnlyId === existing.id);
                         if (!removedItem) return;
-                        deleteStoredImage(removedItem);
+                        deleteStoredGalleryImages(removedItem);
                         items = items.filter(item => item.id !== id);
                         removedScopedItems = true;
                     });
@@ -12551,7 +14162,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function renderSavedLists() {
             if (!savedListsEl) return;
             if (!wishlistLists.length) {
-                savedListsEl.innerHTML = '<div class="savedListsEmpty">Henüz liste yok.<br>İlk listen için yukarıdan “Liste oluştur”a bas.</div>';
+                savedListsEl.innerHTML = '<div class="savedListsEmpty lists-empty-state">Henüz liste yok.<br>İlk listen için yukarıdan “Liste oluştur”a bas.</div>';
                 return;
             }
             savedListsEl.innerHTML = "";
@@ -12632,7 +14243,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 return;
             }
             closeListDeleteConfirm();
-            items.filter(item => item.listOnlyId === id).forEach(item => deleteStoredImage(item));
+            items.filter(item => item.listOnlyId === id).forEach(item => deleteStoredGalleryImages(item));
             items = items.filter(item => item.listOnlyId !== id);
             wishlistLists = wishlistLists.filter(x => x.id !== id);
             if (activeListId === id) activeListId = null;
@@ -12790,6 +14401,100 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return hasRealImage(item) ? (item.imageUrl || item.imgData) : getNoPhotoPlaceholderSrc();
         }
 
+        function makePhotoId() {
+            return "p_" + Date.now().toString(16) + "_" + Math.random().toString(16).slice(2, 8);
+        }
+
+        function normalizePhoto(photo, index = 0) {
+            return {
+                id: safeId(photo?.id || ("photo_" + index)),
+                name: safeText(photo?.name || ("Fotoğraf " + (index + 1)), 120),
+                imageUrl: safeText(photo?.imageUrl || "", 2048),
+                imagePath: safeText(photo?.imagePath || "", 260),
+                imgData: photo?.imgData && String(photo.imgData).startsWith("data:") ? photo.imgData : "",
+                imageStatus: photo?.imageUrl ? "uploaded" : (photo?.imageStatus === "pending" || photo?.imageSyncPending ? "pending" : "none"),
+                imageSyncPending: !!photo?.imageSyncPending || photo?.imageStatus === "pending",
+                createdAt: Number(photo?.createdAt) || Date.now(),
+                origImgData: photo?.origImgData || ""
+            };
+        }
+
+        function getItemPhotos(item) {
+            if (!item) return [];
+            let photos = Array.isArray(item.photos) ? item.photos.map(normalizePhoto) : [];
+            if (!photos.length && hasRealImage(item)) {
+                photos = [normalizePhoto({
+                    id: item.coverPhotoId || "cover",
+                    name: "Kapak görseli",
+                    imageUrl: item.imageUrl || "",
+                    imagePath: item.imagePath || "",
+                    imgData: item.imgData || "",
+                    imageStatus: item.imageStatus || (item.imageUrl ? "uploaded" : "pending"),
+                    imageSyncPending: item.imageSyncPending,
+                    createdAt: item.createdAt || Date.now(),
+                    origImgData: item.origImgData || ""
+                })];
+            }
+            item.photos = photos;
+            if (!item.coverPhotoId && photos.length) item.coverPhotoId = photos[0].id;
+            return photos;
+        }
+
+        function photoHasRealImage(photo) {
+            return !!(photo && (photo.imageUrl || photo.imgData));
+        }
+
+        function getPhotoSrc(photo) {
+            return photoHasRealImage(photo) ? (photo.imageUrl || photo.imgData) : getNoPhotoPlaceholderSrc();
+        }
+
+        function getCoverPhoto(item) {
+            const photos = getItemPhotos(item);
+            return photos.find(photo => photo.id === item.coverPhotoId) || photos[0] || null;
+        }
+
+        function getActiveDetailPhoto(item) {
+            const photos = getItemPhotos(item);
+            if (!photos.length) return null;
+            detailGalleryIndex = Math.max(0, Math.min(detailGalleryIndex, photos.length - 1));
+            return photos[detailGalleryIndex] || photos[0];
+        }
+
+        function getDetailPhotoById(item, photoId) {
+            return getItemPhotos(item).find(photo => photo.id === photoId) || null;
+        }
+
+        function syncCoverFieldsFromGallery(item, touch = true) {
+            if (!item) return item;
+            const cover = getCoverPhoto(item);
+            if (cover) {
+                item.imageUrl = cover.imageUrl || "";
+                item.imagePath = cover.imagePath || "";
+                item.imgData = cover.imgData || "";
+                item.imageStatus = cover.imageStatus || (cover.imageUrl ? "uploaded" : (cover.imgData ? "pending" : "none"));
+                item.imageSyncPending = !!cover.imageSyncPending || item.imageStatus === "pending";
+            } else {
+                item.coverPhotoId = "";
+                item.imageUrl = "";
+                item.imagePath = "";
+                item.imgData = "";
+                item.imageStatus = "none";
+                item.imageSyncPending = false;
+            }
+            if (touch) item.updatedAt = Date.now();
+            return item;
+        }
+
+        function applyPhotoPayload(photo, payload) {
+            if (!photo || !payload) return photo;
+            photo.imageUrl = payload.imageUrl || "";
+            photo.imagePath = payload.imagePath || "";
+            photo.imgData = payload.imgData || "";
+            photo.imageStatus = payload.imageStatus || (photo.imageUrl ? "uploaded" : (photo.imgData ? "pending" : "none"));
+            photo.imageSyncPending = photo.imageStatus === "pending";
+            return photo;
+        }
+
         function refreshNoPhotoImages() {
             const placeholder = getNoPhotoPlaceholderSrc();
             document.querySelectorAll('img[data-no-photo="1"]').forEach(img => {
@@ -12810,6 +14515,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const clean = { ...item };
             if ('imgData' in clean) delete clean.imgData;
             if ('origImgData' in clean) delete clean.origImgData;
+            if (Array.isArray(clean.photos)) {
+                clean.photos = clean.photos.map(photo => {
+                    const slim = { ...photo };
+                    delete slim.imgData;
+                    delete slim.origImgData;
+                    return slim;
+                });
+            }
             return clean;
         }
 
@@ -12819,7 +14532,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const imageUrl = safeText(item?.imageUrl || '', 2048);
             const imagePath = safeText(item?.imagePath || '', 240);
             const localImg = item?.imgData && String(item.imgData).startsWith('data:') ? item.imgData : '';
-            return {
+            const normalized = {
                 id,
                 itemName: safeText(item?.itemName || '', 160),
                 links: Array.isArray(item?.links) ? item.links.map(x => safeText(x, 2048)).filter(Boolean).slice(0, 10) : [],
@@ -12850,8 +14563,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 imageStatus: imageUrl ? 'uploaded' : (item?.imageStatus === 'pending' || item?.imageSyncPending ? 'pending' : 'none'),
                 imageSyncPending: !!item?.imageSyncPending || item?.imageStatus === 'pending',
                 imgData: localImg,
+                photos: Array.isArray(item?.photos) ? item.photos.map(normalizePhoto) : [],
+                coverPhotoId: safeText(item?.coverPhotoId || '', 80),
                 listOnlyId: item?.listOnlyId ? safeId(item.listOnlyId) : ''
             };
+            getItemPhotos(normalized);
+            syncCoverFieldsFromGallery(normalized, false);
+            return normalized;
         }
 
         function serializeRemoteItem(item) {
@@ -12890,14 +14608,40 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     merged.imageStatus = "pending";
                     merged.imageSyncPending = true;
                 }
+                if ((!merged.photos || !merged.photos.length) && local.photos && local.photos.length) {
+                    merged.photos = local.photos.map(normalizePhoto);
+                    merged.coverPhotoId = merged.coverPhotoId || local.coverPhotoId || merged.photos[0]?.id || "";
+                } else if (merged.photos && merged.photos.length && local.photos && local.photos.length) {
+                    const localByPhotoId = new Map(local.photos.map(photo => [photo.id, normalizePhoto(photo)]));
+                    merged.photos = merged.photos.map(photo => {
+                        const localPhoto = localByPhotoId.get(photo.id);
+                        if (!localPhoto) return photo;
+                        const next = { ...photo };
+                        if (!next.imageUrl && localPhoto.imageUrl) {
+                            next.imageUrl = localPhoto.imageUrl;
+                            next.imagePath = localPhoto.imagePath || next.imagePath || "";
+                            next.imageStatus = "uploaded";
+                            next.imageSyncPending = false;
+                        }
+                        if (!next.imageUrl && !next.imgData && localPhoto.imgData) {
+                            next.imgData = localPhoto.imgData;
+                            next.imageStatus = "pending";
+                            next.imageSyncPending = true;
+                        }
+                        if (!next.imagePath && localPhoto.imagePath) next.imagePath = localPhoto.imagePath;
+                        return normalizePhoto(next);
+                    });
+                }
                 if (!merged.imagePath && local.imagePath) merged.imagePath = local.imagePath;
+                syncCoverFieldsFromGallery(merged, false);
                 return merged;
             });
         }
 
-        async function uploadImageData(dataUrl, itemId) {
+        async function uploadImageData(dataUrl, itemId, photoId = "") {
             if (!authUid || !window.storage || !dataUrl || !dataUrl.startsWith('data:')) return { imgData: dataUrl || '', imageStatus: 'pending' };
-            const path = 'users/' + authUid + '/images/' + safeId(itemId) + '.jpg';
+            const fileId = safeId(itemId) + (photoId ? "_" + safeId(photoId) : "");
+            const path = 'users/' + authUid + '/images/' + fileId + '.jpg';
             const ref = storage.ref(path);
             await ref.put(dataURLToBlob(dataUrl), { contentType: 'image/jpeg' });
             return { imageUrl: await ref.getDownloadURL(), imagePath: path, imgData: '', imageStatus: 'uploaded' };
@@ -12912,9 +14656,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        async function deleteStoredGalleryImages(item) {
+            if (!item || !window.storage) return;
+            const paths = new Set();
+            if (item.imagePath) paths.add(item.imagePath);
+            getItemPhotos(item).forEach(photo => {
+                if (photo.imagePath) paths.add(photo.imagePath);
+            });
+            await Promise.all(Array.from(paths).map(path => storage.ref(path).delete().catch(e => console.warn('Storage image delete skipped:', e))));
+        }
+
         async function deleteAllStoredImages() {
             if (!window.storage) return;
-            const knownPaths = Array.from(new Set(items.map(item => item.imagePath).filter(Boolean)));
+            const knownPaths = Array.from(new Set(items.flatMap(item => [item.imagePath, ...getItemPhotos(item).map(photo => photo.imagePath)]).filter(Boolean)));
             await Promise.all(knownPaths.map(path => storage.ref(path).delete().catch(e => console.warn('Storage image delete skipped:', e))));
             if (!authUid || !window.storage) return;
             try {
@@ -13411,11 +15165,149 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             });
         });
 
+        function syncDetailPhotoGallery(item) {
+            if (!detailGalleryImage || !item) return;
+            const photos = getItemPhotos(item);
+            const activePhoto = getActiveDetailPhoto(item);
+            const hasPhoto = !!activePhoto && photoHasRealImage(activePhoto);
+            const cover = getCoverPhoto(item);
+            detailGalleryImage.dataset.noPhoto = hasPhoto ? "0" : "1";
+            detailGalleryImage.src = activePhoto ? getPhotoSrc(activePhoto) : getNoPhotoPlaceholderSrc();
+            detailGalleryImage.onerror = () => {
+                detailGalleryImage.onerror = null;
+                detailGalleryImage.dataset.noPhoto = "1";
+                detailGalleryImage.src = getNoPhotoPlaceholderSrc();
+            };
+            if (detailGalleryCount) {
+                detailGalleryCount.innerHTML = `<i class="ph ph-images"></i> ${photos.length ? detailGalleryIndex + 1 : 0} / ${photos.length}`;
+            }
+            if (detailGalleryPrev) detailGalleryPrev.disabled = photos.length <= 1;
+            if (detailGalleryNext) detailGalleryNext.disabled = photos.length <= 1;
+            if (detailGalleryDelete) detailGalleryDelete.disabled = !photos.length;
+            if (detailGalleryEdit) detailGalleryEdit.disabled = !photos.length;
+            if (detailGalleryCover) {
+                const isCover = !!activePhoto && !!cover && activePhoto.id === cover.id;
+                detailGalleryCover.disabled = !activePhoto || isCover;
+                detailGalleryCover.textContent = isCover ? "Kapak görseli" : "Kapak olarak kullan";
+            }
+        }
+
+        function setDetailGalleryOpen(open) {
+            if (!mPreviewRowEl) return;
+            clearTimeout(detailGalleryModeTimer);
+            if (open) {
+                mPreviewRowEl.classList.add("galleryOpen");
+                requestAnimationFrame(() => {
+                    if (mPreviewRowEl?.classList.contains("galleryOpen")) {
+                        detailModalEl?.classList.add("galleryMode");
+                    }
+                });
+                return;
+            }
+            mPreviewRowEl.classList.remove("galleryOpen");
+            detailGalleryModeTimer = setTimeout(() => {
+                detailModalEl?.classList.remove("galleryMode");
+            }, 420);
+        }
+
+        async function addActiveDetailPhoto(file) {
+            if (!activeId || !file) return;
+            const it = items.find(x => x.id === activeId);
+            if (!it) return;
+            setPhotoBusy(true);
+            try {
+                const imgData = await withTimeout(fileToDataURL(file), 12000, 'Image processing');
+                const photos = getItemPhotos(it);
+                const photo = normalizePhoto({
+                    id: makePhotoId(),
+                    name: file.name || "Yeni fotoğraf",
+                    imgData,
+                    imageStatus: "pending",
+                    imageSyncPending: true,
+                    createdAt: Date.now(),
+                    origImgData: imgData
+                }, photos.length);
+                photos.push(photo);
+                it.photos = photos;
+                if (!it.coverPhotoId) it.coverPhotoId = photo.id;
+                detailGalleryIndex = photos.length - 1;
+                syncCoverFieldsFromGallery(it);
+                mImg.dataset.noPhoto = hasRealImage(it) ? "0" : "1";
+                mImg.src = getImageSrc(it);
+                syncDetailPhotoGallery(it);
+                persist();
+                render();
+                startImageUploadForPhoto(it, photo, imgData);
+                showToast("Fotoğraf eklendi.");
+            } catch (err) {
+                console.error("Fotoğraf eklenemedi:", err);
+                showToast("Fotoğraf eklenemedi, tekrar dene");
+            } finally {
+                setPhotoBusy(false);
+                if (detailPhotoInput) detailPhotoInput.value = "";
+            }
+        }
+
+        async function removeActiveDetailPhoto() {
+            if (!activeId) return;
+            const it = items.find(x => x.id === activeId);
+            if (!it) return;
+            const photos = getItemPhotos(it);
+            const activePhoto = getActiveDetailPhoto(it);
+            if (!activePhoto) return;
+            setPhotoBusy(true);
+            try {
+                await deleteStoredImage(activePhoto);
+                const removedId = activePhoto.id;
+                it.photos = photos.filter(photo => photo.id !== removedId);
+                if (it.coverPhotoId === removedId) it.coverPhotoId = it.photos[0]?.id || "";
+                detailGalleryIndex = Math.max(0, Math.min(detailGalleryIndex, it.photos.length - 1));
+                syncCoverFieldsFromGallery(it);
+                mImg.dataset.noPhoto = "1";
+                mImg.dataset.noPhoto = hasRealImage(it) ? "0" : "1";
+                mImg.src = getImageSrc(it);
+                syncDetailPhotoGallery(it);
+                persist();
+                render();
+                showToast("Fotoğraf silindi.");
+            } catch (err) {
+                console.error("Fotoğraf silinemedi:", err);
+                showToast("Fotoğraf silinemedi, tekrar dene");
+            } finally {
+                setPhotoBusy(false);
+            }
+        }
+
+        function applyDetailCropPayload(item, payload) {
+            if (!item || !payload) return;
+            const photoId = window._cropActivePhotoId || "";
+            const photo = photoId ? getDetailPhotoById(item, photoId) : null;
+            if (photo) {
+                applyPhotoPayload(photo, payload);
+                if (!item.coverPhotoId) item.coverPhotoId = photo.id;
+                syncCoverFieldsFromGallery(item);
+                if (payload.imgData && payload.imgData.startsWith("data:")) startImageUploadForPhoto(item, photo, payload.imgData);
+            } else {
+                applyImagePayload(item, payload);
+                getItemPhotos(item);
+                syncCoverFieldsFromGallery(item);
+                if (payload.imgData && payload.imgData.startsWith("data:")) startImageUploadForItem(item, payload.imgData);
+            }
+            mImg.dataset.noPhoto = hasRealImage(item) ? "0" : "1";
+            mImg.src = getImageSrc(item);
+            syncDetailPhotoGallery(item);
+            persist();
+            render();
+        }
+
         function openModal(id) {
             const it = items.find(x => x.id === id);
             if (!it) return;
             activeId = id;
             window._cropActiveItem = it;
+            window._cropActivePhotoId = "";
+            const modalPhotos = getItemPhotos(it);
+            detailGalleryIndex = Math.max(0, modalPhotos.findIndex(photo => photo.id === it.coverPhotoId));
             const scopeNotice = document.getElementById("mListScopeNotice");
             const scopeList = it.listOnlyId ? wishlistLists.find(list => list.id === it.listOnlyId) : null;
             if (scopeNotice) {
@@ -13436,6 +15328,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 mImg.dataset.noPhoto = "1";
                 mImg.src = getNoPhotoPlaceholderSrc();
             };
+            syncDetailPhotoGallery(it);
+            clearTimeout(detailGalleryModeTimer);
+            detailModalEl?.classList.remove("galleryMode");
+            setDetailGalleryOpen(false);
 
             /* Links */
             buildLinkList(it.links && it.links.length ? it.links : (it.link ? [it.link] : []));
@@ -13517,6 +15413,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function closeDetailModal() {
             if (activeId) initialEditItemIds.delete(activeId);
+            setDetailGalleryOpen(false);
+            clearTimeout(detailGalleryModeTimer);
+            detailModalEl?.classList.remove("galleryMode");
             modalBack.classList.remove("show");
             setTimeout(() => { modalBack.style.display = "none"; }, 280);
             document.body.style.overflow = "";
@@ -13613,12 +15512,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 .then(payload => {
                     const live = items.find(x => x.id === item.id);
                     if (!live || !payload || !payload.imageUrl) return;
+                    if (live.imageStatus !== "pending" || live.imgData !== imgData) return;
                     applyImagePayload(live, payload);
                     persist();
                     render();
                     if (activeId === live.id) {
                         mImg.dataset.noPhoto = "0";
                         mImg.src = getImageSrc(live);
+                        syncDetailPhotoGallery(live);
                     }
                 })
                 .catch(err => {
@@ -13636,10 +15537,53 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 });
         }
 
+        function startImageUploadForPhoto(item, photo, imgData) {
+            if (!item || !photo || !imgData || !imgData.startsWith('data:')) return;
+            const uploadKey = item.id + ":" + photo.id;
+            if (activeImageUploads.has(uploadKey)) return;
+            activeImageUploads.add(uploadKey);
+            uploadImageData(imgData, item.id, photo.id)
+                .then(payload => {
+                    const live = items.find(x => x.id === item.id);
+                    if (!live || !payload || !payload.imageUrl) return;
+                    const livePhoto = getDetailPhotoById(live, photo.id);
+                    if (!livePhoto || livePhoto.imageStatus !== "pending" || livePhoto.imgData !== imgData) return;
+                    applyPhotoPayload(livePhoto, payload);
+                    syncCoverFieldsFromGallery(live);
+                    persist();
+                    render();
+                    if (activeId === live.id) {
+                        mImg.dataset.noPhoto = hasRealImage(live) ? "0" : "1";
+                        mImg.src = getImageSrc(live);
+                        syncDetailPhotoGallery(live);
+                    }
+                })
+                .catch(err => {
+                    const live = items.find(x => x.id === item.id);
+                    const livePhoto = live ? getDetailPhotoById(live, photo.id) : null;
+                    if (livePhoto) {
+                        livePhoto.imageStatus = "pending";
+                        livePhoto.imageSyncPending = true;
+                        syncCoverFieldsFromGallery(live);
+                        safeLocalPersist();
+                        persistRemoteItems();
+                    }
+                    console.warn('Gallery photo upload pending; local retry queue remains active:', err);
+                })
+                .finally(() => {
+                    activeImageUploads.delete(uploadKey);
+                });
+        }
+
         function retryPendingImageUploads() {
             items
                 .filter(item => item.imageSyncPending === true && !item.imageUrl && item.imgData && item.imgData.startsWith('data:'))
                 .forEach(item => startImageUploadForItem(item, item.imgData));
+            items.forEach(item => {
+                getItemPhotos(item)
+                    .filter(photo => photo.imageSyncPending === true && !photo.imageUrl && photo.imgData && photo.imgData.startsWith('data:'))
+                    .forEach(photo => startImageUploadForPhoto(item, photo, photo.imgData));
+            });
         }
 
         window.addEventListener("online", () => {
@@ -13650,6 +15594,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         async function createPhotoItemFromFile(file) {
             const id = Math.random().toString(16).slice(2) + Date.now().toString(16);
+            const photoId = "cover";
             const target = getCurrentTimelineDefaults();
             await nextFrame();
             const imgData = await withTimeout(fileToDataURL(file), 12000, 'Image processing');
@@ -13660,7 +15605,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 price: "", currentPrice: "", priceNote: "",
                 forWho: "self", reason: "", intentNote: "",
                 status: "want", boughtPrice: 0, boughtAt: 0, createdAt: Date.now(), secret: false, savedAmount: 0,
-                imageUrl: "", imagePath: "", imgData, imageStatus: "pending", imageSyncPending: true
+                imageUrl: "", imagePath: "", imgData, imageStatus: "pending", imageSyncPending: true,
+                coverPhotoId: photoId,
+                photos: [normalizePhoto({ id: photoId, name: file.name || "Kapak görseli", imgData, imageStatus: "pending", imageSyncPending: true, createdAt: Date.now(), origImgData: imgData })]
             };
         }
 
@@ -13680,7 +15627,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
                 if (created.length) openModal(created[created.length - 1].id);
                 if (scopedList) showToast(`Ürün yalnızca "${scopedList.name || "bu liste"}" listesine eklendi.`);
-                created.forEach(item => startImageUploadForItem(item, item.imgData));
+                created.forEach(item => {
+                    const cover = getCoverPhoto(item);
+                    if (cover) startImageUploadForPhoto(item, cover, cover.imgData);
+                });
             } catch (err) {
                 console.error("Fotoğraf yüklenemedi:", err);
                 showToast("Fotoğraf yüklenemedi, tekrar dene");
@@ -13701,7 +15651,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 initialEditItemIds.add(item.id);
                 persist(); render();
                 openModal(item.id);
-                startImageUploadForItem(item, item.imgData);
+                const cover = getCoverPhoto(item);
+                if (cover) startImageUploadForPhoto(item, cover, cover.imgData);
             } catch (err) {
                 console.error("Kamera fotoğrafı yüklenemedi:", err);
                 showToast("Fotoğraf yüklenemedi, tekrar dene");
@@ -13824,10 +15775,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             // Always create the item, whether scraping succeeded or gracefully failed
             const newItemId = Math.random().toString(16).slice(2) + Date.now().toString(16);
             const target = getCurrentTimelineDefaults();
+            const linkCoverPhoto = image ? normalizePhoto({
+                id: "cover",
+                name: "Kapak görseli",
+                imageUrl: image,
+                imageStatus: "uploaded",
+                createdAt: Date.now()
+            }) : null;
             items.push({
                 id: newItemId,
                 imageUrl: image || "",
                 imgData: "",
+                coverPhotoId: linkCoverPhoto ? "cover" : "",
+                photos: linkCoverPhoto ? [linkCoverPhoto] : [],
                 itemName: title || "",
                 links: [linkInput], // Formatted input
                 link: linkInput,    // Legacy 
@@ -13877,6 +15837,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             it.reason = document.getElementById("mReason").value || "";
             it.intentNote = document.getElementById("mIntentNote").value.trim();
             it.updatedAt = Date.now();
+            syncCoverFieldsFromGallery(it);
             persist(); render(); closeDetailModal();
             if (it.secret) {
                 showToast("🔒 Ürün gizli listene taşındı. Görüntülemek için kategoriler arasında \"Gizli\" sekmesine geçebilirsiniz.");
@@ -13885,7 +15846,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function doDeleteItem() {
             if (!activeId) return;
             const itemToDelete = items.find(x => x.id === activeId);
-            if (itemToDelete) deleteStoredImage(itemToDelete);
+            if (itemToDelete) deleteStoredGalleryImages(itemToDelete);
             items = items.filter(x => x.id !== activeId);
             wishlistLists.forEach(list => {
                 list.itemIds = (list.itemIds || []).filter(id => id !== activeId);
@@ -13911,11 +15872,55 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         closeModalBtn.addEventListener("click", closeDetailModal);
         modalBack.addEventListener("click", e => { if (e.target === modalBack) closeDetailModal(); });
+        detailGalleryToggle?.addEventListener("click", () => {
+            const it = items.find(x => x.id === activeId);
+            if (it) syncDetailPhotoGallery(it);
+            setDetailGalleryOpen(!mPreviewRowEl?.classList.contains("galleryOpen"));
+        });
+        detailGalleryClose?.addEventListener("click", () => setDetailGalleryOpen(false));
+        detailGalleryPrev?.addEventListener("click", () => {
+            const it = items.find(x => x.id === activeId);
+            const photos = getItemPhotos(it);
+            if (!it || photos.length <= 1) return;
+            detailGalleryIndex = (detailGalleryIndex - 1 + photos.length) % photos.length;
+            syncDetailPhotoGallery(it);
+        });
+        detailGalleryNext?.addEventListener("click", () => {
+            const it = items.find(x => x.id === activeId);
+            const photos = getItemPhotos(it);
+            if (!it || photos.length <= 1) return;
+            detailGalleryIndex = (detailGalleryIndex + 1) % photos.length;
+            syncDetailPhotoGallery(it);
+        });
+        detailGalleryCover?.addEventListener("click", () => {
+            const it = items.find(x => x.id === activeId);
+            const activePhoto = getActiveDetailPhoto(it);
+            if (!it || !activePhoto || activePhoto.id === it.coverPhotoId) return;
+            it.coverPhotoId = activePhoto.id;
+            syncCoverFieldsFromGallery(it);
+            mImg.dataset.noPhoto = hasRealImage(it) ? "0" : "1";
+            mImg.src = getImageSrc(it);
+            syncDetailPhotoGallery(it);
+            persist();
+            render();
+            showToast("Kapak görseli güncellendi.");
+        });
+        detailGalleryAdd?.addEventListener("click", () => detailPhotoInput?.click());
+        detailGalleryEdit?.addEventListener("click", () => {
+            const it = items.find(x => x.id === activeId);
+            const activePhoto = getActiveDetailPhoto(it);
+            if (!it || !activePhoto) return;
+            window._cropActiveItem = it;
+            window._cropActivePhotoId = activePhoto.id;
+            detailCropTrigger?.click();
+        });
+        detailGalleryDelete?.addEventListener("click", removeActiveDetailPhoto);
+        detailPhotoInput?.addEventListener("change", e => addActiveDetailPhoto(e.target.files?.[0]));
 
         /* Clear all */
         function clearAll() {
             if (!confirm("⚠ DİKKAT: Tüm istek listesi silinecek!\n\nEklediğin tüm ürünler, fotoğraflar, notlar ve satın alma geçmişi kalıcı olarak silinecektir.\n\nBu işlem geri alınamaz. Devam etmek istiyor musun?")) return;
-            items.forEach(item => deleteStoredImage(item));
+            items.forEach(item => deleteStoredGalleryImages(item));
             items = [];
             persist();
             /* Clear legacy keys so Wrapped doesn't show stale data */
@@ -14217,17 +16222,66 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             switchMainView("home");
         }
 
+        function formatTryAmount(value) {
+            const amount = Number(value) || 0;
+            return "₺" + Math.max(0, amount).toLocaleString("tr-TR");
+        }
+
+        function readSavingsLog() {
+            try {
+                const raw = JSON.parse(localStorage.getItem(getSavingsLogKey()) || "[]");
+                return Array.isArray(raw) ? raw.filter(entry => Number(entry?.amount) > 0 && Number(entry?.at) > 0) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function writeSavingsLog(entries) {
+            try {
+                localStorage.setItem(getSavingsLogKey(), JSON.stringify(entries.slice(-300)));
+            } catch (e) {
+                console.warn("Birikim aylık kayıtları kaydedilemedi:", e);
+            }
+        }
+
+        function recordSavingsEntry(itemId, amount) {
+            const value = Number(amount) || 0;
+            if (value <= 0) return;
+            const entries = readSavingsLog();
+            entries.push({ itemId: safeId(itemId), amount: value, at: Date.now() });
+            writeSavingsLog(entries);
+        }
+
+        function clearSavingsEntriesForItem(itemId) {
+            writeSavingsLog(readSavingsLog().filter(entry => entry.itemId !== itemId));
+        }
+
+        function getCurrentMonthSavingsTotal(now = new Date()) {
+            const start = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+            const end = new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime();
+            return readSavingsLog().reduce((sum, entry) => {
+                const at = Number(entry.at) || 0;
+                return at >= start && at < end ? sum + (Number(entry.amount) || 0) : sum;
+            }, 0);
+        }
+
+        function updateSavingsMonthSummary() {
+            const el = document.getElementById("savingsMonthAmount");
+            if (el) el.textContent = formatTryAmount(getCurrentMonthSavingsTotal());
+        }
+
         function renderSavings() {
             const list = document.getElementById("savingsList");
             const empty = document.getElementById("savingsEmpty");
             const wantItems = getGeneralItems().filter(x => x.status !== "bought");
+            updateSavingsMonthSummary();
 
             if (!wantItems.length) {
                 list.innerHTML = "";
                 empty.style.display = "block";
-                document.getElementById("savTotalSaved").textContent = "₺0";
-                document.getElementById("savTotalTarget").textContent = "₺0";
-                document.getElementById("savTotalRemaining").textContent = "₺0";
+                document.getElementById("savTotalSaved").textContent = formatTryAmount(0);
+                document.getElementById("savTotalTarget").textContent = formatTryAmount(0);
+                document.getElementById("savTotalRemaining").textContent = formatTryAmount(0);
                 return;
             }
             empty.style.display = "none";
@@ -14236,9 +16290,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const totalSaved = wantItems.reduce((s, x) => s + (x.savedAmount || 0), 0);
             const totalTarget = wantItems.reduce((s, x) => s + (parseFloat(x.price) || 0), 0);
             const totalRemain = Math.max(0, totalTarget - totalSaved);
-            document.getElementById("savTotalSaved").textContent = "₺" + totalSaved.toLocaleString("tr-TR");
-            document.getElementById("savTotalTarget").textContent = "₺" + totalTarget.toLocaleString("tr-TR");
-            document.getElementById("savTotalRemaining").textContent = "₺" + totalRemain.toLocaleString("tr-TR");
+            document.getElementById("savTotalSaved").textContent = formatTryAmount(totalSaved);
+            document.getElementById("savTotalTarget").textContent = formatTryAmount(totalTarget);
+            document.getElementById("savTotalRemaining").textContent = formatTryAmount(totalRemain);
 
             list.innerHTML = "";
             wantItems.forEach(it => {
@@ -14259,9 +16313,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     </div>
                     <div class="savCardMain">
                         <div class="savCardName">${name}</div>
-                        <div class="savCardAmounts"><strong>₺${saved.toLocaleString("tr-TR")}</strong><span>biriken</span></div>
+                        <div class="savCardAmounts"><strong>${formatTryAmount(saved)}</strong><span>biriken</span></div>
                         <div class="savProgressRow">
-                            <span>Hedef: ₺${target.toLocaleString("tr-TR")}</span>
+                            <span>Hedef: ${formatTryAmount(target)}</span>
                             <div class="savProgress"><div class="savProgressFill" style="width:${pct}%"></div></div>
                             <span>%${pct}</span>
                         </div>
@@ -14287,10 +16341,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     const it = items.find(x => x.id === id);
                     if (!it) return;
                     it.savedAmount = (it.savedAmount || 0) + val;
+                    recordSavingsEntry(id, val);
                     inp.value = "";
                     persist();
                     renderSavings();
-                    showToast(`💰 ₺${val.toLocaleString("tr-TR")} eklendi`);
+                    showToast(`💰 ${formatTryAmount(val)} eklendi`);
                 });
             });
             list.querySelectorAll(".savInput").forEach(inp => {
@@ -14305,8 +16360,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 btn.addEventListener("click", () => {
                     const it = items.find(x => x.id === btn.dataset.id);
                     if (!it) return;
-                    if (!confirm(`"${it.itemName || "ürün"}" için biriken ₺${(it.savedAmount || 0).toLocaleString("tr-TR")} sıfırlansın mı?`)) return;
+                    if (!confirm(`"${it.itemName || "ürün"}" için biriken ${formatTryAmount(it.savedAmount || 0)} sıfırlansın mı?`)) return;
                     it.savedAmount = 0;
+                    clearSavingsEntriesForItem(btn.dataset.id);
                     persist();
                     renderSavings();
                 });
@@ -14932,19 +16988,19 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             body.classList.add("wrDashboard");
             body.dataset.dashboardReady = "1";
             body.innerHTML = `
-                <section class="wrHero">
-                    <div class="wrHeroCard heroAssetFrame page-hero-visual-slot" aria-hidden="true">
-                        <img class="heroRaster" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
+                <section class="wrHero page-hero appHero page-hero--standard">
+                    <div class="wrHeroCard heroAssetFrame page-hero-visual-slot page-hero-image-wrap appHeroImageWrap page-hero__media" aria-hidden="true">
+                        <img class="heroRaster page-hero-image appHeroImage page-hero__image" src="assets/hero-wrapped.png" alt="" onerror="this.style.display='none';this.parentElement.classList.add('assetMissing');">
                         <div class="wrHeroBadge" id="wrHeroYear">2026</div>
                     </div>
-                    <div class="wrHeroText">
+                    <div class="wrHeroText appHeroContent page-hero__text">
                         <div class="wrTitleRow">
                             <button class="wrTitleNav" id="wrPrev" aria-label="Önceki ay" onclick="shiftWrappedMonth(-1)">‹</button>
-                            <h2 id="wrTitle">Mayıs 2026 Wrapped'i</h2>
+                            <h2 class="page-hero-title appHeroTitle" id="wrTitle">Mayıs 2026 Wrapped'i</h2>
                             <button class="wrTitleNav" id="wrNext" aria-label="Sonraki ay" onclick="shiftWrappedMonth(1)">›</button>
                         </div>
                         <div class="wrLabel" id="wrLabel" hidden>Mayıs 2026</div>
-                        <div class="sub" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
+                        <div class="sub page-hero-description appHeroDescription" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
                     </div>
                 </section>
 
@@ -15910,19 +17966,29 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             function updateBtns() {
                 const it = window._cropActiveItem;
                 if (!it) { undoBtn.disabled = true; resetBtn.disabled = true; return; }
+                const targetPhoto = window._cropActivePhotoId && typeof getDetailPhotoById === 'function'
+                    ? getDetailPhotoById(it, window._cropActivePhotoId)
+                    : null;
+                const currentSrc = targetPhoto && typeof getPhotoSrc === 'function' ? getPhotoSrc(targetPhoto) : getImageSrc(it);
+                const originalSrc = targetPhoto ? targetPhoto.origImgData : it.origImgData;
                 /* Geri al: oturum açılışından bu yana imgData değiştiyse */
-                undoBtn.disabled = !sessionSavedData || (getImageSrc(it) === sessionSavedData);
+                undoBtn.disabled = !sessionSavedData || (currentSrc === sessionSavedData);
                 /* Orijinale döndür: mevcut imgData ile orijinal farklıysa */
-                resetBtn.disabled = !it.origImgData || (getImageSrc(it) === it.origImgData);
+                resetBtn.disabled = !originalSrc || (currentSrc === originalSrc);
             }
 
             /* ── Kırpma ekranını aç ── */
             editBtn.addEventListener('click', () => {
                 const it = window._cropActiveItem;
-                const activeSrc = getImageSrc(it);
+                const targetPhoto = window._cropActivePhotoId && typeof getDetailPhotoById === 'function'
+                    ? getDetailPhotoById(it, window._cropActivePhotoId)
+                    : null;
+                const activeSrc = targetPhoto && typeof getPhotoSrc === 'function' ? getPhotoSrc(targetPhoto) : getImageSrc(it);
                 if (!it || !activeSrc) return;
                 /* origImgData: ilk yüklendiğindeki hali, bir kez saklanır */
-                if (!it.origImgData) it.origImgData = activeSrc;
+                if (targetPhoto) {
+                    if (!targetPhoto.origImgData) targetPhoto.origImgData = activeSrc;
+                } else if (!it.origImgData) it.origImgData = activeSrc;
                 /* sessionSavedData: bu oturumda düzenleyici AÇILDIĞINDA ne vardı
                    "Geri al" bunu geri yükler — o andan bu yana yapılan tüm değişikliği atar */
                 sessionSavedData = activeSrc;
@@ -16069,11 +18135,14 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             undoBtn.addEventListener('click', () => {
                 if (!sessionSavedData) return;
                 const it = window._cropActiveItem;
-                applyImagePayload(it, sessionSavedData.startsWith('data:') ? { imgData: sessionSavedData } : { imageUrl: sessionSavedData, imgData: '' });
-                document.getElementById('mImg').src = sessionSavedData;
-                if (typeof persist === 'function') persist();
-                if (typeof render === 'function') render();
-                if (sessionSavedData.startsWith('data:') && typeof startImageUploadForItem === 'function') startImageUploadForItem(it, sessionSavedData);
+                if (typeof applyDetailCropPayload === 'function') {
+                    applyDetailCropPayload(it, sessionSavedData.startsWith('data:') ? { imgData: sessionSavedData } : { imageUrl: sessionSavedData, imgData: '' });
+                } else {
+                    applyImagePayload(it, sessionSavedData.startsWith('data:') ? { imgData: sessionSavedData } : { imageUrl: sessionSavedData, imgData: '' });
+                    document.getElementById('mImg').src = sessionSavedData;
+                    if (typeof persist === 'function') persist();
+                    if (typeof render === 'function') render();
+                }
                 /* Sahneyi o versiyonla yenile */
                 cropImg.setAttribute('data-src', '');
                 loadIntoStage(sessionSavedData, () => { updateBtns(); });
@@ -16082,14 +18151,21 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             /* ── Orijinale döndür — ilk yüklendiğindeki haline ── */
             resetBtn.addEventListener('click', () => {
                 const it = window._cropActiveItem;
-                if (!it || !it.origImgData) return;
-                applyImagePayload(it, it.origImgData.startsWith('data:') ? { imgData: it.origImgData } : { imageUrl: it.origImgData, imgData: '' });
-                document.getElementById('mImg').src = it.origImgData;
-                if (typeof persist === 'function') persist();
-                if (typeof render === 'function') render();
-                if (it.origImgData.startsWith('data:') && typeof startImageUploadForItem === 'function') startImageUploadForItem(it, it.origImgData);
+                const targetPhoto = window._cropActivePhotoId && typeof getDetailPhotoById === 'function'
+                    ? getDetailPhotoById(it, window._cropActivePhotoId)
+                    : null;
+                const originalSrc = targetPhoto ? targetPhoto.origImgData : it?.origImgData;
+                if (!it || !originalSrc) return;
+                if (typeof applyDetailCropPayload === 'function') {
+                    applyDetailCropPayload(it, originalSrc.startsWith('data:') ? { imgData: originalSrc } : { imageUrl: originalSrc, imgData: '' });
+                } else {
+                    applyImagePayload(it, originalSrc.startsWith('data:') ? { imgData: originalSrc } : { imageUrl: originalSrc, imgData: '' });
+                    document.getElementById('mImg').src = originalSrc;
+                    if (typeof persist === 'function') persist();
+                    if (typeof render === 'function') render();
+                }
                 cropImg.setAttribute('data-src', '');
-                loadIntoStage(it.origImgData, () => { updateBtns(); });
+                loadIntoStage(originalSrc, () => { updateBtns(); });
             });
 
             /* ── Uygula — kırpılmış görüntüyü kaydet ── */
@@ -16106,12 +18182,16 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 const newData = canvas.toDataURL('image/jpeg', 0.82);
                 const it = window._cropActiveItem;
                 if (it) {
-                    applyImagePayload(it, { imgData: newData });
-                    document.getElementById('mImg').dataset.noPhoto = hasRealImage(it) ? "0" : "1";
-                    document.getElementById('mImg').src = getImageSrc(it);
-                    if (typeof persist === 'function') persist();
-                    if (typeof render === 'function') render();
-                    if (typeof startImageUploadForItem === 'function') startImageUploadForItem(it, newData);
+                    if (typeof applyDetailCropPayload === 'function') {
+                        applyDetailCropPayload(it, { imgData: newData });
+                    } else {
+                        applyImagePayload(it, { imgData: newData });
+                        document.getElementById('mImg').dataset.noPhoto = hasRealImage(it) ? "0" : "1";
+                        document.getElementById('mImg').src = getImageSrc(it);
+                        if (typeof persist === 'function') persist();
+                        if (typeof render === 'function') render();
+                        if (typeof startImageUploadForItem === 'function') startImageUploadForItem(it, newData);
+                    }
                     updateBtns();
                 }
                 overlay.classList.remove('open');
