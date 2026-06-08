@@ -1183,8 +1183,9 @@
         }
 
         #modal.galleryMode {
-            overflow-y: hidden;
-            overscroll-behavior: contain;
+            max-height: min(88svh, 720px);
+            overflow-y: auto;
+            overscroll-behavior-y: contain;
         }
 
         .handle {
@@ -1275,10 +1276,10 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(255, 245, 252, 0.88);
+            background: color-mix(in srgb, var(--surfaceBg) 88%, transparent);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1.5px solid rgba(232, 69, 139, 0.28);
+            border: 1.5px solid var(--accentMid);
             color: var(--accent);
             font-size: 15px;
             display: flex;
@@ -1287,12 +1288,12 @@
             cursor: pointer;
             z-index: 10;
             transition: background .15s, transform .12s, box-shadow .15s;
-            box-shadow: 0 8px 20px rgba(232, 69, 139, .16);
+            box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 16%, transparent);
         }
 
         .galleryToggleBtn:hover {
-            background: rgba(255, 250, 253, 0.96);
-            box-shadow: 0 10px 24px rgba(232, 69, 139, .20);
+            background: color-mix(in srgb, var(--surfaceBg) 96%, white);
+            box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 20%, transparent);
         }
 
         .galleryToggleBtn:active {
@@ -1370,11 +1371,11 @@
         .detailGalleryCard {
             border: 1px solid var(--stroke);
             border-radius: 18px;
-            background: rgba(255, 248, 253, .92);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.64), 0 10px 24px rgba(232, 69, 139, .10);
+            background: color-mix(in srgb, var(--surfaceBg) 94%, var(--accentSoft));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.46), 0 10px 24px color-mix(in srgb, var(--accent) 10%, transparent);
             overflow: hidden;
             min-height: 0;
-            max-height: calc(100svh - 150px);
+            max-height: calc(100svh - 134px);
             display: flex;
             flex-direction: column;
         }
@@ -1385,7 +1386,9 @@
             justify-content: space-between;
             gap: 10px;
             padding: 10px 12px;
-            border-bottom: 1px solid rgba(232, 69, 139, .09);
+            border-bottom: 1px solid var(--accentBorder);
+            background: color-mix(in srgb, var(--surfaceBg) 86%, var(--accentSoft));
+            flex: 0 0 auto;
         }
 
         .detailGalleryLabel {
@@ -1418,9 +1421,16 @@
             max-height: calc(100svh - 250px);
             padding: 14px 48px;
             background:
-                radial-gradient(circle at 50% 0%, rgba(232, 69, 139, .14), transparent 45%),
-                linear-gradient(135deg, rgba(255,255,255,.74), rgba(255,232,246,.76));
-            overscroll-behavior: contain;
+                radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 45%),
+                linear-gradient(135deg, color-mix(in srgb, var(--surfaceBg) 90%, white), color-mix(in srgb, var(--accentSoft) 48%, var(--surfaceBg)));
+            overflow-y: auto;
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .detailGalleryStage::-webkit-scrollbar {
+            display: none;
         }
 
         .detailGalleryNav {
@@ -1431,13 +1441,13 @@
             height: 34px;
             border-radius: 999px;
             border: 1px solid var(--stroke);
-            background: rgba(255, 248, 253, .82);
+            background: color-mix(in srgb, var(--surfaceBg) 82%, transparent);
             color: var(--accent);
             display: grid;
             place-items: center;
             cursor: pointer;
             z-index: 2;
-            box-shadow: 0 8px 20px rgba(232, 69, 139, .11);
+            box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 11%, transparent);
         }
 
         .detailGalleryNav.prev {
@@ -1490,8 +1500,8 @@
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,.62);
             color: var(--textPrimary);
-            background: rgba(255, 248, 253, .78);
-            box-shadow: 0 8px 20px rgba(232, 69, 139, .12);
+            background: color-mix(in srgb, var(--surfaceBg) 78%, transparent);
+            box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 12%, transparent);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             font-family: var(--font-text);
@@ -1515,6 +1525,9 @@
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 7px;
             padding: 10px 12px 12px;
+            border-top: 1px solid var(--accentBorder);
+            background: color-mix(in srgb, var(--surfaceBg) 88%, var(--accentSoft));
+            flex: 0 0 auto;
         }
 
         .detailGalleryAction {
@@ -11653,6 +11666,148 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        /* Targeted UI fixes: auth safe area, gallery ratio, PWA hero stability, shared content gap. */
+        :root {
+            --section-content-gap: 32px;
+        }
+
+        .page-hero--standard {
+            --stdHeroAfter: var(--section-content-gap) !important;
+        }
+
+        #listScreen.show .page-hero--standard,
+        #aiBack.show #aiScreenMode .page-hero--standard,
+        #wrappedBack.show .page-hero--standard,
+        #savingsBack.show .page-hero--standard {
+            --stdHeroAfter: var(--section-content-gap) !important;
+        }
+
+        .page-hero--standard + .aiModes,
+        .page-hero--standard + .statGrid,
+        .page-hero--standard + .wrStatGrid,
+        .page-hero--standard + .savingsSummary,
+        .page-hero--standard ~ .savedLists,
+        .page-hero--standard ~ .listBuilder {
+            margin-top: 0 !important;
+        }
+
+        #listScreen.show .page-hero--standard ~ .savedLists,
+        #savingsBack.show .page-hero--standard + .savingsSummary,
+        #wrappedBack.show .page-hero--standard + .statGrid,
+        #wrappedBack.show .page-hero--standard + .wrStatGrid,
+        #aiBack.show #aiScreenMode .page-hero--standard + .aiModes {
+            margin-top: 0 !important;
+        }
+
+        #savingsBack.show .page-hero--standard {
+            margin-bottom: var(--section-content-gap) !important;
+        }
+
+        .wrappedBody.wrDashboard #wrRange,
+        #wrappedBack.show .page-hero--standard #wrRange {
+            max-width: 340px !important;
+            line-height: 1.45 !important;
+            text-wrap: balance;
+        }
+
+        .detailGalleryStage {
+            height: min(48vh, 360px);
+            max-height: calc(100svh - 260px);
+            min-height: 260px;
+            padding: 12px 42px;
+            overflow-y: hidden !important;
+            overscroll-behavior: none !important;
+            -webkit-overflow-scrolling: auto;
+        }
+
+        .detailGalleryFrame {
+            width: min(100%, 380px);
+        }
+
+        .detailGalleryFrame.isNoPhoto {
+            padding: 0;
+            border-color: transparent;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .detailGalleryImage[data-no-photo="1"] {
+            object-fit: contain;
+            border-color: transparent;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .detailGalleryActions::before {
+            content: "Ürünün fotoğraflarını buradan ekleyebilir, düzenleyebilir veya kapak görseli seçebilirsin.";
+            grid-column: 1 / -1;
+            color: var(--textMuted);
+            font-size: 12px;
+            font-weight: 650;
+            line-height: 1.35;
+            text-align: center;
+            margin: 0 4px 2px;
+        }
+
+        @media (display-mode: standalone) {
+            #aiBack.show #aiScreenMode .page-hero--standard,
+            #aiBack.show #aiScreenMode .page-hero--standard > .page-hero__media,
+            #aiBack.show #aiScreenMode .page-hero--standard > .page-hero__text {
+                transform: none !important;
+            }
+        }
+
+        @media (display-mode: standalone) and (max-width: 760px) {
+            #aiBack.show .aiBody {
+                padding-top: 14px !important;
+            }
+
+            #aiBack.show #aiScreenMode .page-hero--standard {
+                --stdHeroMobileH: 342px;
+                --stdHeroMediaW: min(210px, 56vw);
+                --stdHeroMediaH: 150px;
+                --stdHeroTitleH: 92px;
+                --stdHeroSubtitleH: 50px;
+                --stdHeroAfter: var(--section-content-gap);
+            }
+        }
+
+        @media (display-mode: standalone) and (min-width: 761px) and (max-width: 1180px) {
+            #aiBack.show #aiScreenMode .page-hero--standard {
+                --stdHeroMediaW: 220px;
+                --stdHeroMediaH: 178px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #authScreen {
+                padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+            }
+
+            .auth-top-controls {
+                top: calc(env(safe-area-inset-top, 0px) + 18px);
+            }
+
+            .auth-left {
+                padding-top: calc(48px + env(safe-area-inset-top, 0px));
+            }
+
+            .detailGalleryStage {
+                height: min(44vh, 330px);
+                max-height: calc(100svh - 250px);
+                min-height: 248px;
+                padding: 12px 38px;
+            }
+
+            .detailGalleryFrame {
+                width: min(100%, 360px);
+            }
+
+            .detailGalleryActions::before {
+                font-size: 11px;
+            }
+        }
+
     </style>
 </head>
 
@@ -12147,7 +12302,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                             <button class="wrTitleNav" id="wrNext" aria-label="Sonraki ay">›</button>
                         </div>
                         <div class="wrLabel" id="wrLabel" hidden>Mayıs 2026</div>
-                        <div class="sub page-hero-description appHeroDescription page-hero__subtitle" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
+                        <div class="sub page-hero-description appHeroDescription page-hero__subtitle" id="wrRange">Aylık alışveriş alışkanlıklarını,<br>aldığın ürünleri ve hedeflerini<br>özet halinde gör.</div>
                     </div>
                 </section>
                 <div class="statGrid">
@@ -14464,6 +14619,32 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
         }
 
+        function getGalleryNoPhotoPlaceholderSrc() {
+            const theme = getNoPhotoTheme();
+            const label = getNoPhotoLabel();
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+                    <defs>
+                        <linearGradient id="line" x1="250" y1="275" x2="650" y2="590" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="${theme.line1}" stop-opacity=".76"/>
+                            <stop offset="1" stop-color="${theme.line2}" stop-opacity=".92"/>
+                        </linearGradient>
+                    </defs>
+                    <g fill="none" stroke="url(#line)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M280 465 L372 372 Q393 352 414 374 L528 490"/>
+                        <path d="M492 454 L542 404 Q562 384 584 406 L660 486"/>
+                        <path d="M270 478 L270 304 Q270 272 302 272 L598 272 Q630 272 630 304 L630 478"/>
+                        <path d="M270 478 L270 546 Q270 578 302 578 L586 578"/>
+                        <circle cx="516" cy="350" r="40"/>
+                        <path d="M578 508 L648 580"/>
+                        <path d="M628 525 L596 557"/>
+                        <path d="M674 557 L642 589"/>
+                    </g>
+                    <text x="450" y="690" text-anchor="middle" fill="${theme.text}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="54" font-weight="650" letter-spacing="0">${label}</text>
+                </svg>`;
+            return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+        }
+
         function hasRealImage(item) {
             return !!(item && (item.imageUrl || item.imgData));
         }
@@ -15243,13 +15424,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const activePhoto = getActiveDetailPhoto(item);
             const hasPhoto = !!activePhoto && photoHasRealImage(activePhoto);
             const cover = getCoverPhoto(item);
+            const galleryFrame = detailGalleryImage.closest(".detailGalleryFrame");
+            galleryFrame?.classList.toggle("isNoPhoto", !hasPhoto);
             detailGalleryImage.dataset.noPhoto = hasPhoto ? "0" : "1";
             if (loadImage) {
-                detailGalleryImage.src = activePhoto ? getPhotoSrc(activePhoto) : getNoPhotoPlaceholderSrc();
+                detailGalleryImage.src = hasPhoto && activePhoto ? getPhotoSrc(activePhoto) : getGalleryNoPhotoPlaceholderSrc();
                 detailGalleryImage.onerror = () => {
                     detailGalleryImage.onerror = null;
                     detailGalleryImage.dataset.noPhoto = "1";
-                    detailGalleryImage.src = getNoPhotoPlaceholderSrc();
+                    galleryFrame?.classList.add("isNoPhoto");
+                    detailGalleryImage.src = getGalleryNoPhotoPlaceholderSrc();
                 };
             } else {
                 detailGalleryImage.onerror = null;
@@ -16153,7 +16337,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
             document.getElementById("wrLabel").textContent = mName + " " + wrYear;
             document.getElementById("wrTitle").textContent = mName + " " + wrYear + " Wrapped'i";
-            document.getElementById("wrRange").textContent = "1 " + mName + " – " + lastDay + " " + mName + " " + wrYear;
+            document.getElementById("wrRange").innerHTML = "Aylık alışveriş alışkanlıklarını,<br>aldığın ürünleri ve hedeflerini<br>özet halinde gör.";
 
             const generalItems = getGeneralItems();
             const addedThisMonth = generalItems.filter(x => x.createdAt >= firstTs && x.createdAt <= lastTs).length;
@@ -17072,7 +17256,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                             <button class="wrTitleNav" id="wrNext" aria-label="Sonraki ay" onclick="shiftWrappedMonth(1)">›</button>
                         </div>
                         <div class="wrLabel" id="wrLabel" hidden>Mayıs 2026</div>
-                        <div class="sub page-hero-description appHeroDescription" id="wrRange">Bu ayki istek ve alışveriş özetin hazırlanıyor.</div>
+                        <div class="sub page-hero-description appHeroDescription" id="wrRange">Aylık alışveriş alışkanlıklarını,<br>aldığın ürünleri ve hedeflerini<br>özet halinde gör.</div>
                     </div>
                 </section>
 
@@ -17591,7 +17775,7 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             document.getElementById("wrLabel").textContent = mName + " " + wrYear;
             document.getElementById("wrHeroYear").textContent = wrYear;
             document.getElementById("wrTitle").textContent = mName + " " + wrYear + " Wrapped'i";
-            document.getElementById("wrRange").innerHTML = `Bu ay <b>${addedItems.length}</b> ürün ekledin, <b>${boughtItems.length}</b> tanesini aldın ve toplam <b>${wrCurrency(totalSpent)}</b> harcadın. ${completion ? "Hedeflerine bir adım daha yaklaştın." : "Bu ay için henüz tamamlanan hedef görünmüyor."}`;
+            document.getElementById("wrRange").innerHTML = "Aylık alışveriş alışkanlıklarını,<br>aldığın ürünleri ve hedeflerini<br>özet halinde gör.";
 
             document.getElementById("wrStatGrid").innerHTML = [
                 wrMetric("ph-bag", addedItems.length, "Ürün eklendi", "Seçili ayda"),
