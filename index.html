@@ -1158,16 +1158,19 @@
             max-height: 85vh;
             border-radius: var(--r2) var(--r2) 0 0;
             background: var(--surfaceBg);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            box-shadow: 0 -4px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 -4px 34px rgba(0, 0, 0, 0.12);
             overflow-y: auto;
+            overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             transform: translateY(100%);
             opacity: 0;
             transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.45, 1), opacity 0.22s ease-out;
             margin-bottom: 0;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
         }
 
         .modal::-webkit-scrollbar {
@@ -1177,6 +1180,11 @@
         .modalBack.show .modal {
             transform: translateY(0);
             opacity: 1;
+        }
+
+        #modal.galleryMode {
+            overflow-y: hidden;
+            overscroll-behavior: contain;
         }
 
         .handle {
@@ -1301,13 +1309,14 @@
             transform: translateY(-6px) scale(.992);
             transform-origin: top center;
             transition:
-                grid-template-rows .42s cubic-bezier(.22, 1, .36, 1),
-                opacity .28s ease,
-                transform .38s cubic-bezier(.22, 1, .36, 1),
-                margin-top .36s ease;
+                grid-template-rows .28s cubic-bezier(.22, 1, .36, 1),
+                opacity .22s ease,
+                transform .26s cubic-bezier(.22, 1, .36, 1),
+                margin-top .24s ease;
             margin-top: 0;
             pointer-events: none;
-            will-change: grid-template-rows, opacity, transform;
+            will-change: opacity, transform;
+            contain: layout paint;
         }
 
         .mPreviewRow.galleryOpen .detailPhotoGallery {
@@ -1316,6 +1325,10 @@
             transform: translateY(0) scale(1);
             margin-top: 2px;
             pointer-events: auto;
+        }
+
+        .mPreviewRow.galleryOpen {
+            overscroll-behavior: contain;
         }
 
         #modal .mTabs,
@@ -1344,6 +1357,7 @@
 
         #modal.galleryMode .mTabBody {
             max-height: 0 !important;
+            min-height: 0 !important;
             opacity: 0;
             overflow: hidden;
             visibility: hidden;
@@ -1357,9 +1371,12 @@
             border: 1px solid var(--stroke);
             border-radius: 18px;
             background: rgba(255, 248, 253, .92);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 14px 34px rgba(232, 69, 139, .13);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.64), 0 10px 24px rgba(232, 69, 139, .10);
             overflow: hidden;
             min-height: 0;
+            max-height: calc(100svh - 150px);
+            display: flex;
+            flex-direction: column;
         }
 
         .detailGalleryHead {
@@ -1396,11 +1413,14 @@
             position: relative;
             display: grid;
             place-items: center;
-            min-height: 380px;
+            min-height: 0;
+            height: min(56vh, 420px);
+            max-height: calc(100svh - 250px);
             padding: 14px 48px;
             background:
                 radial-gradient(circle at 50% 0%, rgba(232, 69, 139, .14), transparent 45%),
                 linear-gradient(135deg, rgba(255,255,255,.74), rgba(255,232,246,.76));
+            overscroll-behavior: contain;
         }
 
         .detailGalleryNav {
@@ -1441,7 +1461,7 @@
             overflow: hidden;
             background: var(--surfaceBg);
             border: 1px solid var(--stroke);
-            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.05);
         }
 
         .detailGalleryImage {
@@ -1453,8 +1473,7 @@
             border-radius: 16px;
             border: 1px solid var(--stroke);
             background: var(--surfaceBgLight);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
-            animation: detailStageIn .22s ease;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.035);
         }
 
         @keyframes detailStageIn {
@@ -15254,18 +15273,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (!mPreviewRowEl) return;
             clearTimeout(detailGalleryModeTimer);
             if (open) {
+                detailModalEl?.classList.add("galleryMode");
                 mPreviewRowEl.classList.add("galleryOpen");
-                requestAnimationFrame(() => {
-                    if (mPreviewRowEl?.classList.contains("galleryOpen")) {
-                        detailModalEl?.classList.add("galleryMode");
-                    }
-                });
                 return;
             }
+            detailModalEl?.classList.remove("galleryMode");
             mPreviewRowEl.classList.remove("galleryOpen");
-            detailGalleryModeTimer = setTimeout(() => {
-                detailModalEl?.classList.remove("galleryMode");
-            }, 420);
         }
 
         async function addActiveDetailPhoto(file) {
