@@ -2,21 +2,37 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    match /users/{uid}/images/{imageId} {
+    match /users/{uid}/items/{itemId}/images/{imageId} {
       allow read: if request.auth != null
         && request.auth.uid == uid
-        && imageId.matches('^[A-Za-z0-9_-]+\\.jpg$');
+        && itemId.matches('^[A-Za-z0-9_-]{1,80}$')
+        && imageId.matches('^[A-Za-z0-9_-]+\\.(jpg|png|webp)$');
 
       allow create, update: if request.auth != null
         && request.auth.uid == uid
-        && imageId.matches('^[A-Za-z0-9_-]+\\.jpg$')
+        && itemId.matches('^[A-Za-z0-9_-]{1,80}$')
+        && imageId.matches('^[A-Za-z0-9_-]+\\.(jpg|png|webp)$')
         && request.resource != null
         && request.resource.size < 5 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
 
       allow delete: if request.auth != null
         && request.auth.uid == uid
-        && imageId.matches('^[A-Za-z0-9_-]+\\.jpg$');
+        && itemId.matches('^[A-Za-z0-9_-]{1,80}$')
+        && imageId.matches('^[A-Za-z0-9_-]+\\.(jpg|png|webp)$');
+    }
+
+    match /users/{uid}/images/{imageId} {
+      allow read, delete: if request.auth != null
+        && request.auth.uid == uid
+        && imageId.matches('^[A-Za-z0-9_-]+\\.(jpg|png|webp)$');
+
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && imageId.matches('^[A-Za-z0-9_-]+\\.(jpg|png|webp)$')
+        && request.resource != null
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
     }
 
     match /{allPaths=**} {

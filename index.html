@@ -14708,12 +14708,25 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
         }
 
+        function isDataImage(value) {
+            return typeof value === "string" && value.startsWith("data:image/");
+        }
+
+        function isRemoteImageUrl(value) {
+            return typeof value === "string" && /^https?:\/\//i.test(value);
+        }
+
+        function sanitizeRemoteImageUrl(value) {
+            const url = safeText(value || "", 2048);
+            return isRemoteImageUrl(url) ? url : "";
+        }
+
         function hasRealImage(item) {
-            return !!(item && (item.imageUrl || item.imgData));
+            return !!(item && (isRemoteImageUrl(item.imageUrl) || isDataImage(item.imgData)));
         }
 
         function getImageSrc(item) {
-            return hasRealImage(item) ? (item.imageUrl || item.imgData) : getNoPhotoPlaceholderSrc();
+            return hasRealImage(item) ? (sanitizeRemoteImageUrl(item.imageUrl) || (isDataImage(item.imgData) ? item.imgData : "")) : getNoPhotoPlaceholderSrc();
         }
 
         function makePhotoId() {
@@ -14724,10 +14737,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return {
                 id: safeId(photo?.id || ("photo_" + index)),
                 name: safeText(photo?.name || ("Fotoğraf " + (index + 1)), 120),
-                imageUrl: safeText(photo?.imageUrl || "", 2048),
+                imageUrl: sanitizeRemoteImageUrl(photo?.imageUrl || ""),
                 imagePath: safeText(photo?.imagePath || "", 260),
-                imgData: photo?.imgData && String(photo.imgData).startsWith("data:") ? photo.imgData : "",
-                imageStatus: photo?.imageUrl ? "uploaded" : (photo?.imageStatus === "pending" || photo?.imageSyncPending ? "pending" : "none"),
+                imgData: isDataImage(photo?.imgData) ? photo.imgData : (isDataImage(photo?.imageUrl) ? photo.imageUrl : ""),
+                imageStatus: sanitizeRemoteImageUrl(photo?.imageUrl || "") ? "uploaded" : (photo?.imageStatus === "pending" || photo?.imageSyncPending ? "pending" : "none"),
                 imageSyncPending: !!photo?.imageSyncPending || photo?.imageStatus === "pending",
                 createdAt: Number(photo?.createdAt) || Date.now(),
                 origImgData: photo?.origImgData || ""
@@ -14756,11 +14769,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         function photoHasRealImage(photo) {
-            return !!(photo && (photo.imageUrl || photo.imgData));
+            return !!(photo && (isRemoteImageUrl(photo.imageUrl) || isDataImage(photo.imgData)));
         }
 
         function getPhotoSrc(photo) {
-            return photoHasRealImage(photo) ? (photo.imageUrl || photo.imgData) : getNoPhotoPlaceholderSrc();
+            return photoHasRealImage(photo) ? (sanitizeRemoteImageUrl(photo.imageUrl) || (isDataImage(photo.imgData) ? photo.imgData : "")) : getNoPhotoPlaceholderSrc();
         }
 
         function getCoverPhoto(item) {
@@ -14830,11 +14843,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const clean = { ...item };
             if ('imgData' in clean) delete clean.imgData;
             if ('origImgData' in clean) delete clean.origImgData;
+            clean.imageUrl = sanitizeRemoteImageUrl(clean.imageUrl || "");
             if (Array.isArray(clean.photos)) {
                 clean.photos = clean.photos.map(photo => {
                     const slim = { ...photo };
                     delete slim.imgData;
                     delete slim.origImgData;
+                    slim.imageUrl = sanitizeRemoteImageUrl(slim.imageUrl || "");
                     return slim;
                 });
             }
@@ -14844,9 +14859,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function normalizeItem(item) {
             const id = safeId(item?.id);
             const status = item?.status === 'bought' ? 'bought' : 'want';
-            const imageUrl = safeText(item?.imageUrl || '', 2048);
+            const imageUrl = sanitizeRemoteImageUrl(item?.imageUrl || '');
             const imagePath = safeText(item?.imagePath || '', 240);
-            const localImg = item?.imgData && String(item.imgData).startsWith('data:') ? item.imgData : '';
+            const localImg = isDataImage(item?.imgData) ? item.imgData : (isDataImage(item?.imageUrl) ? item.imageUrl : '');
             const normalized = {
                 id,
                 itemName: safeText(item?.itemName || '', 160),
@@ -14891,6 +14906,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const clean = stripHeavyFields(normalizeItem(item));
             clean.imageStatus = clean.imageUrl ? 'uploaded' : (item?.imageSyncPending ? 'pending' : clean.imageStatus || 'none');
             clean.imageSyncPending = clean.imageStatus === 'pending';
+            if (Array.isArray(clean.photos)) {
+                clean.photos = clean.photos.map(photo => ({
+                    ...photo,
+                    imageStatus: photo.imageUrl ? 'uploaded' : (photo.imageSyncPending ? 'pending' : photo.imageStatus || 'none'),
+                    imageSyncPending: !photo.imageUrl && !!photo.imageSyncPending
+                }));
+            }
             return clean;
         }
 
@@ -14953,12 +14975,54 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             });
         }
 
+        async function resolveImageUrlsFromPaths(targetItems = items, persistAfter = false) {
+            if (!window.storage) return;
+            let changed = false;
+            for (const item of targetItems) {
+                if (item.imagePath && !sanitizeRemoteImageUrl(item.imageUrl)) {
+                    try {
+                        item.imageUrl = await storage.ref(item.imagePath).getDownloadURL();
+                        item.imageStatus = "uploaded";
+                        item.imageSyncPending = false;
+                        changed = true;
+                    } catch (err) {
+                        console.warn('Storage image URL resolve skipped:', err);
+                    }
+                }
+                for (const photo of getItemPhotos(item)) {
+                    if (!photo.imagePath || sanitizeRemoteImageUrl(photo.imageUrl)) continue;
+                    try {
+                        photo.imageUrl = await storage.ref(photo.imagePath).getDownloadURL();
+                        photo.imageStatus = "uploaded";
+                        photo.imageSyncPending = false;
+                        changed = true;
+                    } catch (err) {
+                        console.warn('Storage gallery URL resolve skipped:', err);
+                    }
+                }
+                syncCoverFieldsFromGallery(item, false);
+            }
+            if (!changed) return;
+            safeLocalPersist();
+            if (persistAfter) await persistRemoteItems(targetItems);
+        }
+
+        function getImageExtension(mime) {
+            if (mime === "image/png") return "png";
+            if (mime === "image/webp") return "webp";
+            return "jpg";
+        }
+
         async function uploadImageData(dataUrl, itemId, photoId = "") {
-            if (!authUid || !window.storage || !dataUrl || !dataUrl.startsWith('data:')) return { imgData: dataUrl || '', imageStatus: 'pending' };
-            const fileId = safeId(itemId) + (photoId ? "_" + safeId(photoId) : "");
-            const path = 'users/' + authUid + '/images/' + fileId + '.jpg';
+            if (!authUid || !auth?.currentUser) throw new Error("Fotoğraf yüklemek için giriş yapmalısın.");
+            if (!window.storage) throw new Error("Firebase Storage hazır değil.");
+            if (!isDataImage(dataUrl)) throw new Error("Geçerli bir fotoğraf verisi bulunamadı.");
+            const blob = dataURLToBlob(dataUrl);
+            const safeItemId = safeId(itemId);
+            const safePhotoId = safeId(photoId || "cover");
+            const path = 'users/' + authUid + '/items/' + safeItemId + '/images/' + safePhotoId + '.' + getImageExtension(blob.type);
             const ref = storage.ref(path);
-            await ref.put(dataURLToBlob(dataUrl), { contentType: 'image/jpeg' });
+            await ref.put(blob, { contentType: blob.type || 'image/jpeg' });
             return { imageUrl: await ref.getDownloadURL(), imagePath: path, imgData: '', imageStatus: 'uploaded' };
         }
 
@@ -15014,6 +15078,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return item;
         }
 
+        async function uploadPhotoAndApply(item, photo, imgData) {
+            const payload = await uploadImageData(imgData, item.id, photo.id);
+            applyPhotoPayload(photo, payload);
+            syncCoverFieldsFromGallery(item);
+            return payload;
+        }
+
         async function load() {
             const localItems = readLocalItemsBackup();
             items = localItems;
@@ -15024,6 +15095,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     const fbItems = arrayFromFirebaseNode(rawItems).map(normalizeItem);
                     if (fbItems.length) {
                         items = mergeLocalImageFallbacks(fbItems);
+                        await resolveImageUrlsFromPaths(items, false);
                         remoteItemIds = Array.isArray(rawItems)
                             ? new Set(Object.keys(rawItems).filter(key => rawItems[key]))
                             : new Set(items.map(item => item.id));
@@ -15063,9 +15135,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const root = userRootRef();
             if (!root) return Promise.resolve();
             const normalized = sourceItems.map(normalizeItem);
-            const currentIds = new Set(normalized.map(item => item.id));
+            const writableItems = normalized.filter(item => remoteItemIds.has(item.id) || !itemHasPendingLocalImage(item));
+            const currentIds = new Set(writableItems.map(item => item.id));
             const updates = {};
-            normalized.forEach(item => {
+            writableItems.forEach(item => {
                 updates['items/' + item.id] = serializeRemoteItem(item);
             });
             remoteItemIds.forEach(id => {
@@ -15073,6 +15146,22 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             });
             remoteItemIds = currentIds;
             if (!Object.keys(updates).length) return Promise.resolve();
+            return root.update(updates).catch(e => console.error('Firebase urun yazma hatasi:', e));
+        }
+
+        function itemHasPendingLocalImage(item) {
+            const normalized = normalizeItem(item);
+            return (!!normalized.imageSyncPending && !normalized.imageUrl)
+                || getItemPhotos(normalized).some(photo => !!photo.imageSyncPending && !photo.imageUrl);
+        }
+
+        function persistRemoteItem(item) {
+            const root = userRootRef();
+            if (!root || !item) return Promise.resolve();
+            const normalized = normalizeItem(item);
+            const updates = {};
+            updates['items/' + normalized.id] = serializeRemoteItem(normalized);
+            remoteItemIds.add(normalized.id);
             return root.update(updates).catch(e => console.error('Firebase urun yazma hatasi:', e));
         }
 
@@ -15101,6 +15190,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 remoteItemIds = new Set(remoteItems.map(item => item.id));
                 items = mergeLocalImageFallbacks(remoteItems);
                 safeLocalPersist();
+                resolveImageUrlsFromPaths(items, false).then(renderAfterRemoteSync).catch(err => console.warn('Storage image URL sync skipped:', err));
                 retryPendingImageUploads();
                 renderAfterRemoteSync();
             }, err => console.warn('Firebase urun dinleme hatasi:', err));
@@ -15553,9 +15643,16 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 mImg.dataset.noPhoto = hasRealImage(it) ? "0" : "1";
                 mImg.src = getImageSrc(it);
                 syncDetailPhotoGallery(it);
-                persist();
+                safeLocalPersist();
                 render();
-                startImageUploadForPhoto(it, photo, imgData);
+                await uploadPhotoAndApply(it, photo, imgData);
+                mImg.dataset.noPhoto = hasRealImage(it) ? "0" : "1";
+                mImg.src = getImageSrc(it);
+                syncDetailPhotoGallery(it);
+                safeLocalPersist();
+                await persistRemoteItem(it);
+                refreshWrappedIfOpen();
+                render();
                 showToast("Fotoğraf eklendi.");
             } catch (err) {
                 console.error("Fotoğraf eklenemedi:", err);
@@ -15585,7 +15682,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 mImg.dataset.noPhoto = hasRealImage(it) ? "0" : "1";
                 mImg.src = getImageSrc(it);
                 syncDetailPhotoGallery(it);
-                persist();
+                safeLocalPersist();
+                await persistRemoteItem(it);
+                refreshWrappedIfOpen();
                 render();
                 showToast("Fotoğraf silindi.");
             } catch (err) {
@@ -15614,7 +15713,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             mImg.dataset.noPhoto = hasRealImage(item) ? "0" : "1";
             mImg.src = getImageSrc(item);
             syncDetailPhotoGallery(item);
-            persist();
+            if (payload.imgData && payload.imgData.startsWith("data:")) safeLocalPersist();
+            else persist();
             render();
         }
 
@@ -15832,7 +15932,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     if (!live || !payload || !payload.imageUrl) return;
                     if (live.imageStatus !== "pending" || live.imgData !== imgData) return;
                     applyImagePayload(live, payload);
-                    persist();
+                    safeLocalPersist();
+                    persistRemoteItem(live);
+                    refreshWrappedIfOpen();
                     render();
                     if (activeId === live.id) {
                         mImg.dataset.noPhoto = "0";
@@ -15846,7 +15948,6 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         live.imageStatus = "pending";
                         live.imageSyncPending = true;
                         safeLocalPersist();
-                        persistRemoteItems();
                     }
                     console.warn('Storage upload pending; local retry queue remains active:', err);
                 })
@@ -15868,7 +15969,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     if (!livePhoto || livePhoto.imageStatus !== "pending" || livePhoto.imgData !== imgData) return;
                     applyPhotoPayload(livePhoto, payload);
                     syncCoverFieldsFromGallery(live);
-                    persist();
+                    safeLocalPersist();
+                    persistRemoteItem(live);
+                    refreshWrappedIfOpen();
                     render();
                     if (activeId === live.id) {
                         mImg.dataset.noPhoto = hasRealImage(live) ? "0" : "1";
@@ -15884,7 +15987,6 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         livePhoto.imageSyncPending = true;
                         syncCoverFieldsFromGallery(live);
                         safeLocalPersist();
-                        persistRemoteItems();
                     }
                     console.warn('Gallery photo upload pending; local retry queue remains active:', err);
                 })
@@ -15905,9 +16007,9 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         window.addEventListener("online", () => {
-            persistRemoteItems();
-            persistRemoteLists();
             retryPendingImageUploads();
+            persistRemoteLists();
+            if (!items.some(item => item.imageSyncPending || getItemPhotos(item).some(photo => photo.imageSyncPending))) persistRemoteItems();
         });
 
         async function createPhotoItemFromFile(file) {
@@ -15941,14 +16043,24 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 items.push(...created);
                 const scopedList = attachItemsToPendingList(created);
                 created.forEach(item => initialEditItemIds.add(item.id));
-                persist(); render();
+                safeLocalPersist();
+                render();
                 requestAnimationFrame(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }));
                 if (created.length) openModal(created[created.length - 1].id);
                 if (scopedList) showToast(`Ürün yalnızca "${scopedList.name || "bu liste"}" listesine eklendi.`);
-                created.forEach(item => {
+                const uploadResults = await Promise.allSettled(created.map(async item => {
                     const cover = getCoverPhoto(item);
-                    if (cover) startImageUploadForPhoto(item, cover, cover.imgData);
-                });
+                    if (cover && cover.imgData) await uploadPhotoAndApply(item, cover, cover.imgData);
+                }));
+                safeLocalPersist();
+                await Promise.all(created
+                    .filter(item => !itemHasPendingLocalImage(item))
+                    .map(item => persistRemoteItem(item)));
+                refreshWrappedIfOpen();
+                render();
+                if (uploadResults.some(result => result.status === "rejected")) {
+                    showToast("Bazı fotoğraflar buluta yüklenemedi. Bağlantını kontrol edip tekrar dene.");
+                }
             } catch (err) {
                 console.error("Fotoğraf yüklenemedi:", err);
                 showToast("Fotoğraf yüklenemedi, tekrar dene");
@@ -15967,10 +16079,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 const item = await createPhotoItemFromFile(file);
                 items.push(item);
                 initialEditItemIds.add(item.id);
-                persist(); render();
+                safeLocalPersist();
+                render();
                 openModal(item.id);
                 const cover = getCoverPhoto(item);
-                if (cover) startImageUploadForPhoto(item, cover, cover.imgData);
+                if (cover && cover.imgData) await uploadPhotoAndApply(item, cover, cover.imgData);
+                safeLocalPersist();
+                await persistRemoteItem(item);
+                refreshWrappedIfOpen();
+                render();
             } catch (err) {
                 console.error("Kamera fotoğrafı yüklenemedi:", err);
                 showToast("Fotoğraf yüklenemedi, tekrar dene");

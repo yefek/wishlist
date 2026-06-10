@@ -48,10 +48,24 @@
             "updatedAt": { ".validate": "!newData.exists() || newData.isNumber()" },
             "secret": { ".validate": "!newData.exists() || newData.isBoolean()" },
             "savedAmount": { ".validate": "!newData.exists() || newData.isNumber()" },
-            "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048)" },
-            "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 240)" },
+            "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048 && (newData.val() === '' || newData.val().matches('^https://')))" },
+            "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 260 && !newData.val().matches('^(data:|blob:)'))" },
             "imageStatus": { ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'none' || newData.val() === 'pending' || newData.val() === 'uploaded'))" },
             "imageSyncPending": { ".validate": "!newData.exists() || newData.isBoolean()" },
+            "coverPhotoId": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
+            "photos": {
+              "$idx": {
+                ".validate": "!newData.exists() || (newData.hasChildren(['id']) && !newData.hasChildren(['imgData', 'origImgData']))",
+                "id": { ".validate": "newData.isString() && newData.val().length <= 80" },
+                "name": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 120)" },
+                "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048 && (newData.val() === '' || newData.val().matches('^https://')))" },
+                "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 260 && !newData.val().matches('^(data:|blob:)'))" },
+                "imageStatus": { ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'none' || newData.val() === 'pending' || newData.val() === 'uploaded'))" },
+                "imageSyncPending": { ".validate": "!newData.exists() || newData.isBoolean()" },
+                "createdAt": { ".validate": "!newData.exists() || newData.isNumber()" },
+                "$other": { ".validate": false }
+              }
+            },
             "listOnlyId": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
             "$other": { ".validate": false }
           }
