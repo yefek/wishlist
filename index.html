@@ -11871,6 +11871,37 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
+        /* WishlistAI top-area normalization: keep its custom page shell aligned
+           with the shared desktop/tablet header and compensate only for the
+           extra transparent canvas inside the AI hero asset. */
+        @media (min-width: 761px) {
+            #aiBack.show .aiHeader {
+                box-sizing: border-box !important;
+                min-height: 76px !important;
+                height: 76px !important;
+                flex: 0 0 76px !important;
+                padding: 16px 20px !important;
+            }
+
+            #aiBack.show .aiBody {
+                padding-top: 18px !important;
+            }
+        }
+
+        #aiBack.show #aiScreenMode .aiCouncilHero .aiHeroCard {
+            overflow: visible !important;
+        }
+
+        #aiBack.show #aiScreenMode .aiCouncilHero .aiHeroCard .heroRaster {
+            width: 113% !important;
+            height: 113% !important;
+            max-width: 113% !important;
+            max-height: 113% !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            transform: none !important;
+        }
+
     </style>
 </head>
 
@@ -13066,14 +13097,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         const firebaseReady = typeof window.firebase !== 'undefined'
             && typeof firebase.initializeApp === 'function'
             && typeof firebase.auth === 'function'
-            && typeof firebase.database === 'function'
-            && typeof firebase.storage === 'function';
+            && typeof firebase.database === 'function';
 
         if (firebaseReady) {
             firebase.initializeApp(firebaseConfig);
             window.auth = firebase.auth();
             window.db = firebase.database();
-            window.storage = firebase.storage();
+            // Storage is optional. Images use the free Realtime Database image store;
+            // this handle remains only for resolving/deleting legacy Storage records.
+            window.storage = typeof firebase.storage === 'function' ? firebase.storage() : null;
         } else {
             window.auth = null;
             window.db = null;
@@ -13741,6 +13773,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         let remoteListIds = new Set();
         let itemsRef = null;
         let listsRef = null;
+        let firstItemsRealtimeEvent = true;
+        const RTDB_IMAGE_PREFIX = "rtdb:itemImages/";
+        const RTDB_IMAGE_MAX_CHARS = 520000;
+        const RTDB_IMAGE_MAX_EDGE = 900;
         let suppressRemoteSync = false;
         let realtimeSyncStarted = false;
         let editingListId = null;
@@ -13992,11 +14028,10 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         enforceNumericInput(document.getElementById("mCurrentPrice"));
         enforceNumericInput(document.getElementById("mPrice"));
 
-        /* ── Storage ──
-           Strateji: imgData (base64) sadece localStorage'da tutulur.
-           Firebase'e sadece metadata gider → DB boyutu ~20x küçülür.
-           Silme: item silinince hem array'den hem localStorage image store'dan temizlenir.
-        /* Storage */
+        /* Storage
+           Product metadata and compressed image data live in separate RTDB branches.
+           localStorage is only a cache and a retry queue; it is never the source of truth.
+        */
         function getUserKey(uid = authUid) { return uid ? 'wishlist_v4_items_' + uid : 'wishlist_v4_items_guest'; }
         function getListKey(uid = authUid) { return uid ? 'wishlist_v4_lists_' + uid : 'wishlist_v4_lists_guest'; }
         function getSavingsLogKey(uid = authUid) { return uid ? 'wishlist_v1_savings_log_' + uid : 'wishlist_v1_savings_log_guest'; }
@@ -14721,6 +14756,25 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             return isRemoteImageUrl(url) ? url : "";
         }
 
+        function makeRtdbImagePath(itemId, photoId = "cover") {
+            return RTDB_IMAGE_PREFIX + safeId(itemId) + "/" + safeId(photoId || "cover");
+        }
+
+        function isRtdbImagePath(value) {
+            return typeof value === "string" && value.startsWith(RTDB_IMAGE_PREFIX);
+        }
+
+        function parseRtdbImagePath(value) {
+            if (!isRtdbImagePath(value)) return null;
+            const parts = value.slice(RTDB_IMAGE_PREFIX.length).split("/");
+            if (parts.length !== 2) return null;
+            return { itemId: safeId(parts[0]), photoId: safeId(parts[1]) };
+        }
+
+        function hasPersistedImageRef(value) {
+            return isRtdbImagePath(value) || (typeof value === "string" && value.length > 0);
+        }
+
         function hasRealImage(item) {
             return !!(item && (isRemoteImageUrl(item.imageUrl) || isDataImage(item.imgData)));
         }
@@ -14734,14 +14788,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         function normalizePhoto(photo, index = 0) {
+            const imageUrl = sanitizeRemoteImageUrl(photo?.imageUrl || "");
+            const imagePath = safeText(photo?.imagePath || "", 260);
+            const localData = isDataImage(photo?.imgData) ? photo.imgData : (isDataImage(photo?.imageUrl) ? photo.imageUrl : "");
+            const persisted = imageUrl || isRtdbImagePath(imagePath) || photo?.imageStatus === "uploaded";
+            const pending = !persisted && (photo?.imageStatus === "pending" || photo?.imageSyncPending || !!localData);
             return {
                 id: safeId(photo?.id || ("photo_" + index)),
                 name: safeText(photo?.name || ("Fotoğraf " + (index + 1)), 120),
-                imageUrl: sanitizeRemoteImageUrl(photo?.imageUrl || ""),
-                imagePath: safeText(photo?.imagePath || "", 260),
-                imgData: isDataImage(photo?.imgData) ? photo.imgData : (isDataImage(photo?.imageUrl) ? photo.imageUrl : ""),
-                imageStatus: sanitizeRemoteImageUrl(photo?.imageUrl || "") ? "uploaded" : (photo?.imageStatus === "pending" || photo?.imageSyncPending ? "pending" : "none"),
-                imageSyncPending: !!photo?.imageSyncPending || photo?.imageStatus === "pending",
+                imageUrl,
+                imagePath,
+                imgData: localData,
+                imageStatus: persisted ? "uploaded" : (pending ? "pending" : "none"),
+                imageSyncPending: pending,
                 createdAt: Number(photo?.createdAt) || Date.now(),
                 origImgData: photo?.origImgData || ""
             };
@@ -14750,7 +14809,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         function getItemPhotos(item) {
             if (!item) return [];
             let photos = Array.isArray(item.photos) ? item.photos.map(normalizePhoto) : [];
-            if (!photos.length && hasRealImage(item)) {
+            if (!photos.length && (hasRealImage(item) || hasPersistedImageRef(item.imagePath) || item.imageStatus === "uploaded" || item.imageStatus === "pending")) {
                 photos = [normalizePhoto({
                     id: item.coverPhotoId || "cover",
                     name: "Kapak görseli",
@@ -14818,7 +14877,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             photo.imageUrl = payload.imageUrl || "";
             photo.imagePath = payload.imagePath || "";
             photo.imgData = payload.imgData || "";
-            photo.imageStatus = payload.imageStatus || (photo.imageUrl ? "uploaded" : (photo.imgData ? "pending" : "none"));
+            photo.imageStatus = payload.imageStatus || (photo.imageUrl || isRtdbImagePath(photo.imagePath) ? "uploaded" : (photo.imgData ? "pending" : "none"));
             photo.imageSyncPending = photo.imageStatus === "pending";
             return photo;
         }
@@ -14862,6 +14921,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const imageUrl = sanitizeRemoteImageUrl(item?.imageUrl || '');
             const imagePath = safeText(item?.imagePath || '', 240);
             const localImg = isDataImage(item?.imgData) ? item.imgData : (isDataImage(item?.imageUrl) ? item.imageUrl : '');
+            const persistedImage = imageUrl || isRtdbImagePath(imagePath) || item?.imageStatus === 'uploaded';
+            const pendingImage = !persistedImage && (item?.imageStatus === 'pending' || item?.imageSyncPending || !!localImg);
             const normalized = {
                 id,
                 itemName: safeText(item?.itemName || '', 160),
@@ -14890,8 +14951,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 savedAmount: Number(item?.savedAmount) || 0,
                 imageUrl,
                 imagePath,
-                imageStatus: imageUrl ? 'uploaded' : (item?.imageStatus === 'pending' || item?.imageSyncPending ? 'pending' : 'none'),
-                imageSyncPending: !!item?.imageSyncPending || item?.imageStatus === 'pending',
+                imageStatus: persistedImage ? 'uploaded' : (pendingImage ? 'pending' : 'none'),
+                imageSyncPending: pendingImage,
                 imgData: localImg,
                 photos: Array.isArray(item?.photos) ? item.photos.map(normalizePhoto) : [],
                 coverPhotoId: safeText(item?.coverPhotoId || '', 80),
@@ -14904,13 +14965,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function serializeRemoteItem(item) {
             const clean = stripHeavyFields(normalizeItem(item));
-            clean.imageStatus = clean.imageUrl ? 'uploaded' : (item?.imageSyncPending ? 'pending' : clean.imageStatus || 'none');
+            clean.imageStatus = clean.imageUrl || isRtdbImagePath(clean.imagePath) ? 'uploaded' : (item?.imageSyncPending ? 'pending' : clean.imageStatus || 'none');
             clean.imageSyncPending = clean.imageStatus === 'pending';
             if (Array.isArray(clean.photos)) {
                 clean.photos = clean.photos.map(photo => ({
                     ...photo,
-                    imageStatus: photo.imageUrl ? 'uploaded' : (photo.imageSyncPending ? 'pending' : photo.imageStatus || 'none'),
-                    imageSyncPending: !photo.imageUrl && !!photo.imageSyncPending
+                    imageStatus: photo.imageUrl || isRtdbImagePath(photo.imagePath) ? 'uploaded' : (photo.imageSyncPending ? 'pending' : photo.imageStatus || 'none'),
+                    imageSyncPending: !photo.imageUrl && !isRtdbImagePath(photo.imagePath) && !!photo.imageSyncPending
                 }));
             }
             return clean;
@@ -14918,8 +14979,17 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function stripLocalFallback(item) {
             const clean = normalizeItem(item);
-            if (clean.imageUrl && clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
-            if (clean.imageUrl && clean.origImgData && clean.origImgData.startsWith('data:')) delete clean.origImgData;
+            if ((clean.imageUrl || isRtdbImagePath(clean.imagePath)) && clean.imgData && clean.imgData.startsWith('data:')) delete clean.imgData;
+            if ((clean.imageUrl || isRtdbImagePath(clean.imagePath)) && clean.origImgData && clean.origImgData.startsWith('data:')) delete clean.origImgData;
+            if (Array.isArray(clean.photos)) {
+                clean.photos = clean.photos.map(photo => {
+                    if (!isRtdbImagePath(photo.imagePath)) return photo;
+                    const cached = { ...photo };
+                    delete cached.imgData;
+                    delete cached.origImgData;
+                    return cached;
+                });
+            }
             return clean;
         }
 
@@ -14940,7 +15010,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                     merged.imageStatus = "uploaded";
                     merged.imageSyncPending = false;
                 }
-                if (!merged.imageUrl && !merged.imgData && local.imgData) {
+                if (!merged.imageUrl && !isRtdbImagePath(merged.imagePath) && !merged.imgData && local.imgData) {
                     merged.imgData = local.imgData;
                     merged.imageStatus = "pending";
                     merged.imageSyncPending = true;
@@ -14960,7 +15030,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                             next.imageStatus = "uploaded";
                             next.imageSyncPending = false;
                         }
-                        if (!next.imageUrl && !next.imgData && localPhoto.imgData) {
+                        if (!next.imageUrl && !isRtdbImagePath(next.imagePath) && !next.imgData && localPhoto.imgData) {
                             next.imgData = localPhoto.imgData;
                             next.imageStatus = "pending";
                             next.imageSyncPending = true;
@@ -14975,59 +15045,183 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             });
         }
 
-        async function resolveImageUrlsFromPaths(targetItems = items, persistAfter = false) {
-            if (!window.storage) return;
+        async function hydrateRtdbImages(targetItems = items) {
+            if (!authUid || !window.db || !targetItems.length) return false;
             let changed = false;
-            for (const item of targetItems) {
-                if (item.imagePath && !sanitizeRemoteImageUrl(item.imageUrl)) {
-                    try {
-                        item.imageUrl = await storage.ref(item.imagePath).getDownloadURL();
-                        item.imageStatus = "uploaded";
-                        item.imageSyncPending = false;
-                        changed = true;
-                    } catch (err) {
-                        console.warn('Storage image URL resolve skipped:', err);
+            await Promise.all(targetItems.map(async item => {
+                const itemId = safeId(item.id);
+                try {
+                    const snapshot = await db.ref('users/' + authUid + '/itemImages/' + itemId).once('value');
+                    const records = snapshot.val() || {};
+                    const recordIds = Object.keys(records);
+                    if (!recordIds.length) return;
+
+                    let photos = getItemPhotos(item);
+                    if (!photos.length) {
+                        photos = recordIds.map((photoId, index) => normalizePhoto({
+                            id: photoId,
+                            name: index === 0 ? 'Kapak görseli' : 'Fotoğraf ' + (index + 1),
+                            imagePath: makeRtdbImagePath(itemId, photoId),
+                            imageStatus: 'uploaded',
+                            createdAt: Number(records[photoId]?.createdAt) || Date.now()
+                        }, index));
+                        item.photos = photos;
+                        item.coverPhotoId = item.coverPhotoId || photos[0]?.id || '';
                     }
-                }
-                for (const photo of getItemPhotos(item)) {
-                    if (!photo.imagePath || sanitizeRemoteImageUrl(photo.imageUrl)) continue;
-                    try {
-                        photo.imageUrl = await storage.ref(photo.imagePath).getDownloadURL();
-                        photo.imageStatus = "uploaded";
+
+                    recordIds.forEach(photoId => {
+                        const record = records[photoId];
+                        if (!record || !isDataImage(record.dataUrl)) return;
+                        let photo = photos.find(candidate => candidate.id === photoId);
+                        if (!photo) {
+                            photo = normalizePhoto({ id: photoId, name: 'Fotoğraf', createdAt: record.createdAt });
+                            photos.push(photo);
+                        }
+                        photo.imgData = record.dataUrl;
+                        photo.imageUrl = '';
+                        photo.imagePath = makeRtdbImagePath(itemId, photoId);
+                        photo.imageStatus = 'uploaded';
                         photo.imageSyncPending = false;
                         changed = true;
-                    } catch (err) {
-                        console.warn('Storage gallery URL resolve skipped:', err);
-                    }
+                    });
+                    item.photos = photos;
+                    syncCoverFieldsFromGallery(item, false);
+                } catch (err) {
+                    console.error('RTDB fotoğraf okuma hatası:', { itemId, code: err?.code, message: err?.message, error: err });
                 }
-                syncCoverFieldsFromGallery(item, false);
+            }));
+            return changed;
+        }
+
+        async function resolveImageUrlsFromPaths(targetItems = items, persistAfter = false) {
+            let changed = await hydrateRtdbImages(targetItems);
+
+            // Preserve read compatibility for photos uploaded to legacy Firebase Storage.
+            if (window.storage) {
+                for (const item of targetItems) {
+                    for (const photo of getItemPhotos(item)) {
+                        if (!photo.imagePath || isRtdbImagePath(photo.imagePath) || sanitizeRemoteImageUrl(photo.imageUrl)) continue;
+                        try {
+                            photo.imageUrl = await storage.ref(photo.imagePath).getDownloadURL();
+                            photo.imageStatus = 'uploaded';
+                            photo.imageSyncPending = false;
+                            changed = true;
+                        } catch (err) {
+                            console.warn('Legacy Storage image URL resolve skipped:', err);
+                        }
+                    }
+                    syncCoverFieldsFromGallery(item, false);
+                }
             }
+
             if (!changed) return;
             safeLocalPersist();
             if (persistAfter) await persistRemoteItems(targetItems);
         }
 
-        function getImageExtension(mime) {
-            if (mime === "image/png") return "png";
-            if (mime === "image/webp") return "webp";
-            return "jpg";
+        function describeFirebaseError(error, fallback = "İşlem tamamlanamadı. Lütfen tekrar dene.") {
+            const code = error?.code || "";
+            if (code.includes("permission-denied") || code.includes("unauthorized")) {
+                return "Fotoğraf yükleme izni alınamadı. Lütfen hesabınla tekrar giriş yapıp dene.";
+            }
+            if (code.includes("canceled")) return "Fotoğraf yükleme iptal edildi.";
+            if (code.includes("storage/retry-limit-exceeded") || code.includes("network")) {
+                return "Fotoğraf yüklenemedi. İnternet bağlantını kontrol edip tekrar dene.";
+            }
+            if (String(error?.message || "").toLowerCase().includes("timeout")) {
+                return "Fotoğraf yükleme çok uzun sürdü. Bağlantını kontrol edip tekrar dene.";
+            }
+            return error?.message || fallback;
+        }
+
+        function compressImageDataForRtdb(dataUrl) {
+            if (!isDataImage(dataUrl)) return Promise.reject(new Error('Geçerli bir fotoğraf verisi bulunamadı.'));
+            return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.onload = () => {
+                    let width = image.naturalWidth || image.width;
+                    let height = image.naturalHeight || image.height;
+                    const ratio = Math.min(1, RTDB_IMAGE_MAX_EDGE / Math.max(width, height));
+                    width = Math.max(1, Math.round(width * ratio));
+                    height = Math.max(1, Math.round(height * ratio));
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d', { alpha: false });
+                    let quality = 0.74;
+                    let encoded = '';
+
+                    for (let attempt = 0; attempt < 6; attempt++) {
+                        canvas.width = width;
+                        canvas.height = height;
+                        context.fillStyle = '#ffffff';
+                        context.fillRect(0, 0, width, height);
+                        context.drawImage(image, 0, 0, width, height);
+                        encoded = canvas.toDataURL('image/jpeg', quality);
+                        if (encoded.length <= RTDB_IMAGE_MAX_CHARS) break;
+                        quality = Math.max(0.5, quality - 0.06);
+                        width = Math.max(320, Math.round(width * 0.88));
+                        height = Math.max(320, Math.round(height * 0.88));
+                    }
+
+                    if (!encoded || encoded.length > RTDB_IMAGE_MAX_CHARS) {
+                        reject(new Error('Fotoğraf ücretsiz bulut sınırı için hâlâ çok büyük. Daha küçük bir fotoğraf seç.'));
+                        return;
+                    }
+                    resolve({
+                        dataUrl: encoded,
+                        contentType: 'image/jpeg',
+                        byteSize: dataURLToBlob(encoded).size,
+                        width: canvas.width,
+                        height: canvas.height
+                    });
+                };
+                image.onerror = () => reject(new Error('Fotoğraf işlenemedi.'));
+                image.src = dataUrl;
+            });
         }
 
         async function uploadImageData(dataUrl, itemId, photoId = "") {
+            console.log("RTDB image save: user checked", { uid: authUid, itemId, photoId });
             if (!authUid || !auth?.currentUser) throw new Error("Fotoğraf yüklemek için giriş yapmalısın.");
-            if (!window.storage) throw new Error("Firebase Storage hazır değil.");
+            if (!window.db) throw new Error("Firebase Realtime Database hazır değil.");
             if (!isDataImage(dataUrl)) throw new Error("Geçerli bir fotoğraf verisi bulunamadı.");
-            const blob = dataURLToBlob(dataUrl);
             const safeItemId = safeId(itemId);
             const safePhotoId = safeId(photoId || "cover");
-            const path = 'users/' + authUid + '/items/' + safeItemId + '/images/' + safePhotoId + '.' + getImageExtension(blob.type);
-            const ref = storage.ref(path);
-            await ref.put(blob, { contentType: blob.type || 'image/jpeg' });
-            return { imageUrl: await ref.getDownloadURL(), imagePath: path, imgData: '', imageStatus: 'uploaded' };
+            const imagePath = makeRtdbImagePath(safeItemId, safePhotoId);
+            const databasePath = 'users/' + authUid + '/itemImages/' + safeItemId + '/' + safePhotoId;
+            try {
+                const compressed = await compressImageDataForRtdb(dataUrl);
+                const now = Date.now();
+                await db.ref(databasePath).set({
+                    dataUrl: compressed.dataUrl,
+                    contentType: compressed.contentType,
+                    byteSize: compressed.byteSize,
+                    width: compressed.width,
+                    height: compressed.height,
+                    createdAt: now,
+                    updatedAt: now
+                });
+                console.log('RTDB image save finished', { uid: authUid, itemId: safeItemId, photoId: safePhotoId, bytes: compressed.byteSize });
+                return { imageUrl: '', imagePath, imgData: compressed.dataUrl, imageStatus: 'uploaded' };
+            } catch (error) {
+                console.error("RTDB image save failed", {
+                    code: error?.code,
+                    message: error?.message,
+                    uid: authUid,
+                    path: databasePath,
+                    error
+                });
+                throw error;
+            }
         }
 
         async function deleteStoredImage(item) {
-            if (!item || !item.imagePath || !window.storage) return;
+            if (!item || !item.imagePath || !authUid) return;
+            const rtdbPath = parseRtdbImagePath(item.imagePath);
+            if (rtdbPath && window.db) {
+                await db.ref('users/' + authUid + '/itemImages/' + rtdbPath.itemId + '/' + rtdbPath.photoId).remove();
+                return;
+            }
+            if (!window.storage) return;
             try {
                 await storage.ref(item.imagePath).delete();
             } catch (e) {
@@ -15036,20 +15230,29 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         async function deleteStoredGalleryImages(item) {
-            if (!item || !window.storage) return;
+            if (!item || !authUid) return;
+            if (window.db) {
+                try {
+                    await db.ref('users/' + authUid + '/itemImages/' + safeId(item.id)).remove();
+                } catch (e) {
+                    console.error('RTDB item image cleanup failed:', e);
+                }
+            }
+            if (!window.storage) return;
             const paths = new Set();
-            if (item.imagePath) paths.add(item.imagePath);
+            if (item.imagePath && !isRtdbImagePath(item.imagePath)) paths.add(item.imagePath);
             getItemPhotos(item).forEach(photo => {
-                if (photo.imagePath) paths.add(photo.imagePath);
+                if (photo.imagePath && !isRtdbImagePath(photo.imagePath)) paths.add(photo.imagePath);
             });
             await Promise.all(Array.from(paths).map(path => storage.ref(path).delete().catch(e => console.warn('Storage image delete skipped:', e))));
         }
 
         async function deleteAllStoredImages() {
+            if (!authUid) return;
+            if (window.db) await db.ref('users/' + authUid + '/itemImages').remove();
             if (!window.storage) return;
-            const knownPaths = Array.from(new Set(items.flatMap(item => [item.imagePath, ...getItemPhotos(item).map(photo => photo.imagePath)]).filter(Boolean)));
-            await Promise.all(knownPaths.map(path => storage.ref(path).delete().catch(e => console.warn('Storage image delete skipped:', e))));
-            if (!authUid || !window.storage) return;
+            const knownPaths = Array.from(new Set(items.flatMap(item => [item.imagePath, ...getItemPhotos(item).map(photo => photo.imagePath)]).filter(path => path && !isRtdbImagePath(path))));
+            await Promise.all(knownPaths.map(path => storage.ref(path).delete().catch(e => console.warn('Legacy Storage image delete skipped:', e))));
             try {
                 const folder = await storage.ref('users/' + authUid + '/images').listAll();
                 await Promise.all(folder.items.map(ref => ref.delete().catch(e => console.warn('Storage image delete skipped:', e))));
@@ -15072,7 +15275,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             item.imageUrl = payload.imageUrl || '';
             item.imagePath = payload.imagePath || '';
             item.imgData = payload.imgData || '';
-            item.imageStatus = payload.imageStatus || (item.imageUrl ? 'uploaded' : 'pending');
+            item.imageStatus = payload.imageStatus || (item.imageUrl || isRtdbImagePath(item.imagePath) ? 'uploaded' : 'pending');
             item.imageSyncPending = item.imageStatus === 'pending';
             item.updatedAt = Date.now();
             return item;
@@ -15151,8 +15354,8 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function itemHasPendingLocalImage(item) {
             const normalized = normalizeItem(item);
-            return (!!normalized.imageSyncPending && !normalized.imageUrl)
-                || getItemPhotos(normalized).some(photo => !!photo.imageSyncPending && !photo.imageUrl);
+            return (!!normalized.imageSyncPending && !normalized.imageUrl && !isRtdbImagePath(normalized.imagePath))
+                || getItemPhotos(normalized).some(photo => !!photo.imageSyncPending && !photo.imageUrl && !isRtdbImagePath(photo.imagePath));
         }
 
         function persistRemoteItem(item) {
@@ -15162,7 +15365,22 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const updates = {};
             updates['items/' + normalized.id] = serializeRemoteItem(normalized);
             remoteItemIds.add(normalized.id);
-            return root.update(updates).catch(e => console.error('Firebase urun yazma hatasi:', e));
+            console.log("item save: database write started", { uid: authUid, itemId: normalized.id });
+            return root.update(updates)
+                .then(result => {
+                    console.log("item save: database write finished", { uid: authUid, itemId: normalized.id });
+                    return result;
+                })
+                .catch(e => {
+                    console.error('Firebase urun yazma hatasi:', {
+                        code: e?.code,
+                        message: e?.message,
+                        uid: authUid,
+                        itemId: normalized.id,
+                        error: e
+                    });
+                    throw e;
+                });
         }
 
         function stopRealtimeSync() {
@@ -15170,6 +15388,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (listsRef) listsRef.off();
             itemsRef = null;
             listsRef = null;
+            firstItemsRealtimeEvent = true;
             realtimeSyncStarted = false;
         }
 
@@ -15187,10 +15406,19 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             itemsRef.on('value', snapshot => {
                 if (suppressRemoteSync) return;
                 const remoteItems = arrayFromFirebaseNode(snapshot.val()).map(normalizeItem);
+                const preservePendingLocalItems = firstItemsRealtimeEvent
+                    && remoteItems.length === 0
+                    && items.some(item => itemHasPendingLocalImage(item));
+                firstItemsRealtimeEvent = false;
+                if (preservePendingLocalItems) {
+                    retryPendingImageUploads();
+                    renderAfterRemoteSync();
+                    return;
+                }
                 remoteItemIds = new Set(remoteItems.map(item => item.id));
                 items = mergeLocalImageFallbacks(remoteItems);
                 safeLocalPersist();
-                resolveImageUrlsFromPaths(items, false).then(renderAfterRemoteSync).catch(err => console.warn('Storage image URL sync skipped:', err));
+                resolveImageUrlsFromPaths(items, false).then(renderAfterRemoteSync).catch(err => console.warn('Firebase image sync skipped:', err));
                 retryPendingImageUploads();
                 renderAfterRemoteSync();
             }, err => console.warn('Firebase urun dinleme hatasi:', err));
@@ -15622,7 +15850,12 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             if (!activeId || !file) return;
             const it = items.find(x => x.id === activeId);
             if (!it) return;
+            if (!authUid || !auth?.currentUser) {
+                showToast("Fotoğraf eklemek için giriş yapmalısın.");
+                return;
+            }
             setPhotoBusy(true);
+            console.log("detail photo submit started", { itemId: it.id, hasFile: !!file });
             try {
                 const imgData = await withTimeout(fileToDataURL(file), 12000, 'Image processing');
                 const photos = getItemPhotos(it);
@@ -15653,12 +15886,14 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 await persistRemoteItem(it);
                 refreshWrappedIfOpen();
                 render();
+                console.log("detail photo submit finished", { itemId: it.id });
                 showToast("Fotoğraf eklendi.");
             } catch (err) {
                 console.error("Fotoğraf eklenemedi:", err);
-                showToast("Fotoğraf eklenemedi, tekrar dene");
+                showToast(describeFirebaseError(err, "Fotoğraf eklenemedi, tekrar dene"));
             } finally {
                 setPhotoBusy(false);
+                console.log("detail photo loading cleared", { itemId: it.id });
                 if (detailPhotoInput) detailPhotoInput.value = "";
             }
         }
@@ -15929,11 +16164,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             uploadImageData(imgData, item.id)
                 .then(payload => {
                     const live = items.find(x => x.id === item.id);
-                    if (!live || !payload || !payload.imageUrl) return;
+                    if (!live || !payload || payload.imageStatus !== 'uploaded') return;
                     if (live.imageStatus !== "pending" || live.imgData !== imgData) return;
                     applyImagePayload(live, payload);
                     safeLocalPersist();
-                    persistRemoteItem(live);
+                    persistRemoteItem(live).catch(err => showToast(describeFirebaseError(err, "Fotoğraf kaydı Firebase'e yazılamadı.")));
                     refreshWrappedIfOpen();
                     render();
                     if (activeId === live.id) {
@@ -15949,7 +16184,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         live.imageSyncPending = true;
                         safeLocalPersist();
                     }
-                    console.warn('Storage upload pending; local retry queue remains active:', err);
+                    console.warn('RTDB image save pending; local retry queue remains active:', err);
                 })
                 .finally(() => {
                     activeImageUploads.delete(item.id);
@@ -15964,13 +16199,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             uploadImageData(imgData, item.id, photo.id)
                 .then(payload => {
                     const live = items.find(x => x.id === item.id);
-                    if (!live || !payload || !payload.imageUrl) return;
+                    if (!live || !payload || payload.imageStatus !== 'uploaded') return;
                     const livePhoto = getDetailPhotoById(live, photo.id);
                     if (!livePhoto || livePhoto.imageStatus !== "pending" || livePhoto.imgData !== imgData) return;
                     applyPhotoPayload(livePhoto, payload);
                     syncCoverFieldsFromGallery(live);
                     safeLocalPersist();
-                    persistRemoteItem(live);
+                    persistRemoteItem(live).catch(err => showToast(describeFirebaseError(err, "Fotoğraf kaydı Firebase'e yazılamadı.")));
                     refreshWrappedIfOpen();
                     render();
                     if (activeId === live.id) {
@@ -15988,7 +16223,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                         syncCoverFieldsFromGallery(live);
                         safeLocalPersist();
                     }
-                    console.warn('Gallery photo upload pending; local retry queue remains active:', err);
+                    console.warn('RTDB gallery image save pending; local retry queue remains active:', err);
                 })
                 .finally(() => {
                     activeImageUploads.delete(uploadKey);
@@ -15997,11 +16232,11 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
 
         function retryPendingImageUploads() {
             items
-                .filter(item => item.imageSyncPending === true && !item.imageUrl && item.imgData && item.imgData.startsWith('data:'))
+                .filter(item => item.imageSyncPending === true && !item.imageUrl && !isRtdbImagePath(item.imagePath) && item.imgData && item.imgData.startsWith('data:'))
                 .forEach(item => startImageUploadForItem(item, item.imgData));
             items.forEach(item => {
                 getItemPhotos(item)
-                    .filter(photo => photo.imageSyncPending === true && !photo.imageUrl && photo.imgData && photo.imgData.startsWith('data:'))
+                    .filter(photo => photo.imageSyncPending === true && !photo.imageUrl && !isRtdbImagePath(photo.imagePath) && photo.imgData && photo.imgData.startsWith('data:'))
                     .forEach(photo => startImageUploadForPhoto(item, photo, photo.imgData));
             });
         }
@@ -16013,6 +16248,7 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         });
 
         async function createPhotoItemFromFile(file) {
+            if (!(file instanceof Blob)) throw new Error("Geçerli bir fotoğraf dosyası bulunamadı.");
             const id = Math.random().toString(16).slice(2) + Date.now().toString(16);
             const photoId = "cover";
             const target = getCurrentTimelineDefaults();
@@ -16034,7 +16270,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         filePick.addEventListener("change", async e => {
             const files = e.target.files;
             if (!files || !files.length) return;
+            if (!authUid || !auth?.currentUser) {
+                showToast("Ürün kaydetmek için giriş yapmalısın.");
+                filePick.value = "";
+                return;
+            }
             setPhotoBusy(true);
+            console.log("photo item submit started", { count: files.length, uid: authUid });
             const created = [];
             try {
                 for (const file of files) {
@@ -16061,11 +16303,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 if (uploadResults.some(result => result.status === "rejected")) {
                     showToast("Bazı fotoğraflar buluta yüklenemedi. Bağlantını kontrol edip tekrar dene.");
                 }
+                console.log("photo item submit finished", { created: created.length });
             } catch (err) {
                 console.error("Fotoğraf yüklenemedi:", err);
-                showToast("Fotoğraf yüklenemedi, tekrar dene");
+                showToast(describeFirebaseError(err, "Fotoğraf yüklenemedi, tekrar dene"));
             } finally {
                 setPhotoBusy(false);
+                console.log("photo item loading cleared", { count: created.length });
                 filePick.value = "";
             }
         });
@@ -16074,7 +16318,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         document.getElementById("cameraPick").addEventListener("change", async e => {
             const file = e.target.files[0];
             if (!file) return;
+            if (!authUid || !auth?.currentUser) {
+                showToast("Ürün kaydetmek için giriş yapmalısın.");
+                e.target.value = "";
+                return;
+            }
             setPhotoBusy(true);
+            console.log("camera item submit started", { uid: authUid, hasFile: !!file });
             try {
                 const item = await createPhotoItemFromFile(file);
                 items.push(item);
@@ -16088,11 +16338,13 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
                 await persistRemoteItem(item);
                 refreshWrappedIfOpen();
                 render();
+                console.log("camera item submit finished", { itemId: item.id });
             } catch (err) {
                 console.error("Kamera fotoğrafı yüklenemedi:", err);
-                showToast("Fotoğraf yüklenemedi, tekrar dene");
+                showToast(describeFirebaseError(err, "Fotoğraf yüklenemedi, tekrar dene"));
             } finally {
                 setPhotoBusy(false);
+                console.log("camera item loading cleared");
                 e.target.value = "";
             }
         });

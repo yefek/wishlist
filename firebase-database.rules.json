@@ -48,8 +48,8 @@
             "updatedAt": { ".validate": "!newData.exists() || newData.isNumber()" },
             "secret": { ".validate": "!newData.exists() || newData.isBoolean()" },
             "savedAmount": { ".validate": "!newData.exists() || newData.isNumber()" },
-            "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048 && (newData.val() === '' || newData.val().matches('^https://')))" },
-            "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 260 && !newData.val().matches('^(data:|blob:)'))" },
+            "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048 && (newData.val() === '' || newData.val().matches(/^https:\\/\\//)))" },
+            "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 260 && !newData.val().matches(/^(data:|blob:)/))" },
             "imageStatus": { ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'none' || newData.val() === 'pending' || newData.val() === 'uploaded'))" },
             "imageSyncPending": { ".validate": "!newData.exists() || newData.isBoolean()" },
             "coverPhotoId": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
@@ -58,8 +58,8 @@
                 ".validate": "!newData.exists() || (newData.hasChildren(['id']) && !newData.hasChildren(['imgData', 'origImgData']))",
                 "id": { ".validate": "newData.isString() && newData.val().length <= 80" },
                 "name": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 120)" },
-                "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048 && (newData.val() === '' || newData.val().matches('^https://')))" },
-                "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 260 && !newData.val().matches('^(data:|blob:)'))" },
+                "imageUrl": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048 && (newData.val() === '' || newData.val().matches(/^https:\\/\\//)))" },
+                "imagePath": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 260 && !newData.val().matches(/^(data:|blob:)/))" },
                 "imageStatus": { ".validate": "!newData.exists() || (newData.isString() && (newData.val() === 'none' || newData.val() === 'pending' || newData.val() === 'uploaded'))" },
                 "imageSyncPending": { ".validate": "!newData.exists() || newData.isBoolean()" },
                 "createdAt": { ".validate": "!newData.exists() || newData.isNumber()" },
@@ -68,6 +68,37 @@
             },
             "listOnlyId": { ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 80)" },
             "$other": { ".validate": false }
+          }
+        },
+        "itemImages": {
+          "$itemId": {
+            "$photoId": {
+              ".validate": "!newData.exists() || (newData.hasChildren(['dataUrl', 'contentType', 'byteSize', 'width', 'height', 'createdAt', 'updatedAt']) && $itemId.matches(/^[A-Za-z0-9_-]{1,80}$/) && $photoId.matches(/^[A-Za-z0-9_-]{1,80}$/))",
+              "dataUrl": {
+                ".validate": "newData.isString() && newData.val().length <= 520000 && newData.val().matches(/^data:image.jpeg;base64,.+$/)"
+              },
+              "contentType": {
+                ".validate": "newData.isString() && newData.val() === 'image/jpeg'"
+              },
+              "byteSize": {
+                ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 390000"
+              },
+              "width": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 900"
+              },
+              "height": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 900"
+              },
+              "createdAt": {
+                ".validate": "newData.isNumber()"
+              },
+              "updatedAt": {
+                ".validate": "newData.isNumber()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
           }
         },
         "lists": {
