@@ -11871,20 +11871,88 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             }
         }
 
-        /* WishlistAI top-area normalization: keep its custom page shell aligned
-           with the shared desktop/tablet header and compensate only for the
-           extra transparent canvas inside the AI hero asset. */
+        /* WishlistAI uses an overlay, but its top shell follows the same header
+           row and page gutters as the shared navigation pages. */
+        #aiBack.show .aiHeader {
+            box-sizing: border-box !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+        }
+
+        #aiBack.show .aiHeaderRow {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         @media (min-width: 761px) {
             #aiBack.show .aiHeader {
-                box-sizing: border-box !important;
                 min-height: 76px !important;
                 height: 76px !important;
                 flex: 0 0 76px !important;
                 padding: 16px 20px !important;
             }
 
+            #aiBack.show .aiHeaderRow {
+                max-width: min(1120px, calc(100vw - 48px));
+            }
+
             #aiBack.show .aiBody {
                 padding-top: 18px !important;
+            }
+
+            #aiBack.show #aiScreenMode .aiCouncilHero {
+                margin-top: 0 !important;
+            }
+        }
+
+        @media (min-width: 761px) and (max-width: 979px) {
+            #aiBack.show .aiBody {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding-right: 32px !important;
+                padding-left: 32px !important;
+            }
+        }
+
+        @media (min-width: 980px) {
+            #aiBack.show {
+                inset: 0 0 0 244px !important;
+                width: calc(100% - 244px) !important;
+                max-width: none !important;
+            }
+
+            #aiBack.show .aiHeaderRow {
+                max-width: none !important;
+            }
+
+            #aiBack.show .aiBody {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding-right: 32px !important;
+                padding-left: 32px !important;
+            }
+        }
+
+        @media (max-width: 760px) {
+            #aiBack.show .aiHeaderRow {
+                max-width: none;
+                gap: 8px;
+            }
+
+            #aiBack.show .aiBody {
+                padding-top: 14px !important;
+            }
+
+            #aiBack.show #aiScreenMode .aiCouncilHero {
+                margin-top: 0 !important;
             }
         }
 
@@ -12478,13 +12546,15 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
     <!-- ═══ WISHLIST AI MODAL ═══ -->
     <div class="aiBack" id="aiBack">
         <div class="aiHeader">
-            <button class="aiBackBtn" id="aiCloseBtn"><i class="ph ph-arrow-left"></i></button>
-            <div class="aiTitle"><span class="wl">Wishlist</span><span class="ai">Ai</span></div>
-            <div class="aiActions" aria-label="Hızlı işlemler">
-                <button class="btn primary" id="aiAddBtn" type="button">+ Ekle</button>
-                <button class="btn cameraBtn" id="aiCameraBtn" type="button" title="Kamera"><i class="ph ph-camera"></i></button>
-                <button class="btn cameraBtn" id="aiLinkBtn" type="button" title="Linkten Ekle"><i class="ph ph-link"></i></button>
-                <button class="btn topLogoutBtn" id="aiLogoutBtn" type="button" title="Çıkış Yap"><i class="ph ph-sign-out"></i> Çıkış</button>
+            <div class="aiHeaderRow">
+                <button class="aiBackBtn" id="aiCloseBtn"><i class="ph ph-arrow-left"></i></button>
+                <div class="aiTitle"><span class="wl">Wishlist</span><span class="ai">Ai</span></div>
+                <div class="aiActions" aria-label="Hızlı işlemler">
+                    <button class="btn primary" id="aiAddBtn" type="button">+ Ekle</button>
+                    <button class="btn cameraBtn" id="aiCameraBtn" type="button" title="Kamera"><i class="ph ph-camera"></i></button>
+                    <button class="btn cameraBtn" id="aiLinkBtn" type="button" title="Linkten Ekle"><i class="ph ph-link"></i></button>
+                    <button class="btn topLogoutBtn" id="aiLogoutBtn" type="button" title="Çıkış Yap"><i class="ph ph-sign-out"></i> Çıkış</button>
+                </div>
             </div>
         </div>
         <div class="aiBody">
