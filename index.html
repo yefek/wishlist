@@ -11942,9 +11942,30 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         }
 
         @media (max-width: 760px) {
+            #aiBack.show .aiHeader {
+                top: 0 !important;
+                height: auto !important;
+                min-height: calc(60px + var(--safe-top)) !important;
+                padding: calc(var(--safe-top) + 10px) 12px 10px !important;
+                gap: 0 !important;
+            }
+
             #aiBack.show .aiHeaderRow {
                 max-width: none;
                 gap: 8px;
+            }
+
+            #aiBack.show .aiHeader .aiTitle {
+                display: block !important;
+                line-height: normal !important;
+                margin: 0 auto 0 0 !important;
+                padding: 0 4px 0 0 !important;
+                overflow: visible !important;
+                transform: none !important;
+            }
+
+            #aiBack.show .aiHeader .aiActions #aiAddBtn {
+                min-width: 74px !important;
             }
 
             #aiBack.show .aiBody {
@@ -11954,6 +11975,22 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             #aiBack.show #aiScreenMode .aiCouncilHero {
                 margin-top: 0 !important;
             }
+        }
+
+        /* Keep the Lists CTA visually centered between its description and
+           the first list/empty-state surface. */
+        #listScreen.show .page-hero--standard {
+            --stdHeroAfter: 28px !important;
+        }
+
+        #listScreen.show .page-hero--standard .lists-actions {
+            margin: 28px auto 0 !important;
+            position: static !important;
+            transform: none !important;
+        }
+
+        #listScreen.show .page-hero--standard ~ .savedLists {
+            margin-top: 0 !important;
         }
 
         #aiBack.show #aiScreenMode .aiCouncilHero .aiHeroCard {
