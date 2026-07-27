@@ -4630,38 +4630,59 @@
             background: radial-gradient(ellipse 130% 90% at 15% 15%, rgba(108, 92, 231, .58) 0%, transparent 52%), radial-gradient(ellipse 110% 80% at 85% 85%, rgba(162, 155, 254, .45) 0%, transparent 52%), linear-gradient(150deg, #1a1535 0%, #231d4a 55%, #1c1840 100%);
         }
 
-        /* Auth top-left controls */
+        /* Auth top controls */
         .auth-top-controls {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: calc(var(--safe-top, 0px) + 18px);
+            left: clamp(16px, 2.2vw, 28px);
             z-index: 10;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            min-height: 48px;
+            padding: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.48);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow:
+                0 10px 30px rgba(39, 24, 63, 0.10),
+                inset 0 1px 0 rgba(255, 255, 255, 0.64);
+            backdrop-filter: blur(18px) saturate(145%);
+            -webkit-backdrop-filter: blur(18px) saturate(145%);
+        }
+
+        .auth-language-control {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.22);
         }
 
         .auth-ctrl-btn {
-            display: flex;
+            appearance: none;
+            min-width: 38px;
+            min-height: 34px;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 7px 12px;
-            background: rgba(255, 255, 255, 0.22);
-            border: 1px solid rgba(255, 255, 255, 0.40);
-            border-radius: 99px;
+            justify-content: center;
+            gap: 6px;
+            padding: 0 10px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
             cursor: pointer;
             font-family: var(--font-text);
             font-size: 12px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: background .18s, transform .15s;
-            letter-spacing: 0.2px;
+            font-weight: 700;
+            color: color-mix(in srgb, var(--textPrimary) 82%, transparent);
+            transition: background .18s ease, border-color .18s ease, color .18s ease, transform .15s ease;
+            letter-spacing: 0;
         }
 
         .auth-ctrl-btn:hover {
-            background: rgba(255, 255, 255, 0.32);
+            background: rgba(255, 255, 255, 0.34);
             transform: translateY(-1px);
         }
 
@@ -4670,37 +4691,52 @@
         }
 
         .auth-ctrl-btn.active {
-            background: rgba(255, 255, 255, 0.38);
-            border-color: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.72);
+            border-color: rgba(255, 255, 255, 0.80);
+            color: var(--textPrimary);
+            box-shadow: 0 4px 12px rgba(39, 24, 63, 0.08);
         }
 
         .auth-ctrl-sep {
             width: 1px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.30);
+            height: 24px;
+            margin: 0 1px;
+            background: rgba(255, 255, 255, 0.48);
         }
 
         .auth-ctrl-icon {
-            font-size: 14px;
+            font-size: 17px;
             line-height: 1;
+        }
+
+        .auth-mode-toggle {
+            width: 36px;
+            min-width: 36px;
+            padding: 0;
         }
 
         .auth-theme-dots {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 5px 7px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.32);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            gap: 7px;
+            min-height: 36px;
+            padding: 0 8px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.22);
+            transition: opacity .18s ease, max-width .22s ease, padding .22s ease;
+        }
+
+        .auth-theme-dots[hidden],
+        body[data-theme="dark"] #authScreen .auth-theme-dots {
+            display: none !important;
         }
 
         .auth-theme-dot {
-            width: 18px;
-            height: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.72);
+            appearance: none;
+            width: 19px;
+            height: 19px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.88);
             border-radius: 999px;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
@@ -4714,8 +4750,59 @@
         }
 
         .auth-theme-dot.active {
-            outline-color: rgba(255, 255, 255, 0.88);
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.20), 0 8px 18px rgba(0, 0, 0, 0.14);
+            outline-color: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.26), 0 7px 16px rgba(0, 0, 0, 0.14);
+        }
+
+        .auth-ctrl-btn:focus-visible,
+        .auth-theme-dot:focus-visible {
+            outline: 2px solid color-mix(in srgb, var(--accent) 76%, white);
+            outline-offset: 2px;
+        }
+
+        body[data-theme="dark"] #authScreen .auth-top-controls {
+            border-color: rgba(255, 255, 255, 0.10);
+            background: rgba(15, 25, 35, 0.68);
+            box-shadow:
+                0 12px 34px rgba(0, 0, 0, 0.22),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        body[data-theme="dark"] #authScreen .auth-language-control {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        body[data-theme="dark"] #authScreen .auth-ctrl-btn {
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        body[data-theme="dark"] #authScreen .auth-ctrl-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        body[data-theme="dark"] #authScreen .auth-ctrl-btn.active {
+            color: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: none;
+        }
+
+        @media (max-width: 480px) {
+            .auth-top-controls {
+                left: 12px;
+                gap: 5px;
+                padding: 5px;
+            }
+
+            .auth-theme-dots {
+                gap: 6px;
+                padding-inline: 7px;
+            }
+
+            .auth-theme-dot {
+                width: 18px;
+                height: 18px;
+            }
         }
 
         #authBgStage {
@@ -12740,24 +12827,25 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
         <div class="auth-left">
             <div id="authCardStage"></div>
 
-            <!-- Sol üst: dil + koyu mod -->
+            <!-- Dil, görünüm modu ve açık tema renkleri -->
             <div class="auth-top-controls">
-                <button class="auth-ctrl-btn" id="authLangTr" onclick="authSetLang('tr')">
-                    <span>🇹🇷</span><span>TR</span>
-                </button>
-                <button class="auth-ctrl-btn" id="authLangEn" onclick="authSetLang('en')">
-                    <span>🇬🇧</span><span>EN</span>
-                </button>
+                <div class="auth-language-control" role="group" aria-label="Dil seçimi">
+                    <button class="auth-ctrl-btn" id="authLangTr" onclick="authSetLang('tr')" type="button"
+                        aria-label="Türkçe" aria-pressed="true">TR</button>
+                    <button class="auth-ctrl-btn" id="authLangEn" onclick="authSetLang('en')" type="button"
+                        aria-label="English" aria-pressed="false">EN</button>
+                </div>
                 <div class="auth-ctrl-sep"></div>
-                <button class="auth-ctrl-btn" id="authDarkBtn" onclick="authToggleDark()" title="Koyu mod">
-                    <span class="auth-ctrl-icon" id="authDarkIcon">🌙</span>
+                <button class="auth-ctrl-btn auth-mode-toggle" id="authDarkBtn" onclick="authToggleDark()"
+                    title="Koyu moda geç" aria-label="Koyu moda geç" aria-pressed="false" type="button">
+                    <i class="ph ph-moon auth-ctrl-icon" id="authDarkIcon" aria-hidden="true"></i>
                 </button>
-                <div class="auth-theme-dots" aria-label="Tema rengi">
-                    <button class="auth-theme-dot" data-auth-theme="pink" onclick="authPickTheme('pink')" style="background:linear-gradient(135deg,#E8458B,#A87CFF)" title="Pembe" type="button"></button>
-                    <button class="auth-theme-dot" data-auth-theme="blue" onclick="authPickTheme('blue')" style="background:linear-gradient(135deg,#3D7FE8,#7CB4FF)" title="Mavi" type="button"></button>
-                    <button class="auth-theme-dot" data-auth-theme="green" onclick="authPickTheme('green')" style="background:linear-gradient(135deg,#2EB87A,#7CDFB4)" title="Yeşil" type="button"></button>
-                    <button class="auth-theme-dot" data-auth-theme="peach" onclick="authPickTheme('peach')" style="background:linear-gradient(135deg,#E8763D,#FFAA7C)" title="Şeftali" type="button"></button>
-                    <button class="auth-theme-dot" data-auth-theme="charcoal" onclick="authPickTheme('charcoal')" style="background:linear-gradient(135deg,#7B8FA8,#A8B8CC)" title="Antrasit" type="button"></button>
+                <div class="auth-theme-dots" id="authLightThemeColors" role="group" aria-label="Açık tema rengi">
+                    <button class="auth-theme-dot" data-auth-theme="pink" onclick="authPickTheme('pink')" style="background:linear-gradient(135deg,#E8458B,#A87CFF)" title="Pembe" aria-label="Pembe tema" aria-pressed="false" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="blue" onclick="authPickTheme('blue')" style="background:linear-gradient(135deg,#3D7FE8,#7CB4FF)" title="Mavi" aria-label="Mavi tema" aria-pressed="false" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="green" onclick="authPickTheme('green')" style="background:linear-gradient(135deg,#2EB87A,#7CDFB4)" title="Yeşil" aria-label="Yeşil tema" aria-pressed="false" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="peach" onclick="authPickTheme('peach')" style="background:linear-gradient(135deg,#E8763D,#FFAA7C)" title="Şeftali" aria-label="Şeftali tema" aria-pressed="false" type="button"></button>
+                    <button class="auth-theme-dot" data-auth-theme="charcoal" onclick="authPickTheme('charcoal')" style="background:linear-gradient(135deg,#7B8FA8,#A8B8CC)" title="Antrasit" aria-label="Antrasit tema" aria-pressed="false" type="button"></button>
                 </div>
             </div>
             <div class="auth-left-content">
@@ -13661,11 +13749,23 @@ body[data-theme="dark"] #settingsBack.pageView #settingsModal .sSubHead {
             const active = themeId || localStorage.getItem(THEME_KEY) || 'pink';
             document.querySelectorAll('.auth-theme-dot').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.authTheme === active);
+                btn.setAttribute('aria-pressed', btn.dataset.authTheme === active ? 'true' : 'false');
             });
             const icon = document.getElementById('authDarkIcon');
             const darkBtn = document.getElementById('authDarkBtn');
-            if (icon) icon.textContent = active === 'dark' ? '☀️' : '🌙';
-            if (darkBtn) darkBtn.classList.toggle('active', active === 'dark');
+            const lightColors = document.getElementById('authLightThemeColors');
+            const isDark = active === 'dark';
+            if (icon) icon.className = `ph ${isDark ? 'ph-sun' : 'ph-moon'} auth-ctrl-icon`;
+            if (darkBtn) {
+                darkBtn.classList.toggle('active', isDark);
+                darkBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                darkBtn.setAttribute('aria-label', isDark ? 'Aydınlık moda geç' : 'Koyu moda geç');
+                darkBtn.title = isDark ? 'Aydınlık moda geç' : 'Koyu moda geç';
+            }
+            if (lightColors) {
+                lightColors.hidden = isDark;
+                lightColors.setAttribute('aria-hidden', isDark ? 'true' : 'false');
+            }
         }
 
         function updateAppIconTheme(themeId) {
@@ -19149,8 +19249,14 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
                 if (typeof applyLanguage === 'function') applyLanguage(lang);
                 var tr = document.getElementById('authLangTr');
                 var en = document.getElementById('authLangEn');
-                if (tr) tr.classList.toggle('active', lang === 'tr');
-                if (en) en.classList.toggle('active', lang === 'en');
+                if (tr) {
+                    tr.classList.toggle('active', lang === 'tr');
+                    tr.setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
+                }
+                if (en) {
+                    en.classList.toggle('active', lang === 'en');
+                    en.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+                }
             };
             window.authToggleDark = function () {
                 var cur = localStorage.getItem('wl_theme_v1') || 'pink';
@@ -19170,8 +19276,14 @@ Yanıtı SADECE şu JSON formatında ver, başka hiçbir şey yazma:
             var lTr = document.getElementById('authLangTr');
             var lEn = document.getElementById('authLangEn');
             var rememberBox = document.getElementById('rememberLogin');
-            if (lTr) lTr.classList.toggle('active', lang0 === 'tr');
-            if (lEn) lEn.classList.toggle('active', lang0 === 'en');
+            if (lTr) {
+                lTr.classList.toggle('active', lang0 === 'tr');
+                lTr.setAttribute('aria-pressed', lang0 === 'tr' ? 'true' : 'false');
+            }
+            if (lEn) {
+                lEn.classList.toggle('active', lang0 === 'en');
+                lEn.setAttribute('aria-pressed', lang0 === 'en' ? 'true' : 'false');
+            }
             if (rememberBox) rememberBox.checked = localStorage.getItem('wl_remember_login_v1') === '1';
             if (typeof syncAuthThemeControls === 'function') syncAuthThemeControls(theme0);
         })();
